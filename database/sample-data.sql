@@ -608,7 +608,7 @@ UNLOCK TABLES;
 -- Demo administrator (password: "password") ---------------------------------
 DELETE FROM `users` WHERE `email` = 'admin@example.com';
 INSERT INTO `users` (`id`,`name`,`email`,`password`,`api_token`,`role`,`status`,`verified`,`created_at`,`updated_at`)
-VALUES (1,'Admin','admin@example.com','$2y$10$3nwR6lIQ0Qu7vQbefvyYueRTV0SpvfaCkbBXIpuL0lNBsfdteI632','demo-token',3,1,1,NOW(),NOW());
+VALUES (1,'Admin','admin@example.com','$2y$10$3nwR6lIQ0Qu7vQbefvyYueRTV0SpvfaCkbBXIpuL0lNBsfdteI632','demo-token',4,1,1,NOW(),NOW());
 
 -- Demo posts (neutral sample content, so the front-end renders out of the box)
 INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
@@ -622,7 +622,10 @@ INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,3,'cat'),(1
 DELETE FROM `bp_access` WHERE `module_id` = 22;
 DELETE FROM `bp_modules` WHERE `module_id` = 22;
 
--- Give the demo administrator (role 3) full access to every admin module
-UPDATE `bp_access` SET `canshow` = 1, `cancreate` = 1, `canedit` = 1, `candelete` = 1 WHERE `usertype` = 3;
+-- Give the demo administrator (superadmin, role 4) full access to every module,
+-- including modules that shipped without any access row (e.g. Category).
+DELETE FROM `bp_access` WHERE `usertype` = 4;
+INSERT INTO `bp_access` (`module_id`, `usertype`, `canshow`, `cancreate`, `canedit`, `candelete`)
+SELECT `module_id`, 4, 1, 1, 1, 1 FROM `bp_modules`;
 
 SET FOREIGN_KEY_CHECKS=1;
