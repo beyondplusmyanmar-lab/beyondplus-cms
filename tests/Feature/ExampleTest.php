@@ -2,19 +2,18 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
     /**
-     * A basic test example.
+     * The application boots and the admin login page renders.
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testAdminLoginPageLoads()
     {
-        $response = $this->get('/');
+        $response = $this->get('/bp-admin/login');
 
         $response->assertStatus(200);
     }

@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Bp_post extends Model
 {
     use LogsActivity;
-
-    protected static $logName = 'bp_posts';
 
     protected $primaryKey = 'id';
     protected $table = 'bp_posts';
@@ -20,7 +19,12 @@ class Bp_post extends Model
 
     ];
 
-    protected static $logAttributes = ['title', 'staff_id'];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('bp_posts')
+            ->logOnly(['title', 'staff_id']);
+    }
 
     public function creator()
     {
