@@ -1,149 +1,62 @@
-
-<!-- START HEADER -->
-<header class="header_wrap  header_with_topbar">
-    <div class="top-header">
+@php $siteName = optional(site_information('blogname'))->option_value ?: config('app.name'); @endphp
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-2">
-                </div>
-                <div class="col-md-8 text-center">
-                  <div class="text-center">
-                        
-                        <h2><img class="logo_dark1" src="{{ url('assets/bptheme1/logo.jpg') }}" alt="logo" 
-                          height="50px" /> Department of Research and Innovation</h2>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    @if (Auth::guard("customer_web")->check())
+            <a class="navbar-brand text-primary" href="{{ url('/') }}">{{ $siteName }}</a>
 
-                        @php 
-                            $first_name = Auth::guard("customer_web")->user()->first_name;
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bpNav"
+                    aria-controls="bpNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="bpNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">{{ ucfirst(__('general.home') ?? 'Home') }}</a></li>
+
+                    @foreach (bp_menu() as $menu)
+                        @php
+                            if (app()->getLocale() === 'mm' && isset($menu->translate) && $menu->translate->lang == 2) {
+                                $menu = $menu->translate;
+                            }
+                            $hasChildren = isset($menu->children) && sizeof($menu->children) > 0;
+                            $menuUrl = $menu->menu_type === 'default' ? url('/'.$menu->menu_link) : $menu->menu_link;
                         @endphp
-                        <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6">
-                                <div class="lng_dropdown text-right">
-                                    <select name="language" class="custome_select" id="profile_select">
-                                        <option value='{{ $first_name }}'  data-title="{{ $first_name }}" data-link="{{ url('customer/profile') }}"><a herf="{{ url('customer/profile') }}">{{ $first_name }}</a></option>
-                                         <option value='dashboard' data-title="Dashboard" data-link="{{ url('customer/profile') }}"><a herf="{{ url('customer/profile') }}">Profile</a></option>
-                                        <option value='logout'  data-title="Logout" data-link="{{ url('/customer/logout') }}"><a herf="{{ url('/customer/logout') }}">Logout</a></option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
 
-                    @else
-                         <a href="{{ url('/customer/sign-in') }}" class="nav-link"><i class="linearicons-user"></i> Login</a>
-                    @endif
-                  <div class="text-center text-md-right">
-                        <ul class="header_list">
-                            <li><a href="compare.html"><i class="ti-control-shuffle"></i><span>Compare</span></a></li>
-                            <li><a href="wishlist.html"><i class="ti-heart"></i><span>Wishlist</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="bottom_header dark_skin main_menu_uppercase">
-      <div class="container">
-            <nav class="navbar navbar-expand-lg"> 
-                <!-- <a class="navbar-brand" href="{{ url('/') }}">
-                    Beyond Plus CMS
-                    <img class="logo_light" src="assets/images/logo_light.png" alt="logo" />
-                    <img class="logo_dark" src="assets/images/logo_dark.png" alt="logo" />
-                </a> -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false"> 
-                    <span class="ion-android-menu"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                    <ul class="navbar-nav">
-
-                        <li><a class="nav-link nav_item" href="{{ url('/') }}">Home</a></li>
-
-                        @foreach (bp_menu() as $menu)
-
-            
-                         @if(sizeof($menu->children)>0) 
-                            @php $children = $menu->children @endphp
-                            @if(App::getLocale() == 'mm')
-                              @if(isset($menu->translate))
-                                @if($menu->translate->lang == 2)
-                                  @php $menu = $menu->translate; @endphp
-                                @endif
-                              @endif
-                            @endif
-                       
-                        <li class="dropdown">
-                            <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">{{ $menu->menu_name }}</a>
-                            <div class="dropdown-menu dropdown-reverse">
-                                <ul>
-                                    @foreach ($children as $sub)
-                                      @if(App::getLocale() == 'mm')
-                                        @if(isset($sub->translate))
-                                          @if($sub->translate->lang == 2)
-                                            @php $sub = $sub->translate; @endphp
-                                          @endif
-                                        @endif
-                                      @endif
-                                      <li>
-                                          @if($sub->menu_type == 'default')
-                                            <a href = "{{url('/'.$sub->menu_link) }}" class="dropdown-item">
-                                          @else
-                                            <a href = "{{$sub->menu_link}}" class="dropdown-item">
-                                          @endif
-                                          {{ $sub->menu_name }}</a>
-                                          <!-- <a class="dropdown-item menu-link dropdown-toggler" href="#">Grids</a> -->
-
-                                          @if(sizeof($sub->children)>0) 
-                                            @php $children = $sub->children @endphp
-                                            @if(App::getLocale() == 'mm')
-                                              @if(isset($sub->translate))
-                                                @if($sub->translate->lang == 2)
-                                                  @php $sub = $sub->translate; @endphp
-                                                @endif
-                                              @endif
-                                            @endif
-                                            <div class="dropdown-menu">
-                                                <ul> 
-                                                  <li>
-
-                                                    <!-- <a class="dropdown-item nav-link nav_item" href="blog-three-columns.html">3 columns</a> -->
-
-                                                    @if($sub->menu_type == 'default')
-                                                      <a href = "{{url('/'.$sub->menu_link) }}" class="dropdown-item">
-                                                    @else
-                                                      <a href = "{{$sub->menu_link}}" class="dropdown-item">
-                                                    @endif
-                                                    {{ $sub->menu_name }}</a>
-
-                                                  </li>
-                                                  
-                                                </ul>
-                                            </div>
-                                          @endif
-                                      </li>
+                        @if($hasChildren)
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ $menu->menu_name }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @foreach ($menu->children as $sub)
+                                        @php
+                                            if (app()->getLocale() === 'mm' && isset($sub->translate) && $sub->translate->lang == 2) {
+                                                $sub = $sub->translate;
+                                            }
+                                            $subUrl = $sub->menu_type === 'default' ? url('/'.$sub->menu_link) : $sub->menu_link;
+                                        @endphp
+                                        <li><a class="dropdown-item" href="{{ $subUrl }}">{{ $sub->menu_name }}</a></li>
                                     @endforeach
                                 </ul>
-                            </div>
-                        </li>
-
+                            </li>
                         @else
-                          <li  class="dropdown">
-                                @if($menu->menu_type == 'default')
-                                    <a href = "{{url('/'.$menu->menu_link) }}"  class="nav-link" href="#" data-toggle="dropdown">
-                                @else
-                                    <a href = "{{$menu->menu_link}}">
-                                @endif
-                                  {{ $menu->menu_name }}</a>
-                          </li>  
+                            <li class="nav-item"><a class="nav-link" href="{{ $menuUrl }}">{{ $menu->menu_name }}</a></li>
                         @endif
-                      @endforeach
-                         
-                    </ul>
-                </div>
-            </nav>
+                    @endforeach
+
+                    <li class="nav-item ms-lg-2">
+                        @if (Auth::guard('customer_web')->check())
+                            <a class="btn btn-sm btn-outline-primary" href="{{ url('customer/profile') }}">
+                                <i class="bi bi-person-circle"></i> {{ Auth::guard('customer_web')->user()->first_name }}
+                            </a>
+                        @else
+                            <a class="btn btn-sm btn-outline-primary" href="{{ url('/customer/sign-in') }}">
+                                <i class="bi bi-person"></i> {{ ucfirst(__('general.login') ?? 'Login') }}
+                            </a>
+                        @endif
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </nav>
 </header>
-<!-- END HEADER -->

@@ -1,65 +1,42 @@
+{{-- Search results template --}}
 @extends('theme.bptheme2.layouts.app')
+
+@section('title', 'Search')
+
 @section('content')
-	<div class="col-md-12 main_bg">
-		<div class="col-md-1"></div>
-		<div class="col-md-10 asideleft">
-			<div class="col-md-2 ">
-				
-				
-				<h4>CATEGORIES<hr></h4>
-				
-				<ul>
-					<li>Web Desgin</li>
-					<li>Web Development</li>
-					<li>Android </li>
-				</ul>
-			</div>
-			<div class="col-md-10 asideright">
-				<div class="col-md-12">
-					<h2>COURSES I AM TAKING </h2>
-					<div class="col-md-12 toolbar">Sort by <select><option>Latest</option><option>Popularity</option>
-					<option>Latest</option><option>Ending Soon</option><option>Budget</option></select>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="row firstrow">
-						<div class="col-md-10">
-							<a href="#" >
-								<h5>PHP Web Development Course</h5>
-							</a>
-						</div>
-						<div class="col-md-2">
-							Start Date<br>
-							3-5-2016
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-2">
-							<div class="row">
-								<div class="col-md-12">
-								<img src="{{ asset("/assets/bptheme2/img/phpimages.jpg") }}" name="profile" class="img-responsive" />
-								</div>
-							</div>
-						</div>
-						<div class="col-md-7">
-							<div class="col-md-11">
-									<b>Web Development</b><br><br>PHP သည္ Server Side တစ္မ်ိဳးျဖစ္ျပီး လူူသုံးမ်ားေသာ language တစ္မိ်ဳးလည္း ျဖစ္ပါသည္။
-								</div>
-						</div>
-						<div class="col-md-3 detail">
-							<button type="button" class="btn btn-default detail" >View Details</button>
-						</div>
-					</div>
-				</div>
-				<hr>
-				
-				</div>
-			
-		</div>
-		<div class="col-md-1"></div>
+<div class="container py-5">
+    <div class="row g-4">
+        <aside class="col-lg-3">
+            @include('theme.bptheme2.sidebar')
+        </aside>
 
-		
-	</div>	
-<div class="col-md-12"><br> </div>
+        <div class="col-lg-9">
+            <h1 class="h3 mb-4">
+                Search results@isset($query) for “{{ $query }}”@endisset
+            </h1>
+
+            @isset($posts)
+                @forelse($posts as $post)
+                    @php
+                        if (app()->getLocale() === 'mm' && isset($post->translate) && $post->translate->lang == 2) {
+                            $post = $post->translate;
+                        }
+                    @endphp
+                    <article class="mb-4 pb-4 border-bottom">
+                        <h2 class="h5">
+                            <a href="{{ url('/'.$post->post_link) }}" class="text-dark">{{ $post->title }}</a>
+                        </h2>
+                        <p class="text-body mb-0">
+                            {{ \Illuminate\Support\Str::limit(strip_tags($post->body), 200) }}
+                        </p>
+                    </article>
+                @empty
+                    <p class="text-muted">No results found.</p>
+                @endforelse
+            @else
+                <p class="text-muted">Enter a search term to find posts.</p>
+            @endisset
+        </div>
+    </div>
+</div>
 @stop
-

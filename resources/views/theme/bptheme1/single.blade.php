@@ -1,133 +1,93 @@
 @extends('theme.bptheme1.layouts.app')
-@section('content')
-<div class="row main_bg">
-	<div class="col-sm-1"></div>
-	<div class="col-sm-10 asideleft">
-		<div class="row">
-			<div class="col-sm-2 ">	
-				@component('theme.bptheme1.sidebar') @endcomponent
-			</div>
-			<div class="col-sm-10 asideright">
-				<div class="row">
-					<div class="col-sm-12">
-						@if(App::getLocale() == 'mm')
-							@if(isset($post->translate))
-								@if($post->translate->lang == 2)
-									@php $post = $post->translate; @endphp
-								@endif
-							@endif
-						@endif
-						<div class="row firstrow">
-							<div class="col-sm-10">
-								<a href="{{url('/'.$post->post_link) }}" name="" ><h2>{{ $post->title }}</h2></a>
-							</div>
-							<div class="col-sm-2">
-								@if(Auth::guard('admins')->check())
-									@if($post->post_type == "post")
-										<a href="{{url('/bp-admin/post/'.$post->id.'/edit') }}" name="" >Edit</a>
-									@endif
-								@endif
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-12">
-								<img src="{{url('/uploads/'.$post->featured_img)}}" class="img-thumbnail">
-							</div>
-							<div class="col-sm-10 html">
-								{!! bbParse($post->body) !!}
-							</div>
-							<div class="col-sm-2">
-								
-							</div>
-						</div>
-					</div>	
-				</div>
-				@if(Auth::user())
-					<div class="row">
-						<div class="col-md-12 commentblk">
-							<div class="row">
-								<div class="col-md-1">
-									@if( Auth::user()->avatar != "")
-										<img src="{{  Auth::user()->avatar }}" name="profile" class="img-responsive" height="50px" />
-									@else
-										<img src="{{ asset("/img/blank_profile_pic_60x60.jpg") }}" name="profile" class="img-responsive" height="50px"  />
-									@endif
-									<br />
-								</div>
-								<div class="col-md-11">
-									{{ csrf_field() }}
-									<input type="text" class="form-control" id="comment" name="comment">
-								</div>
-							</div>
-						</div>
 
-					@if($post->comment)
-						@foreach($post->comment as $c)	
-							@if($c->users()->find($c->user_id))
-							<div class="col-md-12">
-								<div class="row">
-									<div class="col-md-1">
-											@if($c->users()->find($c->user_id)->avatar != "")
-												<img src="{{ $c->users()->find($c->user_id)->avatar }}" name="profile" class="img-responsive" height="50px"/>
-											@else
-												<img src="{{ asset("/assets/front/img/blank_profile_pic_60x60.jpg") }}" name="profile" class="img-responsive" height="50px"/>
-											@endif
-											<br />
-										</div>
-										<div class="col-md-11">
-											<b>{{ $c->users()->find($c->user_id)->name }} : </b>
-											{{ $c->body }}
-											<br>
-											{{$c->created_at->diffForHumans()}}
-										</div>
-								</div>
-							</div>
-							@endif		
-						@endforeach
-					@endif
-					</div>
-				@endif
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-1"></div>
-</div>	
-<div class="col-sm-12"><br> </div>
+@section('title', $post->title)
+
+@section('content')
+@php
+    if (app()->getLocale() === 'mm' && isset($post->translate) && $post->translate->lang == 2) {
+        $post = $post->translate;
+    }
+@endphp
+<div class="container py-5">
+    <div class="row g-4">
+        <aside class="col-lg-3">
+            @include('theme.bptheme1.sidebar')
+        </aside>
+
+        <article class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-start">
+                <h1 class="h2 mb-3">{{ $post->title }}</h1>
+                @if(Auth::guard('admins')->check() && $post->post_type == 'post')
+                    <a href="{{ url('/bp-admin/post/'.$post->id.'/edit') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                @endif
+            </div>
+
+            @if($post->featured_img)
+                <img src="{{ url('/uploads/'.$post->featured_img) }}" class="img-fluid rounded mb-4" alt="{{ $post->title }}">
+            @endif
+
+            <div class="bp-content">
+                {!! bbParse($post->body) !!}
+            </div>
+
+            {{-- Comments --}}
+            @auth
+                <hr class="my-4">
+                <h5 class="mb-3">Comments</h5>
+
+                <div class="d-flex gap-2 mb-4">
+                    <img src="{{ Auth::user()->avatar ?: asset('/img/blank_profile_pic_60x60.jpg') }}"
+                         class="rounded-circle" width="48" height="48" alt="you">
+                    <div class="flex-grow-1">
+                        {{ csrf_field() }}
+                        <input type="text" class="form-control" id="comment" name="comment" placeholder="Write a comment and press Enter…">
+                    </div>
+                </div>
+
+                @if($post->comment)
+                    @foreach($post->comment as $c)
+                        @php $author = $c->users()->find($c->user_id); @endphp
+                        @if($author)
+                            <div class="d-flex gap-2 mb-3">
+                                <img src="{{ $author->avatar ?: asset('/img/blank_profile_pic_60x60.jpg') }}"
+                                     class="rounded-circle" width="40" height="40" alt="{{ $author->name }}">
+                                <div>
+                                    <strong>{{ $author->name }}</strong>
+                                    <span class="text-muted small">&middot; {{ $c->created_at->diffForHumans() }}</span>
+                                    <div>{{ $c->body }}</div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+            @endauth
+        </article>
+    </div>
+</div>
 @stop
 
 @push('scripts')
-
-<script type="text/javascript">
-        $(document).ready(function(){
-        $( "#comment" ).keypress(function(e) {
-            var data = {'body':$('#comment').val(), '_token': $('input[name=_token]').val(), 'post_id': '{{ $post->id }}'};
-            if (e.keyCode === 13){
-            		$.ajax({
-					     type: 'POST',
-					     url: '{{ url('/comment') }}',
-					     data: data,
-					     beforeSend: function()
-					     {
-					         // alert('Fetching....');
-					     },
-					     success: function(returnData)
-					     {
-					         if(returnData == 1){
-						      	 location.reload();
-						      }
-					     },
-					     error: function()
-					     {
-					         // alert('Error');
-					     },
-					     complete: function()
-					     {
-					         // alert('Complete')
-					     }
-					 });
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(function () {
+        $('#comment').keypress(function (e) {
+            if (e.which === 13) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url('/comment') }}',
+                    data: {
+                        body: $('#comment').val(),
+                        _token: $('input[name=_token]').val(),
+                        post_id: '{{ $post->id }}'
+                    },
+                    success: function (data) {
+                        if (data == 1) { location.reload(); }
+                    }
+                });
             }
-            });
+        });
     });
 </script>
-
 @endpush

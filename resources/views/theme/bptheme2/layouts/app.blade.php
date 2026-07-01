@@ -1,42 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" >
-    <title>@if (trim($__env->yieldContent('title'))) @yield('title') - Beyond Plus CMS @endif Beyond Plus CMS </title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    @php $siteName = optional(site_information('blogname'))->option_value ?: config('app.name'); @endphp
+    <title>@hasSection('title')@yield('title') — {{ $siteName }}@else{{ $siteName }}@endif</title>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Bootstrap 5 + icons (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <style>
+        :root { --bp-accent: #7c3aed; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1f2937; }
+        a { text-decoration: none; }
+        .navbar-brand { font-weight: 700; letter-spacing: .3px; }
+        .bp-hero {
+            background: linear-gradient(135deg, var(--bp-accent), #5b21b6);
+            color: #fff; padding: 5rem 0;
+        }
+        .bp-hero h1 { font-weight: 800; }
+        .bp-card { transition: transform .15s ease, box-shadow .15s ease; border: 1px solid #eef0f3; }
+        .bp-card:hover { transform: translateY(-4px); box-shadow: 0 .75rem 1.5rem rgba(0,0,0,.08); }
+        .bp-card .card-img-top { aspect-ratio: 16 / 10; object-fit: cover; }
+        .bp-section-title { font-weight: 700; }
+        footer.bp-footer { background: #0f172a; color: #cbd5e1; }
+        footer.bp-footer a { color: #e2e8f0; }
+        footer.bp-footer a:hover { color: #fff; }
+    </style>
 
-    <link rel="stylesheet" type="text/css" href="{{ asset("/assets/bptheme2/css/main.css") }}">
-    
+    @stack('styles')
 </head>
-<body>
-    <div class="container-fluid">
-    <!-- Header -->
+<body class="d-flex flex-column min-vh-100">
 
     @include('theme.bptheme2.layouts.header')
 
-    <!-- Sidebar -->
-   <!-- @1include('layouts/bptheme2/slider')  -->
+    <main class="flex-grow-1">
+        @yield('content')
+    </main>
 
-    @yield('content')
-
-    <!-- Footer -->
     @include('theme.bptheme2.layouts.footer')
-    </div>
 
-    <!-- REQUIRED JS SCRIPTS -->
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     @stack('scripts')
-    
-
 </body>
 </html>

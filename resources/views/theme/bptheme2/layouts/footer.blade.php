@@ -1,31 +1,34 @@
-
-<div class="copyright row">
-    <div class="col-sm-1"> </div>
-    <div class="col-sm-5 copyright1">
-      <h1> Connect with us </h1>
-      <ul>
-       <li><a href="https://www.facebook.com/beyondpluscentre/"><img src="{{ asset("/assets/bptheme2/img/facebook.png") }}"></a></li>
-       <li><a href="#"><img src="{{ asset("/assets/bptheme2/img/googleplus.png") }}"></a></li>
-       <li><a href="#"><img src="{{ asset("/assets/bptheme2/img/twitter1.png") }}"></a></li>
-       <li><a href="#"><img src="{{ asset("/assets/bptheme2/img/youtube.png") }}"></a></li>
-     </ul>
-   </div>
-   <div class="col-sm-1 copyright2">
-   </div>
-   <div class="col-sm-4 copyright3">
-    <h1> Contact Us </h1>
-    78, 6(B) Theingyi Street, Kyeemyindine, Yangon<br />
-    bplusmyanmar@hotmail.com<br />
-    09 3133 0633, 09 2522 32135
-  </div>
-  <div class="col-sm-1"> </div>
-</div>
-<div class="row">
-  <div class="col-sm-12 text-center">
-    <p ><strong>2016 - {{ date('Y')}} . <a href="{{url('/') }}">Powered By Beyond Plus Developers</a>.</strong> Free to use.</p>
-  </div>
-</div>
-<!-- main end -->
-
-
-</body></html>
+@php $siteName = optional(site_information('blogname'))->option_value ?: config('app.name'); @endphp
+<footer class="bp-footer mt-5">
+    <div class="container py-5">
+        <div class="row gy-4">
+            <div class="col-md-6">
+                <h5 class="text-white">{{ $siteName }}</h5>
+                <p class="mb-0 text-secondary">
+                    {{ optional(site_information('blogdescription'))->option_value ?: 'A Laravel content-management system.' }}
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h6 class="text-white">Links</h6>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li><a href="{{ url('/bp-admin') }}">Admin</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6 class="text-white">Follow</h6>
+                <div class="d-flex gap-3 fs-5">
+                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border-top border-secondary-subtle">
+        <div class="container py-3 text-center small text-secondary">
+            &copy; {{ date('Y') }} {{ $siteName }}. Powered by
+            <a href="https://laravel.com">Laravel</a>.
+        </div>
+    </div>
+</footer>
