@@ -1,47 +1,37 @@
-@extends('theme.bptheme1.layouts.app')
-@section('content')
-<div class="row main_bg">
-	<div class="col-md-1"></div>
-	<div class="col-md-10 asideleft">
-		<div class="row">
-			<div class="col-md-2 ">						
-				@component('theme.bptheme1.sidebar') @endcomponent
-			</div>
-			<div class="col-md-10 asideright">
-				@foreach($posts as $post)
-						 
-						 @if(App::getLocale() == 'mm')
-						 	@if(isset($post->translate))
-								@if($post->translate->lang == 2)
-									@php $post = $post->translate; @endphp
-								@endif
-							@endif
-						@endif
-					<div class="col-md-12">
-						
-							<div class="row firstrow">
-								<div class="col-md-10">
-									<a href="{{url('/'.$post->post_link) }}" name="" ><h2>{{ $post->title }}</h2></a>
-								</div>
-								<div class="col-md-2"></div>
-							</div>
-							<div class="col-md-12 toolbar">
-								<div class="col-md-10">
-									{{ $post->body }}
-								</div>
-								<div class="col-md-2">
-									
-								</div>
-							</div>
-					</div>
-				@endforeach
-				<hr>
-				{{ $posts->links() }}
-			</div>
+{{-- Category / term listing template --}}
+@extends('theme.default.layouts.app')
 
-		</div>
-	</div>
-	<div class="col-md-1"></div>
-</div>	
-<div class="col-md-12"><br> </div>
+@section('content')
+<div class="container py-5">
+    <div class="row g-4">
+        <aside class="col-lg-3">
+            @include('theme.default.sidebar')
+        </aside>
+
+        <div class="col-lg-9">
+            @forelse($posts as $post)
+                @php
+                    if (app()->getLocale() === 'mm' && isset($post->translate) && $post->translate->lang == 2) {
+                        $post = $post->translate;
+                    }
+                @endphp
+                <article class="mb-4 pb-4 border-bottom">
+                    <h2 class="h4">
+                        <a href="{{ url('/'.$post->post_link) }}" class="text-dark">{{ $post->title }}</a>
+                    </h2>
+                    <div class="text-body">
+                        {{ \Illuminate\Support\Str::limit(strip_tags($post->body), 300) }}
+                    </div>
+                    <a href="{{ url('/'.$post->post_link) }}" class="small">Read more <i class="bi bi-arrow-right"></i></a>
+                </article>
+            @empty
+                <p class="text-muted">No posts in this category yet.</p>
+            @endforelse
+
+            <div class="mt-4">
+                {{ $posts->links() }}
+            </div>
+        </div>
+    </div>
+</div>
 @stop

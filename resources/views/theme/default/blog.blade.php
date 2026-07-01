@@ -1,47 +1,35 @@
-{{-- this is a blog template --}}
-@extends('theme.bptheme1.layouts.app')
+{{-- Blog listing template --}}
+@extends('theme.default.layouts.app')
+
 @section('content')
-<div class="row main_bg">
-	<div class="col-sm-1"></div>
-	<div class="col-sm-10 asideleft">
-		<div class="row">
-			<div class="col-sm-2 ">	
-				@component('theme.bptheme1.sidebar') @endcomponent
-			</div>
-			<div class="col-sm-10 asideright">
-				@foreach(bp_post(10) as $post)
-				<div class="col-sm-12">
-					<div class="row firstrow">
-						<div class="col-sm-10">
-							<a href="{{url('/'.$post->post_link) }}" name="" ><h2>{{ $post->title }}</h2></a>
-						</div>
-						<div class="col-sm-2"></div>
-					</div>
-					<div class="col-sm-12 toolbar">
-						<div class="col-sm-10 html">
-							{{ $post->body }}
-						</div>
-						<div class="col-sm-2">
-							
-						</div>
-					</div>
-				</div>
-				<hr>		
-				@endforeach
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-1"></div>
-</div>	
-<div class="col-sm-12"><br> </div>
+<div class="container py-5">
+    <div class="row g-4">
+        <aside class="col-lg-3">
+            @include('theme.default.sidebar')
+        </aside>
+
+        <div class="col-lg-9">
+            @foreach(bp_post(10) as $post)
+                @php
+                    if (app()->getLocale() === 'mm' && isset($post->translate) && $post->translate->lang == 2) {
+                        $post = $post->translate;
+                    }
+                @endphp
+                <article class="mb-4 pb-4 border-bottom">
+                    <h2 class="h4">
+                        <a href="{{ url('/'.$post->post_link) }}" class="text-dark">{{ $post->title }}</a>
+                    </h2>
+                    <p class="text-muted small mb-2">
+                        <i class="bi bi-person"></i> {{ optional($post->creator)->name ?? 'Admin' }}
+                        &middot; {{ $post->created_at->diffForHumans() }}
+                    </p>
+                    <div class="text-body">
+                        {{ \Illuminate\Support\Str::limit(strip_tags($post->body), 300) }}
+                    </div>
+                    <a href="{{ url('/'.$post->post_link) }}" class="small">Read more <i class="bi bi-arrow-right"></i></a>
+                </article>
+            @endforeach
+        </div>
+    </div>
+</div>
 @stop
-
-@push('scripts')
-
-<script type="text/javascript">
-	var mark = $('.html').html();
-	var result = marked(mark);
-	$('.html').html(result);
-</script>
-
-@endpush
