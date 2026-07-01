@@ -1,8 +1,8 @@
 -- Beyond Plus CMS — sanitized sample data
 -- ---------------------------------------------------------------------------
--- Full schema for every table + seed data for generic CMS infrastructure only
--- (modules, permissions, languages, options). Contains NO production PII:
--- users/customers/activity_log and real site content are schema-only (empty).
+-- Full schema for every table + seed data for generic CMS infrastructure
+-- (modules, permissions, languages, options) plus a few neutral demo posts.
+-- Contains NO production PII: users/customers/activity_log carry no real data.
 -- A demo admin is provided at the bottom: admin@example.com / password
 -- ---------------------------------------------------------------------------
 
@@ -609,5 +609,13 @@ UNLOCK TABLES;
 DELETE FROM `users` WHERE `email` = 'admin@example.com';
 INSERT INTO `users` (`id`,`name`,`email`,`password`,`api_token`,`role`,`status`,`verified`,`created_at`,`updated_at`)
 VALUES (1,'Admin','admin@example.com','$2y$10$3nwR6lIQ0Qu7vQbefvyYueRTV0SpvfaCkbBXIpuL0lNBsfdteI632','demo-token',3,1,1,NOW(),NOW());
+
+-- Demo posts (neutral sample content, so the front-end renders out of the box)
+INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
+(1,'Welcome to Beyond Plus CMS','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This sample post is here so you can see how the front-end theme renders content out of the box.</p><p>Log in to the admin panel to create, edit, and organise your own pages and posts.</p>','default.jpg','welcome-to-beyond-plus-cms','post','yes',0,1,1,NOW(),NOW()),
+(2,'Getting Started with the Admin Panel','<p>The admin panel lives at <code>/bp-admin</code>. From there you can manage posts, pages, menus, media, sliders and site settings.</p><p>Use the demo administrator account to explore the dashboard and try creating your first post.</p>','default.jpg','getting-started-admin-panel','post','yes',0,1,1,NOW(),NOW()),
+(3,'Building Multilingual Content','<p>Every post and menu item can have a translation. Switch the site locale and the matching translated content is served automatically.</p><p>This makes Beyond Plus CMS a good fit for sites that need to reach audiences in more than one language.</p>','default.jpg','building-multilingual-content','post','yes',0,1,1,NOW(),NOW());
+
+INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,1,'cat'),(1,2,'cat'),(1,3,'cat');
 
 SET FOREIGN_KEY_CHECKS=1;
