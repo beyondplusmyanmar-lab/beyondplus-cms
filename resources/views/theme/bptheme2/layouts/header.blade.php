@@ -11,7 +11,7 @@
 
             <div class="collapse navbar-collapse" id="bpNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">{{ ucfirst(__('general.home') ?? 'Home') }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">Home</a></li>
 
                     @foreach (bp_menu() as $menu)
                         @php
@@ -46,12 +46,12 @@
 
                     <li class="nav-item ms-lg-2">
                         @if (Auth::guard('customer_web')->check())
-                            <a class="btn btn-sm btn-outline-primary" href="{{ url('customer/profile') }}">
+                            <a class="btn btn-sm btn-outline-light" href="{{ url('customer/profile') }}">
                                 <i class="bi bi-person-circle"></i> {{ Auth::guard('customer_web')->user()->first_name }}
                             </a>
                         @else
-                            <a class="btn btn-sm btn-outline-primary" href="{{ url('/customer/sign-in') }}">
-                                <i class="bi bi-person"></i> {{ ucfirst(__('general.login') ?? 'Login') }}
+                            <a class="btn btn-sm btn-outline-light" href="{{ url('/customer/sign-in') }}">
+                                <i class="bi bi-person"></i> Login
                             </a>
                         @endif
                     </li>

@@ -11,7 +11,7 @@
 
             <div class="collapse navbar-collapse" id="bpNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">{{ ucfirst(__('general.home') ?? 'Home') }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">Home</a></li>
 
                     @foreach (bp_menu() as $menu)
                         @php
@@ -51,7 +51,7 @@
                             </a>
                         @else
                             <a class="btn btn-sm btn-outline-primary" href="{{ url('/customer/sign-in') }}">
-                                <i class="bi bi-person"></i> {{ ucfirst(__('general.login') ?? 'Login') }}
+                                <i class="bi bi-person"></i> Login
                             </a>
                         @endif
                     </li>
