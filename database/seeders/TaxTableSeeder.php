@@ -1,5 +1,6 @@
 <?php
 
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use ILLuminate\Database\Eloquent\Model;
 use App\Models\Bp_tax;

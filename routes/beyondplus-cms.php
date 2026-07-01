@@ -273,7 +273,7 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             //       return redirect()->to('/bp-admin/login');
             // });
 
-            Route::get('logout','Auth\MainController@logout');
+            Route::get('logout','BpAdmin\Main@logout');
 
 
             Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
