@@ -618,4 +618,11 @@ INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_typ
 
 INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,3,'cat'),(1,2,'cat'),(1,1,'cat');
 
+-- Remove the client-specific "Department Pages" module
+DELETE FROM `bp_access` WHERE `module_id` = 22;
+DELETE FROM `bp_modules` WHERE `module_id` = 22;
+
+-- Give the demo administrator (role 3) full access to every admin module
+UPDATE `bp_access` SET `canshow` = 1, `cancreate` = 1, `canedit` = 1, `candelete` = 1 WHERE `usertype` = 3;
+
 SET FOREIGN_KEY_CHECKS=1;

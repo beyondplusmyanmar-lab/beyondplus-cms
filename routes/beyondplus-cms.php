@@ -325,7 +325,6 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             Route::get('/news-event/{lang}', 'Front\FrontController@newsEvent');
 
 
-            Route::get('/department/{lang}', 'Front\FrontController@departmentDetail');
       });
 
 

@@ -32,17 +32,4 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' => 'admins'], function () {
-
-	Route::get('department', 'DepartmentController@index');
-    Route::get('department/create', 'DepartmentController@create');
-    Route::post('department', 'DepartmentController@store');
-    Route::get('department/{id}', 'DepartmentController@show');
-    Route::get('department/{id}/edit', 'DepartmentController@edit');
-    Route::put('department/{id}', 'DepartmentController@update');
-    Route::delete('department/{id}', 'DepartmentController@destroy');
-
-    Route::get('department/{id}/translate', 'DepartmentController@translate');
-    Route::get('department/delete/{id}','DepartmentController@destroy');
-
-});
+// Admin routes are registered in routes/beyondplus-cms.php (bp-admin group).

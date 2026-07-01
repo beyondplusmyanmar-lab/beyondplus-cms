@@ -316,22 +316,22 @@ function langauge($chose_id = null) {
 }
 
 function department($chose_id = null) {
-    $department = [1=>'Electronic Technology Research Department', 2=>'Renewable Energy Research Department', 3=>'Chemical Technology Research Center', 4=>'Information and Communication Technology Research Center', 5=>'National Analytical Laboratory', 6=>'National Standards and Quality Division', 7=>'DRI Head Office'];
+    $department = [1=>'Department One', 2=>'Department Two', 3=>'Department Three'];
 
     if($chose_id){
-        $department = $department[$chose_id];
+        $department = $department[$chose_id] ?? '';
     }
-    
+
     return $department;
 }
 
 function departmentShort($chose_id = null) {
-    
-    $department = [1=>'etrd', 2=>'rerd', 3=>'ctrc', 4=>'ictrc', 5=>'nal', 6=>'nsqd', 7=>'driho'];
+
+    $department = [1=>'d1', 2=>'d2', 3=>'d3'];
     if($chose_id){
-            $department = $department[$chose_id];
+            $department = $department[$chose_id] ?? '';
     }
-    
+
     return $department;
 }
 
