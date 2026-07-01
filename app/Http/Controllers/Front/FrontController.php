@@ -338,7 +338,6 @@ class FrontController extends Controller
     //     "user": null,
     //     "media": [ ]
     // },
-        //http://localhost/news-event/detail/allmeeting?start=2021-11-28T00:00:00+06:30&end=2022-01-09T00:00:00+06:30
 
         $posts = Bp_post::select('id','title','event_at as start','post_link as url','event_color as color','featured_img as feature_image_path')->where('post_type','event')->where('translate_id',0)->with('translate')->get();
 

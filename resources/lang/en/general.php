@@ -4,7 +4,6 @@ return [
 
     'home' => 'Home',
     'categories' 	=> 'categories',
-    'dep_r_and_i' 	=> 'Department of Research and Innovation',
     'dri_road' 			=> 'No. 6 KabaAye Pagoda Road',
     'dri_post_code'		=> 'P.O. Box 11081',
     'dri_township'		=> 'Yankin',

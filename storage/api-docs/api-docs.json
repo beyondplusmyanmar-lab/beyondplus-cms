@@ -2,9 +2,9 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Beyond Plus CMS API Documentation",
-        "description": "Player API description",
+        "description": "JSON API for Beyond Plus CMS.",
         "contact": {
-            "email": "admin@admin.com"
+            "email": "admin@example.com"
         },
         "license": {
             "name": "Apache 2.0",
@@ -18,24 +18,8 @@
             "description": "Demo API Server"
         }
     ],
-    "paths": {
-        "/player": {
-            "get": {
-                "summary": "Sample",
-                "responses": {
-                    "200": {
-                        "description": "successful operation"
-                    }
-                }
-            }
-        }
-    },
-    "tags": [
-        {
-            "name": "Projects",
-            "description": "API Endpoints of Projects"
-        }
-    ],
+    "paths": {},
+    "tags": [],
     "security": [
         []
     ]
