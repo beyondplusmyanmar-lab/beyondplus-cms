@@ -1,0 +1,82 @@
+@extends('bp-admin.layouts.admin.index')
+
+@section('title', 'Page')
+
+@section('content')
+    <div class="row">
+        <div class="col-md-12 tile">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <h4>Show</h4>
+                        </div>
+                        <div class="col-sm-1 pull-right">
+                            <a href="{{ url('bp-admin/user-guide') }}" class="btn btn-success  pull-right">
+                                <i class="fa fa-user-plus"></i>
+                                User Guide
+                            </a>
+                        </div>
+                        <div class="col-sm-1 pull-right">
+                            <a href="{{ url('bp-admin/page/create') }}" class="btn btn-success  pull-right">
+                                <i class="fa fa-user-plus"></i>
+                                New
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table  class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Languague</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($page as $c)
+                        <tr>
+                            <td>
+                                <a href="{{ url('bp-admin/page/'.$c->id.'/edit') }}" >{{$c->title}}</a>
+                            </td>
+                            <td>@isset($c->translate)
+                                    <a href="{{ url('bp-admin/page/'.$c->id.'/edit') }}" >{{langauge($c->lang)}}</a> | <a href="{{ url('bp-admin/page/'.$c->translate->id.'/edit') }}" >{{ langauge($c->translate->lang) }}</a>
+                                @else
+                                     <a href="{{ url('bp-admin/page/'.$c->id.'/edit') }}" >{{langauge($c->lang)}}</a> 
+                                @endisset
+                            </td>
+                            <td>
+                                <a href="{{ url('bp-admin/page/'.$c->id.'/edit') }}" class="btn btn-xs btn-info">Edit</a>
+                                <a href="{{ url('bp-admin/page/delete', [$c->id]) }}" class="btn btn-delete btn-xs btn-danger">Delete</a>
+                            </td>
+                            
+                        </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="pagination"> {{ $page->links() }} </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+@stop
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+@endpush
