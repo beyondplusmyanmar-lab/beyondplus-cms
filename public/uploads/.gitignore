@@ -1,0 +1,5 @@
+# User-uploaded media is not tracked — only placeholder images are kept.
+*
+!.gitignore
+!default.jpg
+!la.jpg
