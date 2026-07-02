@@ -625,6 +625,19 @@ INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_typ
 
 INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,3,'cat'),(1,2,'cat'),(1,1,'cat');
 
+-- Demo pages (post_type='page') demonstrating page-template usage
+INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_template`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
+(4,'About Us','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This About page uses the <strong>default</strong> page template (with sidebar).</p>','default.jpg','about-us','page','default','yes',0,1,1,NOW(),NOW()),
+(5,'Our Services','<p>This page uses the <strong>full-width</strong> template (no sidebar), selected via the page template option in the admin.</p>','default.jpg','services','page','fullwidth','yes',0,1,1,NOW(),NOW()),
+(6,'Contact','<p>Reach out using the details on the right. This page uses the <strong>contact</strong> template.</p>','default.jpg','contact','page','contact','yes',0,1,1,NOW(),NOW());
+
+-- Demo navigation menu: a "Company" dropdown (About Us, Our Services) + a top-level Contact link
+INSERT INTO `bp_menus` (`menu_id`,`menu_name`,`menu_link`,`post_id`,`menu_weight`,`menu_icon`,`parent_id`,`menu_type`,`staff_id`,`lang`,`translate_id`,`created_at`) VALUES
+(1,'Company','#',0,1,'',0,'custom',1,1,'0',NOW()),
+(2,'About Us','about-us',4,1,'',1,'default',1,1,'0',NOW()),
+(3,'Our Services','services',5,2,'',1,'default',1,1,'0',NOW()),
+(4,'Contact','contact',6,3,'',0,'default',1,1,'0',NOW());
+
 -- Configuration defaults (secrets intentionally blank) + admin module
 INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) VALUES
 ('registration_type','phone','yes',NOW()),
