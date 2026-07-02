@@ -15,21 +15,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Carbon\Carbon;
 use App\Models\Bp_post;
+use OpenApi\Attributes as OA;
 
 class CMSController extends Controller
 {
-      /**
-     * @SWG\Get(
-     *   path="/player",
-     *   summary="Sample",
-     *   @SWG\Response(response=200, description="successful operation")
-     * )
-     *
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
+    #[OA\Get(
+        path: '/api/m/home',
+        summary: 'CMS home feed (latest news titles and sliders)',
+        tags: ['CMS'],
+        responses: [new OA\Response(response: 200, description: 'Successful operation')]
+    )]
     public function index(Request $request)
     {
         $limit = "10";

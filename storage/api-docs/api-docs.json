@@ -18,9 +18,26 @@
             "description": "Demo API Server"
         }
     ],
-    "paths": {},
-    "tags": [],
-    "security": [
-        []
+    "paths": {
+        "/api/m/home": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "CMS home feed (latest news titles and sliders)",
+                "operationId": "68f2d243feed169d84cc4ea9a6ea551e",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "CMS",
+            "description": "CMS"
+        }
     ]
 }
