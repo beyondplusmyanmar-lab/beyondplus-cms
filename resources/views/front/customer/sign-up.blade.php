@@ -21,12 +21,23 @@
                             @error('firstname')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <input id="lastname" type="hidden" name="lastname" value="{{ old('lastname') }}">
+                        @php $regType = bp_option('registration_type', 'phone'); @endphp
+                        @if($regType === 'phone' || $regType === 'both')
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone number</label>
                             <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror"
                                    name="phone" value="{{ old('phone') }}" required>
                             @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
+                        @endif
+                        @if($regType === 'email' || $regType === 'both')
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                   name="email" value="{{ old('email') }}" required>
+                            @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        @endif
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"

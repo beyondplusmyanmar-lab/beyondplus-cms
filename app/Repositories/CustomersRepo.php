@@ -17,14 +17,16 @@ use Illuminate\Http\Request;
 // use App\Mail\NewRegisterMail;
 // use App\Mail\ActivedAccountMail;
 use App\Repositories\GeneralSettingRepo;
-use Illuminate\Support\Facades\Log;
+use App\Services\OtpNotifier;
 
 class CustomersRepo
 {
     protected $generalSettingRepo;
+    protected $otpNotifier;
 
-    public function __construct(GeneralSettingRepo $generalSettingRepo) {
+    public function __construct(GeneralSettingRepo $generalSettingRepo, OtpNotifier $otpNotifier) {
         $this->generalSettingRepo = $generalSettingRepo;
+        $this->otpNotifier = $otpNotifier;
     }
 
     public function createCustomer($request)
@@ -46,8 +48,9 @@ class CustomersRepo
             // $reward_expiry_date = date("Y-12-31", strtotime($default_point_expire_yr));
 
             $customers->first_name = $input['firstname'];
-            $customers->last_name = $input['lastname'];
-            $customers->phone       = $input['phone'];
+            $customers->last_name = $input['lastname'] ?? '';
+            $customers->phone       = $input['phone'] ?? null;
+            $customers->email       = $input['email'] ?? null;
             /*if(isset($input['subscribed_to_news_letter'])){
                 $input['subscribed_to_news_letter'] = 1;
             }else{
@@ -63,7 +66,7 @@ class CustomersRepo
             $customers->total_reward_points = 0; //for new customer reward points
             // $customers->reward_expiry_date = $reward_expiry_date; //update reward point end-date for customer
             $customers->otpcode = mt_rand(100000,999999);
-            $customers->activation_code = sha1(mt_rand(10000,99999).time().$input['phone']);
+            $customers->activation_code = sha1(mt_rand(10000,99999).time().($input['phone'] ?? $input['email'] ?? ''));
             $customers->password = Hash::make($input['password']);
             
             //$input['subscribed_to_news_letter'] = $input['subscribed_to_news_letter'] ?? false;
@@ -75,8 +78,9 @@ class CustomersRepo
 
 
             if($saved) {
-                // SMS gateway removed from the public build; log the OTP for local testing.
-                Log::info("OTP for {$customers->phone}: {$customers->otpcode}");
+                // Deliver the OTP over the configured channel (SMS/email), or log it
+                // when no gateway is enabled (see admin Configuration page).
+                $this->otpNotifier->send($customers, $customers->otpcode);
             }
 
             // if ($customers->subscribed_to_news_letter) {

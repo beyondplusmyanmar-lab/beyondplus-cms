@@ -45,16 +45,18 @@ class CustomerController extends Controller
      */
     protected $redirectTo = '/';
     protected $customersRepo;
+    protected $otpNotifier;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct( CustomersRepo $customersRepo)
+    public function __construct( CustomersRepo $customersRepo, \App\Services\OtpNotifier $otpNotifier)
     {
 
       $this->customersRepo      = $customersRepo;
+      $this->otpNotifier        = $otpNotifier;
 
     }
 
@@ -93,30 +95,35 @@ class CustomerController extends Controller
     public function customer_register(Request $request)
     {
         $input = $request->all();
-        
 
-
-        $validator = Validator::make($input, [
-            'firstname'    => 'required',
-            // 'lastname'  => 'required',
-            'phone'     => 'required|unique:customers|min:10',
+        // Required fields depend on the configured registration method.
+        $regType = bp_option('registration_type', 'phone');
+        $rules = [
+            'firstname' => 'required',
             'password'  => 'required|confirmed|min:8',
+        ];
+        if ($regType === 'phone' || $regType === 'both') {
+            $rules['phone'] = 'required|unique:customers|min:10';
+        }
+        if ($regType === 'email' || $regType === 'both') {
+            $rules['email'] = 'required|email|unique:customers';
+        }
 
-            ]
-        );        
+        $validator = Validator::make($input, $rules);
 
-          
-        if($validator->fails()) { 
+
+        if($validator->fails()) {
 
           return redirect()->back()->withErrors($validator)->withInput();
 
-        }   
+        }
 
         $saved = $this->customersRepo->createCustomer($request);
 
         if($saved) {
-          // return $this->activation($input['phone']);
-          $request->session()->put('verify_phone',$input['phone']);
+          // Identifier used for the OTP / activation step (phone or email).
+          $identifier = ($regType === 'email') ? $input['email'] : $input['phone'];
+          $request->session()->put('verify_phone', $identifier);
           $request->session()->put('opt_status', "register" );
           
           return redirect('customer/activate')->with('flash_message', 'Your account is created.
@@ -165,7 +172,11 @@ class CustomerController extends Controller
 
             $activation_code = $request->activation_code;
 
-              $customer = Customers::where('phone', $phone)->where('otpcode', $activation_code)->first();
+              // $phone holds whichever identifier was used at registration (phone or email).
+              $customer = Customers::where('otpcode', $activation_code)
+                  ->where(function ($q) use ($phone) {
+                      $q->where('phone', $phone)->orWhere('email', $phone);
+                  })->first();
               
               if($customer) {
 
@@ -267,17 +278,22 @@ class CustomerController extends Controller
         // $remember = $req->get('remember');
         // if(Auth::attempt(['email' => $req->email, 'password' => $req->password], $remember))
 
-        $customer=Customers::where('phone',$request->phone)->first();
+        // The sign-in field ("phone") may hold a phone number or an email,
+        // depending on the configured registration method.
+        $identifier = $request->phone;
+        $loginField = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+        $customer=Customers::where('phone',$identifier)->orWhere('email',$identifier)->first();
 
         if(!is_null($customer)){
           if(Hash::check($request->password, $customer->password)){
             if($customer->status==1){
               if($customer->is_verified==1){
-                if(Auth::guard('customer_web')->attempt(['phone'=>$request->phone,'password'=>$request->password],$request->remember)){
+                if(Auth::guard('customer_web')->attempt([$loginField=>$identifier,'password'=>$request->password],$request->remember)){
                   return redirect('/');
                 }
               }else{
-                if(Auth::guard('customer_web')->attempt(['phone'=>$request->phone,'password'=>$request->password],$request->remember)){
+                if(Auth::guard('customer_web')->attempt([$loginField=>$identifier,'password'=>$request->password],$request->remember)){
                   if(Auth::guard("customer_web")->check()){
                     Auth::guard("customer_web")->logout();
                   }
@@ -335,8 +351,8 @@ class CustomerController extends Controller
 
           if($saved) {
 
-            // SMS gateway removed from the public build; log the OTP for local testing.
-            Log::info("OTP for {$customer->phone}: {$customer->otpcode}");
+            // Deliver the OTP over the configured channel (SMS/email), or log it.
+            $this->otpNotifier->send($customer, $customer->otpcode);
 
             return redirect('customer/activate')->with('flash_message', 'Please check your otp code.');
 

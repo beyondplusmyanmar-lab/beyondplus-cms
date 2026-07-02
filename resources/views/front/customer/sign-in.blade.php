@@ -14,8 +14,12 @@
 
                     <form method="POST" action="{{ url('customer/sign-in') }}">
                         @csrf
+                        @php
+                            $regType = bp_option('registration_type', 'phone');
+                            $idLabel = $regType === 'email' ? 'Email address' : ($regType === 'both' ? 'Phone or email' : 'Phone number');
+                        @endphp
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Phone number</label>
+                            <label for="phone" class="form-label">{{ $idLabel }}</label>
                             <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror"
                                    name="phone" value="{{ old('phone') }}" required autofocus>
                             @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
