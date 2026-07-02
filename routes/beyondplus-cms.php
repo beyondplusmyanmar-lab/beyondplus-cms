@@ -153,6 +153,9 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             Route::get('general/modules','ModulesController@index');
             Route::post('general/moduleupdate','ModulesController@ajaxUpdate');
 
+            Route::get('configuration', 'ConfigurationController@index');
+            Route::post('configuration', 'ConfigurationController@update');
+
             // Route::resource('account', 'AccountController');
 
             Route::get('account', 'AccountController@index');

@@ -625,6 +625,23 @@ INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_typ
 
 INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,3,'cat'),(1,2,'cat'),(1,1,'cat');
 
+-- Configuration defaults (secrets intentionally blank) + admin module
+INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) VALUES
+('registration_type','phone','yes',NOW()),
+('api_enabled','yes','yes',NOW()),
+('sms_enabled','no','yes',NOW()),
+('sms_provider','smspoh','yes',NOW()),
+('sms_sender','','yes',NOW()),
+('sms_api_token','','yes',NOW()),
+('mail_enabled','no','yes',NOW()),
+('mail_provider','mailgun','yes',NOW()),
+('mailgun_domain','','yes',NOW()),
+('mailgun_secret','','yes',NOW()),
+('mail_from','','yes',NOW());
+
+INSERT INTO `bp_modules` (`module_name`,`module_name_mm`,`module_link`,`module_weight`,`module_icon`,`parent_id`,`staff_id`,`section`,`created_at`) VALUES
+('Configuration','ဖွဲ့စည်းမှု','configuration',5,'fa fa-cogs',8,1,1,NOW());
+
 -- Remove the client-specific "Department Pages" module
 DELETE FROM `bp_access` WHERE `module_id` = 22;
 DELETE FROM `bp_modules` WHERE `module_id` = 22;

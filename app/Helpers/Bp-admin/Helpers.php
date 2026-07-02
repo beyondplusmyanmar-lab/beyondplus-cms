@@ -344,6 +344,12 @@ function site_information($filter = 'mobile_theme') {
     return bp_options::where('option_name',$filter)->first();
 }
 
+// Read a single option value with a fallback default.
+function bp_option($name, $default = '') {
+    $option = bp_options::where('option_name', $name)->first();
+    return $option ? $option->option_value : $default;
+}
+
 
 function showBlock($id) {
     

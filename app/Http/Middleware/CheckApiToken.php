@@ -16,6 +16,11 @@ class CheckApiToken
      */
     public function handle($request, Closure $next)
     {
+        // Respect the "API enabled" configuration toggle (defaults to enabled).
+        if (bp_option('api_enabled', 'yes') === 'no') {
+            return response()->json([ "data" => [ "status" => 503, "message" => "API disabled" ] ], 503);
+        }
+
         $segment = "m";
 
         if($request->segment(2)) {

@@ -10,7 +10,7 @@ class Bp_options extends Model
     protected $table = 'bp_options';
 
     protected $fillable = [
-    	'option_id','option_name', 'option_value'
+    	'option_id','option_name', 'option_value', 'autoload'
     ];
 
 }
