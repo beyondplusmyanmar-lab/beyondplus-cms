@@ -64,5 +64,19 @@ class AppServiceProvider extends ServiceProvider
         } catch (\Throwable $e) {
             // DB unavailable (e.g. before migrations) — keep the default mailer.
         }
+
+        // Restrict API CORS to the origins configured on the admin Configuration
+        // page (blank = allow all, the framework default).
+        try {
+            $origins = trim((string) bp_option('cors_origins', ''));
+            if ($origins !== '') {
+                $list = array_values(array_filter(array_map('trim', preg_split('/[\s,]+/', $origins))));
+                if ($list) {
+                    config(['cors.allowed_origins' => $list]);
+                }
+            }
+        } catch (\Throwable $e) {
+            // DB unavailable — keep the default CORS policy.
+        }
     }
 }

@@ -29,6 +29,8 @@ class ConfigurationController extends Controller
         'mailgun_domain'    => '',
         'mailgun_secret'    => '',
         'mail_from'         => '',
+        'spa_url'           => '',      // public URL of the headless/SPA app
+        'cors_origins'      => '',      // allowed API origins; blank = allow all (*)
     ];
 
     /** @var string[] */

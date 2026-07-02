@@ -31,7 +31,7 @@
             </div>
 
             <div class="tile">
-                <h3 class="tile-title">API</h3>
+                <h3 class="tile-title">API &amp; App (headless / SPA)</h3>
                 <div class="tile-body">
                     <div class="form-group">
                         <label class="control-label">JSON API</label>
@@ -39,7 +39,20 @@
                             <option value="yes" {{ $config['api_enabled'] === 'yes' ? 'selected' : '' }}>Enabled</option>
                             <option value="no" {{ $config['api_enabled'] === 'no' ? 'selected' : '' }}>Disabled</option>
                         </select>
-                        <small class="form-text text-muted">Toggle the token-protected JSON API.</small>
+                        <small class="form-text text-muted">Powers the mobile / SPA app. Interactive docs at
+                            <a href="{{ url('api/documentation') }}" target="_blank">/api/documentation</a>.</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">App (SPA) URL</label>
+                        <input type="text" class="form-control" name="spa_url" value="{{ $config['spa_url'] }}"
+                               placeholder="https://app.example.com">
+                        <small class="form-text text-muted">Where your headless / SPA front-end is hosted (used for links).</small>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="control-label">Allowed API origins (CORS)</label>
+                        <textarea class="form-control" name="cors_origins" rows="2"
+                                  placeholder="https://app.example.com, https://admin.example.com">{{ $config['cors_origins'] }}</textarea>
+                        <small class="form-text text-muted">Comma or line separated. Leave blank to allow all origins (<code>*</code>).</small>
                     </div>
                 </div>
             </div>
