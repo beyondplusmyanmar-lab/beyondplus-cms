@@ -16,6 +16,15 @@
 </head>
 <body>
 <div class="container py-4" style="max-width: 960px;">
+    <!-- Navigation menu (from /api/m/menus) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border rounded mb-3 px-3">
+        <span class="navbar-brand mb-0"><i class="bi bi-list"></i> Menu
+            <span class="badge bg-light text-muted border ms-1" style="font-size:.6rem;">/api/m/menus</span></span>
+        <ul class="navbar-nav flex-row flex-wrap gap-2" id="nav-menu">
+            <li class="nav-item"><span class="nav-link text-muted py-0">Loading…</span></li>
+        </ul>
+    </nav>
+
     <div class="d-flex align-items-center justify-content-between mb-1">
         <h3 class="mb-0">Beyond Plus CMS — SPA Example</h3>
         <span id="session-pill" class="badge bg-secondary status-pill">Signed out</span>
@@ -167,10 +176,48 @@
     let token = localStorage.getItem('bp_token') || '';
     document.getElementById('token').value = token;
     updateSession();
+    loadMenu();                    // navigation tree — no auth needed
     loadNews();                    // public content — no auth needed
     loadCategories();
     // If a token is already stored, load the profile page immediately.
     if (token) doProfile();
+
+    async function loadMenu() {
+        const box = document.getElementById('nav-menu');
+        const r = await call('/menus', 'GET');
+        if (!r.ok) { box.innerHTML = '<li class="nav-item"><span class="nav-link text-danger py-0">Menu failed to load</span></li>'; return; }
+        const items = r.body.data || [];
+        box.innerHTML = items.length ? items.map(renderMenuItem).join('')
+                                     : '<li class="nav-item"><span class="nav-link text-muted py-0">No menu items</span></li>';
+    }
+
+    function renderMenuItem(m) {
+        const kids = m.children || [];
+        if (kids.length) {
+            return '<li class="nav-item dropdown">'
+                + '<a class="nav-link dropdown-toggle py-0" href="#" data-bs-toggle="dropdown">' + esc(m.title) + '</a>'
+                + '<ul class="dropdown-menu">'
+                + kids.map(function (c) {
+                    return '<li><a class="dropdown-item" href="#" onclick="return menuClick(this)" '
+                        + 'data-type="' + esc(c.type) + '" data-url="' + esc(c.url) + '">' + esc(c.title) + '</a></li>';
+                  }).join('')
+                + '</ul></li>';
+        }
+        return '<li class="nav-item"><a class="nav-link py-0" href="#" onclick="return menuClick(this)" '
+            + 'data-type="' + esc(m.type) + '" data-url="' + esc(m.url) + '">' + esc(m.title) + '</a></li>';
+    }
+
+    function menuClick(el) {
+        const type = el.getAttribute('data-type');
+        const url = el.getAttribute('data-url');
+        if (type === 'custom') {
+            if (url && url !== '#') window.open(url, '_blank');
+            return false;
+        }
+        // Internal link like "/about-us" -> open the linked page.
+        openContent('pages', url.replace(/^\//, ''));
+        return false;
+    }
 
     function esc(s) { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; }
     function spinner() { return '<div class="text-center text-muted py-3"><div class="spinner-border spinner-border-sm"></div> Loading…</div>'; }
@@ -199,7 +246,7 @@
         if (!posts.length) { box.innerHTML = '<p class="text-muted mb-0">No posts in this category.</p>'; return; }
         box.innerHTML = posts.map(function (p) {
             return '<div class="col-md-4"><div class="border rounded p-3 h-100" '
-                + 'style="cursor:pointer" onclick="openPost(\'' + esc(p.slug) + '\')" title="Read full post">'
+                + 'style="cursor:pointer" onclick="openContent(\'posts\', \'' + esc(p.slug) + '\')" title="Read full post">'
                 + '<small class="text-muted">' + esc(p.date || '') + '</small>'
                 + '<h6 class="mb-1">' + esc(p.title) + '</h6>'
                 + '<p class="small text-muted mb-2">' + esc(p.excerpt) + '</p>'
@@ -208,9 +255,9 @@
         }).join('');
     }
 
-    // Full post detail — body is trusted CMS HTML (shortcodes already expanded server-side).
+    // Full post/page detail — body is trusted CMS HTML (shortcodes already expanded server-side).
     let postReq = 0;
-    async function openPost(slug) {
+    async function openContent(kind, slug) {   // kind: 'posts' | 'pages'
         const my = ++postReq;   // guards against rapid clicks: only the newest response wins
         document.getElementById('post-title').textContent = 'Loading…';
         document.getElementById('post-image').classList.add('d-none');
@@ -218,8 +265,8 @@
         document.getElementById('post-body').innerHTML = spinner();
         bootstrap.Modal.getOrCreateInstance(document.getElementById('postModal')).show();
 
-        const r = await call('/posts/' + encodeURIComponent(slug), 'GET');
-        if (my !== postReq) return;   // a newer openPost() superseded this one — drop the stale response
+        const r = await call('/' + kind + '/' + encodeURIComponent(slug), 'GET');
+        if (my !== postReq) return;   // a newer open superseded this one — drop the stale response
 
         if (!r.ok) {
             document.getElementById('post-title').textContent = 'Unavailable';
