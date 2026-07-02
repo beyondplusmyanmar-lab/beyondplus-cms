@@ -5,7 +5,9 @@
 
 @section('content')
 <style>
-    .menu-body { padding: .5rem; min-height: 460px; }
+    .menu-body { padding: 1rem 1.25rem 1.25rem; min-height: 460px; }
+    .box-header { padding-bottom: .75rem; }
+    .insert-list { padding: .75rem 1rem 1rem; }
     .menu-item-row {
         display: flex; align-items: center; gap: .5rem;
         background: #fff; border: 1px solid #e5e7eb; border-radius: 6px;

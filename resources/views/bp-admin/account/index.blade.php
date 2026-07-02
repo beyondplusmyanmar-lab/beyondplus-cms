@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <form action="{{ url('/bp-admin/account') }}" method="get">
-                    <div class="row pt-3">
+                    <div class="row pt-3 pb-2">
                         <div class="col-md-6">
                             <input type="text" name="name" id="name" class="form-control" placeholder="Search by name or email"
                                    autocomplete="off" value="{{ Request::get('name') }}">
@@ -32,8 +32,8 @@
                 </form>
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
-                <table class="table table-hover">
+            <div class="box-body pt-3" style="border-top: 1px solid #eef0f3;">
+                <table class="table table-hover mb-0">
                     <thead>
                         <tr>
                             <th>Name</th>
