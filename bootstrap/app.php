@@ -21,14 +21,15 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->namespace('App\Http\Controllers')
                 ->group(base_path('routes/web.php'));
 
-            // Locale-prefixed CMS routes ("mm" is the un-prefixed default).
-            foreach (array_reverse(config('app.locales')) as $prefix) {
-                if ($prefix === 'mm') {
-                    $prefix = '';
-                }
+            // Locale-prefixed CMS routes. "mm" is the un-prefixed default and
+            // must be registered LAST, otherwise its catch-all "/{name}" route
+            // shadows the prefixed routes (e.g. /en).
+            $locales = collect(config('app.locales'))
+                ->sortBy(fn ($locale) => $locale === 'mm' ? 1 : 0);
 
+            foreach ($locales as $locale) {
                 Route::middleware('web')
-                    ->prefix($prefix)
+                    ->prefix($locale === 'mm' ? '' : $locale)
                     ->namespace('App\Http\Controllers')
                     ->group(base_path('routes/beyondplus-cms.php'));
             }

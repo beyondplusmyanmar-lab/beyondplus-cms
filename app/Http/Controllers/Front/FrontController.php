@@ -260,8 +260,8 @@ class FrontController extends Controller
           } else {
                 Session::put('applocale', 'en');
                 App::setLocale("en");
-                return redirect()->to(url('/en/ဥပဒေများ'));
-          }    
+                return redirect()->to(url('/en'));
+          }
           // $lang = App::getLocale();
           // dd($lang);
           // return redirect()->to(url('/'));
