@@ -24,11 +24,146 @@
                 "tags": [
                     "CMS"
                 ],
-                "summary": "CMS home feed (latest news titles and sliders)",
-                "operationId": "68f2d243feed169d84cc4ea9a6ea551e",
+                "summary": "Home feed: site info, sliders, latest posts and news",
+                "operationId": "c909d8b45221f84ce61167d628673364",
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/m/posts": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "Paginated list of published posts",
+                "operationId": "39d8093d28974646c4d29d389cd37150",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/m/posts/{slug}": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "Single published post by slug",
+                "operationId": "8f8393851f8bf7939d4986acac3f4c7b",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/m/pages": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "List of published pages",
+                "operationId": "bfb817e2c387c741a5a1f7517e77891c",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/m/pages/{slug}": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "Single published page by slug",
+                "operationId": "e163a65b3e0cc160ab64da61bd21a843",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/m/menus": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "Navigation menu tree",
+                "operationId": "73fa82df0eae12c51a2c6de28dba4caf",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/m/categories": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "List of content categories",
+                "operationId": "b05fba06a9842ee53d3287429e025a09",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/m/categories/{slug}/posts": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "Published posts in a category",
+                "operationId": "831b70046832033cd4cfb306ce9ee560",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/m/sliders": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "Homepage sliders",
+                "operationId": "96ff77f7eee1fab130d411aa9d4f6899",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/m/news": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "Paginated news and events",
+                "operationId": "926d91b82df482711de5a311fdf1f842",
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }

@@ -35,16 +35,24 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
+/*
+ * Public, read-only CMS content API. Unauthenticated but rate limited by the
+ * "api" middleware group (throttle:60,1 per IP). See CMSController.
+ */
 Route::group([
-	'prefix' => 'm', 
-	'as' => 'api.', 
+	'prefix' => 'm',
+	'as' => 'api.',
 	'namespace' => 'Api\V1\Customer'
 ], function () {
-	// Route::get('/posts/{num}', 'PostController@index');
-
-	Route::get('/home', 'CMSController@index');
-
-
-
+	Route::get('/home', 'CMSController@home');
+	Route::get('/posts', 'CMSController@posts');
+	Route::get('/posts/{slug}', 'CMSController@post');
+	Route::get('/pages', 'CMSController@pages');
+	Route::get('/pages/{slug}', 'CMSController@page');
+	Route::get('/menus', 'CMSController@menus');
+	Route::get('/categories', 'CMSController@categories');
+	Route::get('/categories/{slug}/posts', 'CMSController@categoryPosts');
+	Route::get('/sliders', 'CMSController@sliders');
+	Route::get('/news', 'CMSController@news');
 });
 
