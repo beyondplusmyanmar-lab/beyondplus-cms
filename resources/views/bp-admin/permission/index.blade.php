@@ -1,179 +1,110 @@
 @extends('bp-admin.layouts.admin.index')
 
-@section('title', 'Permisson')
+@section('title', 'Permissions')
 
 @section('content')
+<style>
+    .perm-table td { vertical-align: middle; }
+    .perm-role-row td {
+        background: #0f766e; color: #fff; font-weight: 600;
+        letter-spacing: .3px; text-transform: capitalize;
+    }
+    .perm-name { font-weight: 500; color: #111827; }
+    .perm-child .perm-name { padding-left: 2rem; color: #4b5563; font-weight: 400; }
+    .perm-child .perm-name::before { content: '\21B3'; margin-right: .5rem; color: #9ca3af; }
+    .perm-check { text-align: center; width: 110px; }
+</style>
 <div class="row">
     <div class="col-md-12 tile">
         <div class="box box-danger">
             <div class="box-header">
-                <div class="row">
-                    <div class="col-sm-9">
-
-                    </div>
-                    <div class="col-sm-3 pull-right">
-
-                    <!--     <a href="{{ url('bp-admin/permission/reset') }}" class="btn btn-success  pull-right">
-                            <i class="fa fa-user-plus"></i>
-                            Reset<span id="ok"></span>
-                        </a> -->
-                        <!-- <a href="{{ url('bp-admin/module/create') }}" class="btn btn-success  pull-right">
-                            <i class="fa fa-user-plus"></i>
-                            New<span id="ok"></span>
-                        </a> -->
-                    </div>
-                </div>
+                <h4 class="mb-0">Access permissions</h4>
+                <small class="text-muted">Tick a module to grant that role access to it. Changes save automatically.</small>
             </div>
-
             <!-- /.box-header -->
             <div class="box-body">
-                <table  class="table table-bordered table-hover">
+                <table class="table table-hover perm-table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Module Name</th>
-                            <th>Show</th>
+                            <th style="width:70px">#</th>
+                            <th>Module</th>
+                            <th class="perm-check">Access</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @php $i=1; $temprole = []; @endphp
+                        @php $i = 1; $temprole = []; @endphp
                         @foreach ($module as $m)
 
-
-                           @if(!in_array( $m->usertype ,$temprole))
-                             <tr>
-                                <td  colspan="6" class="bg-primary text-white">
+                            @if(!in_array($m->usertype, $temprole))
+                                <tr class="perm-role-row">
                                     @php array_push($temprole, $m->usertype) @endphp
-                                    <b> {{ ucfirst(array_search($m->usertype, \App\Models\Bp_usertype::pluck('id','role')->toArray())) }} </b>
-                                </td>
-                              </tr>
+                                    <td colspan="3">{{ array_search($m->usertype, \App\Models\Bp_usertype::pluck('id', 'role')->toArray()) }}</td>
+                                </tr>
                             @endif
 
                             @if(count($m->module->child) > 0)
-                                 <tr>
-                                    <td class="bg-light text-dark">{{$i++}}</a></td>
-                                    <td class="bg-light text-dark">{{$m->module->module_name}}</a></td>
-                                    <td class="bg-light text-dark">{{Form::checkbox('canshow',$m->access_id,$m->canshow, ['class' => 'canshow' , 'id' => 'canshow-'.$m->access_id])}}</td>
+                                <tr>
+                                    <td>{{ $i++ }}</td>
+                                    <td class="perm-name">{{ $m->module->module_name }}</td>
+                                    <td class="perm-check">{{ Form::checkbox('canshow', $m->access_id, $m->canshow, ['class' => 'canshow', 'id' => 'canshow-'.$m->access_id]) }}</td>
                                 </tr>
 
                                 @foreach($m->module->child as $m1)
-
-                                    <!-- child module access looping and filter with user type -->
                                     @foreach($m1->access as $m1access)
                                         @if($m->usertype == $m1access->usertype)
-                                        <tr>
-                                            <td>- {{$i++}}</a></td>
-                                            <td>{{$m1->module_name}}</a></td>
-                                            <td>{{Form::checkbox('canshow',$m1access->access_id,$m1access->canshow, ['class' => 'canshow' , 'id' => 'canshow-'.$m1access->access_id])}}</td>
-                                        </tr>
+                                            <tr class="perm-child">
+                                                <td>{{ $i++ }}</td>
+                                                <td class="perm-name">{{ $m1->module_name }}</td>
+                                                <td class="perm-check">{{ Form::checkbox('canshow', $m1access->access_id, $m1access->canshow, ['class' => 'canshow', 'id' => 'canshow-'.$m1access->access_id]) }}</td>
+                                            </tr>
                                         @endif
                                     @endforeach
-
                                 @endforeach
                             @else
-
                                 <tr>
-                                    <td class="bg-light text-dark">{{$i++}}</a></td>
-                                    <td class="bg-light text-dark">{{$m->module->module_name}}</a></td>
-                                    <td class="bg-light text-dark">{{Form::checkbox('canshow',$m->access_id,$m->canshow, ['class' => 'canshow' , 'id' => 'canshow-'.$m->access_id])}}</td>
+                                    <td>{{ $i++ }}</td>
+                                    <td class="perm-name">{{ $m->module->module_name }}</td>
+                                    <td class="perm-check">{{ Form::checkbox('canshow', $m->access_id, $m->canshow, ['class' => 'canshow', 'id' => 'canshow-'.$m->access_id]) }}</td>
                                 </tr>
-
                             @endif
 
-                        
                         @endforeach
                     </tbody>
                 </table>
-                <div class="row">
-                    <div class="col-sm-12">
-                     {{--!! dataPaginator($users, true) !!--}}
-                 </div>
-             </div>
-         </div>
-         <!-- /.box-body -->
-     </div>
-     <!-- /.box -->
- </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
 </div>
 @stop
 
 @push('scripts')
-
 <script>
-
-
     $(document).ready(function () {
-      
 
-      $.ajaxSetup({
+        $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
 
-
-        
-
-
-      $('.canshow,.cancreate,.canedit,.candelete').change(function() {
-            // alert( "Handler for  called." );
-
-
+        $('.canshow,.cancreate,.canedit,.candelete').change(function() {
             var access_id = $(this).val();
             var option = Number(this.checked);
             var type = this.className;
-            // loadDoc(access_id, option, this.className);
 
-
-            $.post("/bp-admin/permissionupdate", {access_id: access_id,
+            $.post("/bp-admin/permissionupdate", {
+                access_id: access_id,
                 option: option,
-                type: type}, function(result){
-                if(result) {
-                  // alert("Successfully submited");
-                    // if(result.success == "1") {
-                    //     alert("Successfully submited");
-                    // } else {
-                    //     alert("Failed");
-                    // }
-                } else {
+                type: type
+            }, function(result){
+                if(!result) {
                     alert("Please contact to administrator");
                 }
-                
-
             });
-
         });
 
-    //     function loadDoc(access_id,option,type) {
-    //         var xhttp = new XMLHttpRequest();
-    //         xhttp.onreadystatechange = function() {
-    //           if (this.readyState == 4 && this.status == 200) {
-    //               if(option == 1) {
-    //                 $(this.responseText).unchecked;
-    //               } else {
-    //                 $(this.responseText).checked;
-    //               } 
-    //           } 
-    //       };
-    //       xhttp.open("POST", "/bp-admin/permisson", true);
-    //       // xhttp.open("GET", '/bp-admin/permission/update', true);
-    //       xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    //       xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    //       xhttp.setRequestHeader('Cache-Control', 'no-cache');
-    //       xhttp.setRequestHeader('X-CSRF-TOKEN', document.querySelector('[name=csrf-token]').getAttribute('content'));
-    //       xhttp.send("access_id="+access_id+"&option="+option+"&type="+type);
-    //       // xhttp.send();
-    //   }
-
-
-    //   $('.show,.create,.edit,.delete').on('click', function() {
-    //     var access_id = $(this).val();
-    //     var option = Number(this.checked);
-    //     loadDoc(access_id, option, this.className);
-    // });
-
-  });
-
-
+    });
 </script>
 @endpush

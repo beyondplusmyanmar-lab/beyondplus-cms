@@ -22,7 +22,7 @@ class SettingsController extends Controller
 
     public function index(){
 
-        $options = Bp_options::orderBy('option_id')->paginate(13);
+        $options = Bp_options::pluck('option_value', 'option_name');
         return view('bp-admin.settings.general', array('options' => $options));
     }
 
