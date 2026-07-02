@@ -1,19 +1,56 @@
 @extends('theme.default.layouts.app')
 
 @section('content')
-@php $siteName = optional(site_information('blogname'))->option_value ?: config('app.name'); @endphp
+@php
+    $siteName = optional(site_information('blogname'))->option_value ?: config('app.name');
+    $sliders = bp_slider();
+@endphp
 
-<section class="bp-hero text-center">
-    <div class="container">
-        <h1 class="display-4 mb-3">{{ $siteName }}</h1>
-        <p class="lead mb-4 opacity-75">
-            {{ optional(site_information('blogdescription'))->option_value ?: 'Publish and manage your content with a modern Laravel CMS.' }}
-        </p>
-        <a href="#featured" class="btn btn-light btn-lg px-4">
-            Explore posts <i class="bi bi-arrow-down"></i>
-        </a>
-    </div>
-</section>
+@if($sliders->count() > 0)
+    <section class="bp-slider">
+        <div id="bpCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                @foreach($sliders as $i => $slide)
+                    <button type="button" data-bs-target="#bpCarousel" data-bs-slide-to="{{ $i }}"
+                            class="{{ $i === 0 ? 'active' : '' }}" aria-label="Slide {{ $i + 1 }}"></button>
+                @endforeach
+            </div>
+            <div class="carousel-inner">
+                @foreach($sliders as $i => $slide)
+                    <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
+                        <img src="{{ url('/uploads/'.$slide->slider_link) }}" class="d-block w-100 bp-slide-img" alt="{{ $slide->slider_name }}">
+                        <div class="carousel-caption">
+                            <h2 class="fw-bold">{{ $slide->slider_name }}</h2>
+                            @if($slide->slider_description)
+                                <p class="d-none d-md-block">{{ $slide->slider_description }}</p>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            @if($sliders->count() > 1)
+                <button class="carousel-control-prev" type="button" data-bs-target="#bpCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#bpCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>
+                </button>
+            @endif
+        </div>
+    </section>
+@else
+    <section class="bp-hero text-center">
+        <div class="container">
+            <h1 class="display-4 mb-3">{{ $siteName }}</h1>
+            <p class="lead mb-4 opacity-75">
+                {{ optional(site_information('blogdescription'))->option_value ?: 'Publish and manage your content with a modern Laravel CMS.' }}
+            </p>
+            <a href="#featured" class="btn btn-light btn-lg px-4">
+                Explore posts <i class="bi bi-arrow-down"></i>
+            </a>
+        </div>
+    </section>
+@endif
 
 <section id="featured" class="py-5">
     <div class="container">

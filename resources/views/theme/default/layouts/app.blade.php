@@ -24,6 +24,9 @@
             color: #fff; padding: 5rem 0;
         }
         .bp-hero h1 { font-weight: 800; }
+        .bp-slider .bp-slide-img { height: 480px; object-fit: cover; filter: brightness(0.45); }
+        .bp-slider .carousel-caption { bottom: 20%; text-shadow: 0 2px 6px rgba(0,0,0,.5); }
+        @media (max-width: 768px) { .bp-slider .bp-slide-img { height: 300px; } }
         .bp-card { transition: transform .15s ease, box-shadow .15s ease; border: 1px solid #eef0f3; }
         .bp-card:hover { transform: translateY(-4px); box-shadow: 0 .75rem 1.5rem rgba(0,0,0,.08); }
         .bp-card .card-img-top { aspect-ratio: 16 / 10; object-fit: cover; }

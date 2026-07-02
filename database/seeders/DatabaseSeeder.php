@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TaxTableSeeder::class);
         $this->call(PostTableSeeder::class);
         $this->call(MenuTableSeeder::class);
+        $this->call(SliderTableSeeder::class);
         $this->call(OptionsTableSeeder::class);
         $this->call(ModuleTableSeeder::class);
         $this->call(LanguageTableSeeder::class);
