@@ -173,6 +173,7 @@
     if (token) doProfile();
 
     function esc(s) { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; }
+    function spinner() { return '<div class="text-center text-muted py-3"><div class="spinner-border spinner-border-sm"></div> Loading…</div>'; }
 
     async function loadCategories() {
         const box = document.getElementById('cat-chips');
@@ -191,9 +192,9 @@
         document.querySelectorAll('.cat-chip').forEach(function (b) { b.classList.remove('active'); });
         if (btn) btn.classList.add('active');
         const box = document.getElementById('cat-posts');
-        box.innerHTML = '<p class="text-muted mb-0">Loading…</p>';
+        box.innerHTML = spinner();
         const r = await call('/categories/' + encodeURIComponent(slug) + '/posts', 'GET');
-        if (!r.ok) { box.innerHTML = '<p class="text-danger mb-0">Failed to load posts.</p>'; return; }
+        if (!r.ok) { box.innerHTML = '<div class="text-danger">Failed to load posts. <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadCategoryPosts(\'' + esc(slug) + '\')">Retry</button></div>'; return; }
         const posts = r.body.data || [];
         if (!posts.length) { box.innerHTML = '<p class="text-muted mb-0">No posts in this category.</p>'; return; }
         box.innerHTML = posts.map(function (p) {
@@ -208,9 +209,24 @@
     }
 
     // Full post detail — body is trusted CMS HTML (shortcodes already expanded server-side).
+    let postReq = 0;
     async function openPost(slug) {
+        const my = ++postReq;   // guards against rapid clicks: only the newest response wins
+        document.getElementById('post-title').textContent = 'Loading…';
+        document.getElementById('post-image').classList.add('d-none');
+        document.getElementById('post-cats').innerHTML = '';
+        document.getElementById('post-body').innerHTML = spinner();
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('postModal')).show();
+
         const r = await call('/posts/' + encodeURIComponent(slug), 'GET');
-        if (!r.ok) return;
+        if (my !== postReq) return;   // a newer openPost() superseded this one — drop the stale response
+
+        if (!r.ok) {
+            document.getElementById('post-title').textContent = 'Unavailable';
+            document.getElementById('post-body').innerHTML =
+                '<p class="text-danger mb-0">' + esc((r.body && r.body.data && r.body.data.message) || 'Could not load this post.') + '</p>';
+            return;
+        }
         const p = r.body.data;
         document.getElementById('post-title').textContent = p.title || '';
         const img = document.getElementById('post-image');
@@ -218,14 +234,13 @@
         document.getElementById('post-cats').innerHTML = (p.categories || [])
             .map(function (c) { return '<span class="badge bg-light text-muted border me-1">' + esc(c.name) + '</span>'; }).join('');
         document.getElementById('post-body').innerHTML = p.body || '';
-        new bootstrap.Modal(document.getElementById('postModal')).show();
     }
 
     async function loadNews() {
         const box = document.getElementById('news-list');
-        box.innerHTML = '<p class="text-muted mb-0">Loading…</p>';
+        box.innerHTML = spinner();
         const r = await call('/news', 'GET');
-        if (!r.ok) { box.innerHTML = '<p class="text-danger mb-0">Failed to load news.</p>'; return; }
+        if (!r.ok) { box.innerHTML = '<div class="text-danger">Failed to load news. <button class="btn btn-sm btn-outline-secondary ms-1" onclick="loadNews()">Retry</button></div>'; return; }
         const items = r.body.data || [];
         if (!items.length) { box.innerHTML = '<p class="text-muted mb-0">No news or events yet.</p>'; return; }
         box.innerHTML = items.map(function (n) {
