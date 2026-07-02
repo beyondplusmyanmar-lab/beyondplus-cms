@@ -167,12 +167,319 @@
                     }
                 }
             }
+        },
+        "/api/m/auth/register": {
+            "post": {
+                "tags": [
+                    "Customer Auth"
+                ],
+                "summary": "Register a customer and send an OTP (rate limited 5/min)",
+                "description": "Register a customer (phone/email per registration_type) and send an OTP.",
+                "operationId": "d72b50e0cc2c3595b819aa5720db1d81",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "firstname",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "firstname": {
+                                        "type": "string"
+                                    },
+                                    "lastname": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Required when registration is by phone or both",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Required when registration is by email or both",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 8
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Account created; OTP sent"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "429": {
+                        "description": "Too many attempts"
+                    }
+                }
+            }
+        },
+        "/api/m/auth/verify": {
+            "post": {
+                "tags": [
+                    "Customer Auth"
+                ],
+                "summary": "Verify the registration OTP and receive a token (rate limited 5/min)",
+                "description": "Verify the registration OTP and issue a token.",
+                "operationId": "35dbd1cdc08b73996b2d3c43c67c37ee",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "identifier",
+                                    "code"
+                                ],
+                                "properties": {
+                                    "identifier": {
+                                        "description": "The phone or email used at registration",
+                                        "type": "string"
+                                    },
+                                    "code": {
+                                        "description": "The OTP code",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Verified; returns token + customer"
+                    },
+                    "422": {
+                        "description": "Invalid OTP"
+                    },
+                    "429": {
+                        "description": "Too many attempts"
+                    }
+                }
+            }
+        },
+        "/api/m/auth/login": {
+            "post": {
+                "tags": [
+                    "Customer Auth"
+                ],
+                "summary": "Log in with phone/email + password (rate limited 5/min)",
+                "description": "Authenticate with identifier + password and issue a token.",
+                "operationId": "926e9691801cf4a1bbad7fef5818a23d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "identifier",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "identifier": {
+                                        "description": "Phone or email",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Returns token + customer"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    },
+                    "403": {
+                        "description": "Inactive or unverified account"
+                    },
+                    "429": {
+                        "description": "Too many attempts"
+                    }
+                }
+            }
+        },
+        "/api/m/auth/forgot-password": {
+            "post": {
+                "tags": [
+                    "Customer Auth"
+                ],
+                "summary": "Request a password-reset OTP (rate limited 5/min)",
+                "description": "Send a password-reset OTP. Never reveals whether the account exists.",
+                "operationId": "2a8df44d41ba608006e944a950772982",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "identifier"
+                                ],
+                                "properties": {
+                                    "identifier": {
+                                        "description": "Phone or email",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Generic success (does not disclose account existence)"
+                    },
+                    "429": {
+                        "description": "Too many attempts"
+                    }
+                }
+            }
+        },
+        "/api/m/auth/reset-password": {
+            "post": {
+                "tags": [
+                    "Customer Auth"
+                ],
+                "summary": "Reset the password with an OTP (rate limited 5/min)",
+                "description": "Reset the password with a valid OTP and invalidate existing tokens.",
+                "operationId": "ecac87af02411b51decdae712d9c9f3a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "identifier",
+                                    "code",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "identifier": {
+                                        "description": "Phone or email",
+                                        "type": "string"
+                                    },
+                                    "code": {
+                                        "description": "The OTP code",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 8
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password updated"
+                    },
+                    "422": {
+                        "description": "Invalid OTP or validation error"
+                    },
+                    "429": {
+                        "description": "Too many attempts"
+                    }
+                }
+            }
+        },
+        "/api/m/account/profile": {
+            "get": {
+                "tags": [
+                    "Customer Auth"
+                ],
+                "summary": "Authenticated customer profile",
+                "description": "Authenticated customer profile.",
+                "operationId": "5e6f3c86c2dd7de59ef16a504ceb6262",
+                "parameters": [
+                    {
+                        "name": "X-BP-Token",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer profile"
+                    },
+                    "401": {
+                        "description": "Missing or invalid token"
+                    }
+                }
+            }
+        },
+        "/api/m/account/logout": {
+            "post": {
+                "tags": [
+                    "Customer Auth"
+                ],
+                "summary": "Revoke the current token",
+                "description": "Revoke the current token.",
+                "operationId": "b7b13d8a8f9af32010b0d94f60e4893b",
+                "parameters": [
+                    {
+                        "name": "X-BP-Token",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Logged out"
+                    },
+                    "401": {
+                        "description": "Missing or invalid token"
+                    }
+                }
+            }
         }
     },
     "tags": [
         {
             "name": "CMS",
             "description": "CMS"
+        },
+        {
+            "name": "Customer Auth",
+            "description": "Customer Auth"
         }
     ]
 }

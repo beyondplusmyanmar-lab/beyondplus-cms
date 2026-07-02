@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Customers;
 use App\Repositories\CustomersRepo;
 use App\Services\OtpNotifier;
+use OpenApi\Attributes as OA;
 
 /**
  * Token-based customer auth API (/api/m/auth/* and /api/m/account/*).
@@ -84,6 +85,27 @@ class CustomerAuthController extends Controller
     // ---- endpoints -------------------------------------------------------
 
     /** Register a customer (phone/email per registration_type) and send an OTP. */
+    #[OA\Post(
+        path: '/api/m/auth/register',
+        summary: 'Register a customer and send an OTP (rate limited 5/min)',
+        tags: ['Customer Auth'],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ['firstname', 'password', 'password_confirmation'],
+            properties: [
+                new OA\Property(property: 'firstname', type: 'string'),
+                new OA\Property(property: 'lastname', type: 'string'),
+                new OA\Property(property: 'phone', type: 'string', description: 'Required when registration is by phone or both'),
+                new OA\Property(property: 'email', type: 'string', description: 'Required when registration is by email or both'),
+                new OA\Property(property: 'password', type: 'string', format: 'password', minLength: 8),
+                new OA\Property(property: 'password_confirmation', type: 'string', format: 'password'),
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: 'Account created; OTP sent'),
+            new OA\Response(response: 422, description: 'Validation failed'),
+            new OA\Response(response: 429, description: 'Too many attempts'),
+        ]
+    )]
     public function register(Request $request)
     {
         $regType = bp_option('registration_type', 'phone');
@@ -114,6 +136,23 @@ class CustomerAuthController extends Controller
     }
 
     /** Verify the registration OTP and issue a token. */
+    #[OA\Post(
+        path: '/api/m/auth/verify',
+        summary: 'Verify the registration OTP and receive a token (rate limited 5/min)',
+        tags: ['Customer Auth'],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ['identifier', 'code'],
+            properties: [
+                new OA\Property(property: 'identifier', type: 'string', description: 'The phone or email used at registration'),
+                new OA\Property(property: 'code', type: 'string', description: 'The OTP code'),
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: 'Verified; returns token + customer'),
+            new OA\Response(response: 422, description: 'Invalid OTP'),
+            new OA\Response(response: 429, description: 'Too many attempts'),
+        ]
+    )]
     public function verify(Request $request)
     {
         $validator = Validator::make($request->all(), ['identifier' => 'required', 'code' => 'required']);
@@ -135,6 +174,24 @@ class CustomerAuthController extends Controller
     }
 
     /** Authenticate with identifier + password and issue a token. */
+    #[OA\Post(
+        path: '/api/m/auth/login',
+        summary: 'Log in with phone/email + password (rate limited 5/min)',
+        tags: ['Customer Auth'],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ['identifier', 'password'],
+            properties: [
+                new OA\Property(property: 'identifier', type: 'string', description: 'Phone or email'),
+                new OA\Property(property: 'password', type: 'string', format: 'password'),
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: 'Returns token + customer'),
+            new OA\Response(response: 401, description: 'Invalid credentials'),
+            new OA\Response(response: 403, description: 'Inactive or unverified account'),
+            new OA\Response(response: 429, description: 'Too many attempts'),
+        ]
+    )]
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), ['identifier' => 'required', 'password' => 'required']);
@@ -159,6 +216,19 @@ class CustomerAuthController extends Controller
     }
 
     /** Send a password-reset OTP. Never reveals whether the account exists. */
+    #[OA\Post(
+        path: '/api/m/auth/forgot-password',
+        summary: 'Request a password-reset OTP (rate limited 5/min)',
+        tags: ['Customer Auth'],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ['identifier'],
+            properties: [new OA\Property(property: 'identifier', type: 'string', description: 'Phone or email')]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: 'Generic success (does not disclose account existence)'),
+            new OA\Response(response: 429, description: 'Too many attempts'),
+        ]
+    )]
     public function forgotPassword(Request $request)
     {
         $validator = Validator::make($request->all(), ['identifier' => 'required']);
@@ -177,6 +247,25 @@ class CustomerAuthController extends Controller
     }
 
     /** Reset the password with a valid OTP and invalidate existing tokens. */
+    #[OA\Post(
+        path: '/api/m/auth/reset-password',
+        summary: 'Reset the password with an OTP (rate limited 5/min)',
+        tags: ['Customer Auth'],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ['identifier', 'code', 'password', 'password_confirmation'],
+            properties: [
+                new OA\Property(property: 'identifier', type: 'string', description: 'Phone or email'),
+                new OA\Property(property: 'code', type: 'string', description: 'The OTP code'),
+                new OA\Property(property: 'password', type: 'string', format: 'password', minLength: 8),
+                new OA\Property(property: 'password_confirmation', type: 'string', format: 'password'),
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: 'Password updated'),
+            new OA\Response(response: 422, description: 'Invalid OTP or validation error'),
+            new OA\Response(response: 429, description: 'Too many attempts'),
+        ]
+    )]
     public function resetPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -202,12 +291,32 @@ class CustomerAuthController extends Controller
     }
 
     /** Authenticated customer profile. */
+    #[OA\Get(
+        path: '/api/m/account/profile',
+        summary: 'Authenticated customer profile',
+        tags: ['Customer Auth'],
+        parameters: [new OA\Parameter(name: 'X-BP-Token', in: 'header', required: true, schema: new OA\Schema(type: 'string'))],
+        responses: [
+            new OA\Response(response: 200, description: 'Customer profile'),
+            new OA\Response(response: 401, description: 'Missing or invalid token'),
+        ]
+    )]
     public function profile(Request $request)
     {
         return $this->respond(['customer' => $this->customerPayload($request->user())]);
     }
 
     /** Revoke the current token. */
+    #[OA\Post(
+        path: '/api/m/account/logout',
+        summary: 'Revoke the current token',
+        tags: ['Customer Auth'],
+        parameters: [new OA\Parameter(name: 'X-BP-Token', in: 'header', required: true, schema: new OA\Schema(type: 'string'))],
+        responses: [
+            new OA\Response(response: 200, description: 'Logged out'),
+            new OA\Response(response: 401, description: 'Missing or invalid token'),
+        ]
+    )]
     public function logout(Request $request)
     {
         $customer = $request->user();
