@@ -33,10 +33,10 @@ class CheckApiToken
         }
 
         // All other API endpoints require a valid token.
-        if ($request->hasHeader('X-Trident-Token')) {
-            $XTridentToken = trim($request->header('X-Trident-Token'));
+        if ($request->hasHeader('X-BP-Token')) {
+            $token = trim($request->header('X-BP-Token'));
 
-            if($XTridentToken !== '' && Apikeytable::where('api_token', $XTridentToken)->exists()){
+            if($token !== '' && Apikeytable::where('api_token', $token)->exists()){
                 return $next($request);
             }
         }
