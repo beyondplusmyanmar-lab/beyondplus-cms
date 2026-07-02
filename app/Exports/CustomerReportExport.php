@@ -32,7 +32,7 @@ class CustomerReportExport implements FromView
                     $customer_reports->where('customer_types_id',$this->request->customer_types_id);
                 }
                 if ($this->request->has('name')&& isset($this->request->name)){
-                    $customer_reports->orWhereRaw("concat(first_name,' ', last_name) like '%" . $this->request->name . "%' ");
+                    $customer_reports->orWhereRaw("concat(first_name,' ', last_name) like ?", ['%' . $this->request->name . '%']);
                 }
                 if($this->request->has('search') && isset($this->request->search)){
                     $search = $this->request->search;

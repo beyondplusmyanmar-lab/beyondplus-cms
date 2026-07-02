@@ -184,7 +184,7 @@ class ReportsController extends Controller
                         // $customers = $customers->where('payment_transaction_id',$request->name);  
                         // echo $request->name;  
                         // - care         
-                        $customers ->orWhereRaw("first_name like '%" . $request->name . "%' ");
+                        $customers ->orWhereRaw("first_name like ?", ['%' . $request->name . '%']);
                     }
                 }
             }
