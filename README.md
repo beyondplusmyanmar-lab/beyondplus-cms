@@ -68,6 +68,10 @@ The JSON API authenticates via the `api_token` column (token guard).
 - **Google Sheets/Drive export** (optional): set the `GOOGLE_*` variables in
   `.env` and provide `storage/credentials.json` (see
   `storage/credentials.json.example`).
+- **Customer OTP:** the SMS gateway is not bundled, so the verification code
+  sent during customer sign-up / password reset is written to
+  `storage/logs/laravel.log` instead of texted. Plug in your own SMS provider
+  in `CustomersRepo`/`CustomerController` for production.
 
 ## Security
 
