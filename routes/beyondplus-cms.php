@@ -245,7 +245,7 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
 
 
-      Route::group([ 'middleware' => 'web' ], function () {
+      Route::group([ 'middleware' => ['web', 'frontend.mode'] ], function () {
 
             Route::get('/google', 'Front\FrontController@google');
             // 

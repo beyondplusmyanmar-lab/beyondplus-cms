@@ -43,10 +43,19 @@
                             <a href="{{ url('api/documentation') }}" target="_blank">/api/documentation</a>.</small>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Front-end mode</label>
+                        <select class="form-control" name="frontend_mode">
+                            @foreach (['theme' => 'Server theme', 'spa' => 'Redirect to SPA', 'headless' => 'Headless (API only)'] as $val => $label)
+                                <option value="{{ $val }}" {{ $config['frontend_mode'] === $val ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">What <code>/</code> serves: the server theme, or redirect visitors to the SPA.</small>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">App (SPA) URL</label>
                         <input type="text" class="form-control" name="spa_url" value="{{ $config['spa_url'] }}"
                                placeholder="https://app.example.com">
-                        <small class="form-text text-muted">Where your headless / SPA front-end is hosted (used for links).</small>
+                        <small class="form-text text-muted">Where your headless / SPA front-end is hosted (used for links and redirects).</small>
                     </div>
                     <div class="form-group mb-0">
                         <label class="control-label">Allowed API origins (CORS)</label>

@@ -31,6 +31,7 @@ class ConfigurationController extends Controller
         'mail_from'         => '',
         'spa_url'           => '',      // public URL of the headless/SPA app
         'cors_origins'      => '',      // allowed API origins; blank = allow all (*)
+        'frontend_mode'     => 'theme', // theme | spa | headless
     ];
 
     /** @var string[] */
