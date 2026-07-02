@@ -1,63 +1,54 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Bp_post;
 use App\Models\Bp_relationship;
 
 class PostTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seeds the same demo content as database/sample-data.sql:
+     * three posts (Uncategorised) and three pages that demonstrate the
+     * default / full-width / contact page templates.
      *
      * @return void
      */
     public function run()
     {
         Bp_post::truncate();
-        $this->faker = \Faker\Factory::create();
-        for ($i=1; $i <= 10; $i++) {
-            $Bp_post = [
-                'title'         => $post = $this->faker->sentence($nbWords = 6, $variableNbWords = true),
-                'body'          => $this->faker->text,
-                'post_link'     => formatUrl($post),
-                'post_type'     => 'post',
-                'featured_img'  => 'default.jpg',
-                'staff_id'      => 1,
-                'translate_id'  => 0,
-                'created_at'    => '2016-06-3 00:36:29'
-            ];
+        Bp_relationship::truncate();
 
-            $Bp_relationship = [
-                'tax_id'    => 1,
-                'post_id'   => $i,
-                'type'   => 'cat',
-            ];
-
-            Bp_relationship::insert($Bp_relationship);
-            Bp_post::insert($Bp_post);
+        // Posts (newest id shows first via the front-end ordering).
+        $posts = [
+            [3, 'Welcome to Beyond Plus CMS', '<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This sample post shows how the front-end theme renders content out of the box.</p>', 'welcome-to-beyond-plus-cms', 1],
+            [2, 'Getting Started with the Admin Panel', '<p>The admin panel lives at <code>/bp-admin</code>. From there you can manage posts, pages, menus, media, sliders and site settings.</p>', 'getting-started-admin-panel', 3],
+            [1, 'Building Multilingual Content', '<p>Every post and menu item can have a translation. Switch the site locale and the matching translated content is served automatically.</p>', 'building-multilingual-content', 5],
+        ];
+        foreach ($posts as [$id, $title, $body, $link, $daysAgo]) {
+            Bp_post::insert([
+                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default.jpg',
+                'post_link' => $link, 'post_type' => 'post', 'post_template' => 'default',
+                'post_active' => 'yes', 'translate_id' => 0, 'lang' => 1, 'staff_id' => 1,
+                'created_at' => now()->subDays($daysAgo), 'updated_at' => now()->subDays($daysAgo),
+            ]);
+            Bp_relationship::insert(['tax_id' => 1, 'post_id' => $id, 'type' => 'cat']);
         }
-        for ($y=1; $y <= 5; $y++) {
-            $Bp_post = [
-                'title'         => $page = $this->faker->sentence($nbWords = 6, $variableNbWords = true),
-                'body'          => $this->faker->text,
-                'post_link'     => formatUrl($page),
-                'post_type'     => 'page',
-                'featured_img'  => 'default.jpg',
-                'staff_id'      => 1,
-                'translate_id'  => 0,
-                'created_at'    => '2016-06-3 00:36:29'
-            ];
 
-            $Bp_relationship = [
-                'tax_id'    => 1,
-                'post_id'   => 10+$y,
-                'type'   => 'cat',
-            ];
-
-            Bp_relationship::insert($Bp_relationship);
-            Bp_post::insert($Bp_post);
+        // Pages demonstrating page-template usage.
+        $pages = [
+            [4, 'About Us', '<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This About page uses the <strong>default</strong> page template (with sidebar).</p>', 'about-us', 'default'],
+            [5, 'Our Services', '<p>This page uses the <strong>full-width</strong> template (no sidebar), selected via the page template option in the admin.</p>', 'services', 'fullwidth'],
+            [6, 'Contact', '<p>Reach out using the details on the right. This page uses the <strong>contact</strong> template.</p>', 'contact', 'contact'],
+        ];
+        foreach ($pages as [$id, $title, $body, $link, $template]) {
+            Bp_post::insert([
+                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default.jpg',
+                'post_link' => $link, 'post_type' => 'page', 'post_template' => $template,
+                'post_active' => 'yes', 'translate_id' => 0, 'lang' => 1, 'staff_id' => 1,
+                'created_at' => now(), 'updated_at' => now(),
+            ]);
         }
     }
 }
