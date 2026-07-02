@@ -155,6 +155,8 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('configuration', 'ConfigurationController@index');
             Route::post('configuration', 'ConfigurationController@update');
+            Route::get('themes', 'ThemeController@index');
+            Route::post('themes/activate', 'ThemeController@activate');
             Route::post('configuration/test-sms', 'ConfigurationController@testSms');
             Route::post('configuration/test-email', 'ConfigurationController@testEmail');
 

@@ -662,7 +662,8 @@ INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) 
 ('mail_from','','yes',NOW());
 
 INSERT INTO `bp_modules` (`module_name`,`module_name_mm`,`module_link`,`module_weight`,`module_icon`,`parent_id`,`staff_id`,`section`,`created_at`) VALUES
-('Configuration','ဖွဲ့စည်းမှု','configuration',5,'fa fa-cogs',8,1,1,NOW());
+('Configuration','ဖွဲ့စည်းမှု','configuration',5,'fa fa-cogs',8,1,1,NOW()),
+('Themes','ပုံစံများ','themes',6,'fa fa-paint-brush',8,1,1,NOW());
 
 -- Remove the client-specific "Department Pages" module
 DELETE FROM `bp_access` WHERE `module_id` = 22;
