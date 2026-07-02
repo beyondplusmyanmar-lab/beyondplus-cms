@@ -595,7 +595,10 @@ UNLOCK TABLES;
 
 LOCK TABLES `bp_taxes` WRITE;
 /*!40000 ALTER TABLE `bp_taxes` DISABLE KEYS */;
-INSERT INTO `bp_taxes` (`tax_id`, `parent_id`, `tax_name`, `tax_link`, `tax_icon`, `tax_lan`, `tax_type`, `tax_active`, `translate_id`, `lang`, `staff_id`, `created_at`, `updated_at`) VALUES (1,0,'Uncategorized','uncategorized','fa fa-list',1,'cat','yes',0,1,1,'2016-06-02 18:06:29','2020-11-08 22:53:15');
+INSERT INTO `bp_taxes` (`tax_id`, `parent_id`, `tax_name`, `tax_link`, `tax_icon`, `tax_lan`, `tax_type`, `tax_active`, `translate_id`, `lang`, `staff_id`, `created_at`, `updated_at`) VALUES
+(1,0,'Uncategorized','uncategorized','fa fa-list',1,'cat','yes',0,1,1,'2016-06-02 18:06:29','2020-11-08 22:53:15'),
+(2,0,'Announcements','announcements','fa fa-bullhorn',1,'cat','yes',0,1,1,NOW(),NOW()),
+(3,0,'Guides','guides','fa fa-book',1,'cat','yes',0,1,1,NOW(),NOW());
 /*!40000 ALTER TABLE `bp_taxes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -624,7 +627,7 @@ INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_typ
 (2,'Getting Started with the Admin Panel','<p>The admin panel lives at <code>/bp-admin</code>. From there you can manage posts, pages, menus, media, sliders and site settings.</p><p>Use the demo administrator account to explore the dashboard and try creating your first post.</p>','default.jpg','getting-started-admin-panel','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 3 DAY),DATE_SUB(NOW(), INTERVAL 3 DAY)),
 (1,'Building Multilingual Content','<p>Every post and menu item can have a translation. Switch the site locale and the matching translated content is served automatically.</p><p>This makes Beyond Plus CMS a good fit for sites that need to reach audiences in more than one language.</p>','default.jpg','building-multilingual-content','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 5 DAY),DATE_SUB(NOW(), INTERVAL 5 DAY));
 
-INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,3,'cat'),(1,2,'cat'),(1,1,'cat');
+INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,3,'cat'),(1,2,'cat'),(1,1,'cat'),(2,3,'cat'),(3,2,'cat'),(3,1,'cat');
 
 -- Demo pages (post_type='page') demonstrating page-template usage
 INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_template`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES

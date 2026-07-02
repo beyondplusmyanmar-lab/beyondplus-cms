@@ -38,6 +38,18 @@
         </div>
     </div>
 
+    <!-- Public content: browse posts by category (no auth) -->
+    <div class="card mb-3">
+        <div class="card-header fw-semibold">
+            <i class="bi bi-tags"></i> Browse by category
+            <span class="badge bg-light text-muted border ms-1">public · no auth</span>
+        </div>
+        <div class="card-body">
+            <div id="cat-chips" class="mb-3 d-flex flex-wrap gap-2"><span class="text-muted">Loading…</span></div>
+            <div id="cat-posts" class="row g-3"></div>
+        </div>
+    </div>
+
     <h6 class="mb-2 text-muted">Customer authentication</h6>
     <div class="row g-3">
         <!-- Register -->
@@ -138,10 +150,42 @@
     document.getElementById('token').value = token;
     updateSession();
     loadNews();                    // public content — no auth needed
+    loadCategories();
     // If a token is already stored, load the profile page immediately.
     if (token) doProfile();
 
     function esc(s) { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; }
+
+    async function loadCategories() {
+        const box = document.getElementById('cat-chips');
+        const r = await call('/categories', 'GET');
+        if (!r.ok) { box.innerHTML = '<span class="text-danger">Failed to load categories.</span>'; return; }
+        const cats = r.body.data || [];
+        if (!cats.length) { box.innerHTML = '<span class="text-muted">No categories.</span>'; return; }
+        box.innerHTML = cats.map(function (c) {
+            return '<button class="btn btn-sm btn-outline-primary cat-chip" '
+                + 'onclick="loadCategoryPosts(\'' + esc(c.slug) + '\', this)">' + esc(c.name) + '</button>';
+        }).join('');
+        loadCategoryPosts(cats[0].slug, box.querySelector('.cat-chip'));
+    }
+
+    async function loadCategoryPosts(slug, btn) {
+        document.querySelectorAll('.cat-chip').forEach(function (b) { b.classList.remove('active'); });
+        if (btn) btn.classList.add('active');
+        const box = document.getElementById('cat-posts');
+        box.innerHTML = '<p class="text-muted mb-0">Loading…</p>';
+        const r = await call('/categories/' + encodeURIComponent(slug) + '/posts', 'GET');
+        if (!r.ok) { box.innerHTML = '<p class="text-danger mb-0">Failed to load posts.</p>'; return; }
+        const posts = r.body.data || [];
+        if (!posts.length) { box.innerHTML = '<p class="text-muted mb-0">No posts in this category.</p>'; return; }
+        box.innerHTML = posts.map(function (p) {
+            return '<div class="col-md-4"><div class="border rounded p-3 h-100">'
+                + '<small class="text-muted">' + esc(p.date || '') + '</small>'
+                + '<h6 class="mb-1">' + esc(p.title) + '</h6>'
+                + '<p class="small text-muted mb-0">' + esc(p.excerpt) + '</p>'
+                + '</div></div>';
+        }).join('');
+    }
 
     async function loadNews() {
         const box = document.getElementById('news-list');

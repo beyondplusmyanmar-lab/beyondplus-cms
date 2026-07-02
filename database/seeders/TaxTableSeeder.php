@@ -15,13 +15,24 @@ class TaxTableSeeder extends Seeder
     public function run()
     {
      	Bp_tax::truncate();
-     	Bp_tax::create([
-     		'tax_name'      => 'Uncategorized',
-     		'parent_id'		=>	'0',
-            'tax_link'      => 'uncategorized',
-     		'tax_active'    =>	'yes',
-            'tax_type'      => 'cat',
-     		'created_at'    => '2016-06-3 00:36:29'
-     		]);
+
+        // Ids 1..3 (auto-increment resets on truncate) — referenced by post relationships.
+        $categories = [
+            ['Uncategorized', 'uncategorized', 'fa fa-list'],
+            ['Announcements', 'announcements', 'fa fa-bullhorn'],
+            ['Guides', 'guides', 'fa fa-book'],
+        ];
+        foreach ($categories as [$name, $link, $icon]) {
+            Bp_tax::create([
+                'tax_name'   => $name,
+                'parent_id'  => '0',
+                'tax_link'   => $link,
+                'tax_icon'   => $icon,
+                'tax_active' => 'yes',
+                'tax_type'   => 'cat',
+                'lang'       => 1,
+                'created_at' => now(),
+            ]);
+        }
     }
 }

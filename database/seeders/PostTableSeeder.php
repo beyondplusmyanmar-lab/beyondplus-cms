@@ -51,6 +51,13 @@ class PostTableSeeder extends Seeder
             ]);
         }
 
+        // Extra category memberships for browsing (Announcements=2, Guides=3).
+        Bp_relationship::insert([
+            ['tax_id' => 2, 'post_id' => 3, 'type' => 'cat'],
+            ['tax_id' => 3, 'post_id' => 2, 'type' => 'cat'],
+            ['tax_id' => 3, 'post_id' => 1, 'type' => 'cat'],
+        ]);
+
         // News and events (consumed by /api/m/news and the SPA example).
         $news = [
             [7, 'Beyond Plus CMS v2 released', '<p>The latest release brings a rebuilt admin, a JSON API for the mobile app, and a themes manager.</p>', 'beyond-plus-cms-v2-released', 'news', null],
