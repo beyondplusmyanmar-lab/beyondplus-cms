@@ -72,6 +72,16 @@
                         <input type="password" class="form-control" name="sms_api_token" autocomplete="new-password"
                                placeholder="{{ $config['sms_api_token'] ? '•••••••• (leave blank to keep)' : 'Not set' }}">
                     </div>
+                    <div class="form-group mb-0">
+                        <label class="control-label">Send a test SMS <small class="text-muted">(uses saved credentials)</small></label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="sms_test_to" placeholder="Phone number">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-secondary" id="sms_test_btn">Send test</button>
+                            </div>
+                        </div>
+                        <small id="sms_test_result" class="form-text"></small>
+                    </div>
                 </div>
             </div>
 
@@ -104,6 +114,16 @@
                         <label class="control-label">From address</label>
                         <input type="email" class="form-control" name="mail_from" value="{{ $config['mail_from'] }}" placeholder="no-reply@example.com">
                     </div>
+                    <div class="form-group mb-0">
+                        <label class="control-label">Send a test email <small class="text-muted">(uses saved credentials)</small></label>
+                        <div class="input-group">
+                            <input type="email" class="form-control" id="mail_test_to" placeholder="you@example.com">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-secondary" id="mail_test_btn">Send test</button>
+                            </div>
+                        </div>
+                        <small id="mail_test_result" class="form-text"></small>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,4 +133,26 @@
         <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save configuration</button>
     </div>
 </form>
+
+@push('scripts')
+<script>
+$(function () {
+    function runTest(url, toId, resultId) {
+        var to = $('#' + toId).val();
+        var $r = $('#' + resultId).text('Sending…').css('color', '');
+        $.post(url, { to: to }, function (res) {
+            $r.text(res.message).css('color', res.ok ? '#2e7d32' : '#c62828');
+        }).fail(function () {
+            $r.text('Request failed.').css('color', '#c62828');
+        });
+    }
+    $('#sms_test_btn').on('click', function () {
+        runTest('{{ url("bp-admin/configuration/test-sms") }}', 'sms_test_to', 'sms_test_result');
+    });
+    $('#mail_test_btn').on('click', function () {
+        runTest('{{ url("bp-admin/configuration/test-email") }}', 'mail_test_to', 'mail_test_result');
+    });
+});
+</script>
+@endpush
 @stop

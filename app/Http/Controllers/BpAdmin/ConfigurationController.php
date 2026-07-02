@@ -5,6 +5,8 @@ namespace App\Http\Controllers\BpAdmin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Bp_options;
+use App\Services\SmsService;
+use App\Services\MailService;
 
 class ConfigurationController extends Controller
 {
@@ -64,5 +66,25 @@ class ConfigurationController extends Controller
         }
 
         return redirect()->back()->with('flash_message', 'Configuration saved.');
+    }
+
+    public function testSms(Request $request, SmsService $sms)
+    {
+        $to = trim((string) $request->input('to'));
+        if ($to === '') {
+            return response()->json(['ok' => false, 'message' => 'Enter a phone number to test.']);
+        }
+
+        return response()->json($sms->test($to));
+    }
+
+    public function testEmail(Request $request, MailService $mail)
+    {
+        $to = trim((string) $request->input('to'));
+        if (! filter_var($to, FILTER_VALIDATE_EMAIL)) {
+            return response()->json(['ok' => false, 'message' => 'Enter a valid email address to test.']);
+        }
+
+        return response()->json($mail->test($to));
     }
 }
