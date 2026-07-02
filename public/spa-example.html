@@ -17,15 +17,28 @@
 <body>
 <div class="container py-4" style="max-width: 960px;">
     <div class="d-flex align-items-center justify-content-between mb-1">
-        <h3 class="mb-0">Beyond Plus CMS — SPA Auth Example</h3>
+        <h3 class="mb-0">Beyond Plus CMS — SPA Example</h3>
         <span id="session-pill" class="badge bg-secondary status-pill">Signed out</span>
     </div>
     <p class="text-muted">
-        A live, self-contained demo of the customer auth flow. Every button calls the JSON API at
+        A live, self-contained demo. Every button calls the JSON API at
         <code id="base-label">/api/m</code> with <code>fetch()</code> — the same calls a mobile SPA makes.
         Interactive reference: <a href="/api/documentation" target="_blank">/api/documentation</a>.
     </p>
 
+    <!-- Public content: news & events (no auth) -->
+    <div class="card mb-3">
+        <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-newspaper"></i> News &amp; events
+                <span class="badge bg-light text-muted border ms-1">public · no auth</span></span>
+            <button class="btn btn-sm btn-outline-secondary" onclick="loadNews()">Reload</button>
+        </div>
+        <div class="card-body">
+            <div id="news-list" class="row g-3"><p class="text-muted mb-0">Loading…</p></div>
+        </div>
+    </div>
+
+    <h6 class="mb-2 text-muted">Customer authentication</h6>
     <div class="row g-3">
         <!-- Register -->
         <div class="col-md-6">
@@ -124,8 +137,33 @@
     let token = localStorage.getItem('bp_token') || '';
     document.getElementById('token').value = token;
     updateSession();
+    loadNews();                    // public content — no auth needed
     // If a token is already stored, load the profile page immediately.
     if (token) doProfile();
+
+    function esc(s) { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; }
+
+    async function loadNews() {
+        const box = document.getElementById('news-list');
+        box.innerHTML = '<p class="text-muted mb-0">Loading…</p>';
+        const r = await call('/news', 'GET');
+        if (!r.ok) { box.innerHTML = '<p class="text-danger mb-0">Failed to load news.</p>'; return; }
+        const items = r.body.data || [];
+        if (!items.length) { box.innerHTML = '<p class="text-muted mb-0">No news or events yet.</p>'; return; }
+        box.innerHTML = items.map(function (n) {
+            const isEvent = n.type === 'event';
+            const badge = isEvent ? '<span class="badge bg-info">Event</span>'
+                                  : '<span class="badge bg-secondary">News</span>';
+            const when = isEvent && n.event_at ? ('<i class="bi bi-calendar-event"></i> ' + esc(n.event_at))
+                                               : esc(n.date || '');
+            return '<div class="col-md-4"><div class="border rounded p-3 h-100">'
+                + '<div class="d-flex justify-content-between align-items-center mb-1">' + badge
+                + '<small class="text-muted">' + when + '</small></div>'
+                + '<h6 class="mb-1">' + esc(n.title) + '</h6>'
+                + '<p class="small text-muted mb-0">' + esc(n.excerpt) + '</p>'
+                + '</div></div>';
+        }).join('');
+    }
 
     function renderProfile(c) {
         const empty = document.getElementById('profile-empty');

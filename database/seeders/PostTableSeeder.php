@@ -50,5 +50,20 @@ class PostTableSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now(),
             ]);
         }
+
+        // News and events (consumed by /api/m/news and the SPA example).
+        $news = [
+            [7, 'Beyond Plus CMS v2 released', '<p>The latest release brings a rebuilt admin, a JSON API for the mobile app, and a themes manager.</p>', 'beyond-plus-cms-v2-released', 'news', null],
+            [8, 'Scheduled maintenance this weekend', '<p>The service will be briefly unavailable on Sunday morning for planned upgrades.</p>', 'scheduled-maintenance', 'news', null],
+            [9, 'Community meetup', '<p>Join our online community meetup to learn about building sites with Beyond Plus CMS.</p>', 'community-meetup', 'event', '2026-08-15 18:00:00'],
+        ];
+        foreach ($news as [$id, $title, $body, $link, $type, $eventAt]) {
+            Bp_post::insert([
+                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default.jpg',
+                'post_link' => $link, 'post_type' => $type, 'event_at' => $eventAt, 'post_template' => 'default',
+                'post_active' => 'yes', 'translate_id' => 0, 'lang' => 1, 'staff_id' => 1,
+                'created_at' => now(), 'updated_at' => now(),
+            ]);
+        }
     }
 }

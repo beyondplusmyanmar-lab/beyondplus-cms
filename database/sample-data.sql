@@ -632,6 +632,12 @@ INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_typ
 (5,'Our Services','<p>This page uses the <strong>full-width</strong> template (no sidebar), selected via the page template option in the admin.</p>','default.jpg','services','page','fullwidth','yes',0,1,1,NOW(),NOW()),
 (6,'Contact','<p>Reach out using the details on the right. This page uses the <strong>contact</strong> template.</p>','default.jpg','contact','page','contact','yes',0,1,1,NOW(),NOW());
 
+-- Demo news & events (consumed by /api/m/news and the SPA example)
+INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`event_at`,`post_template`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
+(7,'Beyond Plus CMS v2 released','<p>The latest release brings a rebuilt admin, a JSON API for the mobile app, and a themes manager.</p>','default.jpg','beyond-plus-cms-v2-released','news',NULL,'default','yes',0,1,1,NOW(),NOW()),
+(8,'Scheduled maintenance this weekend','<p>The service will be briefly unavailable on Sunday morning for planned upgrades.</p>','default.jpg','scheduled-maintenance','news',NULL,'default','yes',0,1,1,NOW(),NOW()),
+(9,'Community meetup','<p>Join our online community meetup to learn about building sites with Beyond Plus CMS.</p>','default.jpg','community-meetup','event','2026-08-15 18:00:00','default','yes',0,1,1,NOW(),NOW());
+
 -- Demo navigation menu: a "Company" dropdown (About Us, Our Services) + a top-level Contact link
 INSERT INTO `bp_menus` (`menu_id`,`menu_name`,`menu_link`,`post_id`,`menu_weight`,`menu_icon`,`parent_id`,`menu_type`,`staff_id`,`lang`,`translate_id`,`created_at`) VALUES
 (1,'Company','#',0,1,'',0,'custom',1,1,'0',NOW()),

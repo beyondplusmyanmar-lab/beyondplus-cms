@@ -117,6 +117,25 @@ class CMSController extends Controller
             ->orderBy('id', 'desc');
     }
 
+    /** Published news and events (both post types), newest first. */
+    private function publishedNews()
+    {
+        return Bp_post::whereIn('post_type', ['news', 'event'])
+            ->where('post_active', 'yes')
+            ->where('lang', 1)
+            ->where('translate_id', 0)
+            ->with('translate')
+            ->orderBy('id', 'desc');
+    }
+
+    private function newsCard($post, string $lang): array
+    {
+        $card = $this->postCard($post, $lang);
+        $card['type'] = $post->post_type;      // "news" or "event"
+        $card['event_at'] = $post->event_at;   // set for events
+        return $card;
+    }
+
     private function sliderList()
     {
         return Bp_slider::orderBy('slider_weight')->get()->map(fn ($s) => [
@@ -142,7 +161,7 @@ class CMSController extends Controller
             ],
             'sliders'      => $this->sliderList(),
             'latest_posts' => $this->publishedPosts('post')->limit(6)->get()->map(fn ($p) => $this->postCard($p, $lang)),
-            'news'         => $this->publishedPosts('news')->limit(5)->get()->map(fn ($p) => $this->postCard($p, $lang)),
+            'news'         => $this->publishedNews()->limit(5)->get()->map(fn ($p) => $this->newsCard($p, $lang)),
         ]);
     }
 
@@ -246,10 +265,10 @@ class CMSController extends Controller
     public function news(Request $request)
     {
         $lang = $this->lang($request);
-        $page = $this->publishedPosts('news')->paginate($this->perPage($request));
+        $page = $this->publishedNews()->paginate($this->perPage($request));
 
         return $this->respond(
-            collect($page->items())->map(fn ($p) => $this->postCard($p, $lang)),
+            collect($page->items())->map(fn ($p) => $this->newsCard($p, $lang)),
             200,
             ['meta' => $this->meta($page)]
         );
