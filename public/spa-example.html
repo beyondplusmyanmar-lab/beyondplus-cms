@@ -87,6 +87,33 @@
         </div>
     </div>
 
+    <!-- Profile page (rendered from GET /api/m/account/profile) -->
+    <div class="card mt-3" id="profile-card">
+        <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-person-vcard"></i> Your profile</span>
+            <button class="btn btn-sm btn-outline-secondary" onclick="doProfile()">Refresh</button>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-0" id="profile-empty">Sign in to load your profile.</p>
+            <div id="profile-content" style="display:none;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0"
+                         style="width:56px;height:56px;font-size:1.4rem;" id="profile-initials">–</div>
+                    <div>
+                        <h5 class="mb-0" id="profile-name">–</h5>
+                        <span class="text-muted small">Customer #<span id="profile-id">–</span></span>
+                    </div>
+                </div>
+                <hr>
+                <dl class="row mb-0 small">
+                    <dt class="col-sm-3 text-muted">Phone</dt><dd class="col-sm-9" id="profile-phone">—</dd>
+                    <dt class="col-sm-3 text-muted">Email</dt><dd class="col-sm-9" id="profile-email">—</dd>
+                    <dt class="col-sm-3 text-muted">Reward points</dt><dd class="col-sm-9" id="profile-points">—</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
     <h6 class="mt-4 mb-1">Last API response</h6>
     <pre id="response">// Click a button above to call the API…</pre>
 </div>
@@ -97,6 +124,22 @@
     let token = localStorage.getItem('bp_token') || '';
     document.getElementById('token').value = token;
     updateSession();
+    // If a token is already stored, load the profile page immediately.
+    if (token) doProfile();
+
+    function renderProfile(c) {
+        const empty = document.getElementById('profile-empty');
+        const content = document.getElementById('profile-content');
+        if (!c) { content.style.display = 'none'; empty.style.display = 'block'; return; }
+        empty.style.display = 'none'; content.style.display = 'block';
+        const name = ((c.first_name || '') + ' ' + (c.last_name || '')).trim() || '(no name)';
+        document.getElementById('profile-name').textContent = name;
+        document.getElementById('profile-initials').textContent = (name[0] || '?').toUpperCase();
+        document.getElementById('profile-id').textContent = c.id ?? '–';
+        document.getElementById('profile-phone').textContent = c.phone || '—';
+        document.getElementById('profile-email').textContent = c.email || '—';
+        document.getElementById('profile-points').textContent = c.reward_points ?? 0;
+    }
 
     function updateSession() {
         const pill = document.getElementById('session-pill');
@@ -147,19 +190,24 @@
 
     async function doVerify() {
         const r = await call('/auth/verify', 'POST', { identifier: val('ver_identifier'), code: val('ver_code') });
-        if (r.ok && r.body.data.token) setToken(r.body.data.token);
+        if (r.ok && r.body.data.token) { setToken(r.body.data.token); renderProfile(r.body.data.customer); }
     }
 
     async function doLogin() {
         const r = await call('/auth/login', 'POST', { identifier: val('login_identifier'), password: val('login_password') });
-        if (r.ok && r.body.data.token) setToken(r.body.data.token);
+        if (r.ok && r.body.data.token) { setToken(r.body.data.token); renderProfile(r.body.data.customer); }
     }
 
-    async function doProfile() { await call('/account/profile', 'GET', null, true); }
+    async function doProfile() {
+        const r = await call('/account/profile', 'GET', null, true);
+        if (r.ok) renderProfile(r.body.data.customer);
+        else if (r.status === 401) { setToken(''); renderProfile(null); }
+    }
 
     async function doLogout() {
         await call('/account/logout', 'POST', null, true);
         setToken('');
+        renderProfile(null);
     }
 
     function val(id) { return document.getElementById(id).value.trim(); }
