@@ -56,3 +56,31 @@ Route::group([
 	Route::get('/news', 'CMSController@news');
 });
 
+/*
+ * Customer auth. Public but throttled stricter than the read API (5/min per IP)
+ * to resist brute force on registration, login and OTP verification.
+ */
+Route::group([
+	'prefix' => 'm/auth',
+	'namespace' => 'Api\V1\Customer',
+	'middleware' => 'throttle:5,1'
+], function () {
+	Route::post('/register', 'CustomerAuthController@register');
+	Route::post('/verify', 'CustomerAuthController@verify');
+	Route::post('/login', 'CustomerAuthController@login');
+	Route::post('/forgot-password', 'CustomerAuthController@forgotPassword');
+	Route::post('/reset-password', 'CustomerAuthController@resetPassword');
+});
+
+/*
+ * Protected customer endpoints — require a valid X-BP-Token (customer.token).
+ */
+Route::group([
+	'prefix' => 'm/account',
+	'namespace' => 'Api\V1\Customer',
+	'middleware' => 'customer.token'
+], function () {
+	Route::get('/profile', 'CustomerAuthController@profile');
+	Route::post('/logout', 'CustomerAuthController@logout');
+});
+

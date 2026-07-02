@@ -63,8 +63,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth' => \App\Http\Middleware\Authenticate::class,
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+            'customer.token' => \App\Http\Middleware\CustomerApiToken::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Always return JSON for API requests (rate limits, 404s, validation, etc.)
+        // so SPA clients never receive an HTML error page.
+        $exceptions->shouldRenderJsonWhen(
+            fn ($request, $e) => $request->is('api/*') || $request->expectsJson()
+        );
     })->create();

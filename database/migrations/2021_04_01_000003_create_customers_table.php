@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('activation_code', 300)->nullable();
             $table->integer('otpcode')->nullable();
             $table->string('remember_token', 100)->nullable();
+            $table->string('api_token', 64)->nullable()->index();
             $table->timestamps();
         });
     }
