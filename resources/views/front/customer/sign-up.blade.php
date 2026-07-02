@@ -1,109 +1,51 @@
-@extends('bp-admin.layouts.app')
+@extends('theme.'.(optional(site_information('theme'))->option_value ?: 'default').'.layouts.app')
+
+@section('title', 'Create an account')
 
 @section('content')
-<!-- START MAIN CONTENT -->
-<div class="main_content">
-     <!-- START LOGIN SECTION -->
-    <div class="login_register_wrap section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-6 col-md-10">
-                    <div class="login_wrap">
-                        <div class="padding_eight_all bg-white">
-                            <div class="heading_s1">
-                                <h3>Create an Account</h3>
-                            </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h3 mb-4 text-center">Create an account</h1>
 
-                            @if (Session::has('flash_message'))
-                                <div class="alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    {{ Session::get('flash_message') }}
-                                </div>
-                            @endif
-                            @if (Session::has('flash_danger'))
-                                <div class="alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    {{ Session::get('flash_danger') }}
-                                </div>
-                            @endif
+                    @include('front.customer.partials.messages')
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('customer/sign-up') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('firstname') ? ' has-error' : '' }}">
-                            <label for="firstname" class="col-md-4 control-label">Name </label>
-
-                            <div class="col-md-12">
-                                <input id="firstname" type="text" class="form-control" name="firstname" value="{{ old('firstname') }}" required autofocus>
-
-                                <input id="lastname" type="hidden" class="form-control" name="lastname" value="{{ old('lastname') }}" >
-
-                                @if ($errors->has('firstname'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('firstname') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+                    <form method="POST" action="{{ url('customer/sign-up') }}">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="firstname" class="form-label">Name</label>
+                            <input id="firstname" type="text" class="form-control @error('firstname') is-invalid @enderror"
+                                   name="firstname" value="{{ old('firstname') }}" required autofocus>
+                            @error('firstname')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-
-                        <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
-                            <label for="phone" class="col-md-12 control-label">Phone Number</label>
-
-                            <div class="col-md-12">
-                                <input id="phone" type="phone" class="form-control" name="phone" value="{{ old('phone') }}" required>
-
-                                @if ($errors->has('phone'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('phone') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+                        <input id="lastname" type="hidden" name="lastname" value="{{ old('lastname') }}">
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone number</label>
+                            <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror"
+                                   name="phone" value="{{ old('phone') }}" required>
+                            @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-12 control-label">Password</label>
-
-                            <div class="col-md-12">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                                   name="password" required>
+                            @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-12 control-label">Confirm Password</label>
-
-                            <div class="col-md-12">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
+                        <div class="mb-3">
+                            <label for="password-confirm" class="form-label">Confirm password</label>
+                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12 col-md-offset-4">
-                                <button type="submit" class="btn btn-fill-out btn-block">
-                                    Register
-                                </button>
-                            </div>
-                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Create account</button>
                     </form>
-                            <!-- <div class="different_login">
-                                <span> or</span>
-                            </div>
-                            <ul class="btn-login list_none text-center">
-                                <li><a href="#" class="btn btn-facebook"><i class="ion-social-facebook"></i>Facebook</a></li>
-                                <li><a href="#" class="btn btn-google"><i class="ion-social-googleplus"></i>Google</a></li>
-                            </ul> -->
-                            <div class="form-note text-center">Already have an account? <a href="{{ url('/login') }}">Log in</a></div>
-                        </div>
-                    </div>
+
+                    <p class="text-center text-muted mt-4 mb-0">
+                        Already have an account? <a href="{{ url('/customer/sign-in') }}">Sign in</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-    <!-- END LOGIN SECTION -->
 </div>
 @endsection

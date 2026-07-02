@@ -1,88 +1,41 @@
-@extends('bp-admin.layouts.app')
+@extends('theme.'.(optional(site_information('theme'))->option_value ?: 'default').'.layouts.app')
+
+@section('title', 'Reset password')
 
 @section('content')
-<!-- START MAIN CONTENT -->
-<div class="main_content">
-     <!-- START LOGIN SECTION -->
-    <div class="login_register_wrap section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-6 col-md-10">
-                    <div class="login_wrap">
-                        <div class="padding_eight_all bg-white">
-                            <div class="heading_s1">
-                                <h3>Password Reset</h3>
-                            </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h3 mb-2 text-center">Reset password</h1>
+                    <p class="text-muted text-center mb-4">Enter your phone number and the code you received.</p>
 
+                    @include('front.customer.partials.messages')
 
-                            @if (Session::has('flash_message'))
-                                <div class="alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    {{ Session::get('flash_message') }}
-                                </div>
-                            @endif
-                            @if (Session::has('flash_danger'))
-                                <div class="alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    {{ Session::get('flash_danger') }}
-                                </div>
-                            @endif
-                            
-                            <form method="POST" action="{{ url('customer/forgot-pass') }}">
-                                {{ csrf_field() }}
-
-
-                            <div class="form-group">
-                                <label for="password" class="control-label">Phone Number</label>
-
-                                    <input id="phone" type="text" class="form-control" name="phone" required>
-
-                                    @if ($errors->has('phone'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('phone') }}</strong>
-                                        </span>
-                                    @endif
-                            </div>
-
-                            <!-- <div class="form-group">
-                                <label for="password" class="control-label">Verify Code</label>
-
-                                    <input id="activation_code" type="text" class="form-control" name="activation_code" required>
-
-                                    @if ($errors->has('activation_code'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('activation_code') }}</strong>
-                                        </span>
-                                    @endif
-                            </div> -->
-
-                                <!-- <div class="login_footer form-group">
-                                    <div class="chek-form">
-                                        <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="">
-                                            <label class="form-check-label" for="exampleCheckbox1"><span>Remember me</span></label>
-                                        </div>
-                                    </div>
-                                    <a href="{{ url('/password/reset') }}">Forgot password?</a>
-                                </div> -->
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-fill-out btn-block" name="verify">Verify</button>
-                                </div>
-                            </form>
-                            <!-- <div class="different_login">
-                                <span> or</span>
-                            </div>
-                            <ul class="btn-login list_none text-center">
-                                <li><a href="#" class="btn btn-facebook"><i class="ion-social-facebook"></i>Facebook</a></li>
-                                <li><a href="#" class="btn btn-google"><i class="ion-social-googleplus"></i>Google</a></li>
-                            </ul> -->
-                            <div class="form-note text-center">Don't Have an Account? <a href="{{ url('/customer/sign-up') }}">Sign up now</a></div>
+                    <form method="POST" action="{{ url('customer/forgot-pass') }}">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone number</label>
+                            <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror"
+                                   name="phone" value="{{ old('phone') }}" required autofocus>
+                            @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="activation_code" class="form-label">Verification code</label>
+                            <input id="activation_code" type="text" class="form-control @error('activation_code') is-invalid @enderror"
+                                   name="activation_code" required>
+                            @error('activation_code')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" name="verify">Verify</button>
+                    </form>
+
+                    <p class="text-center text-muted mt-4 mb-0">
+                        Remembered it? <a href="{{ url('/customer/sign-in') }}">Sign in</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-    <!-- END LOGIN SECTION -->
 </div>
 @endsection
