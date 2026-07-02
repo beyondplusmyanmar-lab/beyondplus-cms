@@ -474,7 +474,6 @@ INSERT INTO `bp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (3,'blogname','Beyond Plus CMS','yes','2016-06-02 18:06:29','2021-12-25 04:31:31'),
 (4,'blogdescription','A Beyond Plus CMS sample site','yes','2016-06-02 18:06:29','2021-12-25 04:31:31'),
 (5,'theme','default','yes','2016-06-02 18:06:29','2021-12-25 04:31:31'),
-(6,'mobile_theme','framework7','yes','2016-06-02 18:06:29','2021-12-25 04:31:31'),
 (7,'admin_email','admin@example.com','yes','2016-06-02 18:06:29','2021-12-25 04:31:31'),
 (8,'crawler_text','','yes',NULL,NULL);
 /*!40000 ALTER TABLE `bp_options` ENABLE KEYS */;

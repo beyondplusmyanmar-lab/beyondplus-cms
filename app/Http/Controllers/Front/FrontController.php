@@ -35,7 +35,6 @@ class FrontController extends Controller
 
     public function __construct(){
         $this->theme = Bp_options::where('option_name','theme')->first();
-        $this->mobile_theme = Bp_options::where('option_name','mobile_theme')->first();
         $this->categories = Bp_tax::where('tax_type','category')->get()->all($arrayName = array('tax_name'));
         $this->post_link = Bp_post::select('post_link','id')->get();
     }
@@ -45,15 +44,9 @@ class FrontController extends Controller
     }
 
     public function t(){
-
-        // if(isset($_COOKIE['screen']) && $this->mobile_theme->option_value != "none") {
-        //     if($_COOKIE['screen'] == 'mobile' ) {
-        //         return $t = "theme.".$this->mobile_theme->option_value.".";
-        //     } 
-        // }
-
+        // One responsive theme serves every device; mobile is handled by the
+        // separate SPA that consumes the JSON API.
         return $t = "theme.".$this->theme->option_value.".";
-        
     }
 
     public function template($query, $templateName) {

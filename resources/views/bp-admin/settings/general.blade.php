@@ -67,10 +67,6 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="mobile_theme">Mobile theme</label>
-                        <input type="text" name="mobile_theme" id="mobile_theme" class="form-control" value="{{ $val('mobile_theme') }}" placeholder="none">
-                    </div>
-                    <div class="form-group col-md-6">
                         <label for="crawler_text">Robots / crawler meta</label>
                         <input type="text" name="crawler_text" id="crawler_text" class="form-control" value="{{ $val('crawler_text') }}" placeholder="index, follow">
                     </div>
