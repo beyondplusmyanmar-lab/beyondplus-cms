@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond Plus CMS — SPA Auth Example</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background: #f1f5f9; }
+        .card { border: 1px solid #e5e7eb; }
+        pre#response { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 1rem; min-height: 120px; max-height: 340px; overflow: auto; font-size: .82rem; }
+        .status-pill { font-size: .75rem; }
+        code { color: #be123c; }
+    </style>
+</head>
+<body>
+<div class="container py-4" style="max-width: 960px;">
+    <div class="d-flex align-items-center justify-content-between mb-1">
+        <h3 class="mb-0">Beyond Plus CMS — SPA Auth Example</h3>
+        <span id="session-pill" class="badge bg-secondary status-pill">Signed out</span>
+    </div>
+    <p class="text-muted">
+        A live, self-contained demo of the customer auth flow. Every button calls the JSON API at
+        <code id="base-label">/api/m</code> with <code>fetch()</code> — the same calls a mobile SPA makes.
+        Interactive reference: <a href="/api/documentation" target="_blank">/api/documentation</a>.
+    </p>
+
+    <div class="row g-3">
+        <!-- Register -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold"><i class="bi bi-person-plus"></i> 1. Register</div>
+                <div class="card-body">
+                    <p class="small text-muted mb-2">Required fields follow the registration method configured in the admin
+                        (phone / email / both).</p>
+                    <div class="mb-2"><input id="reg_firstname" class="form-control form-control-sm" placeholder="First name" value="Demo"></div>
+                    <div class="mb-2"><input id="reg_phone" class="form-control form-control-sm" placeholder="Phone (e.g. 09xxxxxxxxx)"></div>
+                    <div class="mb-2"><input id="reg_email" class="form-control form-control-sm" placeholder="Email (if enabled)"></div>
+                    <div class="mb-2"><input id="reg_password" type="password" class="form-control form-control-sm" placeholder="Password (min 8)" value="secret123"></div>
+                    <div class="mb-2"><input id="reg_password2" type="password" class="form-control form-control-sm" placeholder="Confirm password" value="secret123"></div>
+                    <button class="btn btn-sm btn-primary" onclick="doRegister()">Register &amp; send OTP</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verify -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold"><i class="bi bi-shield-check"></i> 2. Verify OTP</div>
+                <div class="card-body">
+                    <div class="alert alert-warning small py-2">
+                        Until an SMS/email provider is enabled on the Configuration page, the OTP is written to
+                        <code>storage/logs/laravel.log</code>. Copy it here.
+                    </div>
+                    <div class="mb-2"><input id="ver_identifier" class="form-control form-control-sm" placeholder="Phone or email used above"></div>
+                    <div class="mb-2"><input id="ver_code" class="form-control form-control-sm" placeholder="OTP code"></div>
+                    <button class="btn btn-sm btn-success" onclick="doVerify()">Verify &amp; get token</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold"><i class="bi bi-box-arrow-in-right"></i> Log in</div>
+                <div class="card-body">
+                    <p class="small text-muted mb-2">Try the seeded demo customer, prefilled below.</p>
+                    <div class="mb-2"><input id="login_identifier" class="form-control form-control-sm" placeholder="Phone or email" value="09000000000"></div>
+                    <div class="mb-2"><input id="login_password" type="password" class="form-control form-control-sm" placeholder="Password" value="password"></div>
+                    <button class="btn btn-sm btn-primary" onclick="doLogin()">Log in</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold"><i class="bi bi-person-badge"></i> Session</div>
+                <div class="card-body">
+                    <p class="small mb-1">Token (sent as <code>X-BP-Token</code>):</p>
+                    <div class="mb-2"><input id="token" class="form-control form-control-sm" placeholder="(none yet)" readonly></div>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="doProfile()">Get profile</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="doLogout()">Log out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h6 class="mt-4 mb-1">Last API response</h6>
+    <pre id="response">// Click a button above to call the API…</pre>
+</div>
+
+<script>
+    const BASE = window.location.origin + '/api/m';
+    document.getElementById('base-label').textContent = BASE;
+    let token = localStorage.getItem('bp_token') || '';
+    document.getElementById('token').value = token;
+    updateSession();
+
+    function updateSession() {
+        const pill = document.getElementById('session-pill');
+        if (token) { pill.textContent = 'Signed in'; pill.className = 'badge bg-success status-pill'; }
+        else { pill.textContent = 'Signed out'; pill.className = 'badge bg-secondary status-pill'; }
+    }
+
+    function show(label, status, body) {
+        document.getElementById('response').textContent =
+            '// ' + label + '  ->  HTTP ' + status + '\n' + JSON.stringify(body, null, 2);
+    }
+
+    async function call(path, method, data, auth) {
+        const headers = { 'Accept': 'application/json' };
+        if (auth && token) headers['X-BP-Token'] = token;
+        const opts = { method, headers };
+        if (data) { headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(data); }
+        let res, body;
+        try {
+            res = await fetch(BASE + path, opts);
+            body = await res.json();
+        } catch (e) {
+            show(method + ' ' + path, 'network error', { error: String(e) });
+            return { ok: false };
+        }
+        show(method + ' ' + path, res.status, body);
+        return { ok: res.ok, status: res.status, body };
+    }
+
+    function setToken(t) {
+        token = t || '';
+        localStorage.setItem('bp_token', token);
+        document.getElementById('token').value = token;
+        updateSession();
+    }
+
+    async function doRegister() {
+        await call('/auth/register', 'POST', {
+            firstname: val('reg_firstname'),
+            phone: val('reg_phone'),
+            email: val('reg_email'),
+            password: val('reg_password'),
+            password_confirmation: val('reg_password2'),
+        });
+        // Pre-fill the verify form with whatever identifier was used.
+        document.getElementById('ver_identifier').value = val('reg_phone') || val('reg_email');
+    }
+
+    async function doVerify() {
+        const r = await call('/auth/verify', 'POST', { identifier: val('ver_identifier'), code: val('ver_code') });
+        if (r.ok && r.body.data.token) setToken(r.body.data.token);
+    }
+
+    async function doLogin() {
+        const r = await call('/auth/login', 'POST', { identifier: val('login_identifier'), password: val('login_password') });
+        if (r.ok && r.body.data.token) setToken(r.body.data.token);
+    }
+
+    async function doProfile() { await call('/account/profile', 'GET', null, true); }
+
+    async function doLogout() {
+        await call('/account/logout', 'POST', null, true);
+        setToken('');
+    }
+
+    function val(id) { return document.getElementById(id).value.trim(); }
+</script>
+</body>
+</html>

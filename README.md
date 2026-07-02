@@ -58,7 +58,9 @@ stored in the `bp_options` table (`option_name = 'theme'`) and defaults to
 ## API for the mobile SPA
 
 The mobile app is a separate SPA that talks to this CMS over a JSON API.
-Interactive docs (OpenAPI / Swagger) are at **`/api/documentation`**.
+Interactive docs (OpenAPI / Swagger) are at **`/api/documentation`**, and a
+live, self-contained auth-flow example (register / verify / login / profile /
+logout) is at **`/spa-example.html`**.
 
 - **Base URL:** `/api/m`
 - **Responses:** JSON, enveloped as
