@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Mail\Transport\ConfigMailgunTransport;
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -46,6 +48,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Custom transport that delivers via the Mailgun credentials in bp_options.
+        Mail::extend('bp_mailgun', fn () => new ConfigMailgunTransport());
+
+        // When mail is enabled in the admin Configuration, route all app mail
+        // through it. Wrapped in try/catch so a not-yet-migrated DB is harmless.
+        try {
+            if (bp_option('mail_enabled', 'no') === 'yes') {
+                config([
+                    'mail.default'      => 'bp_mailgun',
+                    'mail.from.address' => bp_option('mail_from') ?: config('mail.from.address'),
+                    'mail.from.name'    => optional(site_information('blogname'))->option_value ?: config('app.name'),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            // DB unavailable (e.g. before migrations) — keep the default mailer.
+        }
     }
 }

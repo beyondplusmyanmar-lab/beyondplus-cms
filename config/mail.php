@@ -53,6 +53,12 @@ return [
             'transport' => 'mailgun',
         ],
 
+        // Delivers via the Mailgun HTTP API using credentials from the admin
+        // Configuration page (bp_options). Registered in AppServiceProvider.
+        'bp_mailgun' => [
+            'transport' => 'bp_mailgun',
+        ],
+
         'postmark' => [
             'transport' => 'postmark',
         ],
