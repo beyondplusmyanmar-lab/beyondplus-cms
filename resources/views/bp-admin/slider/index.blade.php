@@ -9,7 +9,7 @@
     .slider-thumb { height: 170px; background: #f3f4f6; }
     .slider-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .slider-card .card-footer { display: flex; gap: .5rem; }
-    .slider-empty { border: 1px dashed #d1d5db; border-radius: 8px; }
+    .slider-empty { border: 1px dashed #d1d5db; border-radius: 8px; margin: 1.5rem .5rem; padding: 1.5rem; }
 </style>
 <div class="row">
     <div class="col-md-12 tile">

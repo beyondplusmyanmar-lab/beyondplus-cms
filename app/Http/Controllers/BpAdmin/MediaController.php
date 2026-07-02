@@ -26,42 +26,15 @@ class MediaController extends Controller
 
     public function index(Request $request){
 
-        if(Auth::guard("admins")->user()->role < 3) {
-            
-            $department_type = Auth::guard("admins")->user()->department_type;
+        $media = Bp_media::where('media_type', 'media')->orderBy('updated_at', 'desc');
 
-            // $block = Bp_block::where('block_type',$block_type)->orderBy('id','desc')->where('translate_id',0)->paginate(13);
-            $media = Bp_media::where('department_type',$department_type)->orderBy('updated_at','desc')->paginate(13);
-
-             return view('bp-admin.media.index', array('media' => $media));
+        if ($request->name != null && $request->name != "0") {
+            $media = $media->where('media_name', 'like', '%'.$request->name.'%');
         }
 
-        if($request->name == null && $request->filter==null ){
+        $media = $media->paginate(13);
 
-            $media = Bp_media::where('media_type','media')->orderBy('updated_at','desc')->paginate(13);
-
-        } else {
-
-            $media = Bp_media::where('media_type','media')->orderBy('updated_at','desc');
-
-            if ($request->name != null  ) {
-                if($request->name != "0") {
-                    $media = $media->where("title",'like','%'.$media->name.'%');
-                }
-            }
-
-            // return $request->filter;
-
-            if($request->filter != "0") {
-                $media = $media->where("department_type",$request->filter);
-            }
-
-            $media = $media->paginate(20);
-
-        }
-
-        
-        return view('bp-admin.media.index', array('media' => $media));
+        return view('bp-admin.media.index', ['media' => $media]);
     }
 
 

@@ -9,7 +9,7 @@
     .media-thumb { height: 170px; background: #f3f4f6; }
     .media-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .media-card .card-footer { display: flex; gap: .5rem; }
-    .media-empty { border: 1px dashed #d1d5db; border-radius: 8px; }
+    .media-empty { border: 1px dashed #d1d5db; border-radius: 8px; margin: 1.5rem .5rem; padding: 1.5rem; }
 </style>
 <div class="row">
     <div class="col-md-12 tile">
