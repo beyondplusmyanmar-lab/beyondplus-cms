@@ -3,95 +3,93 @@
 @section('title', 'Media')
 
 @section('content')
+<style>
+    .media-card { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; transition: box-shadow .15s ease, transform .15s ease; }
+    .media-card:hover { box-shadow: 0 .6rem 1.4rem rgba(0,0,0,.10); transform: translateY(-3px); }
+    .media-thumb { height: 170px; background: #f3f4f6; }
+    .media-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .media-card .card-footer { display: flex; gap: .5rem; }
+    .media-empty { border: 1px dashed #d1d5db; border-radius: 8px; }
+</style>
 <div class="row">
     <div class="col-md-12 tile">
         <div class="box box-danger">
             <div class="box-header">
-                <div class="row">
-                    <div class="col-sm-9">
-                        <h4>Show</h4>
+                <div class="row align-items-center">
+                    <div class="col-sm-8">
+                        <h4 class="mb-0">Media library</h4>
+                        <small class="text-muted">Uploaded images you can reuse across posts, pages and sliders.</small>
                     </div>
-                    <div class="col-sm-3 pull-right">
-                        <a href="{{ url('bp-admin/media/create') }}" class="btn btn-success  pull-right">
-                            <i class="fa fa-user-plus"></i>
-                            New
+                    <div class="col-sm-4">
+                        <a href="{{ url('bp-admin/media/create') }}" class="btn btn-success pull-right">
+                            <i class="fa fa-upload"></i> Upload
                         </a>
                     </div>
                 </div>
 
-                @if(Auth::guard("admins")->user()->role > 2) 
+                @if(Auth::guard("admins")->user()->role > 2)
                     <form action="{{ url('/bp-admin/media') }}" method="get">
-                    <div class="row pb-4 pt-4">
-                           
-                                
-                                    <div class="col-md-3"></div>
-                                    <div class="col-md-3">
-                                            <input type="text" name="name" id="name" class="form-control" placeholder="Search with Name" autocomplete="off" value="{{Request::get('name')}}">
-                                    </div>
-
-                                    
-                                     <div class="col-md-4">
-                                        @php
-                                            $department =department();
-                                            $department[0] = "All";
-                                        @endphp
-                                        {{ Form::select('filter',$department,Request::get('filter'), ['class'=>'form-control'])}}
-                                    </div>
-                                    <div class="col-md-2 text-left">
-                                        <button type="submit" class="btn btn-md btn-info"><span class="fa fa-search"></span>Search</button>
-                                        <a href="{{ url('/bp-admin/media') }}" class="btn btn-md btn-primary"><span class="fa fa-refresh"></span></a>
-                                    </div>
-                           
-                    </div>
+                        <div class="row pt-3">
+                            <div class="col-md-6">
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Search by name"
+                                       autocomplete="off" value="{{ Request::get('name') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-info"><span class="fa fa-search"></span> Search</button>
+                                <a href="{{ url('/bp-admin/media') }}" class="btn btn-primary" title="Reset"><span class="fa fa-refresh"></span></a>
+                            </div>
+                        </div>
                     </form>
-                    @else
-                        <br />
-                    @endif
-
+                @endif
             </div>
-
             <!-- /.box-header -->
             <div class="box-body">
-                <table  class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Tittle</th>
-                            <th>Link </th>
-                            <th>Option </th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($media as $c)
-                        <tr>
-                        <td><img src="{{ url("uploads/".$c->media_link)}}" alt="{{$c->media_name}}" height="200px" width="300px"/>
-                            </td>
-                            <td>
-                                <a href="#" name="" />{{$c->media_name}}</a> 
-                            </td>
-                            <td>
-                               <input type="text" value="{{ "/uploads/".$c->media_link}}" class="form-control">
-                           </td>
-                           <td>
-                            <a href="{{ url('bp-admin/media/'.$c->media_id.'/edit') }}" class="btn btn-xs btn-info">Edit</a>
-                            <a href="{{ url('bp-admin/media/delete', [$c->media_id]) }}" class="btn btn-delete btn-xs btn-danger">Delete</a>
-                        </td>
-
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="pagination"> {{ $media->links() }} </div>
+                <div class="row">
+                    @forelse ($media as $c)
+                        <div class="col-md-4 col-sm-6 mb-4">
+                            <div class="card media-card h-100">
+                                <div class="media-thumb">
+                                    <img src="{{ url('uploads/'.$c->media_link) }}" alt="{{ $c->media_name }}">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title mb-2">{{ $c->media_name }}</h5>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" value="{{ '/uploads/'.$c->media_link }}" class="form-control" readonly
+                                               onclick="this.select()" title="Click to select, then copy">
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white">
+                                    <a href="{{ url('bp-admin/media/'.$c->media_id.'/edit') }}" class="btn btn-sm btn-info">
+                                        <i class="fa fa-pencil"></i> Edit
+                                    </a>
+                                    <a href="{{ url('bp-admin/media/delete', [$c->media_id]) }}" class="btn btn-sm btn-danger btn-delete"
+                                       onclick="return confirm('Delete this image?')">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12">
+                            <div class="media-empty text-center text-muted py-5">
+                                <i class="fa fa-image fa-2x mb-2 d-block"></i>
+                                No media yet. Click <strong>Upload</strong> to add an image.
+                            </div>
+                        </div>
+                    @endforelse
                 </div>
+                @if(method_exists($media, 'links'))
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="pagination"> {{ $media->links() }} </div>
+                        </div>
+                    </div>
+                @endif
             </div>
+            <!-- /.box-body -->
         </div>
-        <!-- /.box-body -->
+        <!-- /.box -->
     </div>
-    <!-- /.box -->
-</div>
 </div>
 @stop
 
