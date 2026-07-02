@@ -8,13 +8,14 @@
             <div class="box box-danger">
                 <div class="box-header">
                     <div class="row">
-                        <div class="col-sm-9">
-                            <h4>Show</h4>
+                        <div class="col-sm-8">
+                            <h4 class="mb-0">Posts</h4>
+                            <small class="text-muted">Blog posts shown on the site.</small>
                         </div>
-                        <div class="col-sm-3 pull-right">
+                        <div class="col-sm-4 pull-right">
                             <a href="{{ url('bp-admin/post/create') }}" class="btn btn-success  pull-right">
-                                <i class="fa fa-user-plus"></i>
-                                New
+                                <i class="fa fa-plus"></i>
+                                New post
                             </a>
                         </div>
                     </div>
@@ -44,7 +45,7 @@
                             </td>
                             <td>
                                 <a href="{{ url('bp-admin/post/'.$c->id.'/edit') }}" class="btn btn-xs btn-info">Edit</a>
-                                    <a href="{{ url('bp-admin/post/delete', [$c->id]) }}" class="btn btn-delete btn-xs btn-danger">Delete</a>
+                                    <a href="{{ url('bp-admin/post/delete', [$c->id]) }}" class="btn btn-delete btn-xs btn-danger" onclick="return confirm('Delete this post?')">Delete</a>
                             </td>
                         </tr>
                         @endforeach

@@ -23,108 +23,18 @@ class AccountController extends Controller
 
      public function index(Request $request){
 
+        $query = Admin::orderBy('id', 'DESC');
 
-        // if($request->start_date == null && $request->to_date==null && $request->role == null && $request->email==null && $request->name==null){
-        if($request->filter == null ){
-            $customers = Admin::orderBy('id', 'DESC')->paginate(10);
-            // $customers = Customers::orderBy('id','desc')->get();
-        }else{
-
-            $customers = Admin::orderBy('id','desc');
-
-
-
-            if ($request->name != null  ) {
-                if($request->has('name')) {
-                    if($request->has('name') && isset($request->name)) {   
-                        // $customers = $customers->where('payment_transaction_id',$request->name);  
-                        // echo $request->name;  
-                        // - care         
-                        $customers->orWhereRaw("first_name like ?", ['%' . $request->name . '%']);
-                    }
-                }
-            }
-
-            
-
-            // if ($request->phone != null  ) {
-            //     if($request->has('phone')) {
-            //         if($request->has('phone') && isset($request->phone)) {   
-            //             // $customers = $customers->where('payment_transaction_id',$request->phone);  
-            //             // echo $request->phone;  
-            //             // - care         
-                        
-            //             $customers->where("phone",$request->phone);
-            //         }
-            //     }
-            // }
-
-
-            if ($request->email != null  ) {
-                if($request->has('email')) {
-                    if($request->has('email') && isset($request->email)) {   
-                        // $customers = $customers->where('payment_transaction_id',$request->email);  
-                        // echo $request->email;  
-                        // - care         
-                        
-                        $customers->where("email",urldecode($request->email));
-                    }
-                }
-            }
-            
-            
-            if ($request->start_date != null  ) {
-                if ($request->has('start_date') && isset($request->start_date)) {
-                    $customers = $customers->whereDate('created_at', '>=', \Carbon\Carbon::parse($request->start_date)->format('Y-m-d'));
-
-                }
-            }
-
-
-            if ($request->to_date != null  ) {
-                if ($request->has('to_date') && isset($request->to_date)) {
-                    $customers = $customers->whereDate('created_at', '<=',\Carbon\Carbon::parse($request->to_date)->format('Y-m-d'));
-
-                }
-            }
-
-
-            if ($request->role != null  ) {
-                if($request->has('role')) {
-                    if($request->role != "") {
-                        $customers = $customers->where('role',$request->role);
-                    }
-                    
-                    // echo $request->order_status;
-                }
-            }
-
-            if ($request->filter != null  ) {
-                if($request->has('filter')) {
-                    if($request->filter != "") {
-                        $customers = $customers->where('department_type',$request->filter);
-                    }
-                    
-                    // echo $request->order_status;
-                }
-            }
-
-
-
-            
-
-
-            $customers = $customers->paginate(10);
-
+        if ($request->name != null && $request->name != '0') {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->name.'%')
+                  ->orWhere('email', 'like', '%'.$request->name.'%');
+            });
         }
 
-        // if($request->search) {
-        //     $user = Customers::where('first_name','like','%'.$request->search.'%')->orderBy('id', 'DESC')->paginate(10);
-        // } else {
-        //     $user = Customers::orderBy('id', 'DESC')->paginate(10);
-        // }
-        
-        return view('bp-admin.account.index',array('adminaccounts' => $customers ));
+        $adminaccounts = $query->paginate(10);
+
+        return view('bp-admin.account.index', array('adminaccounts' => $adminaccounts));
     }
 
     public function create(){

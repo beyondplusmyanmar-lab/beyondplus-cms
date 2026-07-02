@@ -8,19 +8,18 @@
             <div class="box box-danger">
                 <div class="box-header">
                     <div class="row">
-                        <div class="col-sm-10">
-                            <h4>Show</h4>
+                        <div class="col-sm-7">
+                            <h4 class="mb-0">Pages</h4>
+                            <small class="text-muted">Standalone pages linked from menus.</small>
                         </div>
-                        <div class="col-sm-1 pull-right">
-                            <a href="{{ url('bp-admin/user-guide') }}" class="btn btn-success  pull-right">
-                                <i class="fa fa-user-plus"></i>
-                                User Guide
+                        <div class="col-sm-5 pull-right">
+                            <a href="{{ url('bp-admin/page/create') }}" class="btn btn-success  pull-right ml-2">
+                                <i class="fa fa-plus"></i>
+                                New page
                             </a>
-                        </div>
-                        <div class="col-sm-1 pull-right">
-                            <a href="{{ url('bp-admin/page/create') }}" class="btn btn-success  pull-right">
-                                <i class="fa fa-user-plus"></i>
-                                New
+                            <a href="{{ url('bp-admin/user-guide') }}" class="btn btn-secondary  pull-right">
+                                <i class="fa fa-book"></i>
+                                User Guide
                             </a>
                         </div>
                     </div>
@@ -36,7 +35,7 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Languague</th>
+                            <th>Language</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -54,7 +53,7 @@
                             </td>
                             <td>
                                 <a href="{{ url('bp-admin/page/'.$c->id.'/edit') }}" class="btn btn-xs btn-info">Edit</a>
-                                <a href="{{ url('bp-admin/page/delete', [$c->id]) }}" class="btn btn-delete btn-xs btn-danger">Delete</a>
+                                <a href="{{ url('bp-admin/page/delete', [$c->id]) }}" class="btn btn-delete btn-xs btn-danger" onclick="return confirm('Delete this page?')">Delete</a>
                             </td>
                             
                         </tr>

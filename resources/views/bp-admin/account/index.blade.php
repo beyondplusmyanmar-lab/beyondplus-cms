@@ -1,176 +1,86 @@
 @extends('bp-admin.layouts.admin.index')
 
-@section('title', 'Staff Account')
+@section('title', 'Staff Accounts')
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12 tile">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <div class="row">
-                        <div class="col-sm-9">
-                            <div class="form-group">
-                             <form action="{{ url('/bp-admin/account') }}" method="get">
-                            
-                                <div class="row">
-                                  <!--   <div class="col-md-2">
-                                            <input type="text" name="start_date" id="start_date" class="form-control" placeholder="Enter From Date" autocomplete="off" value="{{Request::get('start_date')}}">
-                                    </div>
-                                    <div class="col-md-2">
-                                            <input type="text" name="to_date" id="to_date" class="form-control" placeholder="Enter To Date" autocomplete="off" value="{{Request::get('to_date')}}">
-                                    </div>
-                                    <div class="col-md-2">
-                                            <input type="text" name="email" id="email" class="form-control" placeholder="Enter email" autocomplete="off" value="{{Request::get('email')}}">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" autocomplete="off" value="{{Request::get('name')}}">
-                                    </div>
-                                    <!-- <div class="col-md-2">
-                                        {{ Form::select('role',role_type(),Request::get('filter'), ['class'=>'form-control'])}}
-                                    </div> -->
-                                     <!--
-                                    <div class="col-md-4 text-left">
-                                        <button type="submit" class="btn btn-sm btn-info"><span class="fa fa-search"></span>Search</button>
-                                        <a href="{{ url('/bp-admin/account') }}" class="btn btn-sm btn-primary"><span class="fa fa-refresh"></span></a>
-                                    </div> -->
-                                   <!--  <div class="col-md-2" style="text-align: right;">
-                                        <a href="{{url('/bp-admin/reports/customer-report-export')}}?start_date={{Request::get('start_date')}}&to_date={{Request::get('to_date')}}&name={{Request::get('name')}}&customer_types_id={{Request::get('customer_types_id')}}" class="btn btn-sm btn-success" id="search_result"><span class="fa fa-download"></span>Customer Export</a>
-                                    </div> -->
-                                </div>
-                            </form>
-                            </div>
+<div class="row">
+    <div class="col-md-12 tile">
+        <div class="box box-danger">
+            <div class="box-header">
+                <div class="row align-items-center">
+                    <div class="col-sm-8">
+                        <h4 class="mb-0">Staff accounts</h4>
+                        <small class="text-muted">Admin and staff users who can sign in to the dashboard.</small>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="{{ url('bp-admin/account/create') }}" class="btn btn-success pull-right">
+                            <i class="fa fa-user-plus"></i> New account
+                        </a>
+                    </div>
+                </div>
+                <form action="{{ url('/bp-admin/account') }}" method="get">
+                    <div class="row pt-3">
+                        <div class="col-md-6">
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Search by name or email"
+                                   autocomplete="off" value="{{ Request::get('name') }}">
                         </div>
-                        <div class="col-sm-3 pull-right">
-                             
-
-                            <a href="{{ url('bp-admin/account/create') }}" class="btn btn-success  pull-right">
-                                <i class="fa fa-user-plus"></i>
-                                New
-                            </a>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-info"><span class="fa fa-search"></span> Search</button>
+                            <a href="{{ url('/bp-admin/account') }}" class="btn btn-primary" title="Reset"><span class="fa fa-refresh"></span></a>
                         </div>
                     </div>
-                    <form action="{{ url('/bp-admin/account') }}" method="get">
-                        <div class="row pb-4 pt-4">
-                               
-                                    
-                                        <div class="col-md-3"></div>
-                                        <div class="col-md-3">
-                                             <!--    <input type="text" name="name" id="name" class="form-control" placeholder="Search with Name" autocomplete="off" value="{{Request::get('name')}}"> -->
-                                        </div>
-
-                                        
-                                         <div class="col-md-4">
-                                            @php
-                                                $department =department();
-                                                $department[0] = "All";
-                                            @endphp
-                                            {{ Form::select('filter',$department,Request::get('filter'), ['class'=>'form-control'])}}
-                                        </div>
-                                        <div class="col-md-2 text-left">
-                                            <button type="submit" class="btn btn-md btn-info"><span class="fa fa-search"></span>Search</button>
-                                            <a href="{{ url('/bp-admin/account') }}" class="btn btn-md btn-primary"><span class="fa fa-refresh"></span></a>
-                                        </div>
-                               
-                        </div>
-                    </form>
-                </div>
-
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table  class="table table-bordered table-hover">
-                        <thead>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
                             <th>Name</th>
-                            <th>User Type</th>
+                            <th>Role</th>
                             <th>Email</th>
-                            <th>Created Date</th>
-                            <th>Actions</th>
+                            <th>Created</th>
+                            <th class="text-right">Actions</th>
                         </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($adminaccounts as $adminaccount)
-                        
-                        
-                        <tr>
-                            <td>{{$adminaccount->name}} {{Auth::guard("admins")->user()->first_name}}</td>
-                            <td>{{role_type($adminaccount->role)}}
-                                <br />
-                                @php
-                                    $department =department();
-                                    $department[0] = "All";
-                                @endphp
-                                {{$department[$adminaccount->department_type]}}
-                            </td>
-                            <td>{{$adminaccount->email}}</td>
-                            <td>{{$adminaccount->created_at}}</td>
-                            <td>
-        
-                                <div style="float:right">
-                                <a href="{{ url('bp-admin/account/'.$adminaccount->id.'/edit') }}" class="btn btn-xs btn-info">Edit</a>
-                                
-                                <a href="{{ url('bp-admin/account/delete',[$adminaccount->id]) }}" class="btn btn-delete btn-xs btn-danger">Remove</a>
-                                </div>
-                             </td>
-                        </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                    </thead>
+                    <tbody>
+                        @forelse ($adminaccounts as $adminaccount)
+                            <tr>
+                                <td>{{ $adminaccount->name }}</td>
+                                <td><span class="badge badge-info">{{ role_type($adminaccount->role) }}</span></td>
+                                <td>{{ $adminaccount->email }}</td>
+                                <td>{{ optional($adminaccount->created_at)->format('Y-m-d') }}</td>
+                                <td class="text-right">
+                                    <a href="{{ url('bp-admin/account/'.$adminaccount->id.'/edit') }}" class="btn btn-sm btn-info">
+                                        <i class="fa fa-pencil"></i> Edit
+                                    </a>
+                                    <a href="{{ url('bp-admin/account/delete', [$adminaccount->id]) }}" class="btn btn-sm btn-danger btn-delete"
+                                       onclick="return confirm('Remove this account?')">
+                                        <i class="fa fa-trash"></i> Remove
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="5" class="text-center text-muted py-4">No staff accounts found.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+                @if(method_exists($adminaccounts, 'links'))
                     <div class="row">
-                        <div class="col-sm-12">
-                           {{--!! dataPaginator($users, true) !!--}}
-                        </div>
+                        <div class="col-sm-12">{{ $adminaccounts->links() }}</div>
                     </div>
-                </div>
-                <!-- /.box-body -->
+                @endif
             </div>
-            <!-- /.box -->
+            <!-- /.box-body -->
         </div>
+        <!-- /.box -->
     </div>
+</div>
 @stop
 
 @push('scripts')
     <script>
-    // $(function () {
-    //     $('.datatable-Insurance').on('search.dt', function() {
-    //     var search = $('.dataTables_filter input').val();
-    //      var arr= [];
-    //      table.$('tr', {"filter":"applied"}).each(function() {
-    //         arr.push(this.id);
-    //     });
-    //     arr=JSON.stringify(arr);
-    //     var customer_types_id=$('#customer_types_id').val();
-    //     var start_date=$('#start_date').val();
-    //     var to_date=$('#to_date').val();
-    //     var name=$('#name').val();
-    //     var url = "{{ url('/bp-admin/reports/customer-report') }}?start_date="+ start_date +"&to_date="+ to_date+"&customer_types_id="+ customer_types_id+"&name="+ name +"&search="+arr;
-    //      $('#search_result').attr('href',  url );
-    //      $('#detail_download').attr('href',  detail_download_url );        
-       
-    //     return false; 
-    //     });      
-    // });
-
-    $(document).ready(function(){
-
-        // $('#demoDate').datepicker({
-        //     format: "dd/mm/yyyy",
-        //     autoclose: true,
-        //     todayHighlight: true
-        //   });
-
-        $('#start_date').datepicker({  format : 'yyyy-mm-dd',autoclose: true,
-            todayHighlight: true});
-        $('#to_date').datepicker({  format : 'yyyy-mm-dd',autoclose: true,
-            todayHighlight: true});
-        $('#country').on('change', function() {
-            var start_date=$('#start_date').val();
-            var to_date=$('#to_date').val();
-            var url = "{{ url('/bp-admin/reports/customer-report') }}?start_date="+ start_date +"&to_date="+ to_date +$(this).val();
-            if (url) {
-                window.location = url;
-            }
-            return false;
+        $(document).ready(function () {
         });
-   });
-</script>
+    </script>
 @endpush
