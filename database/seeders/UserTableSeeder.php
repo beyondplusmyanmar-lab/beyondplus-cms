@@ -1,10 +1,11 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
+
 use App\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserTableSeeder extends Seeder
 {
@@ -16,34 +17,32 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         User::truncate();
-        $this->faker = \Faker\Factory::create();
+
+        // Demo administrator — matches database/sample-data.sql
         User::create([
-            'name'          => 'San Pwint Thu',
-            'email'         => 'root@email.com',
-            'password'      => Hash::make('root'),
-            'role'          => 3,
-            // 'api_token'     => str_random(60),
-            'api_token'     => mt_rand(1,60),
-            'avatar'        => 'http://lorempixel.com/150/150/people/?55009',
-            'phone_no'      => '1-428-547-2288',
-            'verified'      => '1',
-            'created_at'    => '2016-06-3 00:36:29'
+            'name'      => 'Admin',
+            'email'     => 'admin@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 4,
+            'api_token' => 'demo-token',
+            'avatar'    => '',
+            'status'    => 1,
+            'verified'  => 1,
         ]);
-        for ($i=0; $i < 5; $i++) {
-            $user = [
-                'name'          => $this->faker->firstName,
-                'email'         => $this->faker->unique()->email,
-                'password'      => bcrypt('user'),
-                'role'          => 1,
-                // 'api_token'     => str_random(60),
-                'api_token'     => mt_rand(1,60),
-                'avatar'        => 'http://lorempixel.com/150/150/people/?55009',
-                'phone_no'      => '1-428-547-2288',
-                'verified'      => '0',
-                'created_at'    => '2016-06-3 00:36:29'     
-            ];
-            User::insert($user);
+
+        // A few sample staff accounts
+        $faker = \Faker\Factory::create();
+        for ($i = 0; $i < 3; $i++) {
+            User::create([
+                'name'      => $faker->name(),
+                'email'     => $faker->unique()->safeEmail(),
+                'password'  => Hash::make('password'),
+                'role'      => 2,
+                'api_token' => Str::random(60),
+                'avatar'    => '',
+                'status'    => 1,
+                'verified'  => 1,
+            ]);
         }
-        
     }
 }

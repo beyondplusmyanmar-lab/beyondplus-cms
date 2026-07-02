@@ -373,7 +373,7 @@ CREATE TABLE `users` (
   `phone_no` varchar(30) DEFAULT NULL,
   `activation_key` varchar(6) NOT NULL DEFAULT '0',
   `status` int(11) NOT NULL DEFAULT 0,
-  `avatar` varchar(100) NOT NULL DEFAULT 'http://lorempixel.com/150/150/people/?55009',
+  `avatar` varchar(100) NOT NULL DEFAULT '',
   `verified` tinyint(1) NOT NULL DEFAULT 0,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,

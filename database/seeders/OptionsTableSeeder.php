@@ -15,16 +15,15 @@ class OptionsTableSeeder extends Seeder
     public function run()
     {
         Bp_options::truncate();
-        $option_name = array('siteurl', 'home', 'blogname', 'blogdescription', 'theme','mobile_theme', 'admin_email', 'version');
-        $option_value = array('http://beyondpluscms.com', 'http://beyondpluscms.com', 'CMS', 'Beyond Plus CMS', 'bptheme1', 'framework7', 'superadmin@email.com' , '2.2.0');
-        for ($i=0; $i < 7; $i++) {
-            $Bp_options = [
-                'option_name'       => $option_name[$i],
-                'option_value'      => $option_value[$i],
-                'autoload'          => 'yes',
-                'created_at'        => '2016-06-3 00:36:29'
-            ];
-            Bp_options::insert($Bp_options);
+        $option_name  = array('siteurl', 'home', 'blogname', 'blogdescription', 'theme', 'mobile_theme', 'admin_email', 'version');
+        $option_value = array('http://localhost', 'http://localhost', 'Beyond Plus CMS', 'A Beyond Plus CMS sample site', 'default', 'framework7', 'admin@example.com', '2.2.0');
+        for ($i = 0; $i < count($option_name); $i++) {
+            Bp_options::insert([
+                'option_name'  => $option_name[$i],
+                'option_value' => $option_value[$i],
+                'autoload'     => 'yes',
+                'created_at'   => now(),
+            ]);
         }
     }
 }
