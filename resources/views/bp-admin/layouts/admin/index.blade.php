@@ -34,7 +34,7 @@
         });
     </script>
   </head>
-  <body class="app sidebar-mini rtl">
+  <body class="app sidebar-mini">
     <!-- Navbar-->
     @include('bp-admin.layouts.admin.header')
     <!-- Sidebar menu-->
@@ -46,7 +46,6 @@
       <div class="app-title">
         <div>
           <h1><i class="fa fa-dashboard"></i> @yield('title')</h1>
-          <p>Start a beautiful journey here</p>
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>

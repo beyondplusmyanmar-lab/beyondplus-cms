@@ -615,7 +615,7 @@ VALUES (1,'Admin','admin@example.com','$2y$10$3nwR6lIQ0Qu7vQbefvyYueRTV0SpvfaCkb
 -- Demo customer (front-end login: phone 09000000000 / password "password") ---
 DELETE FROM `customers` WHERE `phone` = '09000000000';
 INSERT INTO `customers` (`customer_types_id`,`first_name`,`last_name`,`email`,`phone`,`password`,`status`,`is_verified`,`total_reward_points`,`created_at`,`updated_at`)
-VALUES (1,'Demo','Customer','customer@example.com','09000000000','$2y$10$3nwR6lIQ0Qu7vQbefvyYueRTV0SpvfaCkbBXIpuL0lNBsfdteI632',1,1,150,NOW(),NOW());
+VALUES (1,'Demo','Customer','customer@example.com','09000000000','$2y$10$3nwR6lIQ0Qu7vQbefvyYueRTV0SpvfaCkbBXIpuL0lNBsfdteI632',1,1,150,DATE_SUB(NOW(), INTERVAL 2 DAY),DATE_SUB(NOW(), INTERVAL 2 DAY));
 
 -- Demo posts (neutral sample content, so the front-end renders out of the box)
 INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES

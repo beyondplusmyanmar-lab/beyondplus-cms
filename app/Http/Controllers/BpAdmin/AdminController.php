@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Bp_post;
+use App\Models\Bp_media;
 use App\Admin;
 use App\User;
 use App\Models\Customers;
@@ -27,11 +28,13 @@ class AdminController extends Controller
         $post = Bp_post::whereNotIn('post_type',['post','event','news','page','user-guide'])->orderBy('updated_at','desc')->paginate(20);
 
         // $post = Bp_post::where('post_type','post')->orderBy('created_at','DESC')->paginate(5);
-        $totalPost= $post->total();
-        $allUser=Customers::paginate(5)->total();
+        $totalPost = Bp_post::where('post_type', 'post')->count();
+        $totalPage = Bp_post::where('post_type', 'page')->count();
+        $totalMedia = Bp_media::count();
+        $allUser = Customers::count();
 
         $latestUsers= Customers::orderBy('created_at','DESC')->paginate(12);
-        return view('bp-admin.home', array('post' => $post , 'allUser' => $allUser, 'latestUsers' => $latestUsers ,'totalPost' => $totalPost));
+        return view('bp-admin.home', array('post' => $post , 'allUser' => $allUser, 'latestUsers' => $latestUsers ,'totalPost' => $totalPost, 'totalPage' => $totalPage, 'totalMedia' => $totalMedia));
     }
 
 

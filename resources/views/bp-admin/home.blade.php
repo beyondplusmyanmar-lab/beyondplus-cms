@@ -12,10 +12,10 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="widget-small info coloured-icon"><i class="icon fa fa-thumbs-o-up fa-3x"></i>
+          <div class="widget-small info coloured-icon"><i class="icon fa fa-file-text-o fa-3x"></i>
             <div class="info">
-              <h4>Bounce Rate</h4>
-              <p><b>53 %</b></p>
+              <h4>Pages</h4>
+              <p><b>{{ $totalPage }}</b></p>
             </div>
           </div>
         </div>
@@ -28,10 +28,10 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="widget-small danger coloured-icon"><i class="icon fa fa-star fa-3x"></i>
+          <div class="widget-small danger coloured-icon"><i class="icon fa fa-picture-o fa-3x"></i>
             <div class="info">
-              <h4>Unique Visitors</h4>
-              <p><b>60</b></p>
+              <h4>Media</h4>
+              <p><b>{{ $totalMedia }}</b></p>
             </div>
           </div>
         </div>
