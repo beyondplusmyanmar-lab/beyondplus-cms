@@ -1,6 +1,6 @@
 @extends('bp-admin.layouts.admin.index')
 
-@section('title', 'Permisson')
+@section('title', 'Modules')
 
 @section('content')
 <div class="row">

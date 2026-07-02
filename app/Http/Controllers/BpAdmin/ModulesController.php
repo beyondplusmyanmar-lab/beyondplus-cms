@@ -22,15 +22,18 @@ class ModulesController extends Controller
 
 
     public function ajaxUpdate(Request $request){
-        // return "ajaxUpdate";
-        
-        if($request->type) {
-            $type = explode(" ", $request->type);
-        }
-        #validation require
-        $access = Bp_module::where('module_id',$request->module_id)->update([$type[0] => $request->option]);
+        // Only these module columns may be toggled/updated from the UI.
+        $allowed = ['section', 'module_weight', 'module_icon', 'module_name', 'module_name_mm', 'parent_id'];
 
-        return $type[0].'-'.$request->module_id;
+        $column = $request->type ? explode(' ', $request->type)[0] : null;
+
+        if (! in_array($column, $allowed, true)) {
+            abort(422, 'Invalid field');
+        }
+
+        Bp_module::where('module_id', $request->module_id)->update([$column => $request->option]);
+
+        return $column.'-'.$request->module_id;
     }
 
 }
