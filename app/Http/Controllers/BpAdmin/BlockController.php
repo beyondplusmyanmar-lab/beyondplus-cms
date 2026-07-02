@@ -25,42 +25,14 @@ class BlockController extends Controller
 
     public function index(Request $request){
 
-        if(Auth::guard("admins")->user()->role < 3) {
-            
-            $block_type = Auth::guard("admins")->user()->department_type;
+        $block = Bp_block::orderBy('id', 'desc')->where('translate_id', 0);
 
-            $block = Bp_block::where('block_type',$block_type)->orderBy('id','desc')->where('translate_id',0)->paginate(13);
-
-             return view('bp-admin.block.index', array('block' => $block));
+        if ($request->name != null && $request->name != "0") {
+            $block = $block->where('title', 'like', '%'.$request->name.'%');
         }
 
-        if($request->name == null && $request->filter==null ){
+        $block = $block->paginate(13);
 
-            $block = Bp_block::orderBy('id','desc')->where('translate_id',0)->paginate(13);
-
-        } else {
-
-            $block = Bp_block::orderBy('id','desc')->where('translate_id',0);
-
-            // $page = Bp_post::whereNotIn('post_type',['post','event','news','page','user-guide'])->orderBy('updated_at','desc')->where('translate_id',0);
-
-            if ($request->name != null  ) {
-                if($request->name != "0") {
-                    $block = $block->where("title",'like','%'.$request->name.'%');
-                }
-            }
-
-            // return $request->filter;
-
-            if($request->filter != "0") {
-                $block = $block->where("block_type",$request->filter);
-            }
-
-            $block = $block->paginate(20);
-
-        }
-
-        
         return view('bp-admin.block.index', array('block' => $block));
     }
 

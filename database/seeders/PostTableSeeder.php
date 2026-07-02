@@ -38,7 +38,7 @@ class PostTableSeeder extends Seeder
 
         // Pages demonstrating page-template usage.
         $pages = [
-            [4, 'About Us', '<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This About page uses the <strong>default</strong> page template (with sidebar).</p>', 'about-us', 'default'],
+            [4, 'About Us', '<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This About page uses the <strong>default</strong> page template (with sidebar).</p>[block]1[/block]', 'about-us', 'default'],
             [5, 'Our Services', '<p>This page uses the <strong>full-width</strong> template (no sidebar), selected via the page template option in the admin.</p>', 'services', 'fullwidth'],
             [6, 'Contact', '<p>Reach out using the details on the right. This page uses the <strong>contact</strong> template.</p>', 'contact', 'contact'],
         ];

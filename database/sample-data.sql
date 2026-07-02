@@ -627,7 +627,7 @@ INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,3,'cat'),(1
 
 -- Demo pages (post_type='page') demonstrating page-template usage
 INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_template`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
-(4,'About Us','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This About page uses the <strong>default</strong> page template (with sidebar).</p>','default.jpg','about-us','page','default','yes',0,1,1,NOW(),NOW()),
+(4,'About Us','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This About page uses the <strong>default</strong> page template (with sidebar).</p>[block]1[/block]','default.jpg','about-us','page','default','yes',0,1,1,NOW(),NOW()),
 (5,'Our Services','<p>This page uses the <strong>full-width</strong> template (no sidebar), selected via the page template option in the admin.</p>','default.jpg','services','page','fullwidth','yes',0,1,1,NOW(),NOW()),
 (6,'Contact','<p>Reach out using the details on the right. This page uses the <strong>contact</strong> template.</p>','default.jpg','contact','page','contact','yes',0,1,1,NOW(),NOW());
 
@@ -642,6 +642,10 @@ INSERT INTO `bp_menus` (`menu_id`,`menu_name`,`menu_link`,`post_id`,`menu_weight
 INSERT INTO `bp_sliders` (`slider_id`,`slider_name`,`slider_link`,`slider_type`,`slider_weight`,`slider_description`,`staff_id`,`created_at`,`updated_at`) VALUES
 (1,'Welcome to Beyond Plus CMS','la.jpg','slider',1,'A modern, multi-language content management system built on Laravel.',1,NOW(),NOW()),
 (2,'Manage Everything in One Place','default.jpg','slider',2,'Posts, pages, menus, media and more — all from a clean admin panel.',1,NOW(),NOW());
+
+-- Demo content block, embedded in the About Us page via the [block]1[/block] shortcode
+INSERT INTO `bp_block` (`id`,`title`,`body`,`block_url`,`block_type`,`block_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
+(1,'Why choose Beyond Plus CMS','Fast, multi-language, and easy to manage — everything you need to publish content, right out of the box.','why-choose','content','yes',0,1,1,NOW(),NOW());
 
 -- Configuration defaults (secrets intentionally blank) + admin module
 INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) VALUES

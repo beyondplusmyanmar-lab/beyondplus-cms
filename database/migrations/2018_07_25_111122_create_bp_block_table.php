@@ -17,7 +17,8 @@ class CreateBpBlockTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('body');
-            $table->string('block_url');
+            $table->string('block_url')->nullable();
+            $table->string('block_type')->nullable();
             $table->string('block_active',3)->default('yes');
             $table->integer('translate_id')->default(0);
             $table->integer('lang')->default(1);
