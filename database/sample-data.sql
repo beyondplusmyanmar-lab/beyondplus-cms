@@ -610,6 +610,11 @@ DELETE FROM `users` WHERE `email` = 'admin@example.com';
 INSERT INTO `users` (`id`,`name`,`email`,`password`,`api_token`,`role`,`status`,`verified`,`created_at`,`updated_at`)
 VALUES (1,'Admin','admin@example.com','$2y$10$3nwR6lIQ0Qu7vQbefvyYueRTV0SpvfaCkbBXIpuL0lNBsfdteI632','demo-token',4,1,1,NOW(),NOW());
 
+-- Demo customer (front-end login: phone 09000000000 / password "password") ---
+DELETE FROM `customers` WHERE `phone` = '09000000000';
+INSERT INTO `customers` (`customer_types_id`,`first_name`,`last_name`,`email`,`phone`,`password`,`status`,`is_verified`,`total_reward_points`,`created_at`,`updated_at`)
+VALUES (1,'Demo','Customer','customer@example.com','09000000000','$2y$10$3nwR6lIQ0Qu7vQbefvyYueRTV0SpvfaCkbBXIpuL0lNBsfdteI632',1,1,150,NOW(),NOW());
+
 -- Demo posts (neutral sample content, so the front-end renders out of the box)
 INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
 (3,'Welcome to Beyond Plus CMS','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This sample post is here so you can see how the front-end theme renders content out of the box.</p><p>Log in to the admin panel to create, edit, and organise your own pages and posts.</p>','default.jpg','welcome-to-beyond-plus-cms','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 1 DAY),DATE_SUB(NOW(), INTERVAL 1 DAY)),

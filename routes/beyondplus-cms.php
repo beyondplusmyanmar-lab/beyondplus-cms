@@ -251,6 +251,7 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('/customer/sign-in','Auth\CustomerController@signin');
             Route::post('/customer/sign-in', 'Auth\CustomerController@login');
+            Route::get('/customer/profile', 'Auth\CustomerController@profile');
             Route::get('/customer/logout', 'Auth\CustomerController@logout');
 
 

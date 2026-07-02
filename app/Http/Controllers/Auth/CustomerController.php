@@ -71,6 +71,18 @@ class CustomerController extends Controller
         return view('front.customer.sign-in');
     }
 
+    //customer profile page
+    public function profile()
+    {
+        if (! Auth::guard('customer_web')->check()) {
+            return redirect('customer/sign-in');
+        }
+
+        return view('front.customer.profile', [
+            'customer' => Auth::guard('customer_web')->user(),
+        ]);
+    }
+
     //customer register page
     public function signup()
     {

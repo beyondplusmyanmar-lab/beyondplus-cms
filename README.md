@@ -42,13 +42,12 @@ php artisan migrate --seed
 
 ## Demo credentials
 
-The sample data ships a single administrator:
+The sample data ships a demo administrator and a demo customer:
 
-| Field    | Value               |
-|----------|---------------------|
-| URL      | `/bp-admin/login`   |
-| Email    | `admin@example.com` |
-| Password | `password`          |
+| Account       | URL                 | Login                        | Password   |
+|---------------|---------------------|------------------------------|------------|
+| Administrator | `/bp-admin/login`   | `admin@example.com`          | `password` |
+| Customer      | `/customer/sign-in` | phone `09000000000`          | `password` |
 
 ## Themes
 
