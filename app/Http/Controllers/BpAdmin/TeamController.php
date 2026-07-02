@@ -126,7 +126,7 @@ class TeamController extends Controller
                 Bp_relationship::create($cat);
             }
         } else {
-            $cat['tax_id'] = 2;
+            $cat['tax_id'] = 1;
             $cat['post_id'] = $id;
             $cat['type']    = 'cat';
             Bp_relationship::create($cat);
