@@ -39,6 +39,22 @@ class PluginController extends Controller
         ]);
     }
 
+    /** Full detail page for a single plugin. */
+    public function show(Request $request)
+    {
+        $slug = basename((string) $request->input('slug'));
+        $all = Plugin::all();
+        abort_unless(isset($all[$slug]), 404, 'Plugin not found.');
+
+        return view('bp-admin.plugin.view', [
+            'plugin'       => $all[$slug],
+            'meta'         => Plugin::meta($slug),
+            'scan'         => Plugin::scan($slug),
+            'requirements' => Plugin::checkRequirements($slug),
+            'failure'      => Plugin::failures()[$slug] ?? null,
+        ]);
+    }
+
     /** Show the static security scan report for a plugin before activating it. */
     public function scan(Request $request)
     {

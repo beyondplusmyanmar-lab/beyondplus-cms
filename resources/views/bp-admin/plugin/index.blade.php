@@ -50,7 +50,7 @@
                             <div class="plugin-card {{ $plugin['active'] ? 'active' : '' }}">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
-                                        <h5 class="mb-1"><i class="fa fa-plug text-muted"></i> {{ $plugin['name'] }}</h5>
+                                        <h5 class="mb-1"><a href="{{ url('bp-admin/plugins/view?slug='.$plugin['slug']) }}" class="text-dark"><i class="fa fa-plug text-muted"></i> {{ $plugin['name'] }}</a></h5>
                                         <span>
                                             @if($plugin['active'])
                                                 <span class="badge badge-success">Active</span>
