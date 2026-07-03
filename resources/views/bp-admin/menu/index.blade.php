@@ -14,7 +14,7 @@
         padding: .5rem .75rem; margin-bottom: .5rem;
         box-shadow: 0 1px 2px rgba(0,0,0,.04); transition: border-color .12s ease;
     }
-    .menu-item-row:hover { border-color: #14b8a6; }
+    .menu-item-row:hover { border-color: #6366f1; }
     .menu-block .menu-block { margin-left: 1.25rem; padding-left: 1rem; border-left: 2px solid #e5e7eb; }
     .menu-grip { color: #9ca3af; cursor: grab; }
     .menu-title { font-weight: 600; color: #111827; }

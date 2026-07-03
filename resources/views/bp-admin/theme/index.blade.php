@@ -6,7 +6,7 @@
 <style>
     .theme-card { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: box-shadow .15s ease; height: 100%; }
     .theme-card:hover { box-shadow: 0 .6rem 1.4rem rgba(0,0,0,.10); }
-    .theme-card.active { border-color: #14b8a6; box-shadow: 0 0 0 2px rgba(20,184,166,.25); }
+    .theme-card.active { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,.25); }
     .theme-thumb { height: 180px; background: #f3f4f6 center/cover no-repeat; display: flex; align-items: center; justify-content: center; color: #9ca3af; }
     .theme-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
     .theme-meta { font-size: .78rem; color: #6b7280; }

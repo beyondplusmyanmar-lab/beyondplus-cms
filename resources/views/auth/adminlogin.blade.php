@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <style>
-        :root { --bp-brand:#0d9488; --bp-brand-dark:#0f766e; --bp-accent:#14b8a6; }
+        :root { --bp-brand:#4f46e5; --bp-brand-dark:#4338ca; --bp-accent:#6366f1; }
         * { font-family:'Inter',-apple-system,"Segoe UI",Roboto,sans-serif; }
         body {
             min-height:100vh; margin:0; display:flex; align-items:center; justify-content:center;
-            background: radial-gradient(1200px 600px at 20% -10%, #14b8a6 0%, transparent 55%),
-                        linear-gradient(135deg, #0f766e 0%, #0f172a 100%);
+            background: radial-gradient(1200px 600px at 20% -10%, #6366f1 0%, transparent 55%),
+                        linear-gradient(135deg, #4338ca 0%, #0f172a 100%);
             padding: 24px;
         }
         .login-card { width:100%; max-width:420px; background:#fff; border-radius:16px; box-shadow:0 24px 60px rgba(2,6,23,.35); overflow:hidden; }
@@ -22,19 +22,19 @@
         .login-badge {
             width:56px; height:56px; margin:0 auto 14px; border-radius:14px; color:#fff;
             display:flex; align-items:center; justify-content:center; font-size:1.5rem;
-            background:linear-gradient(135deg,var(--bp-brand),var(--bp-accent)); box-shadow:0 8px 20px rgba(13,148,136,.4);
+            background:linear-gradient(135deg,var(--bp-brand),var(--bp-accent)); box-shadow:0 8px 20px rgba(79,70,229,.4);
         }
         .login-head h1 { font-size:1.35rem; font-weight:700; color:#0f172a; margin:0; }
         .login-head p { color:#64748b; margin:.35rem 0 0; font-size:.9rem; }
         .login-body { padding: 20px 34px 34px; }
         .form-label { font-weight:500; color:#1e293b; font-size:.85rem; }
         .form-control { border-radius:10px; padding:.6rem .85rem; border:1px solid #e2e8f0; }
-        .form-control:focus { border-color:var(--bp-accent); box-shadow:0 0 0 3px rgba(20,184,166,.18); }
+        .form-control:focus { border-color:var(--bp-accent); box-shadow:0 0 0 3px rgba(129,140,248,.35); }
         .input-group-text { background:#f8fafc; border:1px solid #e2e8f0; border-right:0; border-radius:10px 0 0 10px; color:#94a3b8; }
         .input-group .form-control { border-left:0; border-radius:0 10px 10px 0; }
         .btn-brand {
             background:linear-gradient(135deg,var(--bp-brand),var(--bp-brand-dark)); color:#fff; border:0;
-            border-radius:10px; padding:.65rem; font-weight:600; width:100%; box-shadow:0 8px 18px rgba(13,148,136,.3); transition:filter .15s ease;
+            border-radius:10px; padding:.65rem; font-weight:600; width:100%; box-shadow:0 8px 18px rgba(79,70,229,.3); transition:filter .15s ease;
         }
         .btn-brand:hover { filter:brightness(1.07); color:#fff; }
         .login-foot { text-align:center; color:#94a3b8; font-size:.82rem; padding-bottom:26px; }

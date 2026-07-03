@@ -6,7 +6,7 @@
 <style>
     .plugin-card { border: 1px solid #e5e7eb; border-radius: 10px; height: 100%; transition: box-shadow .15s ease; }
     .plugin-card:hover { box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.08); }
-    .plugin-card.active { border-color: #14b8a6; box-shadow: 0 0 0 2px rgba(20,184,166,.2); }
+    .plugin-card.active { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,.2); }
     .plugin-meta { font-size: .78rem; color: #6b7280; }
     .plugin-empty { border: 1px dashed #d1d5db; border-radius: 8px; }
 </style>

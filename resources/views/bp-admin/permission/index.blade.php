@@ -6,7 +6,7 @@
 <style>
     .perm-table td { vertical-align: middle; }
     .perm-role-row td {
-        background: #0f766e; color: #fff; font-weight: 600;
+        background: #4338ca; color: #fff; font-weight: 600;
         letter-spacing: .3px; text-transform: capitalize;
     }
     .perm-name { font-weight: 500; color: #111827; }

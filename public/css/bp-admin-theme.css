@@ -4,10 +4,12 @@
    and polishes the header, sidebar, cards, forms and buttons.
    ========================================================================== */
 :root {
-    --bp-brand:      #0d9488;   /* teal-600 */
-    --bp-brand-dark: #0f766e;   /* teal-700 */
-    --bp-brand-600:  #0ea5a5;
-    --bp-accent:     #14b8a6;
+    --bp-brand:      #4f46e5;   /* indigo-600 */
+    --bp-brand-dark: #4338ca;   /* indigo-700 (header dark end) */
+    --bp-brand-hover:#3730a3;   /* indigo-800 (button hover) */
+    --bp-brand-600:  #6366f1;
+    --bp-accent:     #6366f1;   /* indigo-500 (active accent) */
+    --bp-focus:      #818cf8;   /* indigo-400 (focus ring) */
     --bp-sidebar:    #0f172a;   /* slate-900 */
     --bp-sidebar-2:  #1e293b;   /* slate-800 */
     --bp-sidebar-tx: #94a3b8;   /* slate-400 */
@@ -28,7 +30,7 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
 /* ---- Header --------------------------------------------------------------- */
 .app-header {
     background: linear-gradient(90deg, var(--bp-brand-dark), var(--bp-brand)) !important;
-    box-shadow: 0 1px 12px rgba(13,148,136,.25);
+    box-shadow: 0 1px 12px rgba(79,70,229,.25);
     border: 0;
 }
 .app-header__logo,
@@ -64,7 +66,7 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
 }
 .app-menu__item.active,
 .treeview.is-expanded > .app-menu__item {
-    background: linear-gradient(90deg, rgba(20,184,166,.18), transparent) !important;
+    background: linear-gradient(90deg, rgba(99,102,241,.20), transparent) !important;
     color: #fff !important;
     border-left-color: var(--bp-accent);
 }
@@ -73,7 +75,7 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
 .treeview.is-expanded > .treeview-menu { display: block; }   /* keep active parent open */
 .treeview-item { color: var(--bp-sidebar-tx) !important; padding-left: 48px !important; border-left: 3px solid transparent; }
 .treeview-item:hover,
-.treeview-item.active { color:#fff !important; background: rgba(20,184,166,.12) !important; border-left-color: var(--bp-accent); }
+.treeview-item.active { color:#fff !important; background: rgba(99,102,241,.12) !important; border-left-color: var(--bp-accent); }
 
 /* ---- Page title / breadcrumb --------------------------------------------- */
 .app-title { border-bottom: 1px solid var(--bp-border); margin: -30px -30px 30px; padding: 22px 30px; background:#fff; }
@@ -100,8 +102,8 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
 }
 .btn-primary:hover, .btn-success:hover,
 .btn-primary:focus, .btn-success:focus {
-    background: var(--bp-brand-dark) !important;
-    border-color: var(--bp-brand-dark) !important;
+    background: var(--bp-brand-hover) !important;
+    border-color: var(--bp-brand-hover) !important;
 }
 .btn-outline-info { color: var(--bp-brand); border-color: var(--bp-brand); }
 .btn-outline-info:hover { background: var(--bp-brand); border-color: var(--bp-brand); color:#fff; }
@@ -116,7 +118,7 @@ a:hover { color: var(--bp-brand-dark); }
 }
 .form-control:focus {
     border-color: var(--bp-accent);
-    box-shadow: 0 0 0 3px rgba(20,184,166,.18);
+    box-shadow: 0 0 0 3px rgba(129,140,248,.35);
 }
 .control-label, label { color: var(--bp-ink); font-weight: 500; }
 
