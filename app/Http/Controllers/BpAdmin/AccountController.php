@@ -49,21 +49,24 @@ class AccountController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required', 
+            'name' => 'required',
             'role' => 'required',
-            'email'=> 'required',
-            'password'=> 'required'
+            'email'=> 'required|email',
+            'password'=> 'required|min:8'
         ]);
 
-        if ($validator->fails()) {  
+        if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $inputs = $request->all();
-        $inputs['api_token'] = bcrypt(time());
-
-        $inputs['password'] = bcrypt($request->input('password'));
-        Admin::create($inputs);
+        // Explicit allow-list — never mass-assign from $request->all().
+        Admin::create([
+            'name'      => $request->input('name'),
+            'email'     => $request->input('email'),
+            'role'      => $request->input('role'),
+            'password'  => bcrypt($request->input('password')),
+            'api_token' => bcrypt(time()),
+        ]);
         return redirect()->to('bp-admin/account');
     }
 
@@ -83,22 +86,23 @@ class AccountController extends Controller
     public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required', 
+            'name' => 'required',
             'role' => 'required',
-            'email'=> 'required'
+            'email'=> 'required|email'
         ]);
 
-        if ($validator->fails()) {  
+        if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $inputs = $request->all();
-        // dd($inputs);
-     //   $inputs = $request->except('_token', '_method');
-        if($request->input('password') != "") {
+        // Explicit allow-list — never mass-assign from $request->all().
+        $inputs = [
+            'name'  => $request->input('name'),
+            'email' => $request->input('email'),
+            'role'  => $request->input('role'),
+        ];
+        if ($request->input('password') != "") {
             $inputs['password'] = bcrypt($request->input('password'));
-        } else {
-            unset($inputs['password']);
         }
 
         Admin::findOrFail($id)->update($inputs);
