@@ -76,13 +76,16 @@
             <div class="box-body pt-3" style="border-top: 1px solid #eef0f3;">
                 <div class="plugin-card p-4 text-center">
                     <i class="fa fa-plug fa-2x text-muted mb-2 d-block"></i>
-                    <h5 class="mb-1">Plugins are coming soon</h5>
+                    <h5 class="mb-1">Manage plugins</h5>
                     <p class="text-muted mb-2">
-                        Beyond Plus CMS will support installable plugins, including
-                        <strong>DoehPOS</strong> integrations.
+                        Install hook-based plugins under <code>/plugins</code> and activate them —
+                        future <strong>DoehPOS</strong> integrations plug in here too.
                     </p>
-                    <a href="https://developers.doehpos.com/" target="_blank" rel="noopener" class="btn btn-sm btn-primary">
-                        <i class="fa fa-external-link"></i> DoehPOS developer docs
+                    <a href="{{ url('bp-admin/plugins') }}" class="btn btn-sm btn-primary">
+                        <i class="fa fa-plug"></i> Open Plugins
+                    </a>
+                    <a href="https://developers.doehpos.com/" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
+                        <i class="fa fa-external-link"></i> DoehPOS docs
                     </a>
                 </div>
             </div>

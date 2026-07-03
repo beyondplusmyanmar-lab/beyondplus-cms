@@ -35,7 +35,8 @@ class ModuleTableSeeder extends Seeder
                     array("Permission","ခွင့်ပြုချက်","permission",0,"fa fa-windows",8,0),
                     array("Generals","အခြေခံ","general",0,"fa fa-bug",8,1),
                     array("Configuration","ဖွဲ့စည်းမှု","configuration",5,"fa fa-cogs",8,1),
-                    array("Themes","ပုံစံများ","themes",6,"fa fa-paint-brush",8,1)
+                    array("Themes","ပုံစံများ","themes",6,"fa fa-paint-brush",8,1),
+                    array("Plugins","ပလပ်အင်များ","plugins",7,"fa fa-plug",8,1)
                 );
         $this->createModule($child);
         

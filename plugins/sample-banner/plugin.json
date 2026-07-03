@@ -1,0 +1,7 @@
+{
+    "name": "Sample Banner",
+    "description": "A demo plugin showing the hook system — adds a small line to the site footer via the theme_footer action.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "main": "sample-banner.php"
+}

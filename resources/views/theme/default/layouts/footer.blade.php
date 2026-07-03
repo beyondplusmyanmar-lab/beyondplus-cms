@@ -30,5 +30,7 @@
             &copy; {{ date('Y') }} {{ $siteName }}. Powered by
             <a href="https://laravel.com">Laravel</a>.
         </div>
+        {{-- Plugin hook: active plugins can render into the footer here. --}}
+        @php bp_do_action('theme_footer') @endphp
     </div>
 </footer>

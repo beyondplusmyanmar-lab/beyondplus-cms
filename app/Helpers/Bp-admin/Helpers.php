@@ -294,6 +294,23 @@ function uploadPath() {
     return public_path().'/uploads/';
 }
 
+/* ---- Plugin hooks (actions & filters) ------------------------------------
+ | Actions run callbacks for side effects; filters transform and return a value.
+ | Plugins register these from their main file; core/themes trigger them.
+ */
+function bp_add_action($hook, $cb, $priority = 10) {
+    \App\Support\Plugin::addAction($hook, $cb, $priority);
+}
+function bp_do_action($hook, ...$args) {
+    \App\Support\Plugin::doAction($hook, ...$args);
+}
+function bp_add_filter($hook, $cb, $priority = 10) {
+    \App\Support\Plugin::addFilter($hook, $cb, $priority);
+}
+function bp_apply_filters($hook, $value, ...$args) {
+    return \App\Support\Plugin::applyFilters($hook, $value, ...$args);
+}
+
 /**
  * Validate that the given request fields, when present, are real images.
  * Rejects non-image uploads (e.g. a disguised .php) before they are stored in

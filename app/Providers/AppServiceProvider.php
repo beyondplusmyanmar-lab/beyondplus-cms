@@ -48,6 +48,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Load active plugins so they can register their action/filter hooks.
+        \App\Support\Plugin::boot();
+
         // Custom transport that delivers via the Mailgun credentials in bp_options.
         Mail::extend('bp_mailgun', fn () => new ConfigMailgunTransport());
 
