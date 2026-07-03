@@ -1,98 +1,115 @@
 # Beyond Plus CMS
 
-A multi-language content-management system built on **Laravel 13** (PHP 8.3+).
-It provides an admin panel (`/bp-admin`), locale-prefixed public pages, a
-theme system, and a token-authenticated JSON API documented with Swagger.
+**Laravel 13** (PHP 8.3+) ပေါ်တွင် တည်ဆောက်ထားသော ဘာသာစကားမျိုးစုံသုံး
+အကြောင်းအရာ စီမံခန့်ခွဲမှုစနစ် (content-management system) တစ်ခုဖြစ်ပါသည်။
+စီမံခန့်ခွဲသူ panel (`/bp-admin`)၊ ဘာသာစကားအလိုက် ခွဲထားသော အများသုံးစာမျက်နှာများ၊
+ပုံစံ (theme) စနစ် နှင့် Swagger ဖြင့် မှတ်တမ်းတင်ထားသော token ဖြင့်စိစစ်သည့်
+JSON API တို့ ပါဝင်ပါသည်။
 
-## Requirements
+## မျက်နှာပြင်ဓာတ်ပုံများ (Screenshots)
+
+| ရှေ့ဆုံးစာမျက်နှာ | စီမံခန့်ခွဲမှု — ပုံစံများ |
+|---|---|
+| ![Front-end](docs/screenshots/frontend.png) | ![Admin themes](docs/screenshots/admin-themes.png) |
+| **SPA နမူနာစာမျက်နှာ** (`/spa-example.html`) | **API စာရွက်စာတမ်း** (Swagger) |
+| ![SPA example](docs/screenshots/spa-example.png) | ![API docs](docs/screenshots/api-docs.png) |
+
+မီနူး စီမံခန့်ခွဲမှု —
+
+![Admin menu](docs/screenshots/admin-menu.png)
+
+## လိုအပ်ချက်များ (Requirements)
 
 - PHP **8.3+**
 - Composer 2
 - MySQL / MariaDB
-- Node.js (only if you want to rebuild front-end assets; pre-built assets are committed)
+- Node.js (ရှေ့ဆုံး assets များကို ပြန်လည်တည်ဆောက်လိုမှသာ လိုအပ်ပြီး၊ တည်ဆောက်ပြီးသား assets များကို ထည့်သွင်းပေးထားပြီးဖြစ်ပါသည်)
 
-## Installation
+## တပ်ဆင်ခြင်း (Installation)
 
 ```bash
-# 1. Install PHP dependencies
+# ၁။ PHP dependencies များ install လုပ်ပါ
 composer install
 
-# 2. Create your environment file and app key
+# ၂။ environment file နှင့် app key ဖန်တီးပါ
 cp .env.example .env
 php artisan key:generate
 
-# 3. Configure the database in .env
+# ၃။ .env ထဲတွင် database ကို သတ်မှတ်ပါ
 #    DB_DATABASE=beyondplus_cms
 #    DB_USERNAME=... DB_PASSWORD=...
 
-# 4. Create the database, then import the sample schema + data
+# ၄။ database ဖန်တီးပြီး နမူနာ schema + data ကို import လုပ်ပါ
 mysql -u root -p -e "CREATE DATABASE beyondplus_cms CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 mysql -u root -p beyondplus_cms < database/sample-data.sql
 
-# 5. Serve
+# ၅။ Serve လုပ်ပါ
 php artisan serve
 ```
 
-Alternatively, instead of importing `database/sample-data.sql` you can build the
-schema from migrations and seed it:
+`database/sample-data.sql` ကို import မလုပ်လိုပါက migrations မှတစ်ဆင့် schema ကို
+တည်ဆောက်ပြီး seed လုပ်နိုင်ပါသည် —
 
 ```bash
 php artisan migrate --seed
 ```
 
-## Demo credentials
+## စမ်းသပ်ရန် အကောင့်များ (Demo credentials)
 
-The sample data ships a demo administrator and a demo customer:
+နမူနာ data ထဲတွင် စမ်းသပ်ရန် စီမံခန့်ခွဲသူ တစ်ဦးနှင့် ဖောက်သည် (customer) တစ်ဦး ပါဝင်ပါသည် —
 
-| Account       | URL                 | Login                        | Password   |
-|---------------|---------------------|------------------------------|------------|
-| Administrator | `/bp-admin/login`   | `admin@example.com`          | `password` |
-| Customer      | `/customer/sign-in` | phone `09000000000`          | `password` |
+| အကောင့် | URL | ဝင်ရောက်ရန် | စကားဝှက် |
+|---|---|---|---|
+| စီမံခန့်ခွဲသူ | `/bp-admin/login` | `admin@example.com` | `password` |
+| ဖောက်သည် | `/customer/sign-in` | ဖုန်း `09000000000` | `password` |
 
-## Themes
+## ပုံစံများ (Themes)
 
-Front-end themes live in `resources/views/theme/<name>/`. The active theme is
-stored in the `bp_options` table (`option_name = 'theme'`) and defaults to
-`default`. Additional sample themes (`bptheme1`, `bptheme2`) are included.
+ရှေ့ဆုံး ပုံစံများကို `resources/views/theme/<name>/` တွင် ထားရှိပါသည်။ အသုံးပြုနေသော
+ပုံစံကို `bp_options` table (`option_name = 'theme'`) တွင် သိမ်းဆည်းထားပြီး၊ မူလ
+တန်ဖိုးမှာ `default` ဖြစ်ပါသည်။ နောက်ထပ် နမူနာပုံစံ (`bptheme1`, `bptheme2`) များလည်း
+ပါဝင်ပါသည်။
 
-## API for the mobile SPA
+## Mobile SPA အတွက် API
 
-The mobile app is a separate SPA that talks to this CMS over a JSON API.
-Interactive docs (OpenAPI / Swagger) are at **`/api/documentation`**, and a
-live, self-contained auth-flow example (register / verify / login / profile /
-logout) is at **`/spa-example.html`**.
+Mobile app သည် ဤ CMS နှင့် JSON API မှတစ်ဆင့် ဆက်သွယ်သည့် သီးခြား SPA တစ်ခုဖြစ်ပါသည်။
+အပြန်အလှန်အသုံးပြုနိုင်သော စာရွက်စာတမ်း (OpenAPI / Swagger) ကို **`/api/documentation`**
+တွင်၊ register / verify / login / profile / logout လုပ်ငန်းစဉ်ကို တိုက်ရိုက်ပြသသည့်
+နမူနာစာမျက်နှာကို **`/spa-example.html`** တွင် ကြည့်ရှုနိုင်ပါသည်။
 
-- **Base URL:** `/api/m`
-- **Responses:** JSON, enveloped as
-  `{ "status": <code>, "data": <payload>, "meta"?: <pagination> }`.
-- **Locale:** append `?lang=en` (or `mm`, the default) to content requests.
-- **Kill switch:** the whole API returns `503` when *API* is turned off on the
-  admin **Configuration** page.
+- **အခြေခံ URL:** `/api/m`
+- **ပြန်ကြားချက် (Responses):** JSON ဖြစ်ပြီး `{ "status": <code>, "data": <payload>, "meta"?: <pagination> }` ပုံစံဖြင့် ပြန်ပေးပါသည်။
+- **ဘာသာစကား:** အကြောင်းအရာ တောင်းဆိုမှုများတွင် `?lang=en` (သို့မဟုတ် မူလ `mm`) ကို ထည့်နိုင်ပါသည်။
+- **ပိတ်ခလုတ်:** စီမံခန့်ခွဲမှု **Configuration** စာမျက်နှာတွင် API ကို ပိတ်လိုက်ပါက API တစ်ခုလုံး `503` ပြန်ပေးပါသည်။
 
-### Public content (read-only)
+### အများသုံး အကြောင်းအရာ (Public content — read-only)
 
-No auth required; rate limited to **60 requests/min per IP**. List endpoints
-accept `?page=` and `?per_page=` (capped at 50).
+စိစစ်မှု (auth) မလိုအပ်ပါ။ IP တစ်ခုလျှင် တစ်မိနစ်လျှင် **တောင်းဆိုမှု 60 ကြိမ်** အထိသာ
+ခွင့်ပြုပါသည်။ စာရင်းပြသည့် endpoint များသည် `?page=` နှင့် `?per_page=` (အများဆုံး 50)
+ကို လက်ခံပါသည်။
 
-| Method & path | Description |
+| Method & path | ဖော်ပြချက် |
 |---|---|
-| `GET /api/m/home` | Site info, sliders, latest posts, news |
-| `GET /api/m/posts` · `GET /api/m/posts/{slug}` | Post list (paginated) · post detail |
-| `GET /api/m/pages` · `GET /api/m/pages/{slug}` | Page list · page detail |
-| `GET /api/m/menus` | Navigation menu tree |
-| `GET /api/m/categories` · `GET /api/m/categories/{slug}/posts` | Categories · posts in a category |
+| `GET /api/m/home` | ဆိုက်အချက်အလက်၊ sliders၊ နောက်ဆုံး posts၊ news |
+| `GET /api/m/posts` · `GET /api/m/posts/{slug}` | Post စာရင်း (paginated) · post အသေးစိတ် |
+| `GET /api/m/pages` · `GET /api/m/pages/{slug}` | Page စာရင်း · page အသေးစိတ် |
+| `GET /api/m/menus` | မီနူး အပြင်အဆင် (tree) |
+| `GET /api/m/categories` · `GET /api/m/categories/{slug}/posts` | ကဏ္ဍများ · ကဏ္ဍအလိုက် posts |
 | `GET /api/m/sliders` · `GET /api/m/news` | Sliders · news (paginated) |
+| `GET /api/m/search?q=` | posts နှင့် pages များကို ရှာဖွေခြင်း |
 
-### Customer authentication
+### ဖောက်သည် စိစစ်ခြင်း (Customer authentication)
 
-Token-based. Auth endpoints are rate limited to **5 requests/min per IP** to
-resist brute force. A successful login or verification returns a **64-character
-token**; send it on protected requests in the **`X-BP-Token`** header. Tokens
-are stored hashed server-side and are revoked on logout and password reset.
+Token အခြေခံ ဖြစ်ပါသည်။ အနိုင်အထက် ဝင်ရောက်မှု (brute force) ကို ကာကွယ်ရန်
+စိစစ်မှု endpoint များကို IP တစ်ခုလျှင် တစ်မိနစ်လျှင် **တောင်းဆိုမှု 5 ကြိမ်** အထိသာ
+ခွင့်ပြုပါသည်။ login သို့မဟုတ် verify အောင်မြင်ပါက **အက္ခရာ 64 လုံးပါ token** တစ်ခု
+ပြန်ရရှိပြီး၊ ၎င်းကို ကာကွယ်ထားသည့် တောင်းဆိုမှုများတွင် **`X-BP-Token`** header ဖြင့်
+ပေးပို့ရပါသည်။ Token များကို server ဘက်တွင် hash ပြုလုပ်၍ သိမ်းဆည်းထားပြီး၊ logout နှင့်
+စကားဝှက် ပြန်လည်သတ်မှတ်သည့်အခါ ပယ်ဖျက်ပါသည်။
 
-**1. Register** — required fields follow the registration method configured in
-the admin (phone, email, or both). An OTP is sent (written to
-`storage/logs/laravel.log` until an SMS/email provider is enabled).
+**၁။ အကောင့်ဖွင့်ခြင်း (Register)** — လိုအပ်သည့် fields များသည် စီမံခန့်ခွဲမှုတွင်
+သတ်မှတ်ထားသော အကောင့်ဖွင့်နည်း (ဖုန်း၊ email၊ သို့မဟုတ် နှစ်မျိုးလုံး) အပေါ် မူတည်ပါသည်။
+OTP တစ်ခု ပေးပို့ပါသည် (SMS/email provider မဖွင့်မချင်း `storage/logs/laravel.log` တွင် ရေးသားပါသည်)။
 
 ```bash
 curl -X POST /api/m/auth/register \
@@ -101,61 +118,58 @@ curl -X POST /api/m/auth/register \
 # -> { "status":200, "data":{ "message":"...", "identifier":"09123456789" } }
 ```
 
-**2. Verify the OTP** — returns a token.
+**၂။ OTP စိစစ်ခြင်း** — token ကို ပြန်ပေးပါသည်။
 
 ```bash
 curl -X POST /api/m/auth/verify -d identifier=09123456789 -d code=123456
 # -> { "status":200, "data":{ "token":"<64-char>", "customer":{ ... } } }
 ```
 
-**3. Log in** — phone or email + password.
+**၃။ ဝင်ရောက်ခြင်း (Log in)** — ဖုန်း သို့မဟုတ် email နှင့် စကားဝှက်။
 
 ```bash
 curl -X POST /api/m/auth/login -d identifier=09123456789 -d password=secret123
 # -> { "status":200, "data":{ "token":"<64-char>", "customer":{ ... } } }
 ```
 
-**4. Authenticated requests** — send the token in the header.
+**၄။ စိစစ်ပြီးသား တောင်းဆိုမှုများ** — header တွင် token ကို ပေးပို့ပါ။
 
 ```bash
 curl /api/m/account/profile -H "X-BP-Token: <token>"
-curl -X POST /api/m/account/logout -H "X-BP-Token: <token>"   # revokes the token
+curl -X POST /api/m/account/logout -H "X-BP-Token: <token>"   # token ကို ပယ်ဖျက်သည်
 ```
 
-**Password reset** — `POST /api/m/auth/forgot-password` (`identifier`) sends an
-OTP; the response never reveals whether the account exists. Then
-`POST /api/m/auth/reset-password` (`identifier`, `code`, `password`,
-`password_confirmation`) sets the new password and invalidates existing tokens.
+**စကားဝှက် ပြန်လည်သတ်မှတ်ခြင်း** — `POST /api/m/auth/forgot-password` (`identifier`) သည်
+OTP တစ်ခု ပေးပို့ပါသည်။ အကောင့် ရှိ/မရှိကို ပြန်ကြားချက်က ဘယ်တော့မှ မဖော်ပြပါ။ ထို့နောက်
+`POST /api/m/auth/reset-password` (`identifier`, `code`, `password`, `password_confirmation`)
+ဖြင့် စကားဝှက်အသစ် သတ်မှတ်ပြီး ရှိပြီးသား tokens များကို ပယ်ဖျက်ပါသည်။
 
-| Method & path | Auth | Description |
+| Method & path | Auth | ဖော်ပြချက် |
 |---|---|---|
-| `POST /api/m/auth/register` | – | Create account, send OTP |
-| `POST /api/m/auth/verify` | – | Verify OTP → token |
-| `POST /api/m/auth/login` | – | Log in → token |
-| `POST /api/m/auth/forgot-password` | – | Send reset OTP |
-| `POST /api/m/auth/reset-password` | – | Reset password |
-| `GET /api/m/account/profile` | `X-BP-Token` | Current customer |
-| `POST /api/m/account/logout` | `X-BP-Token` | Revoke token |
+| `POST /api/m/auth/register` | – | အကောင့်ဖွင့်၊ OTP ပို့ |
+| `POST /api/m/auth/verify` | – | OTP စိစစ် → token |
+| `POST /api/m/auth/login` | – | ဝင်ရောက် → token |
+| `POST /api/m/auth/forgot-password` | – | reset OTP ပို့ |
+| `POST /api/m/auth/reset-password` | – | စကားဝှက် ပြန်လည်သတ်မှတ် |
+| `GET /api/m/account/profile` | `X-BP-Token` | လက်ရှိ ဖောက်သည် |
+| `POST /api/m/account/logout` | `X-BP-Token` | token ပယ်ဖျက် |
 
-## Configuration notes
+## Configuration မှတ်စုများ
 
-- **Locales:** configured in `config/app.php` under `locales` (`en`, `mm`).
-  `mm` is served un-prefixed; other locales are served under their prefix
-  (e.g. `/en/...`).
-- **Google Sheets/Drive export** (optional): set the `GOOGLE_*` variables in
-  `.env` and provide `storage/credentials.json` (see
-  `storage/credentials.json.example`).
-- **Customer OTP / SMS / email:** delivery is configured on the admin
-  **Configuration** page (SMSPoh for SMS, Mailgun for email). Until a provider
-  is enabled there, the OTP sent during sign-up / password reset is written to
-  `storage/logs/laravel.log` instead of delivered.
+- **ဘာသာစကားများ:** `config/app.php` ၏ `locales` (`en`, `mm`) တွင် သတ်မှတ်ပါသည်။ `mm` ကို
+  prefix မပါဘဲ ဝန်ဆောင်ပြီး၊ အခြားဘာသာစကားများကို ၎င်းတို့၏ prefix (ဥပမာ `/en/...`) ဖြင့် ဝန်ဆောင်ပါသည်။
+- **Google Sheets/Drive ထုတ်ယူခြင်း** (optional): `.env` တွင် `GOOGLE_*` variables များ
+  သတ်မှတ်ပြီး `storage/credentials.json` ကို ပေးပါ (`storage/credentials.json.example` ကို ကြည့်ပါ)။
+- **ဖောက်သည် OTP / SMS / email:** ပေးပို့ခြင်းကို စီမံခန့်ခွဲမှု **Configuration** စာမျက်နှာတွင်
+  သတ်မှတ်ပါသည် (SMS အတွက် SMSPoh၊ email အတွက် Mailgun)။ provider မဖွင့်မချင်း
+  အကောင့်ဖွင့်ခြင်း / စကားဝှက် ပြန်လည်သတ်မှတ်ခြင်း အတွင်း ပေးပို့သည့် OTP ကို
+  `storage/logs/laravel.log` တွင် ရေးသားပါသည်။
 
-## Security
+## လုံခြုံရေး (Security)
 
-Real database dumps and OAuth credentials are intentionally excluded via
-`.gitignore`. Never commit `.env`, production SQL dumps, or
-`storage/credentials.json`.
+တကယ့် database dumps နှင့် OAuth credentials များကို `.gitignore` ဖြင့် တမင် ချန်လှပ်ထားပါသည်။
+`.env`၊ production SQL dumps သို့မဟုတ် `storage/credentials.json` ကို ဘယ်တော့မှ commit မလုပ်ပါနှင့်။
 
-## License
+## လိုင်စင် (License)
 
-Open-sourced under the [MIT license](https://opensource.org/licenses/MIT).
+[MIT license](https://opensource.org/licenses/MIT) အောက်တွင် open-source ပြုလုပ်ထားပါသည်။
