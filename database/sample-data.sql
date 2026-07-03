@@ -191,12 +191,13 @@ DROP TABLE IF EXISTS `bp_options`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bp_options` (
   `option_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `option_name` varchar(35) NOT NULL,
+  `option_name` varchar(191) NOT NULL,
   `option_value` text NOT NULL,
   `autoload` varchar(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`option_id`)
+  PRIMARY KEY (`option_id`),
+  UNIQUE KEY `bp_options_option_name_unique` (`option_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `bp_posts`;
