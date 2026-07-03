@@ -15,9 +15,15 @@
 <div class="row">
     <div class="col-md-12 tile">
         <div class="box box-danger">
-            <div class="box-header" style="padding-bottom:.75rem;">
-                <h4 class="mb-0">Plugins</h4>
-                <small class="text-muted">Extend the CMS with add-ons. Drop a plugin folder in <code>/plugins</code>, then activate it here.</small>
+            <div class="box-header" style="padding-bottom:.75rem; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+                <div>
+                    <h4 class="mb-0">Plugins</h4>
+                    <small class="text-muted">Extend the CMS with add-ons. Drop a plugin folder in <code>/plugins</code>, then activate it here.</small>
+                </div>
+                <div class="input-group" style="max-width:260px;">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    <input type="text" id="pluginSearch" class="form-control" placeholder="Search plugins…" autocomplete="off">
+                </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body pt-3" style="border-top:1px solid #eef0f3;">
@@ -33,11 +39,14 @@
                     </div>
                 @endif
 
+                <div id="pluginNone" class="text-center text-muted py-4" style="display:none;">No plugins match your search.</div>
+
                 @forelse($grouped as $category => $categoryPlugins)
+                    <div class="plugin-group">
                     <h6 class="plugin-category">{{ $category }} <span>· {{ count($categoryPlugins) }}</span></h6>
                     <div class="row">
                     @foreach($categoryPlugins as $plugin)
-                        <div class="col-md-4 col-sm-6 mb-4">
+                        <div class="col-md-4 col-sm-6 mb-4 plugin-col" data-search="{{ strtolower($plugin['name'].' '.$plugin['description'].' '.$plugin['category'].' '.$plugin['slug']) }}">
                             <div class="plugin-card {{ $plugin['active'] ? 'active' : '' }}">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
@@ -91,6 +100,7 @@
                         </div>
                     @endforeach
                     </div>
+                    </div>
                 @empty
                     <div class="plugin-empty text-center text-muted py-5">
                         <i class="fa fa-plug fa-2x mb-2 d-block"></i>
@@ -105,5 +115,23 @@
 @stop
 
 @push('scripts')
-    <script>$(document).ready(function () {});</script>
+<script>
+$(function () {
+    var $q = $('#pluginSearch'), $none = $('#pluginNone');
+    $q.on('input', function () {
+        var term = $(this).val().toLowerCase().trim(), any = false;
+        $('.plugin-group').each(function () {
+            var $g = $(this), shown = false;
+            $g.find('.plugin-col').each(function () {
+                var match = !term || String($(this).data('search')).indexOf(term) !== -1;
+                $(this).toggle(match);
+                if (match) shown = true;
+            });
+            $g.toggle(shown);
+            if (shown) any = true;
+        });
+        $none.toggle(!!term && !any);
+    });
+});
+</script>
 @endpush
