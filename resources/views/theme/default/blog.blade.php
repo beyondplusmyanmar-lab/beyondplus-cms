@@ -11,6 +11,7 @@
         <div class="col-lg-9">
             @foreach(bp_post(10) as $post)
                 @php
+                    $postCategory = optional($post->categories->firstWhere('tax_link', '!=', 'uncategorized') ?? $post->categories->first());
                     if (app()->getLocale() === 'mm' && isset($post->translate) && $post->translate->lang == 2) {
                         $post = $post->translate;
                     }
@@ -22,6 +23,9 @@
                     <p class="text-muted small mb-2">
                         <i class="bi bi-person"></i> {{ optional($post->creator)->name ?? 'Admin' }}
                         &middot; {{ $post->created_at->diffForHumans() }}
+                        @if($postCategory->tax_name)
+                            &middot; <a href="{{ url('/cat/'.$postCategory->tax_link) }}" class="badge text-white text-decoration-none" style="background:var(--bp-accent);">{{ $postCategory->tax_name }}</a>
+                        @endif
                     </p>
                     <div class="text-body">
                         {{ \Illuminate\Support\Str::limit(strip_tags($post->body), 300) }}
