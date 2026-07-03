@@ -404,6 +404,35 @@ function slidebar() {
     return bp_module::orderBy('module_weight')->where('parent_id',0)->where('section',1)->with('child')->get();
 }
 
+// True when the current request is on a given admin module's page (the leading
+// '*' tolerates an optional locale prefix like /en/bp-admin/...).
+function bp_menu_active($link) {
+    $link = trim((string) $link, '/');
+    if ($link === '') {
+        return request()->is('*bp-admin');
+    }
+    return request()->is('*bp-admin/'.$link) || request()->is('*bp-admin/'.$link.'/*');
+}
+
+// True when any child of a parent module is the current page (so the parent
+// menu can be highlighted and expanded).
+function bp_menu_parent_active($module) {
+    // The parent's own landing page (e.g. a treeview whose top item links to
+    // /bp-admin/post) should also count as active.
+    if (bp_menu_active($module->module_link)) {
+        return true;
+    }
+    if (empty($module->child)) {
+        return false;
+    }
+    foreach ($module->child as $child) {
+        if (bp_menu_active($child->module_link)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function site_information($filter = 'theme') {
     try {
         return bp_options::where('option_name',$filter)->first();

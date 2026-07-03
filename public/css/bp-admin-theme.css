@@ -70,9 +70,10 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
 }
 .app-menu__icon { color: inherit; opacity: .9; }
 .treeview-menu { background: rgba(0,0,0,.22) !important; }
-.treeview-item { color: var(--bp-sidebar-tx) !important; padding-left: 48px !important; }
+.treeview.is-expanded > .treeview-menu { display: block; }   /* keep active parent open */
+.treeview-item { color: var(--bp-sidebar-tx) !important; padding-left: 48px !important; border-left: 3px solid transparent; }
 .treeview-item:hover,
-.treeview-item.active { color:#fff !important; background: rgba(20,184,166,.12) !important; }
+.treeview-item.active { color:#fff !important; background: rgba(20,184,166,.12) !important; border-left-color: var(--bp-accent); }
 
 /* ---- Page title / breadcrumb --------------------------------------------- */
 .app-title { border-bottom: 1px solid var(--bp-border); margin: -30px -30px 30px; padding: 22px 30px; background:#fff; }

@@ -22,8 +22,8 @@
                               @if(count($s->child)>0)
                                 <!-- check show -->
                                 
-                                  <li class="treeview">
-                                      <a class="app-menu__item"  href="#" data-toggle="treeview"><i class="app-menu__icon {{$s->module_icon}}"></i> <span class="app-menu__label">{{$s->module_name}} </span> <i class="fa fa-angle-right pull-right"></i></a>
+                                  <li class="treeview {{ bp_menu_parent_active($s) ? 'is-expanded' : '' }}">
+                                      <a class="app-menu__item {{ bp_menu_parent_active($s) ? 'active' : '' }}"  href="#" data-toggle="treeview"><i class="app-menu__icon {{$s->module_icon}}"></i> <span class="app-menu__label">{{$s->module_name}} </span> <i class="fa fa-angle-right pull-right"></i></a>
                                       <ul class="treeview-menu">
 
                                           @if (Auth::guard("admins")->user()->role > 3) 
@@ -44,7 +44,7 @@
                                                         @php $m1->module_name = $m1->module_name_mm; @endphp
                                                       @endif
 
-                                                        <li><a href="{{ url("bp-admin/".$m1->module_link)}}" class="treeview-item">{{ $m1->module_name }}</a></li>
+                                                        <li><a href="{{ url("bp-admin/".$m1->module_link)}}" class="treeview-item {{ bp_menu_active($m1->module_link) ? 'active' : '' }}">{{ $m1->module_name }}</a></li>
                                                     @endif
                                                   @endif
                                               @endforeach
@@ -56,7 +56,7 @@
                                   </li>
                                   
                               @else
-                                <li><a class="app-menu__item" href="{{ url("bp-admin/".$s->module_link)}}"><i class=" app-menu__icon {{$s->module_icon}}"></i>  <span class="app-menu__label">{{$s->module_name}}</span></a></li>
+                                <li><a class="app-menu__item {{ bp_menu_active($s->module_link) ? 'active' : '' }}" href="{{ url("bp-admin/".$s->module_link)}}"><i class=" app-menu__icon {{$s->module_icon}}"></i>  <span class="app-menu__label">{{$s->module_name}}</span></a></li>
                                   
                               @endif
                             @endif
