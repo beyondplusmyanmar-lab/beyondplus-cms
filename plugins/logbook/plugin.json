@@ -3,5 +3,11 @@
     "description": "A demo plugin that ships its own database migration. Activating it creates a bp_logbook table; uninstalling drops it.",
     "version": "1.0.0",
     "author": "Beyond Plus",
-    "main": "logbook.php"
+    "main": "logbook.php",
+    "admin_menu": {
+        "title": "Logbook",
+        "link": "logbook",
+        "icon": "fa fa-book",
+        "parent": 8
+    }
 }

@@ -33,6 +33,9 @@ return Application::configure(basePath: dirname(__DIR__))
                     ->namespace('App\Http\Controllers')
                     ->group(base_path('routes/beyondplus-cms.php'));
             }
+
+            // Routes shipped by active plugins.
+            \App\Support\Plugin::bootRoutes();
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

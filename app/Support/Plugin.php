@@ -4,6 +4,7 @@ namespace App\Support;
 
 use App\Models\Bp_options;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 /**
  * A small hook-based plugin system (actions & filters).
@@ -90,6 +91,13 @@ class Plugin
         return $plugins;
     }
 
+    /** A plugin's manifest (plugin.json) as an array. */
+    public static function meta(string $slug): array
+    {
+        $file = self::path().'/'.basename($slug).'/plugin.json';
+        return is_file($file) ? (json_decode(file_get_contents($file), true) ?: []) : [];
+    }
+
     /** Slugs of the active plugins. */
     public static function active(): array
     {
@@ -122,6 +130,9 @@ class Plugin
             // migration history means already-run migrations are skipped, so a
             // plugin update only runs its new migrations.
             self::migrate($slug);
+
+            // Register its admin menu (sidebar link + access) if declared.
+            self::registerMenu($slug);
         }
     }
 
@@ -129,6 +140,66 @@ class Plugin
     public static function deactivate(string $slug): void
     {
         self::setActive(array_filter(self::active(), fn ($s) => $s !== basename($slug)));
+        self::unregisterMenu($slug);
+    }
+
+    /**
+     * Register a plugin's admin page in the sidebar (bp_modules) and grant the
+     * same roles that can see the Plugins page access to it (bp_access). Driven
+     * by the optional "admin_menu" object in plugin.json.
+     */
+    protected static function registerMenu(string $slug): void
+    {
+        $menu = self::meta($slug)['admin_menu'] ?? null;
+        if (! $menu) {
+            return;
+        }
+        $link = $menu['link'] ?? $slug;
+        if (DB::table('bp_modules')->where('module_link', $link)->exists()) {
+            return;
+        }
+
+        $moduleId = DB::table('bp_modules')->insertGetId([
+            'module_name'    => $menu['title'] ?? ucfirst($slug),
+            'module_name_mm' => $menu['title'] ?? ucfirst($slug),
+            'module_link'    => $link,
+            'module_weight'  => $menu['weight'] ?? 99,
+            'module_icon'    => $menu['icon'] ?? 'fa fa-plug',
+            'parent_id'      => $menu['parent'] ?? 8,
+            'section'        => 1,
+            'created_at'     => now(),
+            'updated_at'     => now(),
+        ]);
+
+        // Copy the Plugins page's access grants so the same roles can reach it.
+        $ref = DB::table('bp_modules')->where('module_link', 'plugins')->first();
+        if ($ref) {
+            foreach (DB::table('bp_access')->where('module_id', $ref->module_id)->get() as $a) {
+                DB::table('bp_access')->insert([
+                    'module_id' => $moduleId,
+                    'usertype'  => $a->usertype,
+                    'canshow'   => $a->canshow,
+                    'cancreate' => $a->cancreate,
+                    'canedit'   => $a->canedit,
+                    'candelete' => $a->candelete,
+                ]);
+            }
+        }
+    }
+
+    /** Remove a plugin's admin menu module + access rows. */
+    protected static function unregisterMenu(string $slug): void
+    {
+        $menu = self::meta($slug)['admin_menu'] ?? null;
+        if (! $menu) {
+            return;
+        }
+        $link = $menu['link'] ?? $slug;
+        $module = DB::table('bp_modules')->where('module_link', $link)->first();
+        if ($module) {
+            DB::table('bp_access')->where('module_id', $module->module_id)->delete();
+            DB::table('bp_modules')->where('module_id', $module->module_id)->delete();
+        }
     }
 
     /** True if the plugin ships a migrations/ directory. */
@@ -166,7 +237,11 @@ class Plugin
         }
     }
 
-    /** Load the main file of every active plugin so it can register hooks. */
+    /**
+     * Boot every active plugin: register its view namespace (view('<slug>::x'))
+     * and load its main file so it can register hooks. Plugin routes are loaded
+     * separately during routing (see bootstrap/app.php).
+     */
     public static function boot(): void
     {
         try {
@@ -174,13 +249,39 @@ class Plugin
                 if (! $plugin['active']) {
                     continue;
                 }
-                $main = self::path().'/'.$plugin['slug'].'/'.basename($plugin['main']);
+                $dir = self::path().'/'.$plugin['slug'];
+
+                if (is_dir($dir.'/views')) {
+                    \Illuminate\Support\Facades\View::addNamespace($plugin['slug'], $dir.'/views');
+                }
+
+                $main = $dir.'/'.basename($plugin['main']);
                 if (is_file($main)) {
                     require_once $main;
                 }
             }
         } catch (\Throwable $e) {
             // DB not ready (pre-migration) or a bad plugin — don't break the app.
+        }
+    }
+
+    /**
+     * Load the route files of every active plugin (called during routing).
+     * Plugins declare their own middleware ('web' for front-end pages, 'admins'
+     * for admin pages), so the loader must not wrap them in another group.
+     */
+    public static function bootRoutes(): void
+    {
+        try {
+            foreach (self::active() as $slug) {
+                $routeFile = self::path().'/'.basename($slug).'/routes.php';
+                if (is_file($routeFile)) {
+                    \Illuminate\Support\Facades\Route::namespace('App\Http\Controllers')
+                        ->group($routeFile);
+                }
+            }
+        } catch (\Throwable $e) {
+            // DB not ready or bad route file — skip plugin routes.
         }
     }
 }

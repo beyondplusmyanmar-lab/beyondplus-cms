@@ -41,6 +41,34 @@ Lifecycle (the core runs this for you):
 | **Deactivate** | the plugin is turned off but **its data/tables are kept** |
 | **Uninstall** | migrations are rolled back (`down`, tables dropped), then an optional `uninstall.php` runs for any remaining cleanup |
 
+## UI (routes, views & admin menu)
+
+A plugin can ship its own pages:
+
+```
+plugins/logbook/
+├── plugin.json
+├── logbook.php
+├── routes.php          # loaded only while active
+├── views/
+│   └── report.blade.php
+└── migrations/
+```
+
+- **routes.php** — define routes with your own middleware (`web` for front-end
+  pages, `admins` for admin pages). Loaded while the plugin is active.
+- **views/** — registered as a namespace: render with `view('<slug>::name')`
+  (e.g. `view('logbook::report')`).
+- **admin_menu** in `plugin.json` — adds a sidebar link + access grant so an
+  `/bp-admin/<link>` page is reachable and appears under Settings:
+
+  ```json
+  "admin_menu": { "title": "Logbook", "link": "logbook", "icon": "fa fa-book", "parent": 8 }
+  ```
+
+  The menu/access is added on activate and removed on deactivate. (When route
+  caching is enabled in production, re-run `route:cache` after toggling plugins.)
+
 ### Hook points in core / themes
 
 | Hook | Type | Where |
