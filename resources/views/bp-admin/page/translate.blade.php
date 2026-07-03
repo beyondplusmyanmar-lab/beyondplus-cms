@@ -74,7 +74,18 @@
                 <div class="col-md-12 form-group">
                     <div class="row">
                     {{ Form::label('Template Name') }}<br />
-                    {{ Form::text('post_template', null,['class'=>'form-control']) }}
+                    @php
+                        $activeTheme = optional(site_information('theme'))->option_value ?: 'default';
+                        $templateDir = resource_path('views/theme/'.$activeTheme.'/template');
+                        $templates = ['default' => 'Default'];
+                        if (is_dir($templateDir)) {
+                            foreach (glob($templateDir.'/*.blade.php') as $tplFile) {
+                                $tplName = basename($tplFile, '.blade.php');
+                                $templates[$tplName] = ucfirst($tplName);
+                            }
+                        }
+                    @endphp
+                    {{ Form::select('post_template', $templates, $page->post_template ?: 'default', ['class' => 'form-control']) }}
                     </div>
                 </div>
             </div>
