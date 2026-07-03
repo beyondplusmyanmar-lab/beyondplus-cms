@@ -59,7 +59,7 @@
                 <div class="alert alert-warning py-2">{{ Session::get('msg') }}</div>
             @endif
 
-            <form method="POST" action="{{ url('/bp-admin/login') }}">
+            <form method="POST" action="{{ $loginAction ?? url('/bp-admin/login') }}">
                 {!! csrf_field() !!}
                 <div class="mb-3">
                     <label class="form-label">Email address</label>

@@ -42,4 +42,22 @@ class AdminTest extends TestCase
     {
         $this->get('/bp-admin/post')->assertRedirect();
     }
+
+    public function test_default_login_authenticates(): void
+    {
+        $this->post('/bp-admin/login', ['email' => 'admin@example.com', 'password' => 'password']);
+        $this->assertTrue(auth()->guard('admins')->check());
+    }
+
+    public function test_hardened_login_makes_default_path_a_decoy(): void
+    {
+        \App\Models\Bp_options::updateOrCreate(
+            ['option_name' => 'admin_login_path'],
+            ['option_value' => 'secretdoor', 'autoload' => 'yes']
+        );
+
+        // Even correct credentials at the default (now decoy) path must not log in.
+        $this->post('/bp-admin/login', ['email' => 'admin@example.com', 'password' => 'password']);
+        $this->assertFalse(auth()->guard('admins')->check());
+    }
 }

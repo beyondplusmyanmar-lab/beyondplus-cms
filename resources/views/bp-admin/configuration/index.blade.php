@@ -82,6 +82,24 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tile">
+                <h3 class="tile-title">Admin login security</h3>
+                <div class="tile-body">
+                    <div class="form-group mb-0">
+                        <label class="control-label">Hardened login path</label>
+                        <div class="input-group">
+                            <span class="input-group-text">/bp-admin/</span>
+                            <input type="text" class="form-control" name="admin_login_path" value="{{ $config['admin_login_path'] }}" placeholder="secret-door" autocomplete="off">
+                        </div>
+                        @if($config['admin_login_path'])
+                            <small class="form-text text-success"><i class="fa fa-shield"></i> Real login: <code>{{ url('bp-admin/'.$config['admin_login_path']) }}</code>. <code>/bp-admin/login</code> is now a decoy that always rejects — <strong>bookmark the real URL</strong>.</small>
+                        @else
+                            <small class="form-text text-muted">Move the real admin login to a secret slug. <code>/bp-admin/login</code> keeps its UI but always returns “invalid credentials”. Blank = disabled. (Letters, numbers, dashes.)</small>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
 
         {{-- SMS & email providers are configured on their own plugin pages now --}}

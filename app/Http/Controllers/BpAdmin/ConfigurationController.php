@@ -19,6 +19,7 @@ class ConfigurationController extends Controller
         'registration_type'    => 'phone', // phone | email | both
         'otp_channel'          => 'auto',  // auto | sms | email
         'api_enabled'          => 'yes',   // yes | no
+        'admin_login_path'     => '',      // secret admin login slug; blank = default bp-admin/login
         'spa_url'              => '',       // public URL of the headless/SPA app
         'cors_origins'         => '',       // allowed API origins; blank = allow all (*)
         'frontend_mode'        => 'theme',  // theme | spa | headless
@@ -42,12 +43,33 @@ class ConfigurationController extends Controller
     public function update(Request $request)
     {
         foreach ($this->defaults as $key => $default) {
+            $value = $request->input($key, $default);
+
+            if ($key === 'admin_login_path') {
+                $value = $this->sanitizeLoginPath($value);
+            }
+
             Bp_options::updateOrCreate(
                 ['option_name' => $key],
-                ['option_value' => $request->input($key, $default), 'autoload' => 'yes']
+                ['option_value' => $value, 'autoload' => 'yes']
             );
         }
 
         return redirect()->back()->with('success', 'Configuration saved.');
+    }
+
+    /** Keep the secret login slug safe and clear of paths that already exist. */
+    private function sanitizeLoginPath($value): string
+    {
+        $slug = strtolower(preg_replace('/[^a-z0-9\-]/i', '', (string) $value));
+
+        $reserved = [
+            'login', 'logout', 'myprofile', 'lang', 'dashboard', 'post', 'page', 'news',
+            'media', 'slider', 'menu', 'block', 'account', 'permission', 'general',
+            'configuration', 'themes', 'plugins', 'user', 'reports', 'custom', 'addcustom',
+            'user-guide',
+        ];
+
+        return in_array($slug, $reserved, true) ? '' : $slug;
     }
 }

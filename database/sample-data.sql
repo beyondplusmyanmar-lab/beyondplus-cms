@@ -679,6 +679,7 @@ INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) 
 ('spa_url','','yes',NOW()),
 ('cors_origins','','yes',NOW()),
 ('frontend_mode','theme','yes',NOW()),
+('admin_login_path','','yes',NOW()),
 ('otp_channel','auto','yes',NOW()),
 ('active_plugins','["smspoh","mailgun"]','yes',NOW()),
 ('plugin_versions','{"smspoh":"1.0.0","mailgun":"1.0.0"}','yes',NOW());

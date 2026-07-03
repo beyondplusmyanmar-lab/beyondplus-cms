@@ -293,6 +293,16 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             Route::post('bp-admin/login','BpAdmin\Main@loginAdmin');
             Route::get('bp-admin/login', 'BpAdmin\Main@login');
 
+            // Hardened login: when a secret path is configured it becomes the real
+            // login, and bp-admin/login above turns into a decoy (see Main).
+            try {
+                $__loginPath = trim((string) bp_option('admin_login_path', ''), '/');
+                if ($__loginPath !== '' && $__loginPath !== 'login') {
+                    Route::get('bp-admin/'.$__loginPath, 'BpAdmin\Main@login');
+                    Route::post('bp-admin/'.$__loginPath, 'BpAdmin\Main@loginAdmin');
+                }
+            } catch (\Throwable $__e) { /* DB not ready */ }
+
             // Route::get('syslogin', function() {
             //       return redirect()->to('/bp-admin/login');
             // });
