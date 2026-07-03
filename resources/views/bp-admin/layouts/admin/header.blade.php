@@ -47,6 +47,17 @@
             <li class="app-notification__footer"><a href="#">See all notifications.</a></li>
           </ul>
         </li> -->
+        <!-- Language switcher-->
+        <li class="dropdown">
+          <a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Change language">
+            <i class="fa fa-globe fa-lg"></i>
+            <span style="font-size:.8rem;vertical-align:middle;">&nbsp;{{ Session::get('applocale') == 'mm' ? 'မြန်မာ' : 'EN' }}</span>
+          </a>
+          <ul class="dropdown-menu settings-menu dropdown-menu-right">
+            <li><a class="dropdown-item" href="{{ url('bp-admin/lang/en') }}"><i class="fa fa-check {{ Session::get('applocale') == 'mm' ? 'invisible' : '' }}"></i> English</a></li>
+            <li><a class="dropdown-item" href="{{ url('bp-admin/lang/mm') }}"><i class="fa fa-check {{ Session::get('applocale') == 'mm' ? '' : 'invisible' }}"></i> မြန်မာ</a></li>
+          </ul>
+        </li>
         <!-- User Menu-->
         <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
           <ul class="dropdown-menu settings-menu dropdown-menu-right">

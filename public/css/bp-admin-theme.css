@@ -1,0 +1,127 @@
+/* ==========================================================================
+   Beyond Plus — admin theme enhancements
+   Overrides the vali-admin base (loaded before this file). Recolours the shell
+   and polishes the header, sidebar, cards, forms and buttons.
+   ========================================================================== */
+:root {
+    --bp-brand:      #0d9488;   /* teal-600 */
+    --bp-brand-dark: #0f766e;   /* teal-700 */
+    --bp-brand-600:  #0ea5a5;
+    --bp-accent:     #14b8a6;
+    --bp-sidebar:    #0f172a;   /* slate-900 */
+    --bp-sidebar-2:  #1e293b;   /* slate-800 */
+    --bp-sidebar-tx: #94a3b8;   /* slate-400 */
+    --bp-content:    #f1f5f9;   /* slate-100 */
+    --bp-ink:        #1e293b;
+    --bp-muted:      #64748b;
+    --bp-border:     #e2e8f0;
+    --bp-radius:     10px;
+    --bp-shadow:     0 1px 2px rgba(15,23,42,.06), 0 4px 16px rgba(15,23,42,.06);
+}
+
+body.app,
+.app-content { background: var(--bp-content) !important; }
+body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
+    font-family: 'Inter', 'Noto Sans Myanmar', -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---- Header --------------------------------------------------------------- */
+.app-header {
+    background: linear-gradient(90deg, var(--bp-brand-dark), var(--bp-brand)) !important;
+    box-shadow: 0 1px 12px rgba(13,148,136,.25);
+    border: 0;
+}
+.app-header__logo,
+.app-header__logo:focus,
+.app-header__logo:hover {
+    color: #fff !important;
+    font-weight: 700;
+    letter-spacing: .3px;
+    background: transparent;
+}
+.app-sidebar__toggle { color: rgba(255,255,255,.9) !important; }
+.app-sidebar__toggle:hover { background: rgba(255,255,255,.12) !important; }
+.app-nav__item { color: rgba(255,255,255,.9) !important; }
+.app-nav__item:hover { background: rgba(255,255,255,.14) !important; color:#fff !important; }
+
+/* ---- Sidebar -------------------------------------------------------------- */
+.app-sidebar { background: var(--bp-sidebar) !important; box-shadow: inset -1px 0 0 rgba(255,255,255,.04); }
+.app-sidebar__user { border-bottom: 1px solid rgba(255,255,255,.06); padding: 18px 15px; }
+.app-sidebar__user-name { color:#f8fafc !important; font-weight:600; }
+.app-sidebar__user-designation { color: var(--bp-sidebar-tx) !important; }
+
+.app-menu__item {
+    color: var(--bp-sidebar-tx) !important;
+    border-left: 3px solid transparent;
+    padding: 11px 16px;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.app-menu__item:hover,
+.app-menu__item:focus {
+    background: var(--bp-sidebar-2) !important;
+    color: #fff !important;
+    border-left-color: var(--bp-accent);
+}
+.app-menu__item.active,
+.treeview.is-expanded > .app-menu__item {
+    background: linear-gradient(90deg, rgba(20,184,166,.18), transparent) !important;
+    color: #fff !important;
+    border-left-color: var(--bp-accent);
+}
+.app-menu__icon { color: inherit; opacity: .9; }
+.treeview-menu { background: rgba(0,0,0,.22) !important; }
+.treeview-item { color: var(--bp-sidebar-tx) !important; padding-left: 48px !important; }
+.treeview-item:hover,
+.treeview-item.active { color:#fff !important; background: rgba(20,184,166,.12) !important; }
+
+/* ---- Page title / breadcrumb --------------------------------------------- */
+.app-title { border-bottom: 1px solid var(--bp-border); margin: -30px -30px 30px; padding: 22px 30px; background:#fff; }
+.app-title h1 { color: var(--bp-ink); font-weight: 600; }
+.app-title h1 .fa { color: var(--bp-brand); }
+.app-breadcrumb .breadcrumb-item a { color: var(--bp-brand); }
+.app-title p { color: var(--bp-muted); }
+
+/* ---- Cards / tiles / boxes ------------------------------------------------ */
+.tile, .box, .widget-small {
+    background:#fff;
+    border: 1px solid var(--bp-border) !important;
+    border-radius: var(--bp-radius);
+    box-shadow: var(--bp-shadow);
+}
+.tile { padding: 22px; }
+.box-header { border-bottom: 0; }
+
+/* ---- Buttons -------------------------------------------------------------- */
+.btn { border-radius: 8px; font-weight: 500; }
+.btn-primary, .btn-success {
+    background: var(--bp-brand) !important;
+    border-color: var(--bp-brand) !important;
+}
+.btn-primary:hover, .btn-success:hover,
+.btn-primary:focus, .btn-success:focus {
+    background: var(--bp-brand-dark) !important;
+    border-color: var(--bp-brand-dark) !important;
+}
+.btn-outline-info { color: var(--bp-brand); border-color: var(--bp-brand); }
+.btn-outline-info:hover { background: var(--bp-brand); border-color: var(--bp-brand); color:#fff; }
+a { color: var(--bp-brand); }
+a:hover { color: var(--bp-brand-dark); }
+
+/* ---- Forms ---------------------------------------------------------------- */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid var(--bp-border);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+.form-control:focus {
+    border-color: var(--bp-accent);
+    box-shadow: 0 0 0 3px rgba(20,184,166,.18);
+}
+.control-label, label { color: var(--bp-ink); font-weight: 500; }
+
+/* ---- Tables --------------------------------------------------------------- */
+.table thead th { color: var(--bp-muted); border-bottom: 2px solid var(--bp-border); font-weight:600; }
+.table-hover tbody tr:hover { background: #f8fafc; }
+
+/* Myanmar text a touch larger for legibility */
+:lang(my), .app-menu__label:lang(my) { font-family: 'Noto Sans Myanmar', 'Inter', sans-serif; }

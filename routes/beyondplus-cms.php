@@ -155,6 +155,13 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('configuration', 'ConfigurationController@index');
             Route::post('configuration', 'ConfigurationController@update');
+            // Admin language switch — sets the session locale, returns to the page.
+            Route::get('lang/{lang}', function ($lang) {
+                $l = $lang === 'mm' ? 'mm' : 'en';
+                session(['applocale' => $l]);
+                app()->setLocale($l);
+                return redirect()->back();
+            });
             Route::get('themes', 'ThemeController@index');
             Route::get('themes/scan', 'ThemeController@scan');
             Route::post('themes/activate', 'ThemeController@activate');

@@ -499,9 +499,9 @@ INSERT INTO `bp_modules` (`module_id`, `module_name`, `module_name_mm`, `module_
 (14,'Account','အကောင့်','account',0,'fa fa-desktop',8,1,1,'2016-06-02 18:06:29','2021-03-17 08:32:45'),
 (15,'Permission','ခွင့်ပြုချက်','permission',0,'fa fa-windows',8,1,1,'2016-06-02 18:06:29','2021-03-15 03:57:37'),
 (16,'Generals','အခြေခံ','general',0,'fa fa-bug',8,1,1,'2016-06-02 18:06:29',NULL),
-(17,'Report','Report','reports',10,'fa fa-edit',0,1,1,NULL,NULL),
-(18,'Customer Report','Customer Report','reports/customer-report',10,'fa fa-edit',17,1,1,NULL,NULL),
-(19,'Customer Report Export','Customer Report Export','reports/customer-report-export',10,'fa fa-edit',17,1,0,NULL,NULL),
+(17,'Report','အစီရင်ခံစာ','reports',10,'fa fa-edit',0,1,1,NULL,NULL),
+(18,'Customer Report','ဖောက်သည်အစီရင်ခံစာ','reports/customer-report',10,'fa fa-edit',17,1,1,NULL,NULL),
+(19,'Customer Report Export','ဖောက်သည်အစီရင်ခံစာ ထုတ်ယူ','reports/customer-report-export',10,'fa fa-edit',17,1,0,NULL,NULL),
 (20,'User Guide','User Guide','user-guide',1,'fa fa-edit',0,1,0,NULL,NULL),
 (21,'News and Events','သတင်းနှင့်အခမ်းအနားများ','news',1,'fa fa-edit',2,1,1,NULL,NULL),
 (22,'Department Pages','Department Pages','department',1,'fa fa-edit',0,1,1,NULL,NULL);

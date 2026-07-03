@@ -405,7 +405,11 @@ function slidebar() {
 }
 
 function site_information($filter = 'theme') {
-    return bp_options::where('option_name',$filter)->first();
+    try {
+        return bp_options::where('option_name',$filter)->first();
+    } catch (\Throwable $e) {
+        return null; // DB / table not available — let callers fall back to a default
+    }
 }
 
 // Read a single option value with a fallback default.

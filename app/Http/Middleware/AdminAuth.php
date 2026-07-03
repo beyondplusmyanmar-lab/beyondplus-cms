@@ -38,9 +38,13 @@ class AdminAuth
                 if($segment == "logout") {
                      return $next($request);
                 }
-                
+
 
                 if($segment == "myprofile") {
+                    return $next($request);
+                }
+
+                if($segment == "lang") {
                     return $next($request);
                 }
                 
