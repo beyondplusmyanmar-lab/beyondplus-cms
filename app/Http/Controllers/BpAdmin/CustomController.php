@@ -35,6 +35,7 @@ class CustomController extends Controller
 	}
 
 	public function store(Request $request){
+        bp_validate_images($request, ['custom_icon', 'pictures']);
         $validator = Validator::make($request->all(), [
             'custom_name' => 'required', 
             'custom_link' => 'required',
@@ -48,7 +49,7 @@ class CustomController extends Controller
         
         if ($request->file('custom_icon') && $request->file('custom_icon')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('custom_icon')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('custom_icon')->extension(); // getting image extension
             // $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
             $fileName = $request->file('custom_icon')->getClientOriginalName();
             $request->file('custom_icon')->move($destinationPath, $fileName); // uploading file to given path
@@ -76,6 +77,7 @@ class CustomController extends Controller
 
     public function update($id, Request $request)
     {
+        bp_validate_images($request, ['custom_icon', 'pictures']);
         $validator = Validator::make($request->all(), [
             'custom_name' => 'required', 
             'custom_link' => 'required',
@@ -89,7 +91,7 @@ class CustomController extends Controller
 
         if ($request->file('custom_icon') && $request->file('custom_icon')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('custom_icon')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('custom_icon')->extension(); // getting image extension
             $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
             $request->file('custom_icon')->move($destinationPath, $fileName); // uploading file to given path
             $inputs['custom_icon'] = $fileName;

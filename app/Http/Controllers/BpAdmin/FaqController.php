@@ -40,6 +40,7 @@ class FaqController extends Controller
     }
 
     public function store(Request $request){
+        bp_validate_images($request, ['category_icon', 'pictures']);
         // $this->validate($request, [
         // 'title' => 'required',
         // 'description' => 'required'
@@ -50,7 +51,7 @@ class FaqController extends Controller
         // $inputs['post_link'] = formatUrl($request->input('title'));
         // if ($request->file('category_icon') && $request->file('category_icon')->isValid()) {
         //     $destinationPath = uploadPath();
-        //     $extension = $request->file('category_icon')->getClientOriginalExtension(); // getting image extension
+        //     $extension = $request->file('category_icon')->extension(); // getting image extension
         //     // $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
         //     $fileName = $request->file('category_icon')->getClientOriginalName();
         //     $request->file('category_icon')->move($destinationPath, $fileName); // uploading file to given path
@@ -79,13 +80,14 @@ class FaqController extends Controller
 
     public function update($id, Request $request)
     {
+        bp_validate_images($request, ['category_icon', 'pictures']);
         $inputs = $request->all();
      //   $inputs = $request->except('_token', '_method');
         // $inputs['post_type'] = $this->post_type;
         // $inputs['post_link'] = formatUrl($request->input('title'));
         // if ($request->file('category_icon') && $request->file('category_icon')->isValid()) {
         //     $destinationPath = uploadPath();
-        //     $extension = $request->file('category_icon')->getClientOriginalExtension(); // getting image extension
+        //     $extension = $request->file('category_icon')->extension(); // getting image extension
         //     $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
         //     $request->file('category_icon')->move($destinationPath, $fileName); // uploading file to given path
         //     $inputs['category_icon'] = $fileName;

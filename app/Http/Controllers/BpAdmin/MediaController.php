@@ -45,6 +45,7 @@ class MediaController extends Controller
     }
 
     public function store(Request $request){
+        bp_validate_images($request, ['media_link']);
 
         $validator = Validator::make($request->all(), [
             'media_name' => 'required',
@@ -59,7 +60,7 @@ class MediaController extends Controller
 
         if ($request->file('media_link') && $request->file('media_link')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('media_link')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('media_link')->extension(); // getting image extension
             $fileName = 'mediamk'.md5(microtime().rand()).'.'.$extension; // renameing image
             $request->file('media_link')->move($destinationPath, $fileName); // uploading file to given path
             $inputs['media_link'] = $fileName;
@@ -84,6 +85,7 @@ class MediaController extends Controller
 
     public function update($id, Request $request)
     {
+        bp_validate_images($request, ['media_link']);
         $validator = Validator::make($request->all(), [
             'media_name' => 'required',
             'media_link' => 'required'
@@ -98,7 +100,7 @@ class MediaController extends Controller
 
         if ($request->file('media_link') && $request->file('media_link')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('media_link')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('media_link')->extension(); // getting image extension
             $fileName = 'mediamk'.md5(microtime().rand()).'.'.$extension; // renameing image
             $request->file('media_link')->move($destinationPath, $fileName); // uploading file to given path
             $inputs['media_link'] = $fileName;

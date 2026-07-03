@@ -34,6 +34,7 @@ class TaxController extends Controller
     }
 
     public function store(Request $request){
+        bp_validate_images($request, ['pictures', 'tax_icon']);
         // $this->validate($request, [
         // 'title' => 'required',
         // 'description' => 'required'
@@ -43,7 +44,7 @@ class TaxController extends Controller
         $inputs['tax_type'] = $this->tax_name ;
         if ($request->file('tax_icon') && $request->file('tax_icon')->isValid()) {
             $destinationPath = uploadPath();
-                $extension = $request->file('tax_icon')->getClientOriginalExtension(); // getting image extension
+                $extension = $request->file('tax_icon')->extension(); // getting image extension
                 // $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
                 $fileName = $request->file('tax_icon')->getClientOriginalName();
                 $request->file('tax_icon')->move($destinationPath, $fileName); // uploading file to given path
@@ -73,13 +74,14 @@ class TaxController extends Controller
 
     public function update($id, Request $request)
     {
+        bp_validate_images($request, ['pictures', 'tax_icon']);
         $inputs = $request->all();
         $inputs['tax_type'] = $this->tax_name ;
      //   $inputs = $request->except('_token', '_method');
         $inputs['tax_link'] = formatUrl($request->input('tax_name'));
         if ($request->file('tax_icon') && $request->file('tax_icon')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('tax_icon')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('tax_icon')->extension(); // getting image extension
             $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
             $request->file('tax_icon')->move($destinationPath, $fileName); // uploading file to given path
             $inputs['tax_icon'] = $fileName;

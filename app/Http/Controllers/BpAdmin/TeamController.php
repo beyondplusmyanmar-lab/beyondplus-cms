@@ -40,6 +40,7 @@ class TeamController extends Controller
     }
 
     public function store(Request $request){
+        bp_validate_images($request, ['featured_img']);
 
         $validator = Validator::make($request->all(), [
             'title' => 'required', 
@@ -60,7 +61,7 @@ class TeamController extends Controller
         
         if ($request->file('featured_img') && $request->file('featured_img')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('featured_img')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('featured_img')->extension(); // getting image extension
             $fileName = 'featmk'.md5(microtime().rand()).'.'.$extension; // renameing image
             $request->file('featured_img')->move($destinationPath, $fileName); // uploading file to given path
             $inputs['featured_img'] = $fileName;
@@ -87,11 +88,12 @@ class TeamController extends Controller
 
     public function update($id, Request $request)
     {
+        bp_validate_images($request, ['featured_img']);
         $inputs = $request->all();
         $inputs['post_link'] = formatUrl($request->input('title'));
         if ($request->file('featured_img') && $request->file('featured_img')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('featured_img')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('featured_img')->extension(); // getting image extension
             $fileName = 'featmk'.md5(microtime().rand()).'.'.$extension; // renameing image
             $request->file('featured_img')->move($destinationPath, $fileName); // uploading file to given path
             $inputs['featured_img'] = $fileName;

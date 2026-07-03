@@ -37,6 +37,7 @@ class SlideshowController extends Controller
     }
 
     public function store(Request $request){
+        bp_validate_images($request, ['slideshow_link']);
         // $this->validate($request, [
         // 'title' => 'required',
         // 'description' => 'required'
@@ -45,7 +46,7 @@ class SlideshowController extends Controller
 
         if ($request->file('slideshow_link') && $request->file('slideshow_link')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('slideshow_link')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('slideshow_link')->extension(); // getting image extension
             $fileName = 'slideshowmk'.md5(microtime().rand()).'.'.$extension; // renameing image
 
             $request->file('slideshow_link')->move($destinationPath, $fileName); // uploading file to given path
@@ -73,12 +74,13 @@ class SlideshowController extends Controller
 
     public function update($id, Request $request)
     {
+        bp_validate_images($request, ['slideshow_link']);
         $inputs = $request->all();
      //   $inputs = $request->except('_token', '_method');
 
         if ($request->file('slideshow_link') && $request->file('slideshow_link')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('slideshow_link')->getClientOriginalExtension(); // getting image extension
+            $extension = $request->file('slideshow_link')->extension(); // getting image extension
             $fileName = 'slideshowmk'.md5(microtime().rand()).'.'.$extension; // renameing image
             $request->file('slideshow_link')->move($destinationPath, $fileName); // uploading file to given path
             $inputs['slideshow_link'] = $fileName;

@@ -294,6 +294,19 @@ function uploadPath() {
     return public_path().'/uploads/';
 }
 
+/**
+ * Validate that the given request fields, when present, are real images.
+ * Rejects non-image uploads (e.g. a disguised .php) before they are stored in
+ * the web-accessible uploads directory. Fields are optional (nullable).
+ */
+function bp_validate_images($request, array $fields) {
+    $rules = [];
+    foreach ($fields as $field) {
+        $rules[$field] = 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:4096';
+    }
+    $request->validate($rules);
+}
+
 function role_type($type = null) {
     
     $role_type = App\Models\Bp_usertype::get()->pluck('role','id');

@@ -44,6 +44,7 @@ class MenuController extends Controller
 
     // for div link
     public function store(Request $request){
+        bp_validate_images($request, ['category_icon', 'menu_icon']);
         // $this->validate($request, [
         // 'title' => 'required',
         // 'description' => 'required'
@@ -107,6 +108,7 @@ class MenuController extends Controller
 
     public function update($id, Request $request)
     {
+        bp_validate_images($request, ['category_icon', 'menu_icon']);
         // $inputs = $request->all();
         // $inputs['menu_link'] = str_replace(' ', '-', strtolower($request->input('menu_name')));
     //    print_r($inputs);
@@ -121,7 +123,7 @@ class MenuController extends Controller
 
         // if ($request->file('menu_icon') && $request->file('category_icon')->isValid()) {
         //     $destinationPath = uploadPath();
-        //     $extension = $request->file('category_icon')->getClientOriginalExtension(); // getting image extension
+        //     $extension = $request->file('category_icon')->extension(); // getting image extension
         //     $fileName = 'menumk'.md5(microtime().rand()).'.'.$extension; // renameing image
         //     $request->file('menu_icon')->move($destinationPath, $fileName); // uploading file to given path
         //     $inputs['menu_icon'] = $fileName;
