@@ -54,6 +54,23 @@ class PluginTest extends TestCase
         $this->assertSame('SECRET_TOKEN', bp_plugin_option('smspoh', 'api_token'));
     }
 
+    public function test_plugin_update_is_detected_and_applied(): void
+    {
+        Plugin::activate('logbook');                                   // records the manifest version
+        $this->assertFalse(Plugin::all()['logbook']['update_available']);
+
+        // Simulate a plugin that was installed at an older version.
+        \App\Models\Bp_options::updateOrCreate(
+            ['option_name' => 'plugin_versions'],
+            ['option_value' => json_encode(['logbook' => '0.9.0']), 'autoload' => 'yes']
+        );
+        $this->assertTrue(Plugin::all()['logbook']['update_available']);
+
+        Plugin::update('logbook');                                     // runs new migrations, re-records version
+        $this->assertSame('1.0.0', Plugin::installedVersion('logbook'));
+        $this->assertFalse(Plugin::all()['logbook']['update_available']);
+    }
+
     public function test_security_scan_flags_dangerous_code(): void
     {
         $tmp = sys_get_temp_dir().'/scan'.uniqid();
