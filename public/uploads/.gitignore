@@ -1,5 +1,7 @@
-# User-uploaded media is not tracked — only placeholder images are kept.
+# User-uploaded media is not tracked — only placeholder images and the
+# script-execution guard are kept.
 *
 !.gitignore
+!.htaccess
 !default.jpg
 !la.jpg

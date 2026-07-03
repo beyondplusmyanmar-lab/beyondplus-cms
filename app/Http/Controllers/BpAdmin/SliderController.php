@@ -37,17 +37,19 @@ class SliderController extends Controller
     }
 
     public function store(Request $request){
-        // $this->validate($request, [
-        // 'title' => 'required',
-        // 'description' => 'required'
-        // ]);
+        // Only allow real images (blocks e.g. an uploaded .php from being executed).
+        $request->validate([
+            'slider_name' => 'required',
+            'slider_link' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:4096',
+        ]);
         $inputs = $request->all();
 
         if ($request->file('slider_link') && $request->file('slider_link')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('slider_link')->getClientOriginalExtension(); // getting image extension
-            $fileName = 'slidermk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('slider_link')->move($destinationPath, $fileName); // uploading file to given path
+            // Derive the extension from the file contents, not the client-supplied name.
+            $extension = $request->file('slider_link')->extension();
+            $fileName = 'slidermk'.md5(microtime().rand()).'.'.$extension; // random, safe name
+            $request->file('slider_link')->move($destinationPath, $fileName);
             $inputs['slider_link'] = $fileName;
         }
 
@@ -72,14 +74,17 @@ class SliderController extends Controller
 
     public function update($id, Request $request)
     {
+        // Image is optional on update, but if supplied it must be a real image.
+        $request->validate([
+            'slider_link' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:4096',
+        ]);
         $inputs = $request->all();
-     //   $inputs = $request->except('_token', '_method');
 
         if ($request->file('slider_link') && $request->file('slider_link')->isValid()) {
             $destinationPath = uploadPath();
-            $extension = $request->file('slider_link')->getClientOriginalExtension(); // getting image extension
-            $fileName = 'slidermk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('slider_link')->move($destinationPath, $fileName); // uploading file to given path
+            $extension = $request->file('slider_link')->extension();
+            $fileName = 'slidermk'.md5(microtime().rand()).'.'.$extension;
+            $request->file('slider_link')->move($destinationPath, $fileName);
             $inputs['slider_link'] = $fileName;
         }
 
