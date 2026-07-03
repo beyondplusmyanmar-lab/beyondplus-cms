@@ -114,6 +114,7 @@ plugins/logbook/
 | `the_content` | filter | post/page body before output |
 | `send_sms` / `send_mail` / `send_mail_mime` | filter | delivery — return true when handled |
 | `store_upload` | filter | image upload — return a public URL to store it off-box (else saved locally); display with `bp_upload_url()` |
+| `delete_upload` | filter | image delete — remove the remote object and return true (else the local file is unlinked) |
 
 ## Example
 

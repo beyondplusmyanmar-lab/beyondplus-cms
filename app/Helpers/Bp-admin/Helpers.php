@@ -386,6 +386,25 @@ function bp_upload_url($value) {
     return asset('uploads/'.ltrim((string) $value, '/'));
 }
 
+/**
+ * Remove an uploaded image. A storage plugin may delete a remote object via the
+ * delete_upload hook; otherwise the local file under public/uploads is removed.
+ * Safe to call with the shared default image or an empty value (no-op).
+ */
+function bp_delete_upload($value) {
+    $value = (string) $value;
+    if ($value === '' || $value === 'default.jpg' || $value === 'la.jpg') {
+        return;
+    }
+    if (bp_apply_filters('delete_upload', false, $value)) {
+        return; // a storage plugin removed the remote object
+    }
+    $path = uploadPath().basename($value);
+    if (is_file($path)) {
+        @unlink($path);
+    }
+}
+
 function role_type($type = null) {
     
     $role_type = App\Models\Bp_usertype::get()->pluck('role','id');

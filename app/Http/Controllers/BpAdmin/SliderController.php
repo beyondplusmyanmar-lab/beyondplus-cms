@@ -87,7 +87,11 @@ class SliderController extends Controller
 
     public function destroy($id)
     {
-        Bp_slider::find($id)->delete();
+        $slider = Bp_slider::find($id);
+        if ($slider) {
+            bp_delete_upload($slider->slider_link);
+            $slider->delete();
+        }
         return redirect()->back();
     }
 

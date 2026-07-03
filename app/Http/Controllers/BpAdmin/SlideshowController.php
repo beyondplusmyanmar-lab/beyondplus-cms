@@ -83,7 +83,11 @@ class SlideshowController extends Controller
 
     public function destroy($id)
     {
-        Bp_slideshow::find($id)->delete();
+        $slide = Bp_slideshow::find($id);
+        if ($slide) {
+            bp_delete_upload($slide->slideshow_link);
+            $slide->delete();
+        }
         return redirect()->back();
     }
 

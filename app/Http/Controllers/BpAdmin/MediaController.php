@@ -106,7 +106,11 @@ class MediaController extends Controller
 
     public function destroy($id)
     {
-        Bp_media::find($id)->delete();
+        $media = Bp_media::find($id);
+        if ($media) {
+            bp_delete_upload($media->media_link);
+            $media->delete();
+        }
         return redirect()->back();
     }
 

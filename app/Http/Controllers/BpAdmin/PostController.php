@@ -103,7 +103,11 @@ class PostController extends Controller
 
     public function destroy($id)
     {
-        Bp_post::find($id)->delete();
+        $post = Bp_post::find($id);
+        if ($post) {
+            bp_delete_upload($post->featured_img);
+            $post->delete();
+        }
         return redirect()->back();
     }
 

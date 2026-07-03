@@ -112,7 +112,11 @@ class NewsController extends Controller
 
     public function destroy($id)
     {
-        Bp_post::find($id)->delete();
+        $news = Bp_post::find($id);
+        if ($news) {
+            bp_delete_upload($news->featured_img);
+            $news->delete();
+        }
         return redirect()->back();
     }
 
