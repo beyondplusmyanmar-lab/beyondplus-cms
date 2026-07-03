@@ -2,5 +2,3 @@
 
 @section('code', '429')
 @section('icon', 'bi-hourglass-top')
-@section('title', 'Too many requests')
-@section('message', "You've made too many requests in a short time. Please wait a moment and try again.")

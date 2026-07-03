@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-@php $brand = optional(site_information('blogname'))->option_value ?: config('app.name'); @endphp
+@php
+    // Error pages can render before the locale middleware runs (unmatched routes),
+    // so pick up an en/mm URL prefix here; otherwise the app default (mm) applies.
+    $seg = request()->segment(1);
+    if (in_array($seg, (array) config('app.locales', ['en', 'mm']), true)) {
+        app()->setLocale($seg);
+    }
+    $brand = optional(site_information('blogname'))->option_value ?: config('app.name');
+    // Resolve the code here (after the locale is set) so translations are correct.
+    $code = trim($__env->yieldContent('code')) ?: '500';
+@endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('code') — @yield('title') · {{ $brand }}</title>
+    <title>{{ $code }} — {{ __("errors.$code.title") }} · {{ $brand }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -43,12 +53,12 @@
     <a href="{{ url('/') }}" class="bp-err__brand">{{ $brand }}</a>
     <main class="bp-err">
         <div class="bp-err__badge"><i class="bi @yield('icon', 'bi-exclamation-triangle')"></i></div>
-        <div class="bp-err__code">@yield('code')</div>
-        <h1 class="bp-err__title">@yield('title')</h1>
-        <p class="bp-err__msg">@yield('message')</p>
+        <div class="bp-err__code">{{ $code }}</div>
+        <h1 class="bp-err__title">{{ __("errors.$code.title") }}</h1>
+        <p class="bp-err__msg">{{ __("errors.$code.message") }}</p>
         <div class="d-flex gap-2 justify-content-center flex-wrap">
-            <a href="{{ url('/') }}" class="btn btn-bp px-4"><i class="bi bi-house-door"></i> Back to home</a>
-            <a href="javascript:history.back()" class="btn btn-outline-secondary px-4"><i class="bi bi-arrow-left"></i> Go back</a>
+            <a href="{{ url('/') }}" class="btn btn-bp px-4"><i class="bi bi-house-door"></i> {{ __('errors.home') }}</a>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary px-4"><i class="bi bi-arrow-left"></i> {{ __('errors.back') }}</a>
         </div>
     </main>
 </body>
