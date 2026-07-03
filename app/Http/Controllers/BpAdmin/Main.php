@@ -7,6 +7,7 @@
  */
 namespace App\Http\Controllers\BpAdmin;
 use Validator;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -26,12 +27,23 @@ class Main extends Controller
     {
         $admin = auth()->guard('admins');
 
+        // Rate limit login attempts per IP: 5 tries, then locked for the window.
+        $throttleKey = 'admin-login:'.$request->ip();
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return view('auth/adminlogin', [
+                'match'       => "Too many login attempts. Try again in {$seconds} seconds.",
+                'loginAction' => $request->url(),
+            ]);
+        }
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
         if ($validator->fails()) {
+            RateLimiter::hit($throttleKey, 60);
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -47,13 +59,16 @@ class Main extends Controller
         if ($isDecoy) {
             $admin->attempt($credentials);
             $admin->logout();
+            RateLimiter::hit($throttleKey, 60);
             return view('auth/adminlogin', ['match' => $error, 'loginAction' => $request->url()]);
         }
 
         if ($admin->attempt($credentials)) {
+            RateLimiter::clear($throttleKey);
             return redirect()->intended('bp-admin');
         }
 
+        RateLimiter::hit($throttleKey, 60);
         return view('auth/adminlogin', ['match' => $error, 'loginAction' => $request->url()]);
     }
 

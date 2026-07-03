@@ -14,6 +14,7 @@ class AdminTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+        \Illuminate\Support\Facades\Cache::flush(); // reset the login rate limiter
     }
 
     private function admin(): Admin
@@ -59,5 +60,17 @@ class AdminTest extends TestCase
         // Even correct credentials at the default (now decoy) path must not log in.
         $this->post('/bp-admin/login', ['email' => 'admin@example.com', 'password' => 'password']);
         $this->assertFalse(auth()->guard('admins')->check());
+    }
+
+    public function test_login_is_rate_limited(): void
+    {
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/bp-admin/login', ['email' => 'admin@example.com', 'password' => 'wrong-password']);
+        }
+
+        // After 5 failures the next attempt is locked out — even correct creds.
+        $response = $this->post('/bp-admin/login', ['email' => 'admin@example.com', 'password' => 'password']);
+        $this->assertFalse(auth()->guard('admins')->check());
+        $response->assertSee('Too many', false);
     }
 }
