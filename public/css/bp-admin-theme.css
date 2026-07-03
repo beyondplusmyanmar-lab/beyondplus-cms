@@ -85,14 +85,20 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
 .app-title p { color: var(--bp-muted); }
 
 /* ---- Cards / tiles / boxes ------------------------------------------------ */
-.tile, .box, .widget-small {
+/* The .tile is the card. A .box is only a logical group inside it, so it gets
+   no border/shadow of its own — otherwise table/form content (which has no
+   padding) sits flush against that inner border. */
+.tile, .widget-small {
     background:#fff;
     border: 1px solid var(--bp-border) !important;
     border-radius: var(--bp-radius);
     box-shadow: var(--bp-shadow);
 }
 .tile { padding: 22px; }
-.box-header { border-bottom: 0; }
+.box { background: transparent; border: 0 !important; box-shadow: none; margin-bottom: 0; }
+.box + .box { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--bp-border); }
+.box-header { border-bottom: 0; padding-left: 0; padding-right: 0; }
+.box-body { padding-left: 0; padding-right: 0; }
 
 /* ---- Buttons -------------------------------------------------------------- */
 .btn { border-radius: 8px; font-weight: 500; }
