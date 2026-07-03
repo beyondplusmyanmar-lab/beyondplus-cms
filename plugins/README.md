@@ -19,6 +19,28 @@ Register these from a plugin's main file:
 
 Both accept an optional priority (lower runs first, default `10`).
 
+## Database (plugin-owned migrations)
+
+A plugin owns its schema. Ship Laravel migrations in a `migrations/` folder:
+
+```
+plugins/loyalty/
+├── plugin.json
+├── loyalty.php
+├── migrations/
+│   └── 2026_06_10_000001_create_loyalty_table.php
+└── uninstall.php        (optional)
+```
+
+Lifecycle (the core runs this for you):
+
+| Action | What happens |
+|---|---|
+| **Activate** | the plugin's pending migrations run (`up`) — its tables are created |
+| **Update** | dropping in new migration files + reactivating runs only the new ones (Laravel's migration history skips those already applied) |
+| **Deactivate** | the plugin is turned off but **its data/tables are kept** |
+| **Uninstall** | migrations are rolled back (`down`, tables dropped), then an optional `uninstall.php` runs for any remaining cleanup |
+
 ### Hook points in core / themes
 
 | Hook | Type | Where |

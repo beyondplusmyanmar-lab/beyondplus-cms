@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Models\Bp_options;
+use Illuminate\Support\Facades\Artisan;
 
 /**
  * A small hook-based plugin system (actions & filters).
@@ -81,6 +82,7 @@ class Plugin
                 'author'      => $meta['author'] ?? '',
                 'main'        => $meta['main'] ?? $slug.'.php',
                 'active'      => in_array($slug, $active, true),
+                'migrations'  => is_dir($dir.'/migrations'),
             ];
         }
 
@@ -115,12 +117,53 @@ class Plugin
             $active = self::active();
             $active[] = $slug;
             self::setActive($active);
+
+            // Run the plugin's own migrations (creates its tables). Laravel's
+            // migration history means already-run migrations are skipped, so a
+            // plugin update only runs its new migrations.
+            self::migrate($slug);
         }
     }
 
+    /** Deactivate the plugin — its data / tables are kept (use uninstall to remove). */
     public static function deactivate(string $slug): void
     {
         self::setActive(array_filter(self::active(), fn ($s) => $s !== basename($slug)));
+    }
+
+    /** True if the plugin ships a migrations/ directory. */
+    public static function hasMigrations(string $slug): bool
+    {
+        return is_dir(self::path().'/'.basename($slug).'/migrations');
+    }
+
+    /** Run a plugin's pending migrations (up). */
+    public static function migrate(string $slug): void
+    {
+        $slug = basename($slug);
+        if (self::hasMigrations($slug)) {
+            Artisan::call('migrate', ['--path' => 'plugins/'.$slug.'/migrations', '--force' => true]);
+        }
+    }
+
+    /**
+     * Uninstall a plugin: deactivate it, roll back its migrations (dropping its
+     * tables), then run an optional uninstall.php for any remaining cleanup.
+     * This is deliberately separate from deactivate(), which keeps data.
+     */
+    public static function uninstall(string $slug): void
+    {
+        $slug = basename($slug);
+        self::deactivate($slug);
+
+        if (self::hasMigrations($slug)) {
+            Artisan::call('migrate:rollback', ['--path' => 'plugins/'.$slug.'/migrations', '--force' => true]);
+        }
+
+        $script = self::path().'/'.$slug.'/uninstall.php';
+        if (is_file($script)) {
+            require $script;
+        }
     }
 
     /** Load the main file of every active plugin so it can register hooks. */

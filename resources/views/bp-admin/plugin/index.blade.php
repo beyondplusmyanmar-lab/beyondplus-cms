@@ -39,18 +39,27 @@
                                         v{{ $plugin['version'] }}
                                         @if($plugin['author']) &middot; {{ $plugin['author'] }} @endif
                                         &middot; <code>{{ $plugin['slug'] }}</code>
+                                        @if($plugin['migrations'])
+                                            <span class="badge badge-light border" title="Ships database migrations"><i class="fa fa-database"></i> DB</span>
+                                        @endif
                                     </p>
                                     @if($plugin['active'])
                                         <form action="{{ url('bp-admin/plugins/deactivate') }}" method="post" class="d-inline">
                                             {{ csrf_field() }}
                                             <input type="hidden" name="slug" value="{{ $plugin['slug'] }}">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">Deactivate</button>
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary">Deactivate</button>
                                         </form>
                                     @else
                                         <form action="{{ url('bp-admin/plugins/activate') }}" method="post" class="d-inline">
                                             {{ csrf_field() }}
                                             <input type="hidden" name="slug" value="{{ $plugin['slug'] }}">
                                             <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Activate</button>
+                                        </form>
+                                        <form action="{{ url('bp-admin/plugins/uninstall') }}" method="post" class="d-inline"
+                                              onsubmit="return confirm('Uninstall {{ $plugin['name'] }}? This rolls back its migrations and deletes its data.')">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="slug" value="{{ $plugin['slug'] }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Uninstall</button>
                                         </form>
                                     @endif
                                 </div>

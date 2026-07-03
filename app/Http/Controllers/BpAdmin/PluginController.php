@@ -27,6 +27,12 @@ class PluginController extends Controller
     public function deactivate(Request $request)
     {
         Plugin::deactivate((string) $request->input('slug'));
-        return redirect()->back()->with('flash_message', 'Plugin deactivated.');
+        return redirect()->back()->with('flash_message', 'Plugin deactivated (its data is kept).');
+    }
+
+    public function uninstall(Request $request)
+    {
+        Plugin::uninstall((string) $request->input('slug'));
+        return redirect()->back()->with('flash_message', 'Plugin uninstalled and its data removed.');
     }
 }
