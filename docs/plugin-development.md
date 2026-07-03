@@ -31,6 +31,7 @@ plugins/my-plugin/
 {
   "id": "my-plugin",
   "type": "plugin",
+  "category": "Communication",
   "name": "My Plugin",
   "description": "What it does.",
   "version": "1.0.0",

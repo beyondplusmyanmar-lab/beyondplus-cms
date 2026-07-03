@@ -9,6 +9,8 @@
     .plugin-card.active { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,.2); }
     .plugin-meta { font-size: .78rem; color: #6b7280; }
     .plugin-empty { border: 1px dashed #d1d5db; border-radius: 8px; }
+    .plugin-category { text-transform: uppercase; letter-spacing: .06em; font-size: .76rem; font-weight: 700; color: #64748b; margin: 6px 0 14px; padding-bottom: 8px; border-bottom: 1px solid #eef0f3; }
+    .plugin-category span { color: #94a3b8; font-weight: 500; }
 </style>
 <div class="row">
     <div class="col-md-12 tile">
@@ -31,8 +33,10 @@
                     </div>
                 @endif
 
-                <div class="row">
-                    @forelse($plugins as $plugin)
+                @forelse($grouped as $category => $categoryPlugins)
+                    <h6 class="plugin-category">{{ $category }} <span>· {{ count($categoryPlugins) }}</span></h6>
+                    <div class="row">
+                    @foreach($categoryPlugins as $plugin)
                         <div class="col-md-4 col-sm-6 mb-4">
                             <div class="plugin-card {{ $plugin['active'] ? 'active' : '' }}">
                                 <div class="card-body">
@@ -85,15 +89,14 @@
                                 </div>
                             </div>
                         </div>
-                    @empty
-                        <div class="col-12">
-                            <div class="plugin-empty text-center text-muted py-5">
-                                <i class="fa fa-plug fa-2x mb-2 d-block"></i>
-                                No plugins installed. Add one under <code>/plugins</code> to get started.
-                            </div>
-                        </div>
-                    @endforelse
-                </div>
+                    @endforeach
+                    </div>
+                @empty
+                    <div class="plugin-empty text-center text-muted py-5">
+                        <i class="fa fa-plug fa-2x mb-2 d-block"></i>
+                        No plugins installed. Add one under <code>/plugins</code> to get started.
+                    </div>
+                @endforelse
             </div>
             <!-- /.box-body -->
         </div>

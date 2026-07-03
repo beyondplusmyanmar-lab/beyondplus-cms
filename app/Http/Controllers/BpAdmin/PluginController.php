@@ -34,7 +34,7 @@ class PluginController extends Controller
     public function index()
     {
         return view('bp-admin.plugin.index', [
-            'plugins'  => Plugin::all(),
+            'grouped'  => collect(Plugin::all())->groupBy('category')->sortKeys(),
             'failures' => Plugin::failures(),
         ]);
     }

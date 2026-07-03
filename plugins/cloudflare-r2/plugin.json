@@ -1,6 +1,7 @@
 {
     "id": "cloudflare-r2",
     "type": "plugin",
+    "category": "Storage",
     "name": "Cloudflare R2 Storage",
     "description": "Stores uploaded images in Cloudflare R2 (S3-compatible object storage) instead of the local disk. Configure below, then activate to switch new uploads to R2.",
     "version": "1.0.0",

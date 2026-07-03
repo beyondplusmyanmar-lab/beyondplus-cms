@@ -1,6 +1,7 @@
 {
     "id": "logbook",
     "type": "plugin",
+    "category": "Utilities",
     "name": "Logbook",
     "description": "A demo plugin that ships its own database migration, admin page and view. Activating it creates a bp_logbook table; uninstalling drops it.",
     "version": "1.0.0",

@@ -85,6 +85,7 @@ class Plugin
                 'id'           => $meta['id'] ?? $slug,
                 'type'         => $meta['type'] ?? 'plugin',
                 'name'         => $meta['name'] ?? ucfirst($slug),
+                'category'     => $meta['category'] ?? 'General',
                 'description'  => $meta['description'] ?? 'No description provided.',
                 'version'      => $meta['version'] ?? '1.0.0',
                 'author'       => $meta['author'] ?? '',

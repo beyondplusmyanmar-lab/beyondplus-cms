@@ -1,6 +1,7 @@
 {
     "id": "smspoh",
     "type": "plugin",
+    "category": "Communication",
     "name": "SMSPoh",
     "description": "Sends SMS (OTP and notifications) through the SMSPoh gateway. Configure it from this plugin's Settings.",
     "version": "1.0.0",

@@ -1,6 +1,7 @@
 {
     "id": "mailgun",
     "type": "plugin",
+    "category": "Communication",
     "name": "Mailgun",
     "description": "Sends email (OTP and notifications) through the Mailgun HTTP API. Configure it from this plugin's Settings.",
     "version": "1.0.0",
