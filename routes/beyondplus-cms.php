@@ -172,6 +172,7 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             Route::post('plugins/settings', 'PluginController@saveSettings');
             Route::post('plugins/test', 'PluginController@test');
             Route::post('plugins/activate', 'PluginController@activate');
+            Route::post('plugins/update', 'PluginController@update');
             Route::post('plugins/deactivate', 'PluginController@deactivate');
             Route::post('plugins/uninstall', 'PluginController@uninstall');
 

@@ -73,7 +73,7 @@ Lifecycle (the core runs this for you):
 | Action | What happens |
 |---|---|
 | **Activate** | the plugin's pending migrations run (`up`) — its tables are created |
-| **Update** | dropping in new migration files + reactivating runs only the new ones (Laravel's migration history skips those already applied) |
+| **Update** | bump `version` in `plugin.json` (and drop in new migration files); the Plugins page shows "Update available X → Y" and the **Update** button runs only the new migrations (Laravel skips applied ones) and re-records the version |
 | **Deactivate** | the plugin is turned off but **its data/tables are kept** |
 | **Uninstall** | migrations are rolled back (`down`, tables dropped), then an optional `uninstall.php` runs for any remaining cleanup |
 

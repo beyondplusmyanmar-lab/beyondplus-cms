@@ -80,6 +80,9 @@ class Plugin
             }
 
             $isActive = in_array($slug, $active, true);
+            $version   = $meta['version'] ?? '1.0.0';
+            $installed = self::installedVersion($slug);
+            $updateAvailable = $isActive && $installed && version_compare($version, $installed, '>');
             $plugins[$slug] = [
                 'slug'         => $slug,
                 'id'           => $meta['id'] ?? $slug,
@@ -87,7 +90,9 @@ class Plugin
                 'name'         => $meta['name'] ?? ucfirst($slug),
                 'category'     => $meta['category'] ?? 'General',
                 'description'  => $meta['description'] ?? 'No description provided.',
-                'version'      => $meta['version'] ?? '1.0.0',
+                'version'          => $version,
+                'installed_version'=> $installed,
+                'update_available' => $updateAvailable,
                 'author'       => $meta['author'] ?? '',
                 'homepage'     => $meta['homepage'] ?? '',
                 'license'      => $meta['license'] ?? '',
@@ -95,7 +100,9 @@ class Plugin
                 'main'         => $meta['main'] ?? $slug.'.php',
                 'active'       => $isActive,
                 'migrations'   => is_dir($dir.'/migrations'),
-                'tampered'     => $isActive && self::isTampered($slug),
+                // A version bump legitimately changes files, so show "update"
+                // rather than "modified" in that case.
+                'tampered'     => $isActive && ! $updateAvailable && self::isTampered($slug),
                 'settings'     => ! empty($meta['settings']),
             ];
         }
@@ -184,8 +191,9 @@ class Plugin
         // Register its admin menu (sidebar link + access) if declared.
         self::registerMenu($slug);
 
-        // Record an integrity baseline and clear any prior recovery failure.
+        // Record an integrity baseline + the installed version, clear any failure.
         self::storeFingerprint($slug);
+        self::setInstalledVersion($slug, self::meta($slug)['version'] ?? '1.0.0');
         self::clearFailure($slug);
 
         self::audit('activated', $slug);
@@ -362,6 +370,42 @@ class Plugin
         if (self::hasMigrations($slug)) {
             Artisan::call('migrate', ['--path' => 'plugins/'.$slug.'/migrations', '--force' => true]);
         }
+    }
+
+    // ---- versions / updates ---------------------------------------------
+
+    /** The version recorded when the plugin was last activated/updated. */
+    public static function installedVersion(string $slug): ?string
+    {
+        $map = json_decode(bp_option('plugin_versions', '{}'), true) ?: [];
+        return $map[basename($slug)] ?? null;
+    }
+
+    protected static function setInstalledVersion(string $slug, string $version): void
+    {
+        $map = json_decode(bp_option('plugin_versions', '{}'), true) ?: [];
+        $map[basename($slug)] = $version;
+        Bp_options::updateOrCreate(
+            ['option_name' => 'plugin_versions'],
+            ['option_value' => json_encode($map), 'autoload' => 'yes']
+        );
+    }
+
+    /**
+     * Apply an available update: run the plugin's new migrations (Laravel skips
+     * ones already applied), re-record its version and re-baseline integrity.
+     */
+    public static function update(string $slug): void
+    {
+        $slug = basename($slug);
+        if (! in_array($slug, self::active(), true)) {
+            return; // only active plugins are updated
+        }
+        self::migrate($slug);                                        // runs only new migrations
+        self::setInstalledVersion($slug, self::meta($slug)['version'] ?? '1.0.0');
+        self::storeFingerprint($slug);                               // new files → new baseline
+        self::clearFailure($slug);
+        self::audit('updated to '.(self::meta($slug)['version'] ?? '?'), $slug);
     }
 
     /**

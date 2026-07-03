@@ -152,6 +152,13 @@ class PluginController extends Controller
         return redirect()->back()->with('success', 'Plugin activated.');
     }
 
+    public function update(Request $request)
+    {
+        Plugin::update((string) $request->input('slug'));
+
+        return redirect()->back()->with('success', 'Plugin updated.');
+    }
+
     public function deactivate(Request $request)
     {
         Plugin::deactivate((string) $request->input('slug'));

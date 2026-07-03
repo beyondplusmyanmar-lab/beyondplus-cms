@@ -22,6 +22,7 @@
                     <span>
                         @if($plugin['active'])<span class="badge badge-success">Active</span>@else<span class="badge badge-secondary">Inactive</span>@endif
                         @if($plugin['tampered'])<span class="badge badge-danger"><i class="fa fa-exclamation-triangle"></i> Modified</span>@endif
+                        @if($plugin['update_available'])<span class="badge badge-warning"><i class="fa fa-arrow-up"></i> Update {{ $plugin['installed_version'] }} → {{ $plugin['version'] }}</span>@endif
                     </span>
                 </div>
                 <p class="text-muted">{{ $plugin['description'] }}</p>
@@ -77,6 +78,12 @@
                 <h6 class="text-uppercase text-muted mb-3" style="letter-spacing:.06em; font-size:.75rem;">Actions</h6>
                 @component('bp-admin.inc.alert')@endcomponent
 
+                @if($plugin['update_available'])
+                    <form action="{{ url('bp-admin/plugins/update') }}" method="post">
+                        {{ csrf_field() }}<input type="hidden" name="slug" value="{{ $plugin['slug'] }}">
+                        <button class="btn btn-sm btn-warning btn-block mb-2"><i class="fa fa-arrow-up"></i> Update to {{ $plugin['version'] }}</button>
+                    </form>
+                @endif
                 @if($plugin['settings'])
                     <a href="{{ url('bp-admin/plugins/settings?slug='.$plugin['slug']) }}" class="btn btn-sm btn-outline-primary btn-block mb-2"><i class="fa fa-cog"></i> Settings</a>
                 @endif

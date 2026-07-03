@@ -60,6 +60,9 @@
                                             @if($plugin['tampered'])
                                                 <span class="badge badge-danger" title="Files changed since activation"><i class="fa fa-exclamation-triangle"></i> Modified</span>
                                             @endif
+                                            @if($plugin['update_available'])
+                                                <span class="badge badge-warning" title="A newer version is available"><i class="fa fa-arrow-up"></i> Update</span>
+                                            @endif
                                         </span>
                                     </div>
                                     <p class="text-muted small mb-2">{{ $plugin['description'] }}</p>
@@ -76,6 +79,13 @@
                                         <a href="{{ url('bp-admin/plugins/settings?slug='.$plugin['slug']) }}" class="btn btn-sm btn-outline-primary" title="Configure"><i class="fa fa-cog"></i> Settings</a>
                                     @endif
                                     @if($plugin['active'])
+                                        @if($plugin['update_available'])
+                                            <form action="{{ url('bp-admin/plugins/update') }}" method="post" class="d-inline">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" name="slug" value="{{ $plugin['slug'] }}">
+                                                <button type="submit" class="btn btn-sm btn-warning" title="Update {{ $plugin['installed_version'] }} → {{ $plugin['version'] }}"><i class="fa fa-arrow-up"></i> Update to {{ $plugin['version'] }}</button>
+                                            </form>
+                                        @endif
                                         <form action="{{ url('bp-admin/plugins/deactivate') }}" method="post" class="d-inline">
                                             {{ csrf_field() }}
                                             <input type="hidden" name="slug" value="{{ $plugin['slug'] }}">
