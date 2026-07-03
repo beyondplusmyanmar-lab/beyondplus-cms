@@ -50,6 +50,7 @@
                                             <button type="submit" class="btn btn-sm btn-outline-secondary">Deactivate</button>
                                         </form>
                                     @else
+                                        <a href="{{ url('bp-admin/plugins/scan?slug='.$plugin['slug']) }}" class="btn btn-sm btn-outline-info" title="Security scan"><i class="fa fa-shield"></i> Scan</a>
                                         <form action="{{ url('bp-admin/plugins/activate') }}" method="post" class="d-inline">
                                             {{ csrf_field() }}
                                             <input type="hidden" name="slug" value="{{ $plugin['slug'] }}">

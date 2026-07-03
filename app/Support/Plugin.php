@@ -117,23 +117,119 @@ class Plugin
         );
     }
 
-    public static function activate(string $slug): void
+    /**
+     * Activate a plugin. Returns a result array:
+     *  - ['blocked' => true, 'scan' => [...]] if the security scan found
+     *    high-risk code (the plugin is NOT activated), or
+     *  - ['activated' => true, 'scan' => [...]] on success (scan warnings, if
+     *    any, are informational).
+     */
+    public static function activate(string $slug): array
     {
         // basename() guards the slug against path traversal.
         $slug = basename($slug);
-        if (is_dir(self::path().'/'.$slug)) {
-            $active = self::active();
-            $active[] = $slug;
-            self::setActive($active);
-
-            // Run the plugin's own migrations (creates its tables). Laravel's
-            // migration history means already-run migrations are skipped, so a
-            // plugin update only runs its new migrations.
-            self::migrate($slug);
-
-            // Register its admin menu (sidebar link + access) if declared.
-            self::registerMenu($slug);
+        if (! is_dir(self::path().'/'.$slug)) {
+            return ['blocked' => true, 'scan' => ['critical' => [['file' => $slug, 'reason' => 'plugin not found']], 'warning' => []]];
         }
+
+        // Security gate: never load a plugin whose code contains high-risk
+        // constructs (arbitrary code execution, shell access, obfuscation, …).
+        $scan = self::scan($slug);
+        if (! empty($scan['critical'])) {
+            \Illuminate\Support\Facades\Log::warning("Plugin activation BLOCKED by security scan: {$slug}", $scan['critical']);
+            return ['blocked' => true, 'scan' => $scan];
+        }
+
+        $active = self::active();
+        $active[] = $slug;
+        self::setActive($active);
+
+        // Run the plugin's own migrations (creates its tables). Laravel's
+        // migration history means already-run migrations are skipped, so a
+        // plugin update only runs its new migrations.
+        self::migrate($slug);
+
+        // Register its admin menu (sidebar link + access) if declared.
+        self::registerMenu($slug);
+
+        self::audit('activated', $slug);
+        return ['activated' => true, 'scan' => $scan];
+    }
+
+    /**
+     * Static security scan of a plugin's PHP files. Returns
+     * ['critical' => [...], 'warning' => [...]] where each entry is
+     * ['file' => ..., 'reason' => ...]. Critical matches block activation;
+     * warnings are surfaced but allowed. This is a heuristic safety net, not a
+     * sandbox — only install plugins from sources you trust.
+     */
+    public static function scan(string $slug): array
+    {
+        $dir = self::path().'/'.basename($slug);
+
+        $critical = [
+            '/\beval\s*\(/i'                                              => 'eval() — executes arbitrary code',
+            '/\b(exec|shell_exec|system|passthru|proc_open|popen)\s*\(/i' => 'shell / process execution',
+            '/`[^`\n]*`/'                                                 => 'backtick shell execution',
+            '/\bassert\s*\(\s*[\'"]/i'                                    => 'assert() on a string — executes code',
+            '/\bcreate_function\s*\(/i'                                   => 'create_function() — executes code',
+            '/preg_replace\s*\(\s*([\'"]).*\1\s*[.,]?\s*[\'"][^\'"]*e/i'  => 'preg_replace /e — executes code',
+            '/(eval|assert)\s*\(\s*(base64_decode|gzinflate|gzuncompress|str_rot13)/i' => 'obfuscated code execution',
+            '/(include|require)(_once)?\s*\(?\s*[\'"]https?:\/\//i'       => 'remote code inclusion',
+        ];
+        $warning = [
+            '/\bbase64_decode\s*\(/i'                    => 'base64_decode — can hide payloads',
+            '/\b(unlink|rmdir)\s*\(/i'                   => 'file / directory deletion',
+            '/\b(file_put_contents|fwrite|fopen)\s*\(/i' => 'writes to the filesystem',
+            '/\bcurl_exec\s*\(/i'                        => 'raw cURL request',
+            '/\bmove_uploaded_file\s*\(/i'               => 'handles uploaded files',
+            '/\b(putenv|ini_set)\s*\(/i'                 => 'changes the runtime environment',
+        ];
+
+        $hit = ['critical' => [], 'warning' => []];
+        foreach (self::phpFiles($dir) as $file) {
+            $code = @file_get_contents($file);
+            if ($code === false) {
+                continue;
+            }
+            $rel = ltrim(str_replace($dir, '', $file), '/\\');
+            foreach ($critical as $re => $reason) {
+                if (preg_match($re, $code)) {
+                    $hit['critical'][] = ['file' => $rel, 'reason' => $reason];
+                }
+            }
+            foreach ($warning as $re => $reason) {
+                if (preg_match($re, $code)) {
+                    $hit['warning'][] = ['file' => $rel, 'reason' => $reason];
+                }
+            }
+        }
+        return $hit;
+    }
+
+    /** All .php files inside a plugin (recursive). */
+    protected static function phpFiles(string $dir): array
+    {
+        if (! is_dir($dir)) {
+            return [];
+        }
+        $files = [];
+        $it = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS)
+        );
+        foreach ($it as $f) {
+            if ($f->isFile() && strtolower($f->getExtension()) === 'php') {
+                $files[] = $f->getPathname();
+            }
+        }
+        return $files;
+    }
+
+    /** Audit-log a plugin lifecycle action with the acting admin. */
+    protected static function audit(string $action, string $slug): void
+    {
+        $who = optional(auth('admins')->user())->email ?? 'system';
+        \Illuminate\Support\Facades\Log::info("Plugin {$action}: {$slug} (by {$who})");
     }
 
     /** Deactivate the plugin — its data / tables are kept (use uninstall to remove). */
@@ -141,6 +237,7 @@ class Plugin
     {
         self::setActive(array_filter(self::active(), fn ($s) => $s !== basename($slug)));
         self::unregisterMenu($slug);
+        self::audit('deactivated', basename($slug));
     }
 
     /**
@@ -235,6 +332,8 @@ class Plugin
         if (is_file($script)) {
             require $script;
         }
+
+        self::audit('uninstalled', $slug);
     }
 
     /**

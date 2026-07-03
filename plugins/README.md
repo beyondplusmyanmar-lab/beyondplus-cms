@@ -8,6 +8,32 @@ Hook-based plugins for Beyond Plus CMS. Each plugin is a folder in here with:
 Activate / deactivate from the admin: **bp-admin → Plugins**. Active plugins are
 stored in the `active_plugins` option and their main file is loaded on boot.
 
+## Security
+
+Plugins run real PHP, so a malicious or careless plugin is a genuine risk. The
+core adds several layers — but **the most important rule is: only install
+plugins from sources you trust.** No scanner can fully sandbox PHP.
+
+- **Static security scan** — before a plugin is activated its PHP files are
+  scanned for high-risk constructs (`eval`, `shell_exec`/`system`/backticks,
+  `assert`/`create_function`, `preg_replace /e`, obfuscated `eval(base64_decode(...))`,
+  remote `include`). **Any critical match blocks activation.** Lower-risk
+  patterns (`base64_decode`, filesystem writes, `curl_exec`, …) are shown as
+  warnings. Review a plugin any time from **Plugins → Scan**.
+- **Permission-gated** — every plugin action (including the POST
+  activate/deactivate/uninstall) requires access to the Plugins module, so a
+  lower-privilege admin can't manage plugins.
+- **Audit log** — activate/deactivate/uninstall and blocked activations are
+  written to the application log with the acting admin.
+- **Not web-served** — the `/plugins` directory is outside `public/`, so plugin
+  source is never directly reachable over HTTP.
+- **Fail-safe boot** — a plugin that throws on load is caught and skipped rather
+  than taking down the site.
+
+Production hardening: make `/plugins` read-only to the web user so a
+compromised app can't drop or modify plugin code at runtime, and keep plugin
+code under review/version control.
+
 ## Hooks
 
 Register these from a plugin's main file:
