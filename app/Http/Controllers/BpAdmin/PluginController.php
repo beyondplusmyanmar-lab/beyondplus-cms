@@ -33,7 +33,10 @@ class PluginController extends Controller
 
     public function index()
     {
-        return view('bp-admin.plugin.index', ['plugins' => Plugin::all()]);
+        return view('bp-admin.plugin.index', [
+            'plugins'  => Plugin::all(),
+            'failures' => Plugin::failures(),
+        ]);
     }
 
     /** Show the static security scan report for a plugin before activating it. */
@@ -53,6 +56,13 @@ class PluginController extends Controller
         $result = Plugin::activate((string) $request->input('slug'));
 
         if (! empty($result['blocked'])) {
+            if (! empty($result['requirements'])) {
+                return redirect()->back()->withErrors(array_merge(
+                    ['Activation blocked — this plugin is not compatible with your environment:'],
+                    $result['requirements']
+                ));
+            }
+
             $reasons = collect($result['scan']['critical'] ?? [])
                 ->map(fn ($f) => $f['file'].' — '.$f['reason'])
                 ->all();

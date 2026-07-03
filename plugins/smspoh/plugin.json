@@ -1,7 +1,17 @@
 {
+    "id": "smspoh",
+    "type": "plugin",
     "name": "SMSPoh",
     "description": "Sends SMS (OTP and notifications) through the SMSPoh gateway. Set the API token in Configuration → SMS Gateway.",
     "version": "1.0.0",
     "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/plugins/smspoh",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1",
+        "extensions": ["curl", "json"]
+    },
+    "permissions": ["http"],
     "main": "smspoh.php"
 }

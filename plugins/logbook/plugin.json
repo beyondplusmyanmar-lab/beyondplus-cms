@@ -1,8 +1,17 @@
 {
+    "id": "logbook",
+    "type": "plugin",
     "name": "Logbook",
-    "description": "A demo plugin that ships its own database migration. Activating it creates a bp_logbook table; uninstalling drops it.",
+    "description": "A demo plugin that ships its own database migration, admin page and view. Activating it creates a bp_logbook table; uninstalling drops it.",
     "version": "1.0.0",
     "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/plugins/logbook",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1"
+    },
+    "permissions": ["database"],
     "main": "logbook.php",
     "admin_menu": {
         "title": "Logbook",

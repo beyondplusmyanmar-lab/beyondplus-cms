@@ -1,7 +1,13 @@
 {
+    "id": "sample-banner",
+    "type": "plugin",
     "name": "Sample Banner",
     "description": "A demo plugin showing the hook system — adds a small line to the site footer via the theme_footer action.",
     "version": "1.0.0",
     "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/plugins/sample-banner",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "permissions": [],
     "main": "sample-banner.php"
 }

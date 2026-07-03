@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\DB;
  */
 class Plugin
 {
+    /** CMS version plugins declare compatibility against (minCmsVersion). */
+    public const CMS_VERSION = '2.2.0';
+
     protected static array $actions = [];
     protected static array $filters = [];
 
@@ -75,15 +78,22 @@ class Plugin
                 $meta = json_decode(file_get_contents($dir.'/plugin.json'), true) ?: [];
             }
 
+            $isActive = in_array($slug, $active, true);
             $plugins[$slug] = [
-                'slug'        => $slug,
-                'name'        => $meta['name'] ?? ucfirst($slug),
-                'description' => $meta['description'] ?? 'No description provided.',
-                'version'     => $meta['version'] ?? '1.0.0',
-                'author'      => $meta['author'] ?? '',
-                'main'        => $meta['main'] ?? $slug.'.php',
-                'active'      => in_array($slug, $active, true),
-                'migrations'  => is_dir($dir.'/migrations'),
+                'slug'         => $slug,
+                'id'           => $meta['id'] ?? $slug,
+                'type'         => $meta['type'] ?? 'plugin',
+                'name'         => $meta['name'] ?? ucfirst($slug),
+                'description'  => $meta['description'] ?? 'No description provided.',
+                'version'      => $meta['version'] ?? '1.0.0',
+                'author'       => $meta['author'] ?? '',
+                'homepage'     => $meta['homepage'] ?? '',
+                'license'      => $meta['license'] ?? '',
+                'minCmsVersion'=> $meta['minCmsVersion'] ?? '',
+                'main'         => $meta['main'] ?? $slug.'.php',
+                'active'       => $isActive,
+                'migrations'   => is_dir($dir.'/migrations'),
+                'tampered'     => $isActive && self::isTampered($slug),
             ];
         }
 
@@ -132,6 +142,12 @@ class Plugin
             return ['blocked' => true, 'scan' => ['critical' => [['file' => $slug, 'reason' => 'plugin not found']], 'warning' => []]];
         }
 
+        // Compatibility gate: don't install a plugin this environment can't run.
+        $problems = self::checkRequirements($slug);
+        if ($problems) {
+            return ['blocked' => true, 'requirements' => $problems];
+        }
+
         // Security gate: never load a plugin whose code contains high-risk
         // constructs (arbitrary code execution, shell access, obfuscation, …).
         $scan = self::scan($slug);
@@ -151,6 +167,10 @@ class Plugin
 
         // Register its admin menu (sidebar link + access) if declared.
         self::registerMenu($slug);
+
+        // Record an integrity baseline and clear any prior recovery failure.
+        self::storeFingerprint($slug);
+        self::clearFailure($slug);
 
         self::audit('activated', $slug);
         return ['activated' => true, 'scan' => $scan];
@@ -230,6 +250,103 @@ class Plugin
     {
         $who = optional(auth('admins')->user())->email ?? 'system';
         \Illuminate\Support\Facades\Log::info("Plugin {$action}: {$slug} (by {$who})");
+    }
+
+    // ---- dependency / compatibility -------------------------------------
+
+    /**
+     * Check a plugin's declared requirements against this environment. Returns a
+     * list of unmet requirements (empty = compatible). Reads the manifest's
+     * minCmsVersion and requires{php, extensions}.
+     */
+    public static function checkRequirements(string $slug): array
+    {
+        $meta = self::meta($slug);
+        $problems = [];
+
+        if (! empty($meta['minCmsVersion']) && version_compare(self::CMS_VERSION, $meta['minCmsVersion'], '<')) {
+            $problems[] = "needs CMS >= {$meta['minCmsVersion']} (this is ".self::CMS_VERSION.')';
+        }
+
+        $req = $meta['requires'] ?? [];
+        if (! empty($req['php']) && version_compare(PHP_VERSION, $req['php'], '<')) {
+            $problems[] = "needs PHP >= {$req['php']} (this is ".PHP_VERSION.')';
+        }
+        foreach ($req['extensions'] ?? [] as $ext) {
+            if (! extension_loaded($ext)) {
+                $problems[] = "needs PHP extension: {$ext}";
+            }
+        }
+
+        return $problems;
+    }
+
+    // ---- integrity (tamper detection) -----------------------------------
+
+    /** A SHA-256 fingerprint over all the plugin's PHP files + its manifest. */
+    public static function fingerprint(string $slug): string
+    {
+        $dir = self::path().'/'.basename($slug);
+        $parts = [];
+        foreach (self::phpFiles($dir) as $f) {
+            $parts[str_replace($dir, '', $f)] = hash_file('sha256', $f);
+        }
+        if (is_file($dir.'/plugin.json')) {
+            $parts['plugin.json'] = hash_file('sha256', $dir.'/plugin.json');
+        }
+        ksort($parts);
+        return hash('sha256', json_encode($parts));
+    }
+
+    protected static function storeFingerprint(string $slug): void
+    {
+        $map = json_decode(bp_option('plugin_hashes', '{}'), true) ?: [];
+        $map[$slug] = self::fingerprint($slug);
+        Bp_options::updateOrCreate(
+            ['option_name' => 'plugin_hashes'],
+            ['option_value' => json_encode($map), 'autoload' => 'yes']
+        );
+    }
+
+    /** True if an installed plugin's files changed since it was activated. */
+    public static function isTampered(string $slug): bool
+    {
+        $map = json_decode(bp_option('plugin_hashes', '{}'), true) ?: [];
+        return isset($map[$slug]) && $map[$slug] !== self::fingerprint($slug);
+    }
+
+    // ---- recovery mode --------------------------------------------------
+
+    /** Auto-disable a plugin that failed to boot and record why. */
+    protected static function recordFailure(string $slug, string $reason): void
+    {
+        self::setActive(array_filter(self::active(), fn ($s) => $s !== $slug));
+
+        $failures = json_decode(bp_option('plugin_failures', '{}'), true) ?: [];
+        $failures[$slug] = $reason;
+        Bp_options::updateOrCreate(
+            ['option_name' => 'plugin_failures'],
+            ['option_value' => json_encode($failures), 'autoload' => 'yes']
+        );
+        \Illuminate\Support\Facades\Log::error("Plugin auto-disabled after boot failure: {$slug} — {$reason}");
+    }
+
+    /** Slug => reason for plugins auto-disabled by recovery mode. */
+    public static function failures(): array
+    {
+        return json_decode(bp_option('plugin_failures', '{}'), true) ?: [];
+    }
+
+    protected static function clearFailure(string $slug): void
+    {
+        $failures = self::failures();
+        if (isset($failures[$slug])) {
+            unset($failures[$slug]);
+            Bp_options::updateOrCreate(
+                ['option_name' => 'plugin_failures'],
+                ['option_value' => json_encode($failures), 'autoload' => 'yes']
+            );
+        }
     }
 
     /** Deactivate the plugin — its data / tables are kept (use uninstall to remove). */
@@ -344,10 +461,16 @@ class Plugin
     public static function boot(): void
     {
         try {
-            foreach (self::all() as $plugin) {
-                if (! $plugin['active']) {
-                    continue;
-                }
+            $plugins = self::all();
+        } catch (\Throwable $e) {
+            return; // DB not ready (pre-migration) — skip plugins entirely.
+        }
+
+        foreach ($plugins as $plugin) {
+            if (! $plugin['active']) {
+                continue;
+            }
+            try {
                 $dir = self::path().'/'.$plugin['slug'];
 
                 if (is_dir($dir.'/views')) {
@@ -358,9 +481,11 @@ class Plugin
                 if (is_file($main)) {
                     require_once $main;
                 }
+            } catch (\Throwable $e) {
+                // Recovery mode: a plugin that throws on load (fatal, parse error,
+                // missing dependency) is auto-disabled so the site stays up.
+                self::recordFailure($plugin['slug'], $e->getMessage());
             }
-        } catch (\Throwable $e) {
-            // DB not ready (pre-migration) or a bad plugin — don't break the app.
         }
     }
 

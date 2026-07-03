@@ -21,6 +21,16 @@
             <div class="box-body pt-3" style="border-top:1px solid #eef0f3;">
                 @component('bp-admin.inc.alert')@endcomponent
 
+                @if(!empty($failures))
+                    <div class="alert alert-warning">
+                        <strong><i class="fa fa-life-ring"></i> Recovery mode:</strong>
+                        the following plugin(s) were auto-disabled after failing to load —
+                        @foreach($failures as $slug => $reason)
+                            <div class="small mt-1"><code>{{ $slug }}</code> — {{ $reason }}</div>
+                        @endforeach
+                    </div>
+                @endif
+
                 <div class="row">
                     @forelse($plugins as $plugin)
                         <div class="col-md-4 col-sm-6 mb-4">
@@ -28,11 +38,16 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <h5 class="mb-1"><i class="fa fa-plug text-muted"></i> {{ $plugin['name'] }}</h5>
-                                        @if($plugin['active'])
-                                            <span class="badge badge-success">Active</span>
-                                        @else
-                                            <span class="badge badge-secondary">Inactive</span>
-                                        @endif
+                                        <span>
+                                            @if($plugin['active'])
+                                                <span class="badge badge-success">Active</span>
+                                            @else
+                                                <span class="badge badge-secondary">Inactive</span>
+                                            @endif
+                                            @if($plugin['tampered'])
+                                                <span class="badge badge-danger" title="Files changed since activation"><i class="fa fa-exclamation-triangle"></i> Modified</span>
+                                            @endif
+                                        </span>
                                     </div>
                                     <p class="text-muted small mb-2">{{ $plugin['description'] }}</p>
                                     <p class="plugin-meta mb-3">
@@ -42,6 +57,7 @@
                                         @if($plugin['migrations'])
                                             <span class="badge badge-light border" title="Ships database migrations"><i class="fa fa-database"></i> DB</span>
                                         @endif
+                                        @if($plugin['minCmsVersion']) &middot; needs CMS &ge; {{ $plugin['minCmsVersion'] }}@endif
                                     </p>
                                     @if($plugin['active'])
                                         <form action="{{ url('bp-admin/plugins/deactivate') }}" method="post" class="d-inline">

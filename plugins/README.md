@@ -2,11 +2,15 @@
 
 Hook-based plugins for Beyond Plus CMS. Each plugin is a folder in here with:
 
-- `plugin.json` — metadata (`name`, `description`, `version`, `author`, `main`)
+- `plugin.json` — manifest (`id`, `type`, `name`, `version`, `author`,
+  `homepage`, `license`, `minCmsVersion`, `requires`, `permissions`, `main`)
 - a main PHP file (default `<slug>.php`) that registers hooks
 
 Activate / deactivate from the admin: **bp-admin → Plugins**. Active plugins are
 stored in the `active_plugins` option and their main file is loaded on boot.
+
+**Full developer guide:** [`docs/plugin-development.md`](../docs/plugin-development.md).
+**Portal roadmap:** [`docs/plugin-portal.md`](../docs/plugin-portal.md).
 
 ## Security
 
@@ -20,6 +24,12 @@ plugins from sources you trust.** No scanner can fully sandbox PHP.
   remote `include`). **Any critical match blocks activation.** Lower-risk
   patterns (`base64_decode`, filesystem writes, `curl_exec`, …) are shown as
   warnings. Review a plugin any time from **Plugins → Scan**.
+- **Compatibility checks** — `minCmsVersion` and `requires` (PHP version,
+  extensions) are verified before activation; incompatible plugins are refused.
+- **Integrity checking** — a SHA-256 baseline is stored on activate; a plugin
+  whose files change afterwards is flagged **Modified** on the Plugins page.
+- **Recovery mode** — a plugin that throws while loading is auto-disabled and
+  reported (Plugins page + log), so one bad plugin can't take the site down.
 - **Permission-gated** — every plugin action (including the POST
   activate/deactivate/uninstall) requires access to the Plugins module, so a
   lower-privilege admin can't manage plugins.
