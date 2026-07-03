@@ -108,6 +108,10 @@ class CustomerAuthController extends Controller
     )]
     public function register(Request $request)
     {
+        if (bp_option('registration_enabled', 'yes') !== 'yes') {
+            return response()->json(['status' => 'error', 'message' => 'Registration is currently closed.'], 403);
+        }
+
         $regType = bp_option('registration_type', 'phone');
 
         $rules = ['firstname' => 'required', 'password' => 'required|confirmed|min:8'];

@@ -664,6 +664,7 @@ INSERT INTO `bp_block` (`id`,`title`,`body`,`block_url`,`block_type`,`block_acti
 
 -- Configuration defaults (secrets intentionally blank) + admin module
 INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) VALUES
+('registration_enabled','yes','yes',NOW()),
 ('registration_type','phone','yes',NOW()),
 ('api_enabled','yes','yes',NOW()),
 ('sms_enabled','no','yes',NOW()),

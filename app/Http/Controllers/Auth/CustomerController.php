@@ -88,12 +88,19 @@ class CustomerController extends Controller
     //customer register page
     public function signup()
     {
+        if (bp_option('registration_enabled', 'yes') !== 'yes') {
+            return redirect('customer/sign-in')->with('warning', 'Registration is currently closed.');
+        }
         return view('front.customer.sign-up');
     }
 
     //create new customer
     public function customer_register(Request $request)
     {
+        if (bp_option('registration_enabled', 'yes') !== 'yes') {
+            return redirect('customer/sign-in')->with('warning', 'Registration is currently closed.');
+        }
+
         $input = $request->all();
 
         // Required fields depend on the configured registration method.

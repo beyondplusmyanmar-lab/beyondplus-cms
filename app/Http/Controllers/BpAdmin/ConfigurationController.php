@@ -18,6 +18,7 @@ class ConfigurationController extends Controller
      * @var array<string, string>
      */
     protected $defaults = [
+        'registration_enabled' => 'yes',   // yes | no — allow new customer sign-ups
         'registration_type' => 'phone',   // phone | email | both
         'otp_channel'       => 'auto',     // auto | sms | email
         'api_enabled'       => 'yes',      // yes | no

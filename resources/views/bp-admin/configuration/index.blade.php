@@ -19,6 +19,14 @@
                 <h3 class="tile-title">Registration</h3>
                 <div class="tile-body">
                     <div class="form-group">
+                        <label class="control-label">Customer registration</label>
+                        <select class="form-control" name="registration_enabled">
+                            <option value="yes" {{ $config['registration_enabled'] === 'yes' ? 'selected' : '' }}>Open — anyone can sign up</option>
+                            <option value="no" {{ $config['registration_enabled'] === 'no' ? 'selected' : '' }}>Closed — no new sign-ups</option>
+                        </select>
+                        <small class="form-text text-muted">Turn off to stop new customer registrations.</small>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Customer registration method</label>
                         <select class="form-control" name="registration_type">
                             @foreach (['phone' => 'Phone only', 'email' => 'Email only', 'both' => 'Phone &amp; Email'] as $val => $label)

@@ -40,9 +40,11 @@
                         <button type="submit" class="btn btn-primary w-100" name="login">Sign in</button>
                     </form>
 
+                    @if(bp_option('registration_enabled', 'yes') === 'yes')
                     <p class="text-center text-muted mt-4 mb-0">
                         Don't have an account? <a href="{{ url('/customer/sign-up') }}">Sign up</a>
                     </p>
+                    @endif
                 </div>
             </div>
         </div>
