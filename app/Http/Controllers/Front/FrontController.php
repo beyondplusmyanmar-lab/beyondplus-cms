@@ -65,8 +65,12 @@ class FrontController extends Controller
 
     public function index(){
 
-        
+
         return view($this->t().'index', ['title' => 'home' ,  'categories' => $this->categories,'post_link'=>$this->post_link ]);
+    }
+
+    public function blog(){
+        return view($this->t().'blog', ['title' => 'Blog', 'posts' => bp_post(10)]);
     }
 
     public function menu($name) {

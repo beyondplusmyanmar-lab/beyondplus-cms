@@ -9,7 +9,9 @@
         </aside>
 
         <div class="col-lg-9">
-            @foreach(bp_post(10) as $post)
+            <h1 class="h3 mb-4">Blog</h1>
+            @php $posts = $posts ?? bp_post(10); @endphp
+            @forelse($posts as $post)
                 @php
                     $postCategory = optional($post->categories->firstWhere('tax_link', '!=', 'uncategorized') ?? $post->categories->first());
                     if (app()->getLocale() === 'mm' && isset($post->translate) && $post->translate->lang == 2) {
@@ -32,7 +34,13 @@
                     </div>
                     <a href="{{ url('/'.$post->post_link) }}" class="small">Read more <i class="bi bi-arrow-right"></i></a>
                 </article>
-            @endforeach
+            @empty
+                <p class="text-muted">No posts yet.</p>
+            @endforelse
+
+            @if($posts->hasPages())
+                <div class="mt-4">{{ $posts->links() }}</div>
+            @endif
         </div>
     </div>
 </div>

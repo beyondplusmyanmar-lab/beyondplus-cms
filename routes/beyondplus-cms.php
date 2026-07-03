@@ -327,7 +327,9 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             Route::get('/sitemap', 'Front\FrontController@sitemap');
             Route::get('/rss', 'Front\FrontController@rss');
             Route::post('/comment', 'Front\FrontController@comment');
-            
+
+            Route::get('/blog', 'Front\FrontController@blog');
+
             Route::get('/{name}', 'Front\FrontController@menu');
             Route::get('/detail/{name}', 'Front\FrontController@post');
             Route::get('/cat/{name}', 'Front\FrontController@cat');
