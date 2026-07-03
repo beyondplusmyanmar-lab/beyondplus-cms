@@ -307,6 +307,40 @@ function bp_validate_images($request, array $fields) {
     $request->validate($rules);
 }
 
+/**
+ * Centralised, hardened image storage. Moves an uploaded image into the uploads
+ * directory and returns the stored filename, or null if the file is missing or
+ * is not a whitelisted image type.
+ *
+ * Security: the type is checked against a MIME whitelist (content, not the
+ * client name), the extension comes from that whitelist, and the filename is a
+ * cryptographically-random hex string — so a caller can never store an
+ * executable, control the extension, cause a path traversal, or overwrite an
+ * existing file. Pair with bp_validate_images() for user-facing error messages.
+ */
+function bp_store_image($file, string $prefix = 'up') {
+    if (! $file || ! $file->isValid()) {
+        return null;
+    }
+
+    $allowed = [
+        'image/jpeg' => 'jpg',
+        'image/png'  => 'png',
+        'image/gif'  => 'gif',
+        'image/webp' => 'webp',
+    ];
+
+    $mime = $file->getMimeType();
+    if (! isset($allowed[$mime])) {
+        return null;
+    }
+
+    $name = preg_replace('/[^a-z0-9]/i', '', $prefix).bin2hex(random_bytes(16)).'.'.$allowed[$mime];
+    $file->move(uploadPath(), $name);
+
+    return $name;
+}
+
 function role_type($type = null) {
     
     $role_type = App\Models\Bp_usertype::get()->pluck('role','id');

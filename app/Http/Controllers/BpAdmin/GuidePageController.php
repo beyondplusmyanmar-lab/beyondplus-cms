@@ -49,15 +49,8 @@ class GuidePageController extends Controller
         $inputs = $request->all();
         $inputs['post_type'] = $this->post_type;
         $inputs['post_link'] = formatUrl($request->input('title'));
-        if ($request->file('category_icon') && $request->file('category_icon')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('category_icon')->extension(); // getting image extension
-            // $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $fileName = $request->file('category_icon')->getClientOriginalName();
-            $request->file('category_icon')->move($destinationPath, $fileName); // uploading file to given path
-            if($request->file('pictures') !=null){
-                $inputs['category_icon'] = $fileName;
-            }
+        if ($__up = bp_store_image($request->file('category_icon'), 'cate')) {
+            $inputs['category_icon'] = $__up;
         }
 
 
@@ -84,12 +77,8 @@ class GuidePageController extends Controller
      //   $inputs = $request->except('_token', '_method');
         $inputs['post_type'] = $this->post_type;
         $inputs['post_link'] = formatUrl($request->input('title'));
-        if ($request->file('category_icon') && $request->file('category_icon')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('category_icon')->extension(); // getting image extension
-            $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('category_icon')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['category_icon'] = $fileName;
+        if ($__up = bp_store_image($request->file('category_icon'), 'cate')) {
+            $inputs['category_icon'] = $__up;
         }
 
         Bp_post::findOrFail($id)->update($inputs);

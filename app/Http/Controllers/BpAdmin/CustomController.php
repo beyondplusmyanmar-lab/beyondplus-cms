@@ -47,15 +47,8 @@ class CustomController extends Controller
 
         $inputs = $request->all();
         
-        if ($request->file('custom_icon') && $request->file('custom_icon')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('custom_icon')->extension(); // getting image extension
-            // $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $fileName = $request->file('custom_icon')->getClientOriginalName();
-            $request->file('custom_icon')->move($destinationPath, $fileName); // uploading file to given path
-            if($request->file('pictures') !=null){
-                $inputs['custom_icon'] = $fileName;
-            }
+        if ($__up = bp_store_image($request->file('custom_icon'), 'cust')) {
+            $inputs['custom_icon'] = $__up;
         }
 
 
@@ -89,12 +82,8 @@ class CustomController extends Controller
 
         $inputs = $request->all();
 
-        if ($request->file('custom_icon') && $request->file('custom_icon')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('custom_icon')->extension(); // getting image extension
-            $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('custom_icon')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['custom_icon'] = $fileName;
+        if ($__up = bp_store_image($request->file('custom_icon'), 'cust')) {
+            $inputs['custom_icon'] = $__up;
         }
 
         Bp_custom::findOrFail($id)->update($inputs);

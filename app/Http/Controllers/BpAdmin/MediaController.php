@@ -58,12 +58,8 @@ class MediaController extends Controller
 
         $inputs = $request->all();
 
-        if ($request->file('media_link') && $request->file('media_link')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('media_link')->extension(); // getting image extension
-            $fileName = 'mediamk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('media_link')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['media_link'] = $fileName;
+        if ($__up = bp_store_image($request->file('media_link'), 'medi')) {
+            $inputs['media_link'] = $__up;
         }
 
         $inputs['media_type'] = 'media';
@@ -98,12 +94,8 @@ class MediaController extends Controller
         $inputs = $request->all();
      //   $inputs = $request->except('_token', '_method');
 
-        if ($request->file('media_link') && $request->file('media_link')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('media_link')->extension(); // getting image extension
-            $fileName = 'mediamk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('media_link')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['media_link'] = $fileName;
+        if ($__up = bp_store_image($request->file('media_link'), 'medi')) {
+            $inputs['media_link'] = $__up;
         }
 
         $inputs['media_type'] = 'media';

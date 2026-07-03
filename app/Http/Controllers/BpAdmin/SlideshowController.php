@@ -44,13 +44,8 @@ class SlideshowController extends Controller
         // ]);
         $inputs = $request->all();
 
-        if ($request->file('slideshow_link') && $request->file('slideshow_link')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('slideshow_link')->extension(); // getting image extension
-            $fileName = 'slideshowmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-
-            $request->file('slideshow_link')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['slideshow_link'] = $fileName;
+        if ($__up = bp_store_image($request->file('slideshow_link'), 'slid')) {
+            $inputs['slideshow_link'] = $__up;
         }
 
 
@@ -78,12 +73,8 @@ class SlideshowController extends Controller
         $inputs = $request->all();
      //   $inputs = $request->except('_token', '_method');
 
-        if ($request->file('slideshow_link') && $request->file('slideshow_link')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('slideshow_link')->extension(); // getting image extension
-            $fileName = 'slideshowmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('slideshow_link')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['slideshow_link'] = $fileName;
+        if ($__up = bp_store_image($request->file('slideshow_link'), 'slid')) {
+            $inputs['slideshow_link'] = $__up;
         }
 
         Bp_slideshow::findOrFail($id)->update($inputs);

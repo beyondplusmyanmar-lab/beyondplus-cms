@@ -63,12 +63,8 @@ class NewsController extends Controller
 
         $update_id = Bp_post::orderBy('id', 'desc')->first();
         
-        if ($request->file('featured_img') && $request->file('featured_img')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('featured_img')->extension(); // getting image extension
-            $fileName = 'featmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('featured_img')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['featured_img'] = $fileName;
+        if ($__up = bp_store_image($request->file('featured_img'), 'feat')) {
+            $inputs['featured_img'] = $__up;
         }
 
         $categories  = $request->get('taxes');
@@ -100,12 +96,8 @@ class NewsController extends Controller
             $inputs['event_at'] = $request->input('event_at');
         }
         
-        if ($request->file('featured_img') && $request->file('featured_img')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('featured_img')->extension(); // getting image extension
-            $fileName = 'featmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('featured_img')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['featured_img'] = $fileName;
+        if ($__up = bp_store_image($request->file('featured_img'), 'feat')) {
+            $inputs['featured_img'] = $__up;
         }
 
         Bp_post::findOrFail($id)->update($inputs);

@@ -44,13 +44,8 @@ class SliderController extends Controller
         ]);
         $inputs = $request->all();
 
-        if ($request->file('slider_link') && $request->file('slider_link')->isValid()) {
-            $destinationPath = uploadPath();
-            // Derive the extension from the file contents, not the client-supplied name.
-            $extension = $request->file('slider_link')->extension();
-            $fileName = 'slidermk'.md5(microtime().rand()).'.'.$extension; // random, safe name
-            $request->file('slider_link')->move($destinationPath, $fileName);
-            $inputs['slider_link'] = $fileName;
+        if ($__up = bp_store_image($request->file('slider_link'), 'slid')) {
+            $inputs['slider_link'] = $__up;
         }
 
 
@@ -80,12 +75,8 @@ class SliderController extends Controller
         ]);
         $inputs = $request->all();
 
-        if ($request->file('slider_link') && $request->file('slider_link')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('slider_link')->extension();
-            $fileName = 'slidermk'.md5(microtime().rand()).'.'.$extension;
-            $request->file('slider_link')->move($destinationPath, $fileName);
-            $inputs['slider_link'] = $fileName;
+        if ($__up = bp_store_image($request->file('slider_link'), 'slid')) {
+            $inputs['slider_link'] = $__up;
         }
 
         $inputs['slider_type'] = 'slider';

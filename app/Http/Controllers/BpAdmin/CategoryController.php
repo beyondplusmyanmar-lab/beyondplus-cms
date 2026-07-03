@@ -42,15 +42,8 @@ class CategoryController extends Controller
         $inputs = $request->all();
         $inputs['tax_link'] = formatUrl($request->input('tax_name'));
 
-        if ($request->file('tax_icon') && $request->file('tax_icon')->isValid()) {
-        $destinationPath = uploadPath();
-            $extension = $request->file('tax_icon')->extension(); // getting image extension
-            // $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $fileName = $request->file('tax_icon')->getClientOriginalName();
-            $request->file('tax_icon')->move($destinationPath, $fileName); // uploading file to given path
-            if($request->file('pictures') !=null){
-                $inputs['tax_icon'] = $fileName;
-            }
+        if ($__up = bp_store_image($request->file('tax_icon'), 'tax_')) {
+            $inputs['tax_icon'] = $__up;
         } else {
             $inputs['tax_icon'] = 'fa fa-list';
         }
@@ -79,12 +72,8 @@ class CategoryController extends Controller
      //   $inputs = $request->except('_token', '_method');
         $inputs['tax_link'] = formatUrl($request->input('tax_name'));
 
-        if ($request->file('tax_icon') && $request->file('tax_icon')->isValid()) {
-            $destinationPath = uploadPath();
-            $extension = $request->file('tax_icon')->extension(); // getting image extension
-            $fileName = 'catmk'.md5(microtime().rand()).'.'.$extension; // renameing image
-            $request->file('tax_icon')->move($destinationPath, $fileName); // uploading file to given path
-            $inputs['tax_icon'] = $fileName;
+        if ($__up = bp_store_image($request->file('tax_icon'), 'tax_')) {
+            $inputs['tax_icon'] = $__up;
         }
 
         Bp_tax::findOrFail($id)->update($inputs);
