@@ -39,6 +39,22 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust proxies only when explicitly configured (behind nginx / a load
+        // balancer / Cloudflare) so the real client IP is used for rate limiting
+        // and logging. Off by default to avoid X-Forwarded-* spoofing on direct
+        // connections. Set TRUSTED_PROXIES=* or a comma list of IPs/CIDRs.
+        $proxies = env('TRUSTED_PROXIES');
+        if ($proxies !== null && $proxies !== '') {
+            $middleware->trustProxies(
+                at: $proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)),
+                headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR
+                    | \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST
+                    | \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT
+                    | \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO
+                    | \Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB
+            );
+        }
+
         // Append locale detection to the default web stack.
         $middleware->web(append: [
             \App\Http\Middleware\Locale::class,
