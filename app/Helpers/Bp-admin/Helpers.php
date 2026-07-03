@@ -384,17 +384,6 @@ function block_types() {
     return ['content' => 'Content', 'html' => 'HTML', 'widget' => 'Widget'];
 }
 
-function departmentShort($chose_id = null) {
-
-    $department = [1=>'d1', 2=>'d2', 3=>'d3'];
-    if($chose_id){
-            $department = $department[$chose_id] ?? '';
-    }
-
-    return $department;
-}
-
-
 function slidebar() {
     return bp_module::orderBy('module_weight')->where('parent_id',0)->where('section',1)->with('child')->get();
 }
