@@ -32,4 +32,13 @@ use Illuminate\Support\Facades\Route;
 
 
 
+// SPA example demo. Served from resources/ (not public/) and gated by the
+// api_enabled toggle, so it returns 503 when the API is disabled — matching the
+// API and its docs. Registered here (before the front catch-all) to keep the
+// /spa-example.html URL.
+Route::get('/spa-example.html', function () {
+    return response(file_get_contents(resource_path('spa-example.html')))
+        ->header('Content-Type', 'text/html; charset=UTF-8');
+})->middleware('api.enabled');
+
 // Admin routes are registered in routes/beyondplus-cms.php (bp-admin group).
