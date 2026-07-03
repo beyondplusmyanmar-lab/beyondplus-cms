@@ -4,6 +4,7 @@
 
 @section('content')
 @php
+    $postCategories = $post->categories; // base post's categories, before the translate swap
     if (app()->getLocale() === 'mm' && isset($post->translate) && $post->translate->lang == 2) {
         $post = $post->translate;
     }
@@ -23,6 +24,14 @@
                     </a>
                 @endif
             </div>
+
+            @if($postCategories->count())
+                <div class="mb-3">
+                    @foreach($postCategories as $cat)
+                        <a href="{{ url('/cat/'.$cat->tax_link) }}" class="badge text-white text-decoration-none me-1" style="background:var(--bp-accent);">{{ $cat->tax_name }}</a>
+                    @endforeach
+                </div>
+            @endif
 
             @if($post->featured_img)
                 <img src="{{ bp_upload_url($post->featured_img) }}" class="img-fluid rounded mb-4" alt="{{ $post->title }}">
