@@ -62,20 +62,8 @@ class SmsService
 
     protected function dispatch(string $to, string $message): bool
     {
-        switch (bp_option('sms_provider', 'smspoh')) {
-            case 'smspoh':
-                $response = Http::withToken(bp_option('sms_api_token'))
-                    ->acceptJson()
-                    ->timeout(10)
-                    ->post('https://api.smspoh.com/v1/messages/send', [
-                        'to'      => $to,
-                        'from'    => bp_option('sms_sender') ?: 'CMS',
-                        'content' => $message,
-                    ]);
-
-                return $response->successful();
-            default:
-                return false;
-        }
+        // Delegated to the active SMS provider plugin (e.g. SMSPoh) via the hook.
+        // Returns false if no provider plugin handled it.
+        return (bool) bp_apply_filters('send_sms', false, $to, $message);
     }
 }

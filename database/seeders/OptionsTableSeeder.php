@@ -20,7 +20,7 @@ class OptionsTableSeeder extends Seeder
             'mail_enabled', 'mail_provider', 'mailgun_domain', 'mailgun_secret', 'mail_from', 'spa_url', 'cors_origins', 'frontend_mode', 'otp_channel', 'active_plugins');
         $option_value = array('http://localhost', 'http://localhost', 'Beyond Plus CMS', 'A Beyond Plus CMS sample site', 'default', 'admin@example.com', '2.2.0',
             'phone', 'yes', 'no', 'smspoh', '', '',
-            'no', 'mailgun', '', '', '', '', '', 'theme', 'auto', '[]');
+            'no', 'mailgun', '', '', '', '', '', 'theme', 'auto', '["smspoh","mailgun"]');
         for ($i = 0; $i < count($option_name); $i++) {
             Bp_options::insert([
                 'option_name'  => $option_name[$i],

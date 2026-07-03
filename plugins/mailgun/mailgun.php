@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * Mailgun provider plugin.
+ *
+ * Registers the `send_mail` filter so the CMS can deliver email through the
+ * Mailgun HTTP API. The filter receives (bool $sent, string $to, string
+ * $subject, string $body) and returns true when accepted. Credentials come from
+ * the Configuration page (mailgun_domain, mailgun_secret, mail_from). Loaded
+ * only when this plugin is active.
+ */
+
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+bp_add_filter('send_mail', function ($sent, $to, $subject, $body) {
+    if ($sent) {
+        return $sent;
+    }
+    $domain = bp_option('mailgun_domain', '');
+    $secret = bp_option('mailgun_secret', '');
+    if ($domain === '' || $secret === '') {
+        return false;
+    }
+
+    try {
+        $response = Http::asForm()
+            ->withBasicAuth('api', $secret)
+            ->timeout(10)
+            ->post("https://api.mailgun.net/v3/{$domain}/messages", [
+                'from'    => bp_option('mail_from') ?: "no-reply@{$domain}",
+                'to'      => $to,
+                'subject' => $subject,
+                'text'    => $body,
+            ]);
+
+        return $response->successful();
+    } catch (\Throwable $e) {
+        Log::warning('Mailgun send failed: '.$e->getMessage());
+        return false;
+    }
+});

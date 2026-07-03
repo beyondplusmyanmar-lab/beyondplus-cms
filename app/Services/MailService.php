@@ -60,18 +60,8 @@ class MailService
 
     protected function dispatch(string $to, string $subject, string $body): bool
     {
-        $domain = bp_option('mailgun_domain');
-
-        $response = Http::asForm()
-            ->withBasicAuth('api', bp_option('mailgun_secret'))
-            ->timeout(10)
-            ->post("https://api.mailgun.net/v3/{$domain}/messages", [
-                'from'    => bp_option('mail_from') ?: "no-reply@{$domain}",
-                'to'      => $to,
-                'subject' => $subject,
-                'text'    => $body,
-            ]);
-
-        return $response->successful();
+        // Delegated to the active email provider plugin (e.g. Mailgun) via the hook.
+        // Returns false if no provider plugin handled it.
+        return (bool) bp_apply_filters('send_mail', false, $to, $subject, $body);
     }
 }

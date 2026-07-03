@@ -1,0 +1,7 @@
+{
+    "name": "SMSPoh",
+    "description": "Sends SMS (OTP and notifications) through the SMSPoh gateway. Set the API token in Configuration → SMS Gateway.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "main": "smspoh.php"
+}

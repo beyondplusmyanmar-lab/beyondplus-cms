@@ -1,0 +1,7 @@
+{
+    "name": "Mailgun",
+    "description": "Sends email (OTP and notifications) through the Mailgun HTTP API. Set the domain and secret in Configuration → Email.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "main": "mailgun.php"
+}
