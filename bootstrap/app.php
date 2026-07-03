@@ -65,6 +65,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
             'customer.token' => \App\Http\Middleware\CustomerApiToken::class,
             'frontend.mode' => \App\Http\Middleware\FrontendMode::class,
+            'api.enabled' => \App\Http\Middleware\ApiEnabled::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
