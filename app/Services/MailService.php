@@ -14,15 +14,15 @@ class MailService
     /** Credentials present (regardless of the on/off toggle). */
     public function configured(): bool
     {
-        return bp_option('mail_provider', 'mailgun') === 'mailgun'
-            && bp_option('mailgun_domain') !== ''
-            && bp_option('mailgun_secret') !== '';
+        $domain = bp_plugin_option('mailgun', 'domain') ?: bp_option('mailgun_domain', '');
+        $secret = bp_plugin_option('mailgun', 'secret') ?: bp_option('mailgun_secret', '');
+        return $domain !== '' && $secret !== '';
     }
 
     /** Turned on AND configured — used by the live flows. */
     public function enabled(): bool
     {
-        return bp_option('mail_enabled', 'no') === 'yes' && $this->configured();
+        return in_array('mailgun', \App\Support\Plugin::active(), true) && $this->configured();
     }
 
     public function send(string $to, string $subject, string $body): bool

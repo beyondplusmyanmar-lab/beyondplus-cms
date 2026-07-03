@@ -169,11 +169,10 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             Route::get('plugins/scan', 'PluginController@scan');
             Route::get('plugins/settings', 'PluginController@settings');
             Route::post('plugins/settings', 'PluginController@saveSettings');
+            Route::post('plugins/test', 'PluginController@test');
             Route::post('plugins/activate', 'PluginController@activate');
             Route::post('plugins/deactivate', 'PluginController@deactivate');
             Route::post('plugins/uninstall', 'PluginController@uninstall');
-            Route::post('configuration/test-sms', 'ConfigurationController@testSms');
-            Route::post('configuration/test-email', 'ConfigurationController@testEmail');
 
             // Route::resource('account', 'AccountController');
 

@@ -18,5 +18,6 @@
         { "name": "api_token", "label": "API Token", "type": "password", "help": "Your SMSPoh API token." },
         { "name": "sender", "label": "Sender ID", "type": "text", "placeholder": "CMS", "help": "The From / sender name shown on the SMS." }
     ],
+    "test": { "hook": "send_sms", "label": "Send a test SMS to", "placeholder": "09xxxxxxxxx" },
     "main": "smspoh.php"
 }

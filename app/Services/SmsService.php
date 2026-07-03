@@ -14,13 +14,13 @@ class SmsService
     /** Credentials present (regardless of the on/off toggle). */
     public function configured(): bool
     {
-        return bp_option('sms_api_token') !== '';
+        return (bp_plugin_option('smspoh', 'api_token') ?: bp_option('sms_api_token', '')) !== '';
     }
 
-    /** Turned on AND configured — used by the live OTP flow. */
+    /** The SMSPoh provider plugin is active AND configured — used by the OTP flow. */
     public function enabled(): bool
     {
-        return bp_option('sms_enabled', 'no') === 'yes' && $this->configured();
+        return in_array('smspoh', \App\Support\Plugin::active(), true) && $this->configured();
     }
 
     /**

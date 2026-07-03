@@ -19,5 +19,6 @@
         { "name": "from_email", "label": "From Address", "type": "text", "placeholder": "no-reply@example.com", "help": "Default sender address." },
         { "name": "api_base", "label": "API Base URL", "type": "select", "default": "https://api.mailgun.net/v3", "options": { "https://api.mailgun.net/v3": "US region", "https://api.eu.mailgun.net/v3": "EU region" }, "help": "Match your Mailgun account region." }
     ],
+    "test": { "hook": "send_mail", "label": "Send a test email to", "placeholder": "you@example.com" },
     "main": "mailgun.php"
 }

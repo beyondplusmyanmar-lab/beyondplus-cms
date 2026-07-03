@@ -42,7 +42,7 @@
                                 <option value="{{ $val }}" {{ $config['otp_channel'] === $val ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
-                        <small class="form-text text-muted">Which provider sends the verification code. Enable and configure it in its box below. Falls back to the log if unavailable.</small>
+                        <small class="form-text text-muted">Which provider sends the verification code. Activate and configure the provider on its plugin page. Falls back to the log if unavailable.</small>
                     </div>
                 </div>
             </div>
@@ -84,85 +84,13 @@
             </div>
         </div>
 
-        {{-- SMS + Email --}}
+        {{-- SMS & email providers are configured on their own plugin pages now --}}
         <div class="col-md-6">
             <div class="tile">
-                <h3 class="tile-title">SMS Gateway</h3>
+                <h3 class="tile-title">Providers</h3>
                 <div class="tile-body">
-                    <div class="form-group">
-                        <label class="control-label">Status</label>
-                        <select class="form-control" name="sms_enabled">
-                            <option value="yes" {{ $config['sms_enabled'] === 'yes' ? 'selected' : '' }}>Enabled</option>
-                            <option value="no" {{ $config['sms_enabled'] === 'no' ? 'selected' : '' }}>Disabled</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Provider</label>
-                        <select class="form-control" name="sms_provider">
-                            <option value="smspoh" {{ $config['sms_provider'] === 'smspoh' ? 'selected' : '' }}>SMSPoh</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Sender name</label>
-                        <input type="text" class="form-control" name="sms_sender" value="{{ $config['sms_sender'] }}">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">API token</label>
-                        <input type="password" class="form-control" name="sms_api_token" autocomplete="new-password"
-                               placeholder="{{ $config['sms_api_token'] ? '•••••••• (leave blank to keep)' : 'Not set' }}">
-                    </div>
-                    <div class="form-group mb-0">
-                        <label class="control-label">Send a test SMS <small class="text-muted">(uses saved credentials)</small></label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="sms_test_to" placeholder="Phone number">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-secondary" id="sms_test_btn">Send test</button>
-                            </div>
-                        </div>
-                        <small id="sms_test_result" class="form-text"></small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tile">
-                <h3 class="tile-title">Email (Mailgun)</h3>
-                <div class="tile-body">
-                    <div class="form-group">
-                        <label class="control-label">Status</label>
-                        <select class="form-control" name="mail_enabled">
-                            <option value="yes" {{ $config['mail_enabled'] === 'yes' ? 'selected' : '' }}>Enabled</option>
-                            <option value="no" {{ $config['mail_enabled'] === 'no' ? 'selected' : '' }}>Disabled</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Provider</label>
-                        <select class="form-control" name="mail_provider">
-                            <option value="mailgun" {{ $config['mail_provider'] === 'mailgun' ? 'selected' : '' }}>Mailgun</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Mailgun domain</label>
-                        <input type="text" class="form-control" name="mailgun_domain" value="{{ $config['mailgun_domain'] }}" placeholder="mg.example.com">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Mailgun secret</label>
-                        <input type="password" class="form-control" name="mailgun_secret" autocomplete="new-password"
-                               placeholder="{{ $config['mailgun_secret'] ? '•••••••• (leave blank to keep)' : 'Not set' }}">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">From address</label>
-                        <input type="email" class="form-control" name="mail_from" value="{{ $config['mail_from'] }}" placeholder="no-reply@example.com">
-                    </div>
-                    <div class="form-group mb-0">
-                        <label class="control-label">Send a test email <small class="text-muted">(uses saved credentials)</small></label>
-                        <div class="input-group">
-                            <input type="email" class="form-control" id="mail_test_to" placeholder="you@example.com">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-secondary" id="mail_test_btn">Send test</button>
-                            </div>
-                        </div>
-                        <small id="mail_test_result" class="form-text"></small>
-                    </div>
+                    <p class="text-muted mb-3">SMS and email are delivered by <strong>provider plugins</strong>. Configure and test each one on its own page (Plugins &rarr; Settings).</p>
+                    <a href="{{ url('bp-admin/plugins') }}" class="btn btn-sm btn-outline-primary"><i class="fa fa-plug"></i> Open Plugins</a>
                 </div>
             </div>
         </div>
@@ -173,25 +101,4 @@
     </div>
 </form>
 
-@push('scripts')
-<script>
-$(function () {
-    function runTest(url, toId, resultId) {
-        var to = $('#' + toId).val();
-        var $r = $('#' + resultId).text('Sending…').css('color', '');
-        $.post(url, { to: to }, function (res) {
-            $r.text(res.message).css('color', res.ok ? '#2e7d32' : '#c62828');
-        }).fail(function () {
-            $r.text('Request failed.').css('color', '#c62828');
-        });
-    }
-    $('#sms_test_btn').on('click', function () {
-        runTest('{{ url("bp-admin/configuration/test-sms") }}', 'sms_test_to', 'sms_test_result');
-    });
-    $('#mail_test_btn').on('click', function () {
-        runTest('{{ url("bp-admin/configuration/test-email") }}', 'mail_test_to', 'mail_test_result');
-    });
-});
-</script>
-@endpush
 @stop

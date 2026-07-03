@@ -48,6 +48,22 @@
                     <a href="{{ url('bp-admin/plugins') }}" class="btn btn-sm btn-outline-secondary">Back</a>
                     <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save settings</button>
                 </form>
+
+                @if(!empty($meta['test']))
+                    <hr>
+                    <form action="{{ url('bp-admin/plugins/test') }}" method="post">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="slug" value="{{ $slug }}">
+                        <label class="control-label">{{ $meta['test']['label'] ?? 'Send a test message to' }}</label>
+                        <div class="input-group" style="max-width:420px;">
+                            <input type="text" class="form-control" name="test_to" placeholder="{{ $meta['test']['placeholder'] ?? '' }}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-paper-plane"></i> Send test</button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Uses the saved settings above (save first).</small>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

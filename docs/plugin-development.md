@@ -74,6 +74,13 @@ Field `type`: `text` (default), `password`, `textarea`, `select` (with
 $token = bp_plugin_option('my-plugin', 'api_token');   // stored as plugin.my-plugin.api_token
 ```
 
+Add a `"test"` block and the settings page shows a "Send test" button that runs
+the given hook with the entered recipient:
+
+```json
+"test": { "hook": "send_sms", "label": "Send a test SMS to", "placeholder": "09xxxxxxxxx" }
+```
+
 ## Hooks
 
 From your main file:

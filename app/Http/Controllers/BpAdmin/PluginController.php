@@ -88,6 +88,29 @@ class PluginController extends Controller
         return redirect()->back()->with('success', 'Settings saved.');
     }
 
+    /** Send a test message through a provider plugin (uses its declared hook). */
+    public function test(Request $request)
+    {
+        $slug = basename((string) $request->input('slug'));
+        $test = Plugin::meta($slug)['test'] ?? null;
+        abort_if(! $test, 404);
+
+        $to = trim((string) $request->input('test_to'));
+        if ($to === '') {
+            return redirect()->back()->withErrors('Enter a recipient to test.');
+        }
+
+        if (($test['hook'] ?? 'send_sms') === 'send_mail') {
+            $ok = (bool) bp_apply_filters('send_mail', false, $to, 'Test — Beyond Plus CMS', "This is a test email from the {$slug} plugin.");
+        } else {
+            $ok = (bool) bp_apply_filters('send_sms', false, $to, "Test SMS from Beyond Plus CMS ({$slug}).");
+        }
+
+        return $ok
+            ? redirect()->back()->with('success', 'Test message sent.')
+            : redirect()->back()->withErrors('Test failed — check the settings and that the plugin is active.');
+    }
+
     public function activate(Request $request)
     {
         $result = Plugin::activate((string) $request->input('slug'));
