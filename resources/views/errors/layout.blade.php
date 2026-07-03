@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+@php $brand = optional(site_information('blogname'))->option_value ?: config('app.name'); @endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('code') — @yield('title')</title>
+    <title>@yield('code') — @yield('title') · {{ $brand }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -34,9 +35,12 @@
         .bp-err__msg { color:#64748b; margin:.75rem auto 1.75rem; max-width:26rem; }
         .btn-bp { background:var(--bp-accent); border-color:var(--bp-accent); color:#fff; }
         .btn-bp:hover, .btn-bp:focus { background:var(--bp-accent-dark); border-color:var(--bp-accent-dark); color:#fff; }
+        .bp-err__brand { position:fixed; top:1.5rem; left:50%; transform:translateX(-50%); font-weight:800; font-size:1.15rem; color:var(--bp-accent); text-decoration:none; letter-spacing:-.01em; }
+        .bp-err__brand:hover { color:var(--bp-accent-dark); }
     </style>
 </head>
 <body>
+    <a href="{{ url('/') }}" class="bp-err__brand">{{ $brand }}</a>
     <main class="bp-err">
         <div class="bp-err__badge"><i class="bi @yield('icon', 'bi-exclamation-triangle')"></i></div>
         <div class="bp-err__code">@yield('code')</div>
