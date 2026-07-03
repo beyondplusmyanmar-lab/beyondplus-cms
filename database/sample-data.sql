@@ -648,11 +648,13 @@ INSERT INTO `bp_menus` (`menu_id`,`menu_name`,`menu_link`,`post_id`,`menu_weight
 (2,'About Us','about-us',4,1,'',1,'default',1,1,'0',NOW()),
 (3,'Our Services','services',5,2,'',1,'default',1,1,'0',NOW()),
 (4,'Contact','contact',6,3,'',0,'default',1,1,'0',NOW()),
+(9,'Blog','blog',0,4,'',0,'default',1,1,'0',NOW()),
 -- Myanmar translations (lang=2, translate_id -> base menu, MM children re-parented to the MM parent)
 (5,'ကုမ္ပဏီ','#',0,1,'',0,'custom',1,2,'1',NOW()),
 (6,'ကျွန်ုပ်တို့အကြောင်း','about-us',4,1,'',5,'default',1,2,'2',NOW()),
 (7,'ဝန်ဆောင်မှုများ','services',5,2,'',5,'default',1,2,'3',NOW()),
-(8,'ဆက်သွယ်ရန်','contact',6,3,'',0,'default',1,2,'4',NOW());
+(8,'ဆက်သွယ်ရန်','contact',6,3,'',0,'default',1,2,'4',NOW()),
+(10,'ဘလော့ဂ်','blog',0,4,'',0,'default',1,2,'9',NOW());
 
 -- Demo homepage sliders (use the committed placeholder images)
 INSERT INTO `bp_sliders` (`slider_id`,`slider_name`,`slider_link`,`slider_type`,`slider_weight`,`slider_description`,`staff_id`,`created_at`,`updated_at`) VALUES

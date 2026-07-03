@@ -26,10 +26,12 @@ class MenuTableSeeder extends Seeder
             [2, 'About Us',     'about-us', 4, 1, 1, 'default', 1, '0'],
             [3, 'Our Services', 'services', 5, 2, 1, 'default', 1, '0'],
             [4, 'Contact',      'contact',  6, 3, 0, 'default', 1, '0'],
+            [9, 'Blog',         'blog',     0, 4, 0, 'default', 1, '0'],
             [5, 'ကုမ္ပဏီ',              '#',        0, 1, 0, 'custom',  2, '1'],
             [6, 'ကျွန်ုပ်တို့အကြောင်း', 'about-us', 4, 1, 5, 'default', 2, '2'],
             [7, 'ဝန်ဆောင်မှုများ',      'services', 5, 2, 5, 'default', 2, '3'],
             [8, 'ဆက်သွယ်ရန်',          'contact',  6, 3, 0, 'default', 2, '4'],
+            [10, 'ဘလော့ဂ်',            'blog',     0, 4, 0, 'default', 2, '9'],
         ];
 
         foreach ($menus as [$id, $name, $link, $postId, $weight, $parent, $type, $lang, $translateId]) {
