@@ -37,15 +37,6 @@
                                 {{ Form::select('role',role_type(),$adminaccounts->role, ['class'=>'form-control'])}}
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Choose Department </label>
-                                @php
-                                    $department =department();
-                                    $department[0] = "All";
-                                @endphp
-                                {{ Form::select('department_type',$department,null, ['class'=>'form-control'])}}
-
-                            </div>
-                            <div class="form-group">
                                 <label class="control-label">Email</label>
                                 {{ Form::text('email',null,array('class'=>'form-control')) }}
                             </div>

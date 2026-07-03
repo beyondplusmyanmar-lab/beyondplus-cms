@@ -27,33 +27,6 @@
                             @component('bp-admin.inc.alert')
                             @endcomponent
                             
-                            @if(Auth::guard("admins")->user()->role > 2) 
-                            <div class="form-group">
-                                <label class="control-label">Choose Department </label>
-
-                                @php
-                                    $department =department();
-                                    $department[0] = "All";
-                                @endphp
-
-                                {{ Form::select('department_type',$department,null,array('class'=>'form-control')) }}
-
-                            </div>
-                            @else
-                            <div class="form-group">
-                                <label class="control-label">Choose Department </label>
-
-                                @php
-                                    $department =department();
-                                    $department[0] = "All";
-                                @endphp
-
-                                {{ Form::select('department_type',$department,Auth::guard("admins")->user()->department_type,array('class'=>'form-control' )) }}
-
-                            </div>
-
-                            @endif
-
                             <div class="form-group">
                                 <label class="control-label">Name</label>
                             {{  Form::text('media_name', null,['class'=>'form-control'])}}
