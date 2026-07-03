@@ -379,16 +379,6 @@ function langauge($chose_id = null) {
     return $langauge;
 }
 
-function department($chose_id = null) {
-    $department = [1=>'Department One', 2=>'Department Two', 3=>'Department Three'];
-
-    if($chose_id){
-        $department = $department[$chose_id] ?? '';
-    }
-
-    return $department;
-}
-
 // Options for a content block's type (a free-form categorisation).
 function block_types() {
     return ['content' => 'Content', 'html' => 'HTML', 'widget' => 'Widget'];
