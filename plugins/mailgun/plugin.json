@@ -2,7 +2,7 @@
     "id": "mailgun",
     "type": "plugin",
     "name": "Mailgun",
-    "description": "Sends email (OTP and notifications) through the Mailgun HTTP API. Set the domain and secret in Configuration → Email.",
+    "description": "Sends email (OTP and notifications) through the Mailgun HTTP API. Configure it from this plugin's Settings.",
     "version": "1.0.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/mailgun",
@@ -13,5 +13,11 @@
         "extensions": ["curl", "json"]
     },
     "permissions": ["http"],
+    "settings": [
+        { "name": "domain", "label": "Sending Domain", "type": "text", "placeholder": "mg.example.com", "help": "Your verified Mailgun domain." },
+        { "name": "secret", "label": "API Key", "type": "password", "help": "Your Mailgun private API key." },
+        { "name": "from_email", "label": "From Address", "type": "text", "placeholder": "no-reply@example.com", "help": "Default sender address." },
+        { "name": "api_base", "label": "API Base URL", "type": "select", "default": "https://api.mailgun.net/v3", "options": { "https://api.mailgun.net/v3": "US region", "https://api.eu.mailgun.net/v3": "EU region" }, "help": "Match your Mailgun account region." }
+    ],
     "main": "mailgun.php"
 }
