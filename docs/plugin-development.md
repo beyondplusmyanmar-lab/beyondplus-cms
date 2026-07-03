@@ -111,6 +111,21 @@ deactivate).
 - **Permissions** — only admins with Plugins-module access can manage plugins;
   every action is audit-logged.
 
+## Verifying packages (CI / cron)
+
+Run a security sweep over every installed plugin and theme — static scan,
+integrity (tamper) check and compatibility check — in one command:
+
+```bash
+php artisan packages:verify          # table report
+php artisan packages:verify --json   # machine-readable
+php artisan packages:verify --strict # also fail on warnings
+```
+
+It **exits non-zero** if any package has a critical scan finding, was modified
+since activation, or is incompatible — so you can wire it into CI or a cron job
+to catch a tampered or malicious package early.
+
 ## Do / don't
 
 - **Do** guard for missing tables/config (`Schema::hasTable`, `bp_option(...)`),
