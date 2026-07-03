@@ -27,6 +27,15 @@
                         </select>
                         <small class="form-text text-muted">Which identifier new customers register with.</small>
                     </div>
+                    <div class="form-group mb-0">
+                        <label class="control-label">OTP delivery</label>
+                        <select class="form-control" name="otp_channel">
+                            @foreach (['auto' => 'Automatic (SMS, then email)', 'sms' => 'SMS (SMSPoh)', 'email' => 'Email (Mailgun)'] as $val => $label)
+                                <option value="{{ $val }}" {{ $config['otp_channel'] === $val ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">Which provider sends the verification code. Enable and configure it in its box below. Falls back to the log if unavailable.</small>
+                    </div>
                 </div>
             </div>
 

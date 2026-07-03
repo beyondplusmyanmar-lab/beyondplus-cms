@@ -19,6 +19,7 @@ class ConfigurationController extends Controller
      */
     protected $defaults = [
         'registration_type' => 'phone',   // phone | email | both
+        'otp_channel'       => 'auto',     // auto | sms | email
         'api_enabled'       => 'yes',      // yes | no
         'sms_enabled'       => 'no',
         'sms_provider'      => 'smspoh',

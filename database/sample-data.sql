@@ -672,7 +672,8 @@ INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) 
 ('mail_from','','yes',NOW()),
 ('spa_url','','yes',NOW()),
 ('cors_origins','','yes',NOW()),
-('frontend_mode','theme','yes',NOW());
+('frontend_mode','theme','yes',NOW()),
+('otp_channel','auto','yes',NOW());
 
 INSERT INTO `bp_modules` (`module_name`,`module_name_mm`,`module_link`,`module_weight`,`module_icon`,`parent_id`,`staff_id`,`section`,`created_at`) VALUES
 ('Configuration','ဖွဲ့စည်းမှု','configuration',5,'fa fa-cogs',8,1,1,NOW()),

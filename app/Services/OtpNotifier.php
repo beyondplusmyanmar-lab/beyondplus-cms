@@ -23,18 +23,27 @@ class OtpNotifier
     public function send($customer, $code): void
     {
         $message = "Your verification code is {$code}.";
+        $channel = bp_option('otp_channel', 'auto');   // auto | sms | email
         $sent = false;
 
-        if (! empty($customer->phone) && $this->sms->enabled()) {
-            $sent = $this->sms->send($customer->phone, $message);
-        }
+        $trySms = fn () => (! empty($customer->phone) && $this->sms->enabled())
+            ? $this->sms->send($customer->phone, $message) : false;
 
-        if (! $sent && ! empty($customer->email) && $this->mail->enabled()) {
-            $sent = $this->mail->send($customer->email, 'Your verification code', $message);
+        $tryMail = fn () => (! empty($customer->email) && $this->mail->enabled())
+            ? $this->mail->send($customer->email, 'Your verification code', $message) : false;
+
+        // The admin picks which provider delivers the OTP; "auto" prefers SMS
+        // then falls back to email (the original behaviour).
+        if ($channel === 'sms') {
+            $sent = $trySms();
+        } elseif ($channel === 'email') {
+            $sent = $tryMail();
+        } else {
+            $sent = $trySms() ?: $tryMail();
         }
 
         if (! $sent) {
-            // No gateway enabled/available — log so the flow still works locally.
+            // Chosen gateway not enabled/available — log so the flow still works locally.
             $target = $customer->phone ?: $customer->email;
             Log::info("OTP for {$target}: {$code}");
         }
