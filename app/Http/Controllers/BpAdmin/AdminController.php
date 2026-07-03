@@ -25,9 +25,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        $post = Bp_post::whereNotIn('post_type',['post','event','news','page','user-guide'])->orderBy('updated_at','desc')->paginate(20);
-
-        // $post = Bp_post::where('post_type','post')->orderBy('created_at','DESC')->paginate(5);
+        $post = Bp_post::where('post_type', 'post')->orderBy('updated_at', 'desc')->limit(6)->get();
         $totalPost = Bp_post::where('post_type', 'post')->count();
         $totalPage = Bp_post::where('post_type', 'page')->count();
         $totalMedia = Bp_media::count();
