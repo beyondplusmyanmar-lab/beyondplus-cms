@@ -35,6 +35,9 @@
         Interactive reference: <a href="/api/documentation" target="_blank">/api/documentation</a>.
     </p>
 
+    <!-- Public content: homepage sliders (no auth) -->
+    <div id="hero-slider" class="mb-3"></div>
+
     <!-- Public content: search (no auth) -->
     <div class="card mb-3">
         <div class="card-header fw-semibold">
@@ -193,8 +196,34 @@
     document.getElementById('token').value = token;
     updateSession();
     loadMenu();                    // navigation tree — no auth needed
+    loadSliders();                 // homepage carousel — no auth needed
     loadNews();                    // public content — no auth needed
     loadCategories();
+
+    async function loadSliders() {
+        const box = document.getElementById('hero-slider');
+        const r = await call('/sliders', 'GET');
+        const slides = (r.ok && r.body.data) ? r.body.data : [];
+        if (!slides.length) { box.innerHTML = ''; return; }
+        box.innerHTML =
+            '<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">'
+            + '<div class="carousel-inner rounded overflow-hidden">'
+            + slides.map(function (s, i) {
+                return '<div class="carousel-item ' + (i === 0 ? 'active' : '') + '">'
+                    + '<img src="' + esc(s.image || '') + '" class="d-block w-100" alt="" '
+                    + 'style="height:220px;object-fit:cover;filter:brightness(.6)">'
+                    + '<div class="carousel-caption">'
+                    + '<h5 class="fw-bold">' + esc(s.title) + '</h5>'
+                    + (s.description ? '<p class="d-none d-md-block small mb-0">' + esc(s.description) + '</p>' : '')
+                    + '</div></div>';
+              }).join('')
+            + '</div>'
+            + (slides.length > 1
+                ? '<button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>'
+                + '<button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>'
+                : '')
+            + '</div>';
+    }
     // If a token is already stored, load the profile page immediately.
     if (token) doProfile();
 
