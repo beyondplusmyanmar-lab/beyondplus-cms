@@ -24,7 +24,7 @@ function bp_tax()
 }
 function bp_post($limitId)
 {
-    $post = bp_post::where('post_type','post')->with('translate')->orderby('id','desc')->paginate($limitId);
+    $post = bp_post::where('post_type','post')->with('translate','categories')->orderby('id','desc')->paginate($limitId);
     return $post;
 }
 

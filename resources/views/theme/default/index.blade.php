@@ -62,15 +62,21 @@
         <div class="row g-4">
             @forelse (bp_post(8) as $post)
                 @php
+                    $postCategory = optional($post->categories->firstWhere('tax_link', '!=', 'uncategorized') ?? $post->categories->first());
                     if (app()->getLocale() === 'mm' && isset($post->translate) && $post->translate->lang == 2) {
                         $post = $post->translate;
                     }
                 @endphp
                 <div class="col-lg-3 col-sm-6">
                     <article class="card bp-card h-100">
-                        <a href="{{ url('/'.$post->post_link) }}">
-                            <img src="{{ bp_upload_url($post->featured_img) }}" class="card-img-top" alt="{{ $post->title }}">
-                        </a>
+                        <div class="position-relative">
+                            <a href="{{ url('/'.$post->post_link) }}">
+                                <img src="{{ bp_upload_url($post->featured_img) }}" class="card-img-top" alt="{{ $post->title }}">
+                            </a>
+                            @if($postCategory->tax_name)
+                                <a href="{{ url('/cat/'.$postCategory->tax_link) }}" class="badge text-white position-absolute text-decoration-none" style="top:.6rem; left:.6rem; background:var(--bp-accent); z-index:2;">{{ $postCategory->tax_name }}</a>
+                            @endif
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title">
                                 <a href="{{ url('/'.$post->post_link) }}" class="text-dark stretched-link">{{ $post->title }}</a>

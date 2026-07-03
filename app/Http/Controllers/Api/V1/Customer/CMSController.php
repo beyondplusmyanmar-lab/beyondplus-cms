@@ -70,13 +70,16 @@ class CMSController extends Controller
     private function postCard($post, string $lang): array
     {
         $t = $this->loc($post, $lang);
+        $category = $post->categories->firstWhere('tax_link', '!=', 'uncategorized') ?? $post->categories->first();
+
         return [
-            'id'      => $post->id,
-            'title'   => $t->title,
-            'slug'    => $post->post_link,
-            'excerpt' => Str::limit(trim(strip_tags(preg_replace('/\[block\].*?\[\/block\]/is', '', (string) $t->body))), 160),
-            'image'   => $this->image($post->featured_img),
-            'date'    => optional($post->created_at)->toDateString(),
+            'id'       => $post->id,
+            'title'    => $t->title,
+            'slug'     => $post->post_link,
+            'excerpt'  => Str::limit(trim(strip_tags(preg_replace('/\[block\].*?\[\/block\]/is', '', (string) $t->body))), 160),
+            'image'    => $this->image($post->featured_img),
+            'category' => $category ? ['name' => $category->tax_name, 'slug' => $category->tax_link] : null,
+            'date'     => optional($post->created_at)->toDateString(),
         ];
     }
 
@@ -113,7 +116,7 @@ class CMSController extends Controller
             ->where('post_active', 'yes')
             ->where('lang', 1)
             ->where('translate_id', 0)
-            ->with('translate')
+            ->with('translate', 'categories')
             ->orderBy('id', 'desc');
     }
 
