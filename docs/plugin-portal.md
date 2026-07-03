@@ -23,8 +23,11 @@ lifecycle and no internet dependency:
 - **recovery mode** (a crashing plugin auto-disables, site stays up)
 - **permission** gating + **audit** log
 
-Themes follow the same model (`/themes/<name>` with `theme.json`, `views/`,
-`assets/`, `lang/`).
+Themes are hosted the **same way** (implemented): each lives in
+`resources/views/theme/<slug>` with a `theme.json` manifest, and the shared
+`App\Support\PackageGuard` gives them the same **security scan** (Blade-aware —
+inline `<script>` and comments are ignored), **compatibility** check and
+**integrity** fingerprint. A theme that fails the scan is never made active.
 
 ## Phase 2 — official portal (future, separate service)
 

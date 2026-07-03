@@ -37,19 +37,26 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <h5 class="mb-1">{{ $theme['name'] }}</h5>
-                                        @if($theme['slug'] === $active)
-                                            <span class="badge badge-success">Active</span>
-                                        @endif
+                                        <span>
+                                            @if($theme['slug'] === $active)
+                                                <span class="badge badge-success">Active</span>
+                                            @endif
+                                            @if($theme['tampered'])
+                                                <span class="badge badge-danger" title="Files changed since activation"><i class="fa fa-exclamation-triangle"></i> Modified</span>
+                                            @endif
+                                        </span>
                                     </div>
                                     <p class="text-muted small mb-2">{{ $theme['description'] }}</p>
                                     <p class="theme-meta mb-3">
                                         <i class="fa fa-code-fork"></i> v{{ $theme['version'] }}
                                         @if($theme['author']) &middot; {{ $theme['author'] }} @endif
                                         &middot; <code>{{ $theme['slug'] }}</code>
+                                        @if($theme['minCmsVersion']) &middot; needs CMS &ge; {{ $theme['minCmsVersion'] }}@endif
                                     </p>
                                     @if($theme['slug'] === $active)
                                         <button class="btn btn-sm btn-outline-secondary" disabled>Currently active</button>
                                     @else
+                                        <a href="{{ url('bp-admin/themes/scan?theme='.$theme['slug']) }}" class="btn btn-sm btn-outline-info" title="Security scan"><i class="fa fa-shield"></i> Scan</a>
                                         <form action="{{ url('bp-admin/themes/activate') }}" method="post" class="d-inline">
                                             {{ csrf_field() }}
                                             <input type="hidden" name="theme" value="{{ $theme['slug'] }}">

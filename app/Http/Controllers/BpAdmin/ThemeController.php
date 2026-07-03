@@ -4,7 +4,7 @@ namespace App\Http\Controllers\BpAdmin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Bp_options;
+use App\Support\Theme;
 
 class ThemeController extends Controller
 {
@@ -18,47 +18,53 @@ class ThemeController extends Controller
      */
     public function index()
     {
-        $active = bp_option('theme', 'default');
+        return view('bp-admin.theme.index', [
+            'themes' => Theme::all(),
+            'active' => Theme::active(),
+        ]);
+    }
 
-        $themes = collect(glob(resource_path('views/theme/*'), GLOB_ONLYDIR))
-            ->map(function ($path) {
-                $slug = basename($path);
-                $meta = [];
-                if (is_file($path.'/theme.json')) {
-                    $meta = json_decode(file_get_contents($path.'/theme.json'), true) ?: [];
-                }
+    /** Show the static security scan report for a theme before activating it. */
+    public function scan(Request $request)
+    {
+        $slug = basename((string) $request->input('theme'));
 
-                return [
-                    'slug'        => $slug,
-                    'name'        => $meta['name'] ?? ucfirst($slug),
-                    'description' => $meta['description'] ?? 'No description provided.',
-                    'version'     => $meta['version'] ?? '1.0.0',
-                    'author'      => $meta['author'] ?? '',
-                    'preview'     => file_exists(public_path('theme-previews/'.$slug.'.png'))
-                        ? 'theme-previews/'.$slug.'.png' : null,
-                ];
-            })->values();
-
-        return view('bp-admin.theme.index', compact('themes', 'active'));
+        return view('bp-admin.theme.scan', [
+            'slug' => $slug,
+            'meta' => Theme::meta($slug),
+            'scan' => Theme::scan($slug),
+        ]);
     }
 
     /**
-     * Set the active front-end theme.
+     * Set the active front-end theme — gated by the compatibility and security
+     * checks (a theme that fails the scan is never made active).
      */
     public function activate(Request $request)
     {
-        // basename() guards against path traversal in the submitted slug.
-        $slug = basename((string) $request->input('theme'));
+        $result = Theme::activate((string) $request->input('theme'));
 
-        if ($slug === '' || ! is_dir(resource_path('views/theme/'.$slug))) {
-            return redirect()->back()->withErrors('That theme could not be found.');
+        if (! empty($result['blocked'])) {
+            if (! empty($result['error'])) {
+                return redirect()->back()->withErrors($result['error']);
+            }
+            if (! empty($result['requirements'])) {
+                return redirect()->back()->withErrors(array_merge(
+                    ['Activation blocked — this theme is not compatible with your environment:'],
+                    $result['requirements']
+                ));
+            }
+
+            $reasons = collect($result['scan']['critical'] ?? [])
+                ->map(fn ($f) => $f['file'].' — '.$f['reason'])
+                ->all();
+
+            return redirect()->back()->withErrors(array_merge(
+                ['Activation blocked — the security scan flagged high-risk code:'],
+                $reasons
+            ));
         }
 
-        Bp_options::updateOrCreate(
-            ['option_name' => 'theme'],
-            ['option_value' => $slug]
-        );
-
-        return redirect()->back()->with('flash_message', 'Active theme updated.');
+        return redirect()->back()->with('success', 'Active theme updated.');
     }
 }

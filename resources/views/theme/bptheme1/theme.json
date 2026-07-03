@@ -1,6 +1,11 @@
 {
+    "id": "bptheme1",
+    "type": "theme",
     "name": "BP Theme 1",
     "description": "An alternative front-end layout built on the same Bootstrap 5 base as Default, with its own header and section styling.",
     "version": "1.0.0",
-    "author": "Beyond Plus"
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/themes/bptheme1",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0"
 }

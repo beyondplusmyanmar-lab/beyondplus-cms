@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Models\Bp_options;
+use App\Support\PackageGuard;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
@@ -185,64 +186,7 @@ class Plugin
      */
     public static function scan(string $slug): array
     {
-        $dir = self::path().'/'.basename($slug);
-
-        $critical = [
-            '/\beval\s*\(/i'                                              => 'eval() — executes arbitrary code',
-            '/\b(exec|shell_exec|system|passthru|proc_open|popen)\s*\(/i' => 'shell / process execution',
-            '/`[^`\n]*`/'                                                 => 'backtick shell execution',
-            '/\bassert\s*\(\s*[\'"]/i'                                    => 'assert() on a string — executes code',
-            '/\bcreate_function\s*\(/i'                                   => 'create_function() — executes code',
-            '/preg_replace\s*\(\s*([\'"]).*\1\s*[.,]?\s*[\'"][^\'"]*e/i'  => 'preg_replace /e — executes code',
-            '/(eval|assert)\s*\(\s*(base64_decode|gzinflate|gzuncompress|str_rot13)/i' => 'obfuscated code execution',
-            '/(include|require)(_once)?\s*\(?\s*[\'"]https?:\/\//i'       => 'remote code inclusion',
-        ];
-        $warning = [
-            '/\bbase64_decode\s*\(/i'                    => 'base64_decode — can hide payloads',
-            '/\b(unlink|rmdir)\s*\(/i'                   => 'file / directory deletion',
-            '/\b(file_put_contents|fwrite|fopen)\s*\(/i' => 'writes to the filesystem',
-            '/\bcurl_exec\s*\(/i'                        => 'raw cURL request',
-            '/\bmove_uploaded_file\s*\(/i'               => 'handles uploaded files',
-            '/\b(putenv|ini_set)\s*\(/i'                 => 'changes the runtime environment',
-        ];
-
-        $hit = ['critical' => [], 'warning' => []];
-        foreach (self::phpFiles($dir) as $file) {
-            $code = @file_get_contents($file);
-            if ($code === false) {
-                continue;
-            }
-            $rel = ltrim(str_replace($dir, '', $file), '/\\');
-            foreach ($critical as $re => $reason) {
-                if (preg_match($re, $code)) {
-                    $hit['critical'][] = ['file' => $rel, 'reason' => $reason];
-                }
-            }
-            foreach ($warning as $re => $reason) {
-                if (preg_match($re, $code)) {
-                    $hit['warning'][] = ['file' => $rel, 'reason' => $reason];
-                }
-            }
-        }
-        return $hit;
-    }
-
-    /** All .php files inside a plugin (recursive). */
-    protected static function phpFiles(string $dir): array
-    {
-        if (! is_dir($dir)) {
-            return [];
-        }
-        $files = [];
-        $it = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS)
-        );
-        foreach ($it as $f) {
-            if ($f->isFile() && strtolower($f->getExtension()) === 'php') {
-                $files[] = $f->getPathname();
-            }
-        }
-        return $files;
+        return PackageGuard::scan(self::path().'/'.basename($slug));
     }
 
     /** Audit-log a plugin lifecycle action with the acting admin. */
@@ -261,24 +205,7 @@ class Plugin
      */
     public static function checkRequirements(string $slug): array
     {
-        $meta = self::meta($slug);
-        $problems = [];
-
-        if (! empty($meta['minCmsVersion']) && version_compare(self::CMS_VERSION, $meta['minCmsVersion'], '<')) {
-            $problems[] = "needs CMS >= {$meta['minCmsVersion']} (this is ".self::CMS_VERSION.')';
-        }
-
-        $req = $meta['requires'] ?? [];
-        if (! empty($req['php']) && version_compare(PHP_VERSION, $req['php'], '<')) {
-            $problems[] = "needs PHP >= {$req['php']} (this is ".PHP_VERSION.')';
-        }
-        foreach ($req['extensions'] ?? [] as $ext) {
-            if (! extension_loaded($ext)) {
-                $problems[] = "needs PHP extension: {$ext}";
-            }
-        }
-
-        return $problems;
+        return PackageGuard::checkRequirements(self::meta($slug), self::CMS_VERSION);
     }
 
     // ---- integrity (tamper detection) -----------------------------------
@@ -286,16 +213,7 @@ class Plugin
     /** A SHA-256 fingerprint over all the plugin's PHP files + its manifest. */
     public static function fingerprint(string $slug): string
     {
-        $dir = self::path().'/'.basename($slug);
-        $parts = [];
-        foreach (self::phpFiles($dir) as $f) {
-            $parts[str_replace($dir, '', $f)] = hash_file('sha256', $f);
-        }
-        if (is_file($dir.'/plugin.json')) {
-            $parts['plugin.json'] = hash_file('sha256', $dir.'/plugin.json');
-        }
-        ksort($parts);
-        return hash('sha256', json_encode($parts));
+        return PackageGuard::fingerprint(self::path().'/'.basename($slug));
     }
 
     protected static function storeFingerprint(string $slug): void
