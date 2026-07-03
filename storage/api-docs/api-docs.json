@@ -168,6 +168,31 @@
                 }
             }
         },
+        "/api/m/search": {
+            "get": {
+                "tags": [
+                    "CMS"
+                ],
+                "summary": "Search published posts and pages by title or body",
+                "operationId": "7dfee178430977406403cc52e399de24",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/m/auth/register": {
             "post": {
                 "tags": [

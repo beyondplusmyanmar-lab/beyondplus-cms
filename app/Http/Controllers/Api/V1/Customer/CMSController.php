@@ -74,7 +74,7 @@ class CMSController extends Controller
             'id'      => $post->id,
             'title'   => $t->title,
             'slug'    => $post->post_link,
-            'excerpt' => Str::limit(trim(strip_tags((string) $t->body)), 160),
+            'excerpt' => Str::limit(trim(strip_tags(preg_replace('/\[block\].*?\[\/block\]/is', '', (string) $t->body))), 160),
             'image'   => $this->image($post->featured_img),
             'date'    => optional($post->created_at)->toDateString(),
         ];
@@ -271,6 +271,43 @@ class CMSController extends Controller
             collect($page->items())->map(fn ($p) => $this->newsCard($p, $lang)),
             200,
             ['meta' => $this->meta($page)]
+        );
+    }
+
+    #[OA\Get(path: '/api/m/search', summary: 'Search published posts and pages by title or body', tags: ['CMS'],
+        parameters: [new OA\Parameter(name: 'q', in: 'query', required: true, schema: new OA\Schema(type: 'string', minLength: 2))],
+        responses: [new OA\Response(response: 200, description: 'OK')])]
+    public function search(Request $request)
+    {
+        $q = trim((string) $request->query('q', ''));
+
+        // Require a minimum term length to avoid overly broad / expensive scans.
+        if (mb_strlen($q) < 2) {
+            return $this->respond([], 200, ['meta' => ['query' => $q, 'total' => 0]]);
+        }
+
+        $lang = $this->lang($request);
+        // The like value is bound as a parameter — safe from SQL injection.
+        $page = Bp_post::whereIn('post_type', ['post', 'page'])
+            ->where('post_active', 'yes')
+            ->where('lang', 1)
+            ->where('translate_id', 0)
+            ->where(function ($query) use ($q) {
+                $query->where('title', 'like', '%'.$q.'%')
+                      ->orWhere('body', 'like', '%'.$q.'%');
+            })
+            ->with('translate')
+            ->orderBy('id', 'desc')
+            ->paginate($this->perPage($request));
+
+        return $this->respond(
+            collect($page->items())->map(function ($p) use ($lang) {
+                $card = $this->postCard($p, $lang);
+                $card['type'] = $p->post_type;   // "post" or "page"
+                return $card;
+            }),
+            200,
+            ['meta' => array_merge(['query' => $q], $this->meta($page))]
         );
     }
 }

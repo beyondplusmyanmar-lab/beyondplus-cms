@@ -35,6 +35,22 @@
         Interactive reference: <a href="/api/documentation" target="_blank">/api/documentation</a>.
     </p>
 
+    <!-- Public content: search (no auth) -->
+    <div class="card mb-3">
+        <div class="card-header fw-semibold">
+            <i class="bi bi-search"></i> Search
+            <span class="badge bg-light text-muted border ms-1">public · no auth</span>
+        </div>
+        <div class="card-body">
+            <div class="input-group mb-3">
+                <input type="text" id="search-q" class="form-control" placeholder="Search posts and pages…"
+                       onkeydown="if(event.key==='Enter')doSearch()">
+                <button class="btn btn-primary" onclick="doSearch()"><i class="bi bi-search"></i> Search</button>
+            </div>
+            <div id="search-results" class="row g-3"></div>
+        </div>
+    </div>
+
     <!-- Public content: news & events (no auth) -->
     <div class="card mb-3">
         <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
@@ -205,6 +221,28 @@
         }
         return '<li class="nav-item"><a class="nav-link py-0" href="#" onclick="return menuClick(this)" '
             + 'data-type="' + esc(m.type) + '" data-url="' + esc(m.url) + '">' + esc(m.title) + '</a></li>';
+    }
+
+    async function doSearch() {
+        const q = document.getElementById('search-q').value.trim();
+        const box = document.getElementById('search-results');
+        if (q.length < 2) { box.innerHTML = '<p class="text-muted mb-0">Type at least 2 characters.</p>'; return; }
+        box.innerHTML = spinner();
+        const r = await call('/search?q=' + encodeURIComponent(q), 'GET');
+        if (!r.ok) { box.innerHTML = '<div class="text-danger">Search failed. <button class="btn btn-sm btn-outline-secondary ms-1" onclick="doSearch()">Retry</button></div>'; return; }
+        const items = r.body.data || [];
+        if (!items.length) { box.innerHTML = '<p class="text-muted mb-0">No results for “' + esc(q) + '”.</p>'; return; }
+        box.innerHTML = items.map(function (p) {
+            const kind = p.type === 'page' ? 'pages' : 'posts';
+            return '<div class="col-md-6"><div class="border rounded p-3 h-100" style="cursor:pointer" '
+                + 'onclick="openContent(\'' + kind + '\', \'' + esc(p.slug) + '\')" title="Open">'
+                + '<div class="d-flex justify-content-between align-items-center mb-1">'
+                + '<span class="badge bg-secondary text-capitalize">' + esc(p.type) + '</span>'
+                + '<small class="text-muted">' + esc(p.date || '') + '</small></div>'
+                + '<h6 class="mb-1">' + esc(p.title) + '</h6>'
+                + '<p class="small text-muted mb-0">' + esc(p.excerpt) + '</p>'
+                + '</div></div>';
+        }).join('');
     }
 
     function menuClick(el) {

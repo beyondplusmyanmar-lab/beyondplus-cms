@@ -54,6 +54,7 @@ Route::group([
 	Route::get('/categories/{slug}/posts', 'CMSController@categoryPosts');
 	Route::get('/sliders', 'CMSController@sliders');
 	Route::get('/news', 'CMSController@news');
+	Route::get('/search', 'CMSController@search');
 });
 
 /*
