@@ -389,6 +389,11 @@ function department($chose_id = null) {
     return $department;
 }
 
+// Options for a content block's type (a free-form categorisation).
+function block_types() {
+    return ['content' => 'Content', 'html' => 'HTML', 'widget' => 'Widget'];
+}
+
 function departmentShort($chose_id = null) {
 
     $department = [1=>'d1', 2=>'d2', 3=>'d3'];

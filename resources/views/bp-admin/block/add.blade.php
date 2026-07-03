@@ -26,9 +26,9 @@
                             {{--  --}}
                             
                             <div class="form-group">
-                                <label class="control-label">Choose Department </label>
+                                <label class="control-label">Block Type</label>
 
-                                {{ Form::select('block_type',department(),null,array('class'=>'form-control')) }}
+                                {{ Form::select('block_type',block_types(),null,array('class'=>'form-control')) }}
 
                             </div>
 

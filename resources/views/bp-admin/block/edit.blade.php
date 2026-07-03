@@ -35,9 +35,9 @@
                     @endcomponent
                     {{--  --}}
                     <div class="form-group">
-                        <label class="control-label">Choose Department </label>
+                        <label class="control-label">Block Type</label>
 
-                        {{ Form::select('block_type',department(),$block->block_type,array('class'=>'form-control')) }}
+                        {{ Form::select('block_type',block_types(),$block->block_type,array('class'=>'form-control')) }}
 
                     </div>
 
