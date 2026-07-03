@@ -34,7 +34,7 @@
                         <div class="col-md-4 col-sm-6 mb-4">
                             <div class="card slider-card h-100">
                                 <div class="slider-thumb">
-                                    <img src="{{ url('uploads/'.$c->slider_link) }}" alt="{{ $c->slider_name }}">
+                                    <img src="{{ bp_upload_url($c->slider_link) }}" alt="{{ $c->slider_name }}">
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">

@@ -18,7 +18,7 @@
             <div class="carousel-inner">
                 @foreach($sliders as $i => $slide)
                     <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
-                        <img src="{{ url('/uploads/'.$slide->slider_link) }}" class="d-block w-100 bp-slide-img" alt="{{ $slide->slider_name }}">
+                        <img src="{{ bp_upload_url($slide->slider_link) }}" class="d-block w-100 bp-slide-img" alt="{{ $slide->slider_name }}">
                         <div class="carousel-caption">
                             <h2 class="fw-bold">{{ $slide->slider_name }}</h2>
                             @if($slide->slider_description)
@@ -69,7 +69,7 @@
                 <div class="col-lg-3 col-sm-6">
                     <article class="card bp-card h-100">
                         <a href="{{ url('/'.$post->post_link) }}">
-                            <img src="{{ url('/uploads/'.$post->featured_img) }}" class="card-img-top" alt="{{ $post->title }}">
+                            <img src="{{ bp_upload_url($post->featured_img) }}" class="card-img-top" alt="{{ $post->title }}">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">

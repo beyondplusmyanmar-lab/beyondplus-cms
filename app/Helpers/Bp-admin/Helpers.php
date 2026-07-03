@@ -358,9 +358,32 @@ function bp_store_image($file, string $prefix = 'up') {
     }
 
     $name = preg_replace('/[^a-z0-9]/i', '', $prefix).bin2hex(random_bytes(16)).'.'.$allowed[$mime];
+
+    // A storage plugin (e.g. Cloudflare R2 / S3) may claim the upload and return
+    // a public URL; otherwise the file is stored locally under public/uploads.
+    $stored = bp_apply_filters('store_upload', null, $file, $name);
+    if (is_string($stored) && $stored !== '') {
+        return $stored;
+    }
+
     $file->move(uploadPath(), $name);
 
     return $name;
+}
+
+/**
+ * Resolve a stored image reference to a URL. A full URL (object storage) is
+ * returned as-is; a bare filename resolves to the local /uploads path. Use this
+ * everywhere an uploaded image is displayed so local and object storage both work.
+ */
+function bp_upload_url($value) {
+    if ($value === null || $value === '') {
+        return '';
+    }
+    if (preg_match('#^(https?:)?//#i', (string) $value)) {
+        return $value;
+    }
+    return asset('uploads/'.ltrim((string) $value, '/'));
 }
 
 function role_type($type = null) {

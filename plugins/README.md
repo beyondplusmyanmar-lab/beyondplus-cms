@@ -112,6 +112,8 @@ plugins/logbook/
 | `theme_footer` | action | end of the front-end footer |
 | `admin_notices` | action | top of the admin content area |
 | `the_content` | filter | post/page body before output |
+| `send_sms` / `send_mail` / `send_mail_mime` | filter | delivery — return true when handled |
+| `store_upload` | filter | image upload — return a public URL to store it off-box (else saved locally); display with `bp_upload_url()` |
 
 ## Example
 

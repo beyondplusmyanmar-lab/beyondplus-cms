@@ -37,7 +37,7 @@
                                 {{ Form::file('slider_link',null,array('class'=>'form-control')) }}
                                 {{ Form::hidden('slider_link',null,array('class'=>'form-control')) }}
                                 <br /><br />
-                                <img src="{{  url('uploads/'.$slider->slider_link) }}" height="50px;" />
+                                <img src="{{  bp_upload_url($slider->slider_link) }}" height="50px;" />
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Description</label>

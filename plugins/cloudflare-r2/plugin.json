@@ -1,0 +1,25 @@
+{
+    "id": "cloudflare-r2",
+    "type": "plugin",
+    "name": "Cloudflare R2 Storage",
+    "description": "Stores uploaded images in Cloudflare R2 (S3-compatible object storage) instead of the local disk. Configure below, then activate to switch new uploads to R2.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/plugins/cloudflare-r2",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1",
+        "extensions": ["curl", "hash"]
+    },
+    "permissions": ["http", "filesystem"],
+    "settings": [
+        { "name": "endpoint", "label": "S3 API Endpoint", "type": "text", "placeholder": "https://<account_id>.r2.cloudflarestorage.com", "help": "Your R2 S3 API endpoint (no bucket)." },
+        { "name": "bucket", "label": "Bucket", "type": "text", "placeholder": "my-bucket" },
+        { "name": "access_key", "label": "Access Key ID", "type": "text" },
+        { "name": "secret_key", "label": "Secret Access Key", "type": "password" },
+        { "name": "public_url", "label": "Public Base URL", "type": "text", "placeholder": "https://cdn.example.com", "help": "Where objects are served publicly (R2 public bucket or custom domain)." },
+        { "name": "region", "label": "Region", "type": "text", "default": "auto", "help": "R2 uses 'auto'; S3 uses e.g. ap-southeast-1." }
+    ],
+    "main": "cloudflare-r2.php"
+}

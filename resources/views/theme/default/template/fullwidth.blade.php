@@ -12,7 +12,7 @@
 <div class="container py-5">
     <h1 class="mb-4">{{ $post->title }}</h1>
     @if($post->featured_img)
-        <img src="{{ url('/uploads/'.$post->featured_img) }}" class="img-fluid rounded mb-4" alt="{{ $post->title }}">
+        <img src="{{ bp_upload_url($post->featured_img) }}" class="img-fluid rounded mb-4" alt="{{ $post->title }}">
     @endif
     <div class="bp-content">
         {!! bbParse($post->body) !!}

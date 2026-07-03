@@ -49,12 +49,12 @@
                         <div class="col-md-4 col-sm-6 mb-4">
                             <div class="card media-card h-100">
                                 <div class="media-thumb">
-                                    <img src="{{ url('uploads/'.$c->media_link) }}" alt="{{ $c->media_name }}">
+                                    <img src="{{ bp_upload_url($c->media_link) }}" alt="{{ $c->media_name }}">
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title mb-2">{{ $c->media_name }}</h5>
                                     <div class="input-group input-group-sm">
-                                        <input type="text" value="{{ '/uploads/'.$c->media_link }}" class="form-control" readonly
+                                        <input type="text" value="{{ bp_upload_url($c->media_link) }}" class="form-control" readonly
                                                onclick="this.select()" title="Click to select, then copy">
                                     </div>
                                 </div>

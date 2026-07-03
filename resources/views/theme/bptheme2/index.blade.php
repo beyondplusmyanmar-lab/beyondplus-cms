@@ -32,7 +32,7 @@
                 <div class="col-lg-3 col-sm-6">
                     <article class="card bp-card h-100">
                         <a href="{{ url('/'.$post->post_link) }}">
-                            <img src="{{ url('/uploads/'.$post->featured_img) }}" class="card-img-top" alt="{{ $post->title }}">
+                            <img src="{{ bp_upload_url($post->featured_img) }}" class="card-img-top" alt="{{ $post->title }}">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">

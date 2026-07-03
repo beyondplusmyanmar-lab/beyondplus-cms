@@ -64,7 +64,7 @@ class CMSController extends Controller
 
     private function image(?string $file): ?string
     {
-        return $file ? url('uploads/'.$file) : null;
+        return $file ? bp_upload_url($file) : null;
     }
 
     private function postCard($post, string $lang): array
