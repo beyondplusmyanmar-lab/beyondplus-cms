@@ -60,7 +60,7 @@
                     <div class="col-md-12 form-group">
                         <div class="row">
                             {{ Form::label('Template Name') }}<br />
-                            {{ Form::text('post_template', 'default' ,['class'=>'form-control']) }}
+                            @include('bp-admin.inc.template-select', ['selected' => 'default'])
                         </div>
                     </div>
                 </div>
