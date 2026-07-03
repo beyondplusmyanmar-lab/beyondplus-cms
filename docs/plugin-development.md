@@ -53,6 +53,27 @@ plugins/my-plugin/
 | `main` | The file loaded on boot to register hooks |
 | `admin_menu` | Adds a sidebar link + access grant to an admin page |
 
+## Settings (plugin configuration page)
+
+A plugin declares its own config fields in `plugin.json` — the CMS renders a
+settings form for it (Plugins → **Settings** on the card) and stores the values.
+No need to add anything to the core Configuration page.
+
+```json
+"settings": [
+  { "name": "api_url",   "label": "API URL",   "type": "text",     "default": "https://api.example.com", "help": "Base endpoint." },
+  { "name": "api_token", "label": "API Token", "type": "password" },
+  { "name": "mode",      "label": "Mode",      "type": "select",   "options": { "live": "Live", "test": "Test" } }
+]
+```
+
+Field `type`: `text` (default), `password`, `textarea`, `select` (with
+`options`), `checkbox` (`yes`/`no`). Read the saved values from your plugin code:
+
+```php
+$token = bp_plugin_option('my-plugin', 'api_token');   // stored as plugin.my-plugin.api_token
+```
+
 ## Hooks
 
 From your main file:

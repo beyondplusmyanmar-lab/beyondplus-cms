@@ -95,6 +95,7 @@ class Plugin
                 'active'       => $isActive,
                 'migrations'   => is_dir($dir.'/migrations'),
                 'tampered'     => $isActive && self::isTampered($slug),
+                'settings'     => ! empty($meta['settings']),
             ];
         }
 
@@ -107,6 +108,19 @@ class Plugin
     {
         $file = self::path().'/'.basename($slug).'/plugin.json';
         return is_file($file) ? (json_decode(file_get_contents($file), true) ?: []) : [];
+    }
+
+    /** A plugin's declared settings fields (from plugin.json "settings"). */
+    public static function settingsSchema(string $slug): array
+    {
+        $settings = self::meta($slug)['settings'] ?? [];
+        return is_array($settings) ? $settings : [];
+    }
+
+    /** Option key a plugin's setting is stored under. */
+    public static function settingKey(string $slug, string $name): string
+    {
+        return 'plugin.'.basename($slug).'.'.$name;
     }
 
     /** Slugs of the active plugins. */

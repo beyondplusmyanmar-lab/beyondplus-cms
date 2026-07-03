@@ -51,6 +51,43 @@ class PluginController extends Controller
         ]);
     }
 
+    /** Render a plugin's settings form (from its declared schema). */
+    public function settings(Request $request)
+    {
+        $slug = basename((string) $request->input('slug'));
+        $schema = Plugin::settingsSchema($slug);
+        abort_if(empty($schema), 404, 'This plugin has no settings.');
+
+        $values = [];
+        foreach ($schema as $field) {
+            $values[$field['name']] = bp_option(Plugin::settingKey($slug, $field['name']), $field['default'] ?? '');
+        }
+
+        return view('bp-admin.plugin.settings', [
+            'slug'   => $slug,
+            'meta'   => Plugin::meta($slug),
+            'schema' => $schema,
+            'values' => $values,
+        ]);
+    }
+
+    /** Persist a plugin's settings (only fields declared in its schema). */
+    public function saveSettings(Request $request)
+    {
+        $slug = basename((string) $request->input('slug'));
+        $schema = Plugin::settingsSchema($slug);
+        abort_if(empty($schema), 404);
+
+        foreach ($schema as $field) {
+            \App\Models\Bp_options::updateOrCreate(
+                ['option_name' => Plugin::settingKey($slug, $field['name'])],
+                ['option_value' => (string) $request->input($field['name'], ''), 'autoload' => 'yes']
+            );
+        }
+
+        return redirect()->back()->with('success', 'Settings saved.');
+    }
+
     public function activate(Request $request)
     {
         $result = Plugin::activate((string) $request->input('slug'));

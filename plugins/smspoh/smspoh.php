@@ -16,17 +16,23 @@ bp_add_filter('send_sms', function ($sent, $to, $message) {
     if ($sent) {
         return $sent;                       // already delivered by another provider
     }
-    if (bp_option('sms_api_token', '') === '') {
+
+    // Read from this plugin's own settings, falling back to the legacy config.
+    $token  = bp_plugin_option('smspoh', 'api_token') ?: bp_option('sms_api_token', '');
+    $url    = bp_plugin_option('smspoh', 'api_url') ?: 'https://api.smspoh.com/v1/messages/send';
+    $sender = bp_plugin_option('smspoh', 'sender') ?: (bp_option('sms_sender') ?: 'CMS');
+
+    if ($token === '') {
         return false;                       // not configured
     }
 
     try {
-        $response = Http::withToken(bp_option('sms_api_token'))
+        $response = Http::withToken($token)
             ->acceptJson()
             ->timeout(10)
-            ->post('https://api.smspoh.com/v1/messages/send', [
+            ->post($url, [
                 'to'      => $to,
-                'from'    => bp_option('sms_sender') ?: 'CMS',
+                'from'    => $sender,
                 'content' => $message,
             ]);
 

@@ -298,6 +298,11 @@ function uploadPath() {
  | Actions run callbacks for side effects; filters transform and return a value.
  | Plugins register these from their main file; core/themes trigger them.
  */
+// Read a plugin's own setting (stored via its plugin settings page).
+function bp_plugin_option($slug, $name, $default = '') {
+    return bp_option(\App\Support\Plugin::settingKey($slug, $name), $default);
+}
+
 function bp_add_action($hook, $cb, $priority = 10) {
     \App\Support\Plugin::addAction($hook, $cb, $priority);
 }

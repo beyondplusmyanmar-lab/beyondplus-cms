@@ -59,6 +59,9 @@
                                         @endif
                                         @if($plugin['minCmsVersion']) &middot; needs CMS &ge; {{ $plugin['minCmsVersion'] }}@endif
                                     </p>
+                                    @if($plugin['settings'])
+                                        <a href="{{ url('bp-admin/plugins/settings?slug='.$plugin['slug']) }}" class="btn btn-sm btn-outline-primary" title="Configure"><i class="fa fa-cog"></i> Settings</a>
+                                    @endif
                                     @if($plugin['active'])
                                         <form action="{{ url('bp-admin/plugins/deactivate') }}" method="post" class="d-inline">
                                             {{ csrf_field() }}
