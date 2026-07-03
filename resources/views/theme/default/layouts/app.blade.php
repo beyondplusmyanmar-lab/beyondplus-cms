@@ -14,15 +14,31 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
     <style>
-        :root { --bp-accent: #2563eb; }
-        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1f2937; }
+        :root {
+            --bp-accent: #0d9488;        /* teal brand — aligned with the admin */
+            --bp-accent-dark: #0f766e;
+            --bs-primary: #0d9488;
+            --bs-primary-rgb: 13,148,136;
+            --bs-link-color: #0d9488;
+            --bs-link-hover-color: #0f766e;
+        }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Myanmar", sans-serif; color: #1f2937; }
         a { text-decoration: none; }
+        .text-primary { color: var(--bp-accent) !important; }
+        .btn-primary { --bs-btn-bg: var(--bp-accent); --bs-btn-border-color: var(--bp-accent); --bs-btn-hover-bg: var(--bp-accent-dark); --bs-btn-hover-border-color: var(--bp-accent-dark); }
+        .btn-outline-primary { --bs-btn-color: var(--bp-accent); --bs-btn-border-color: var(--bp-accent); --bs-btn-hover-bg: var(--bp-accent); --bs-btn-hover-border-color: var(--bp-accent); }
         .navbar-brand { font-weight: 700; letter-spacing: .3px; }
         .bp-hero {
-            background: linear-gradient(135deg, var(--bp-accent), #1e40af);
+            background: linear-gradient(135deg, var(--bp-accent), #0f172a);
             color: #fff; padding: 5rem 0;
         }
+        /* Language toggle (matches the teal brand) */
+        .bp-lang { display:inline-flex; border:1px solid #cbd5e1; border-radius:999px; overflow:hidden; }
+        .bp-lang__opt { padding:.24rem .7rem; font-size:.8rem; font-weight:600; color:#475569; line-height:1.5; }
+        .bp-lang__opt:hover { background:#f1f5f9; color:var(--bp-accent-dark); }
+        .bp-lang__opt.active { background:var(--bp-accent); color:#fff; }
         .bp-hero h1 { font-weight: 800; }
         .bp-slider .bp-slide-img { height: 480px; object-fit: cover; filter: brightness(0.45); }
         .bp-slider .carousel-caption { bottom: 20%; text-shadow: 0 2px 6px rgba(0,0,0,.5); }

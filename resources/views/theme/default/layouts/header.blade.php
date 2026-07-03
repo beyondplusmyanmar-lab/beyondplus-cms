@@ -44,6 +44,13 @@
                         @endif
                     @endforeach
 
+                    <li class="nav-item ms-lg-3 d-flex align-items-center">
+                        <div class="bp-lang" role="group" aria-label="Language">
+                            <a href="{{ url('lang/en') }}" class="bp-lang__opt {{ app()->getLocale() === 'mm' ? '' : 'active' }}">EN</a>
+                            <a href="{{ url('lang/mm') }}" class="bp-lang__opt {{ app()->getLocale() === 'mm' ? 'active' : '' }}">မြန်မာ</a>
+                        </div>
+                    </li>
+
                     <li class="nav-item ms-lg-2">
                         @if (Auth::guard('customer_web')->check())
                             <a class="btn btn-sm btn-outline-primary" href="{{ url('customer/profile') }}">
