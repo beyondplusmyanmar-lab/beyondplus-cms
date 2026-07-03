@@ -42,18 +42,24 @@ class ConfigurationController extends Controller
 
     public function update(Request $request)
     {
-        foreach ($this->defaults as $key => $default) {
-            $value = $request->input($key, $default);
+        // All-or-nothing: don't leave a half-saved config if one option fails.
+        \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+            foreach ($this->defaults as $key => $default) {
+                // Empty form fields arrive as null (ConvertEmptyStringsToNull
+                // middleware); option_value is NOT NULL, so coalesce to the default
+                // and store a string.
+                $value = (string) ($request->input($key, $default) ?? $default);
 
-            if ($key === 'admin_login_path') {
-                $value = $this->sanitizeLoginPath($value);
+                if ($key === 'admin_login_path') {
+                    $value = $this->sanitizeLoginPath($value);
+                }
+
+                Bp_options::updateOrCreate(
+                    ['option_name' => $key],
+                    ['option_value' => $value, 'autoload' => 'yes']
+                );
             }
-
-            Bp_options::updateOrCreate(
-                ['option_name' => $key],
-                ['option_value' => $value, 'autoload' => 'yes']
-            );
-        }
+        });
 
         return redirect()->back()->with('success', 'Configuration saved.');
     }

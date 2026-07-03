@@ -42,9 +42,11 @@ class SettingsController extends Controller
     {
 
         $inputs = $request->except('_token', 'save');
-        while ($output = current($inputs)) {
-            Bp_options::where('option_name', key($inputs))->update(['option_value' => $inputs[key($inputs)]]);
-            next($inputs);
+        foreach ($inputs as $name => $value) {
+            // Cast to string: empty fields arrive as null (ConvertEmptyStringsToNull)
+            // and option_value is NOT NULL. (Also avoids the old loop stopping early
+            // on the first empty value.)
+            Bp_options::where('option_name', $name)->update(['option_value' => (string) $value]);
         }
 
         return redirect()->back()->withSuccess('Successfully edited');
