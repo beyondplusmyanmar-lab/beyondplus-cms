@@ -20,9 +20,7 @@ JSON API တို့ ပါဝင်ပါသည်။
 
 ပလပ်အင် (plugin) စီမံခန့်ခွဲမှု — ကဏ္ဍအလိုက် ခွဲထားသော ကတ်များ၊ လုံခြုံရေး scan၊ settings —
 
-| ပလပ်အင်များ (ကဏ္ဍအလိုက်) | ပလပ်အင် အသေးစိတ် |
-|---|---|
-| ![Plugins](docs/screenshots/plugins.png) | ![Plugin detail](docs/screenshots/plugins-detail.png) |
+![Plugins](docs/screenshots/plugins.png)
 
 ## လိုအပ်ချက်များ (Requirements)
 
