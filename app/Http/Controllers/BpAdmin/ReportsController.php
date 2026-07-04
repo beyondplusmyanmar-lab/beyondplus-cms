@@ -37,6 +37,20 @@ class ReportsController extends Controller
         $this->middleware('admins');
     }
 
+    /** Full, filterable activity log (dashboard shows only the latest few). */
+    public function activityLog(Request $request) {
+        $logNames = \Spatie\Activitylog\Models\Activity::query()
+            ->select('log_name')->distinct()->orderBy('log_name')->pluck('log_name')->filter()->values();
+
+        $query = \Spatie\Activitylog\Models\Activity::with('causer')->latest();
+        if ($request->filled('log') && $logNames->contains($request->query('log'))) {
+            $query->where('log_name', $request->query('log'));
+        }
+        $activities = $query->paginate(30)->appends($request->query());
+
+        return view('bp-admin.reports.activity', compact('activities', 'logNames'));
+    }
+
     // protected $generalSettingRepo;
 
     // public function __construct(GeneralSettingRepo $generalSettingRepo) {

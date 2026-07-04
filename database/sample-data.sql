@@ -695,7 +695,8 @@ INSERT INTO `bp_modules` (`module_name`,`module_name_mm`,`module_link`,`module_w
 ('Themes','ပုံစံများ','themes',6,'fa fa-paint-brush',8,1,1,NOW()),
 ('Plugins','ပလပ်အင်များ','plugins',7,'fa fa-plug',8,1,1,NOW()),
 ('FAQ','အမေးအဖြေများ','faq',6,'fa fa-question-circle',0,1,1,NOW()),
-('Feedback','တုံ့ပြန်ချက်များ','feedback',7,'fa fa-comments',0,1,1,NOW());
+('Feedback','တုံ့ပြန်ချက်များ','feedback',7,'fa fa-comments',0,1,1,NOW()),
+('Activity log','လုပ်ဆောင်ချက်မှတ်တမ်း','activity',1,'fa fa-history',17,1,1,NOW());
 
 -- Remove the client-specific "Department Pages" module
 DELETE FROM `bp_access` WHERE `module_id` = 22;

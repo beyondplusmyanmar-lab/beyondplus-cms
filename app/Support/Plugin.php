@@ -217,6 +217,15 @@ class Plugin
     {
         $who = optional(auth('admins')->user())->email ?? 'system';
         \Illuminate\Support\Facades\Log::info("Plugin {$action}: {$slug} (by {$who})");
+
+        // Also record on the dashboard activity feed (best-effort).
+        try {
+            activity('plugin')
+                ->causedBy(auth('admins')->user())
+                ->log(sprintf('%s the plugin “%s”', $action, $slug));
+        } catch (\Throwable $e) {
+            // activity_log unavailable (e.g. pre-migration) — the Log line stands.
+        }
     }
 
     // ---- dependency / compatibility -------------------------------------

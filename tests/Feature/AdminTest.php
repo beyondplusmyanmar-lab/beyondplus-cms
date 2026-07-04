@@ -62,6 +62,17 @@ class AdminTest extends TestCase
         $this->assertFalse(auth()->guard('admins')->check());
     }
 
+    public function test_activity_log_page_loads(): void
+    {
+        $this->actingAs($this->admin(), 'admins')->get('/bp-admin/activity')->assertStatus(200);
+    }
+
+    public function test_login_is_recorded_as_activity(): void
+    {
+        $this->post('/bp-admin/login', ['email' => 'admin@example.com', 'password' => 'password']);
+        $this->assertDatabaseHas('activity_log', ['log_name' => 'auth', 'description' => 'signed in']);
+    }
+
     public function test_login_is_rate_limited(): void
     {
         for ($i = 0; $i < 5; $i++) {

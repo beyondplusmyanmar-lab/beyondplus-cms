@@ -65,6 +65,9 @@ class Main extends Controller
 
         if ($admin->attempt($credentials)) {
             RateLimiter::clear($throttleKey);
+            try {
+                activity('auth')->causedBy($admin->user())->log('signed in');
+            } catch (\Throwable $e) { /* activity_log unavailable */ }
             return redirect()->intended('bp-admin');
         }
 
