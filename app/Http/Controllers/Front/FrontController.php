@@ -73,6 +73,28 @@ class FrontController extends Controller
         return view($this->t().'blog', ['title' => 'Blog', 'posts' => bp_post(10)]);
     }
 
+    public function events(Request $request){
+        try {
+            $cursor = $request->filled('month')
+                ? \Carbon\Carbon::createFromFormat('Y-m', $request->query('month'))->startOfMonth()
+                : \Carbon\Carbon::now()->startOfMonth();
+        } catch (\Throwable $e) {
+            $cursor = \Carbon\Carbon::now()->startOfMonth();
+        }
+
+        $events = \App\Models\Bp_post::where('translate_id', 0)
+            ->where('post_active', 'yes')
+            ->whereNotNull('event_at')
+            ->where('event_at', '>=', $cursor->copy()->startOfMonth())
+            ->where('event_at', '<', $cursor->copy()->addMonth()->startOfMonth())
+            ->with('translate')
+            ->orderBy('event_at')
+            ->get()
+            ->groupBy(fn ($e) => \Carbon\Carbon::parse($e->event_at)->toDateString());
+
+        return view($this->t().'calendar', ['title' => 'Events', 'cursor' => $cursor, 'events' => $events]);
+    }
+
     public function faq(){
         if (bp_option('faq_enabled', 'yes') !== 'yes') { abort(404); }
         $faqs = \App\Models\Faq::where('is_active', 1)->orderBy('sort_order')->orderBy('id')->get();

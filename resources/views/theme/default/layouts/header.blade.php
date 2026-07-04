@@ -44,6 +44,7 @@
                         @endif
                     @endforeach
 
+                    <li class="nav-item"><a class="nav-link" href="{{ url('/events') }}">{{ app()->getLocale() === 'mm' ? 'ပွဲများ' : 'Events' }}</a></li>
                     @if(bp_option('faq_enabled', 'yes') === 'yes')
                         <li class="nav-item"><a class="nav-link" href="{{ url('/faq') }}">{{ app()->getLocale() === 'mm' ? 'အမေးအဖြေ' : 'FAQ' }}</a></li>
                     @endif

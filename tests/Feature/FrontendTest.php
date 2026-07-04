@@ -26,6 +26,12 @@ class FrontendTest extends TestCase
         $this->get('/bp-admin/login')->assertStatus(200)->assertSee('Sign in', false);
     }
 
+    public function test_events_calendar_loads(): void
+    {
+        $this->get('/events')->assertStatus(200);
+        $this->get('/events?month=2026-08')->assertStatus(200);
+    }
+
     public function test_api_home_returns_json_envelope(): void
     {
         $this->getJson('/api/m/home')

@@ -323,6 +323,9 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('/blog', 'Front\FrontController@blog');
 
+            // Public events calendar.
+            Route::get('/events', 'Front\FrontController@events');
+
             // FAQ (404s unless enabled) + the merged Contact / feedback page.
             Route::get('/faq', 'Front\FrontController@faq');
             Route::get('/contact', 'Front\FrontController@contact');
