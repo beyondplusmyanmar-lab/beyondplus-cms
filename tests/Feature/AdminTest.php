@@ -62,6 +62,12 @@ class AdminTest extends TestCase
         $this->assertFalse(auth()->guard('admins')->check());
     }
 
+    public function test_system_flow_page_loads(): void
+    {
+        $this->actingAs($this->admin(), 'admins')->get('/bp-admin/configuration/flow')
+            ->assertStatus(200)->assertSee('System flow');
+    }
+
     public function test_activity_log_page_loads(): void
     {
         $this->actingAs($this->admin(), 'admins')->get('/bp-admin/activity')->assertStatus(200);

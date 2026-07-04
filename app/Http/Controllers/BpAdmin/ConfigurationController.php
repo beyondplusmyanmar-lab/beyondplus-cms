@@ -43,6 +43,47 @@ class ConfigurationController extends Controller
         return view('bp-admin.configuration.index', ['config' => $config]);
     }
 
+    /** A visual "system flow" of how the CMS routes services through plugins. */
+    public function flow()
+    {
+        $active = \App\Support\Plugin::active();
+        $on = fn (string $slug) => in_array($slug, $active, true);
+        $r2 = $on('cloudflare-r2');
+        $api = bp_option('api_enabled', 'yes') === 'yes';
+
+        $flows = [
+            [
+                'title'   => 'Customer OTP & notifications',
+                'trigger' => ['label' => 'Sign-up · Verify · Reset', 'icon' => 'fa-user-plus'],
+                'core'    => ['label' => 'OTP dispatcher', 'sub' => 'channel: '.bp_option('otp_channel', 'auto')],
+                'providers' => [
+                    ['label' => 'SMSPoh', 'sub' => 'SMS', 'slug' => 'smspoh', 'active' => $on('smspoh'), 'icon' => 'fa-comment'],
+                    ['label' => 'Mailgun', 'sub' => 'Email', 'slug' => 'mailgun', 'active' => $on('mailgun'), 'icon' => 'fa-envelope'],
+                    ['label' => 'Log file', 'sub' => 'fallback when no provider', 'active' => true, 'fallback' => true, 'icon' => 'fa-file-text-o'],
+                ],
+            ],
+            [
+                'title'   => 'Image storage',
+                'trigger' => ['label' => 'Media upload', 'icon' => 'fa-image'],
+                'core'    => ['label' => 'bp_store_image', 'sub' => $r2 ? 'object storage' : 'local disk'],
+                'providers' => [
+                    ['label' => 'Cloudflare R2', 'sub' => 'object storage', 'slug' => 'cloudflare-r2', 'active' => $r2, 'icon' => 'fa-cloud'],
+                    ['label' => 'Local disk', 'sub' => 'public/uploads', 'active' => ! $r2, 'fallback' => true, 'icon' => 'fa-hdd-o'],
+                ],
+            ],
+            [
+                'title'   => 'Mobile app / SPA',
+                'trigger' => ['label' => 'API request', 'icon' => 'fa-mobile'],
+                'core'    => ['label' => 'JSON API', 'sub' => $api ? 'enabled' : 'disabled'],
+                'providers' => [
+                    ['label' => '/api/m/*', 'sub' => $api ? 'serving content' : 'returns 503', 'active' => $api, 'icon' => 'fa-plug'],
+                ],
+            ],
+        ];
+
+        return view('bp-admin.configuration.flow', ['flows' => $flows, 'activeCount' => count($active)]);
+    }
+
     public function update(Request $request)
     {
         // All-or-nothing: don't leave a half-saved config if one option fails.

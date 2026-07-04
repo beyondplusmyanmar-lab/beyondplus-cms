@@ -9,6 +9,12 @@
     </div>
 @endif
 
+<div class="d-flex justify-content-end mb-3">
+    <a href="{{ url('bp-admin/configuration/flow') }}" class="btn btn-outline-primary btn-sm">
+        <i class="fa fa-sitemap"></i> View system flow
+    </a>
+</div>
+
 <form method="POST" action="{{ url('bp-admin/configuration') }}">
     {{ csrf_field() }}
 
