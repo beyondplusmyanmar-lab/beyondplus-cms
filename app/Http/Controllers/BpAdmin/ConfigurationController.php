@@ -23,6 +23,8 @@ class ConfigurationController extends Controller
         'api_enabled'          => 'yes',   // yes | no
         'admin_login_path'     => '',      // secret admin login slug; blank = default bp-admin/login
         'developer_ips'        => '',      // IPs/CIDRs that may see the 500 developer log
+        'update_check'         => 'yes',   // yes | no — check GitHub for core updates
+        'update_repo'          => '',      // owner/repo to check; blank = default repo
         'spa_url'              => '',       // public URL of the headless/SPA app
         'cors_origins'         => '',       // allowed API origins; blank = allow all (*)
         'frontend_mode'        => 'theme',  // theme | spa | headless
@@ -41,6 +43,17 @@ class ConfigurationController extends Controller
         }
 
         return view('bp-admin.configuration.index', ['config' => $config]);
+    }
+
+    /** System info + core update status (checked against GitHub releases). */
+    public function system(\Illuminate\Http\Request $request)
+    {
+        return view('bp-admin.configuration.system', [
+            'update'  => \App\Support\CoreUpdate::check($request->boolean('check')),
+            'repo'    => \App\Support\CoreUpdate::repo(),
+            'php'     => PHP_VERSION,
+            'laravel' => app()->version(),
+        ]);
     }
 
     /** A visual "system flow" of how the CMS routes services through plugins. */

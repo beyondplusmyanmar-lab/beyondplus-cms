@@ -156,6 +156,7 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('configuration', 'ConfigurationController@index');
             Route::get('configuration/flow', 'ConfigurationController@flow');
+            Route::get('configuration/system', 'ConfigurationController@system');
             Route::post('configuration', 'ConfigurationController@update');
             // Admin language switch — sets the session locale, returns to the page.
             Route::get('lang/{lang}', function ($lang) {

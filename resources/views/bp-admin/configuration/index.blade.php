@@ -9,7 +9,10 @@
     </div>
 @endif
 
-<div class="d-flex justify-content-end mb-3">
+<div class="d-flex justify-content-end mb-3" style="gap:.4rem;">
+    <a href="{{ url('bp-admin/configuration/system') }}" class="btn btn-outline-primary btn-sm">
+        <i class="fa fa-info-circle"></i> System &amp; updates
+    </a>
     <a href="{{ url('bp-admin/configuration/flow') }}" class="btn btn-outline-primary btn-sm">
         <i class="fa fa-sitemap"></i> View system flow
     </a>
@@ -123,6 +126,25 @@
                         <label class="control-label">Developer IP allow-list</label>
                         <textarea class="form-control" name="developer_ips" rows="2" placeholder="203.0.113.4, 10.0.0.0/24">{{ $config['developer_ips'] }}</textarea>
                         <small class="form-text text-muted">IPs / IPv4 CIDR ranges allowed to see the detailed error (developer log) on a <code>500</code> page — in addition to signed-in admins. Comma or line separated. Your current IP: <code>{{ request()->ip() }}</code>.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tile">
+                <h3 class="tile-title">Core updates</h3>
+                <div class="tile-body">
+                    <div class="form-group">
+                        <label class="control-label">Check for core updates</label>
+                        <select class="form-control" name="update_check">
+                            <option value="yes" {{ $config['update_check'] === 'yes' ? 'selected' : '' }}>Enabled</option>
+                            <option value="no" {{ $config['update_check'] === 'no' ? 'selected' : '' }}>Disabled</option>
+                        </select>
+                        <small class="form-text text-muted">Check the project's GitHub releases for a newer version.</small>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="control-label">Update repository</label>
+                        <input type="text" class="form-control" name="update_repo" value="{{ $config['update_repo'] }}" placeholder="beyondplusmyanmar-lab/beyondplus-cms">
+                        <small class="form-text text-muted">GitHub <code>owner/repo</code> to check. Blank = the default project repo. See <a href="{{ url('bp-admin/configuration/system') }}">System &amp; updates</a>.</small>
                     </div>
                 </div>
             </div>
