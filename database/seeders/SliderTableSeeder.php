@@ -18,7 +18,7 @@ class SliderTableSeeder extends Seeder
 
         // [name, image (committed placeholder), weight, description]
         $sliders = [
-            ['Welcome to Beyond Plus CMS', 'slide-1.svg', 1, 'A modern, multi-language content management system built on Laravel.'],
+            ['Welcome to Beyond Plus CMS', 'slide-1.svg', 1, 'A modern, multi-language content management system.'],
             ['Manage Everything in One Place', 'slide-2.svg', 2, 'Posts, pages, menus, media and more — all from a clean admin panel.'],
         ];
 

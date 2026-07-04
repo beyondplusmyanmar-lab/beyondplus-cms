@@ -5,7 +5,7 @@
             <div class="col-md-6">
                 <h5 class="text-white">{{ $siteName }}</h5>
                 <p class="mb-0 text-secondary">
-                    {{ optional(site_information('blogdescription'))->option_value ?: 'A Laravel content-management system.' }}
+                    {{ optional(site_information('blogdescription'))->option_value ?: 'A modern, multi-language content-management system.' }}
                 </p>
             </div>
             <div class="col-md-3">
@@ -27,8 +27,7 @@
     </div>
     <div class="border-top border-secondary-subtle">
         <div class="container py-3 text-center small text-secondary">
-            &copy; {{ date('Y') }} {{ $siteName }}. Powered by
-            <a href="https://laravel.com">Laravel</a>.
+            &copy; {{ date('Y') }} {{ $siteName }}. {{ app()->getLocale() === 'mm' ? 'မူပိုင်ခွင့် အားလုံး ရယူထားသည်။' : 'All rights reserved.' }}
         </div>
         {{-- Plugin hook: active plugins can render into the footer here. --}}
         @php bp_do_action('theme_footer') @endphp

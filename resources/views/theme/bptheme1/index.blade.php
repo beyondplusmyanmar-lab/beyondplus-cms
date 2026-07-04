@@ -7,7 +7,7 @@
     <div class="container">
         <h1 class="display-4 mb-3">{{ $siteName }}</h1>
         <p class="lead mb-4 opacity-75">
-            {{ optional(site_information('blogdescription'))->option_value ?: 'Publish and manage your content with a modern Laravel CMS.' }}
+            {{ optional(site_information('blogdescription'))->option_value ?: 'Publish and manage your content with a modern CMS.' }}
         </p>
         <a href="#featured" class="btn btn-light btn-lg px-4">
             Explore posts <i class="bi bi-arrow-down"></i>
