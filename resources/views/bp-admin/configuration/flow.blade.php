@@ -27,6 +27,8 @@
     .flow-arrow { flex: 0 0 44px; height: 2px; background: #cbd5e1; position: relative; }
     .flow-arrow::after { content: ''; position: absolute; right: -1px; top: -4px; border: 5px solid transparent; border-left-color: #cbd5e1; }
     .flow-col { display: flex; flex-direction: column; gap: .55rem; }
+    .flow-node.flow-link { display: block; text-decoration: none; cursor: pointer; transition: transform .1s ease, box-shadow .1s ease; }
+    .flow-node.flow-link:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(15,23,42,.13); }
     @media (max-width: 720px) { .flow-arrow { flex-basis: 22px; } .flow-node { min-width: 130px; } }
 </style>
 <div class="row">
@@ -60,7 +62,8 @@
                             <div class="flow-arrow"></div>
                             <div class="flow-col">
                                 @foreach($flow['providers'] as $p)
-                                    <div class="flow-node {{ $p['active'] ? 'on' : 'off' }}">
+                                    @php $isLink = !empty($p['link']); @endphp
+                                    <{{ $isLink ? 'a' : 'div' }} @if($isLink) href="{{ $p['link'] }}" @endif class="flow-node {{ $isLink ? 'flow-link' : '' }} {{ $p['active'] ? 'on' : 'off' }}">
                                         <span class="flow-dot {{ $p['active'] ? 'on' : '' }}"></span>
                                         <div class="ttl"><i class="fa {{ $p['icon'] }}"></i> {{ $p['label'] }}</div>
                                         <div class="sub">{{ $p['sub'] }}</div>
@@ -69,7 +72,7 @@
                                         @elseif(!empty($p['fallback']))
                                             <span class="flow-badge {{ $p['active'] ? 'on' : 'off' }}">{{ $p['active'] ? 'in use' : 'standby' }}</span>
                                         @endif
-                                    </div>
+                                    </{{ $isLink ? 'a' : 'div' }}>
                                 @endforeach
                             </div>
                         </div>

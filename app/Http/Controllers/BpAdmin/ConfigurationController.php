@@ -57,8 +57,8 @@ class ConfigurationController extends Controller
                 'trigger' => ['label' => 'Sign-up · Verify · Reset', 'icon' => 'fa-user-plus'],
                 'core'    => ['label' => 'OTP dispatcher', 'sub' => 'channel: '.bp_option('otp_channel', 'auto')],
                 'providers' => [
-                    ['label' => 'SMSPoh', 'sub' => 'SMS', 'slug' => 'smspoh', 'active' => $on('smspoh'), 'icon' => 'fa-comment'],
-                    ['label' => 'Mailgun', 'sub' => 'Email', 'slug' => 'mailgun', 'active' => $on('mailgun'), 'icon' => 'fa-envelope'],
+                    ['label' => 'SMSPoh', 'sub' => 'SMS', 'slug' => 'smspoh', 'active' => $on('smspoh'), 'icon' => 'fa-comment', 'link' => url('bp-admin/plugins/settings?slug=smspoh')],
+                    ['label' => 'Mailgun', 'sub' => 'Email', 'slug' => 'mailgun', 'active' => $on('mailgun'), 'icon' => 'fa-envelope', 'link' => url('bp-admin/plugins/settings?slug=mailgun')],
                     ['label' => 'Log file', 'sub' => 'fallback when no provider', 'active' => true, 'fallback' => true, 'icon' => 'fa-file-text-o'],
                 ],
             ],
@@ -67,7 +67,7 @@ class ConfigurationController extends Controller
                 'trigger' => ['label' => 'Media upload', 'icon' => 'fa-image'],
                 'core'    => ['label' => 'bp_store_image', 'sub' => $r2 ? 'object storage' : 'local disk'],
                 'providers' => [
-                    ['label' => 'Cloudflare R2', 'sub' => 'object storage', 'slug' => 'cloudflare-r2', 'active' => $r2, 'icon' => 'fa-cloud'],
+                    ['label' => 'Cloudflare R2', 'sub' => 'object storage', 'slug' => 'cloudflare-r2', 'active' => $r2, 'icon' => 'fa-cloud', 'link' => url('bp-admin/plugins/settings?slug=cloudflare-r2')],
                     ['label' => 'Local disk', 'sub' => 'public/uploads', 'active' => ! $r2, 'fallback' => true, 'icon' => 'fa-hdd-o'],
                 ],
             ],
@@ -76,7 +76,17 @@ class ConfigurationController extends Controller
                 'trigger' => ['label' => 'API request', 'icon' => 'fa-mobile'],
                 'core'    => ['label' => 'JSON API', 'sub' => $api ? 'enabled' : 'disabled'],
                 'providers' => [
-                    ['label' => '/api/m/*', 'sub' => $api ? 'serving content' : 'returns 503', 'active' => $api, 'icon' => 'fa-plug'],
+                    ['label' => '/api/m/*', 'sub' => $api ? 'serving content' : 'returns 503', 'active' => $api, 'icon' => 'fa-plug', 'link' => url('bp-admin/configuration')],
+                ],
+            ],
+            [
+                'title'   => 'Front-end features',
+                'trigger' => ['label' => 'Site visitor', 'icon' => 'fa-globe'],
+                'core'    => ['label' => 'Theme: '.bp_option('theme', 'default'), 'sub' => 'active theme'],
+                'providers' => [
+                    ['label' => 'FAQ page', 'sub' => '/faq', 'active' => bp_option('faq_enabled', 'yes') === 'yes', 'fallback' => true, 'icon' => 'fa-question-circle', 'link' => url('bp-admin/faq')],
+                    ['label' => 'Contact form', 'sub' => '/contact', 'active' => bp_option('feedback_enabled', 'yes') === 'yes', 'fallback' => true, 'icon' => 'fa-envelope-o', 'link' => url('bp-admin/feedback')],
+                    ['label' => 'Events calendar', 'sub' => '/events', 'active' => true, 'fallback' => true, 'icon' => 'fa-calendar', 'link' => url('bp-admin/news')],
                 ],
             ],
         ];
