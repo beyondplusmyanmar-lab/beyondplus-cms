@@ -22,6 +22,10 @@ JSON API တို့ ပါဝင်ပါသည်။
 
 ![Plugins](docs/screenshots/plugins.png)
 
+စနစ်၏ ဝန်ဆောင်မှု flow (n8n ပုံစံ) — မည်သည့် plugin/service ဖွင့်ထားပြီး မည်သို့ ချိတ်ဆက်ထားသည်ကို မြင်ကွင်းအဖြစ် ပြသည် —
+
+![System flow](docs/screenshots/system-flow.png)
+
 ## လိုအပ်ချက်များ (Requirements)
 
 - PHP **8.3+**
