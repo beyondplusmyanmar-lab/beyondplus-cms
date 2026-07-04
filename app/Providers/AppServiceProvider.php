@@ -51,6 +51,11 @@ class AppServiceProvider extends ServiceProvider
         // Load active plugins so they can register their action/filter hooks.
         \App\Support\Plugin::boot();
 
+        // Attribute activity-log entries to the signed-in admin (custom guard).
+        $this->app->make(\Spatie\Activitylog\CauserResolver::class)->resolveUsing(
+            fn () => auth()->guard('admins')->user() ?? auth()->user()
+        );
+
         // Custom transport that delivers via the Mailgun credentials in bp_options.
         Mail::extend('bp_mailgun', fn () => new ConfigMailgunTransport());
 

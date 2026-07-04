@@ -733,6 +733,14 @@ CREATE TABLE `feedback` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Sample activity feed for the dashboard (attributed to the demo admin)
+INSERT INTO `activity_log` (`log_name`,`description`,`subject_type`,`event`,`subject_id`,`causer_type`,`causer_id`,`created_at`,`updated_at`) VALUES
+('content','created the post “Welcome to Beyond Plus CMS”','App\\Models\\Bp_post','created',3,'App\\Admin',1,DATE_SUB(NOW(), INTERVAL 4 DAY),DATE_SUB(NOW(), INTERVAL 4 DAY)),
+('content','created the page “About Us”','App\\Models\\Bp_post','created',4,'App\\Admin',1,DATE_SUB(NOW(), INTERVAL 3 DAY),DATE_SUB(NOW(), INTERVAL 3 DAY)),
+('content','updated the post “Getting Started with the Admin Panel”','App\\Models\\Bp_post','updated',2,'App\\Admin',1,DATE_SUB(NOW(), INTERVAL 2 DAY),DATE_SUB(NOW(), INTERVAL 2 DAY)),
+('content','created the event “Community meetup”','App\\Models\\Bp_post','created',9,'App\\Admin',1,DATE_SUB(NOW(), INTERVAL 1 DAY),DATE_SUB(NOW(), INTERVAL 1 DAY)),
+('content','updated the page “Contact”','App\\Models\\Bp_post','updated',6,'App\\Admin',1,DATE_SUB(NOW(), INTERVAL 6 HOUR),DATE_SUB(NOW(), INTERVAL 6 HOUR));
+
 -- Give the demo administrator (superadmin, role 4) full access to every module,
 -- including modules that shipped without any access row (e.g. Category).
 DELETE FROM `bp_access` WHERE `usertype` = 4;

@@ -22,8 +22,16 @@ class Bp_post extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->useLogName('bp_posts')
-            ->logOnly(['title', 'staff_id']);
+            ->useLogName('content')
+            ->logOnly(['title'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $event) => trim(sprintf(
+                '%s the %s “%s”',
+                $event,                                   // created / updated / deleted
+                $this->post_type ?: 'post',               // post / page / news / event
+                \Illuminate\Support\Str::limit((string) $this->title, 60)
+            )));
     }
 
     public function creator()

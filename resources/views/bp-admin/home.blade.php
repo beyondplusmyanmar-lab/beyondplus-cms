@@ -113,6 +113,32 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="dash-tile">
+            <div class="dash-head">
+                <h5><i class="fa fa-history text-muted"></i> Recent activity</h5>
+            </div>
+            @forelse ($activities as $a)
+                <div class="dash-item">
+                    <div class="d-flex align-items-center" style="gap:12px;">
+                        <span class="dash-avatar">{{ strtoupper(substr(optional($a->causer)->name ?? 'S', 0, 1)) }}</span>
+                        <div>
+                            <div class="dash-item-title">
+                                <strong>{{ optional($a->causer)->name ?? optional($a->causer)->email ?? 'System' }}</strong> {{ $a->description }}
+                            </div>
+                            <div class="dash-item-sub text-uppercase" style="font-size:.68rem; letter-spacing:.3px;">{{ $a->log_name }}</div>
+                        </div>
+                    </div>
+                    <span class="dash-time">{{ $a->created_at->diffForHumans() }}</span>
+                </div>
+            @empty
+                <div class="dash-empty">No activity yet — actions taken in the admin panel will appear here.</div>
+            @endforelse
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')

@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CustomTableSeeder::class);
         $this->call(AccessTableSeeder::class);
         $this->call(FaqTableSeeder::class);
+        $this->call(ActivityLogSeeder::class);
 
     }
 }

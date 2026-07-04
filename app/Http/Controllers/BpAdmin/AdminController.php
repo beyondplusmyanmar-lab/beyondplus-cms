@@ -32,7 +32,10 @@ class AdminController extends Controller
         $allUser = Customers::count();
 
         $latestUsers= Customers::orderBy('created_at','DESC')->paginate(12);
-        return view('bp-admin.home', array('post' => $post , 'allUser' => $allUser, 'latestUsers' => $latestUsers ,'totalPost' => $totalPost, 'totalPage' => $totalPage, 'totalMedia' => $totalMedia));
+
+        $activities = \Spatie\Activitylog\Models\Activity::with('causer')->latest()->limit(8)->get();
+
+        return view('bp-admin.home', array('post' => $post , 'allUser' => $allUser, 'latestUsers' => $latestUsers ,'totalPost' => $totalPost, 'totalPage' => $totalPage, 'totalMedia' => $totalMedia, 'activities' => $activities));
     }
 
 
