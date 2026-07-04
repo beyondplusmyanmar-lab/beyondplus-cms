@@ -32,6 +32,7 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             Route::get('post/delete/{id}','PostController@destroy');
 
             Route::get('news', 'NewsController@index');
+            Route::get('news/calendar', 'NewsController@calendar');
             Route::get('news/create', 'NewsController@create');
             Route::post('news', 'NewsController@store');
             Route::get('news/{id}', 'NewsController@show');

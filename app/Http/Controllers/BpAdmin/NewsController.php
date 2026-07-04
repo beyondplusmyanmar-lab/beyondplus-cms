@@ -34,6 +34,27 @@ class NewsController extends Controller
         return view('bp-admin.news.index', array('post' => $post));
     }
 
+    /** Month calendar of dated events (post.event_at). */
+    public function calendar(Request $request){
+        try {
+            $cursor = $request->filled('month')
+                ? \Carbon\Carbon::createFromFormat('Y-m', $request->query('month'))->startOfMonth()
+                : \Carbon\Carbon::now()->startOfMonth();
+        } catch (\Throwable $e) {
+            $cursor = \Carbon\Carbon::now()->startOfMonth();
+        }
+
+        $events = Bp_post::where('translate_id', 0)
+            ->whereNotNull('event_at')
+            ->where('event_at', '>=', $cursor->copy()->startOfMonth())
+            ->where('event_at', '<', $cursor->copy()->addMonth()->startOfMonth())
+            ->orderBy('event_at')
+            ->get()
+            ->groupBy(fn ($e) => \Carbon\Carbon::parse($e->event_at)->toDateString());
+
+        return view('bp-admin.news.calendar', compact('cursor', 'events'));
+    }
+
     public function create(){
        return view('bp-admin.news.add', array('taxes' => $this->taxes));
 
@@ -55,7 +76,9 @@ class NewsController extends Controller
         $inputs['post_link'] = formatUrl($request->input('title'));
         $inputs['post_type'] = $request->input('post_type');
         if($request->input('post_type') == "event") {
-            $inputs['event_at'] = $request->input('event_at');
+            $inputs['event_at'] = $request->filled('event_at')
+                ? \Carbon\Carbon::parse($request->input('event_at'))->toDateTimeString()
+                : null;
         }
         
         $inputs['post_created'] = Auth::guard('admins')->user()->id;
@@ -93,7 +116,9 @@ class NewsController extends Controller
         $inputs['post_link'] = formatUrl($request->input('title'));
         $inputs['post_type'] = $request->input('post_type');
         if($request->input('post_type') == "event") {
-            $inputs['event_at'] = $request->input('event_at');
+            $inputs['event_at'] = $request->filled('event_at')
+                ? \Carbon\Carbon::parse($request->input('event_at'))->toDateTimeString()
+                : null;
         }
         
         if ($__up = bp_store_image($request->file('featured_img'), 'feat')) {

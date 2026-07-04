@@ -217,7 +217,7 @@ CREATE TABLE `bp_posts` (
   `post_active` varchar(3) NOT NULL DEFAULT 'yes',
   `translate_id` int(11) NOT NULL DEFAULT 0,
   `lang` int(11) NOT NULL DEFAULT 1,
-  `event_at` date DEFAULT NULL,
+  `event_at` datetime DEFAULT NULL,
   `staff_id` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `event_color` varchar(100) NOT NULL DEFAULT '#3A87AD',

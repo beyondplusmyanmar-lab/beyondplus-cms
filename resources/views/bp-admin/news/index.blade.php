@@ -12,10 +12,12 @@
                             <h4 class="mb-0">News &amp; events</h4>
                             <small class="text-muted">Time-sensitive announcements and events.</small>
                         </div>
-                        <div class="col-sm-4 pull-right">
-                            <a href="{{ url('bp-admin/news/create') }}" class="btn btn-success  pull-right">
-                                <i class="fa fa-plus"></i>
-                                New item
+                        <div class="col-sm-4 pull-right text-right">
+                            <a href="{{ url('bp-admin/news/calendar') }}" class="btn btn-outline-primary">
+                                <i class="fa fa-calendar"></i> Calendar
+                            </a>
+                            <a href="{{ url('bp-admin/news/create') }}" class="btn btn-success">
+                                <i class="fa fa-plus"></i> New item
                             </a>
                         </div>
                     </div>

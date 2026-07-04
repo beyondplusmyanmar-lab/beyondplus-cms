@@ -51,8 +51,9 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Event Date</label>
-                                <input type="text" name="event_at" id="start_date" class="form-control" placeholder="Enter From Date" autocomplete="off" value="{{date('Y-m-d')}}">
+                                <label class="control-label">Event date &amp; time</label>
+                                <input type="datetime-local" name="event_at" id="start_date" class="form-control" value="{{ date('Y-m-d\TH:i') }}">
+                                <small class="form-text text-muted">Used for events (ignored for plain news).</small>
                             </div>
                             
                             <div class="form-group">

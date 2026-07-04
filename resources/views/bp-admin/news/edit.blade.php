@@ -64,8 +64,10 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Event Date</label>
-                                {{ Form::text('event_at', null,['class'=>'form-control', 'id' => 'start_date']) }}
+                                <label class="control-label">Event date &amp; time</label>
+                                <input type="datetime-local" name="event_at" id="start_date" class="form-control"
+                                       value="{{ $post->event_at ? \Carbon\Carbon::parse($post->event_at)->format('Y-m-d\TH:i') : '' }}">
+                                <small class="form-text text-muted">Used for events (ignored for plain news).</small>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Active</label>
