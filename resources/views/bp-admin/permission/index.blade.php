@@ -18,8 +18,21 @@
     <div class="col-md-12 tile">
         <div class="box box-danger">
             <div class="box-header">
-                <h4 class="mb-0">Access permissions</h4>
-                <small class="text-muted">Tick a module to grant that role access to it. Changes save automatically.</small>
+                <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap:.5rem;">
+                    <div>
+                        <h4 class="mb-0">Access permissions</h4>
+                        <small class="text-muted">Tick a module to grant that role access to it. Changes save automatically.</small>
+                    </div>
+                    <div class="d-flex align-items-center" style="gap:.4rem;">
+                        <label class="mb-0 small text-muted">Filter by role</label>
+                        <select id="roleFilter" class="form-control form-control-sm" style="width:auto;">
+                            <option value="">All roles</option>
+                            @foreach(\App\Models\Bp_usertype::orderBy('id')->get() as $ut)
+                                <option value="{{ $ut->id }}">{{ ucfirst($ut->role) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -36,14 +49,14 @@
                         @foreach ($module as $m)
 
                             @if(!in_array($m->usertype, $temprole))
-                                <tr class="perm-role-row">
+                                <tr class="perm-role-row" data-role="{{ $m->usertype }}">
                                     @php array_push($temprole, $m->usertype) @endphp
                                     <td colspan="3">{{ array_search($m->usertype, \App\Models\Bp_usertype::pluck('id', 'role')->toArray()) }}</td>
                                 </tr>
                             @endif
 
                             @if(count($m->module->child) > 0)
-                                <tr>
+                                <tr data-role="{{ $m->usertype }}">
                                     <td>{{ $i++ }}</td>
                                     <td class="perm-name">{{ $m->module->module_name }}</td>
                                     <td class="perm-check">{{ Form::checkbox('canshow', $m->access_id, $m->canshow, ['class' => 'canshow', 'id' => 'canshow-'.$m->access_id]) }}</td>
@@ -52,7 +65,7 @@
                                 @foreach($m->module->child as $m1)
                                     @foreach($m1->access as $m1access)
                                         @if($m->usertype == $m1access->usertype)
-                                            <tr class="perm-child">
+                                            <tr class="perm-child" data-role="{{ $m->usertype }}">
                                                 <td>{{ $i++ }}</td>
                                                 <td class="perm-name">{{ $m1->module_name }}</td>
                                                 <td class="perm-check">{{ Form::checkbox('canshow', $m1access->access_id, $m1access->canshow, ['class' => 'canshow', 'id' => 'canshow-'.$m1access->access_id]) }}</td>
@@ -61,7 +74,7 @@
                                     @endforeach
                                 @endforeach
                             @else
-                                <tr>
+                                <tr data-role="{{ $m->usertype }}">
                                     <td>{{ $i++ }}</td>
                                     <td class="perm-name">{{ $m->module->module_name }}</td>
                                     <td class="perm-check">{{ Form::checkbox('canshow', $m->access_id, $m->canshow, ['class' => 'canshow', 'id' => 'canshow-'.$m->access_id]) }}</td>
@@ -87,6 +100,15 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+
+        // Filter the table by role.
+        $('#roleFilter').on('change', function () {
+            var role = $(this).val();
+            $('.perm-table tbody tr').each(function () {
+                var r = String($(this).data('role'));
+                $(this).toggle(role === '' || r === role);
+            });
         });
 
         $('.canshow,.cancreate,.canedit,.candelete').change(function() {
