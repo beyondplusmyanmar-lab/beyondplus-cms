@@ -52,9 +52,9 @@
                         </select>
                     </div>
                     <div class="form-group mb-0">
-                        <label class="control-label">Public feedback form</label>
+                        <label class="control-label">Contact form</label>
                         <select class="form-control" name="feedback_enabled">
-                            <option value="yes" {{ $config['feedback_enabled'] === 'yes' ? 'selected' : '' }}>Enabled — show /feedback</option>
+                            <option value="yes" {{ $config['feedback_enabled'] === 'yes' ? 'selected' : '' }}>Enabled — show the form on /contact</option>
                             <option value="no" {{ $config['feedback_enabled'] === 'no' ? 'selected' : '' }}>Disabled</option>
                         </select>
                         <small class="form-text text-muted">Manage FAQs and read messages from the FAQ / Feedback admin pages.</small>

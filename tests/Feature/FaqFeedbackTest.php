@@ -34,18 +34,34 @@ class FaqFeedbackTest extends TestCase
         $this->get('/faq')->assertStatus(404);
     }
 
-    public function test_feedback_submission_is_stored(): void
+    public function test_contact_page_loads_with_form(): void
     {
-        $this->post('/feedback', [
+        $this->get('/contact')->assertStatus(200)->assertSee('name="message"', false);
+    }
+
+    public function test_contact_submission_is_stored(): void
+    {
+        $this->post('/contact', [
             'name' => 'Ann', 'email' => 'a@example.com', 'subject' => 'Hi', 'message' => 'Nice site',
         ]);
         $this->assertDatabaseHas('feedback', ['name' => 'Ann', 'subject' => 'Hi', 'is_read' => 0]);
     }
 
-    public function test_feedback_page_404_when_disabled(): void
+    public function test_contact_honeypot_drops_bots(): void
+    {
+        $this->post('/contact', ['name' => 'Bot', 'message' => 'spam', 'website' => 'http://spam.example']);
+        $this->assertDatabaseMissing('feedback', ['name' => 'Bot']);
+    }
+
+    public function test_contact_form_blocked_when_disabled(): void
     {
         Bp_options::updateOrCreate(['option_name' => 'feedback_enabled'], ['option_value' => 'no', 'autoload' => 'yes']);
-        $this->get('/feedback')->assertStatus(404);
+        $this->post('/contact', ['name' => 'X', 'message' => 'hi'])->assertStatus(404);
+    }
+
+    public function test_old_feedback_url_redirects_to_contact(): void
+    {
+        $this->get('/feedback')->assertRedirect('/contact');
     }
 
     public function test_admin_can_manage_faqs_and_read_feedback(): void

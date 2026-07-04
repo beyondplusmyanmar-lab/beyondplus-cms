@@ -79,24 +79,33 @@ class FrontController extends Controller
         return view($this->t().'faq', ['title' => 'FAQ', 'faqs' => $faqs]);
     }
 
-    public function feedback(){
-        if (bp_option('feedback_enabled', 'yes') !== 'yes') { abort(404); }
-        return view($this->t().'feedback', ['title' => 'Feedback']);
+    // Contact = the public feedback form (merged with the old /feedback page).
+    public function contact(){
+        return view($this->t().'contact', ['title' => 'Contact']);
     }
 
-    public function feedbackStore(Request $request){
+    public function contactStore(Request $request){
         if (bp_option('feedback_enabled', 'yes') !== 'yes') { abort(404); }
+
+        $msg = app()->getLocale() === 'mm'
+            ? 'ကျေးဇူးတင်ပါသည် — သင့်စာကို ပေးပို့ပြီးပါပြီ။'
+            : 'Thanks — your message has been sent.';
+
+        // Honeypot: a real user never fills this hidden field. Drop bots silently
+        // (pretend success so they don't learn the field is a trap).
+        if ($request->filled('website')) {
+            return redirect('contact')->with('success', $msg);
+        }
+
         $data = $request->validate([
             'name'    => 'required|string|max:120',
             'email'   => 'nullable|email|max:190',
             'subject' => 'nullable|string|max:190',
-            'message' => 'required|string',
+            'message' => 'required|string|max:5000',
         ]);
         \App\Models\Feedback::create($data);
-        $msg = app()->getLocale() === 'mm'
-            ? 'ကျေးဇူးတင်ပါသည် — သင့်စာကို ပေးပို့ပြီးပါပြီ။'
-            : 'Thanks — your message has been sent.';
-        return redirect('feedback')->with('success', $msg);
+
+        return redirect('contact')->with('success', $msg);
     }
 
     public function menu($name) {

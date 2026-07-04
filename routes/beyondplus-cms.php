@@ -323,10 +323,13 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('/blog', 'Front\FrontController@blog');
 
-            // FAQ + feedback (front-end) — each 404s unless enabled in Configuration.
+            // FAQ (404s unless enabled) + the merged Contact / feedback page.
             Route::get('/faq', 'Front\FrontController@faq');
-            Route::get('/feedback', 'Front\FrontController@feedback');
-            Route::post('/feedback', 'Front\FrontController@feedbackStore');
+            Route::get('/contact', 'Front\FrontController@contact');
+            Route::post('/contact', 'Front\FrontController@contactStore')->middleware('throttle:5,1');
+            // Old /feedback URLs now point at the Contact page.
+            Route::get('/feedback', function () { return redirect('/contact'); });
+            Route::post('/feedback', 'Front\FrontController@contactStore')->middleware('throttle:5,1');
 
             // Preview an error page without forcing a real failure. Dev/admin only:
             // works when APP_DEBUG is on, or for a signed-in admin. e.g.
