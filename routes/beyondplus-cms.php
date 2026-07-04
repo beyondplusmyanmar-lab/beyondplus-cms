@@ -226,14 +226,8 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
 
             Route::get('feedback', 'FeedbackController@index');
-            Route::get('feedback/create', 'FeedbackController@create');
-            Route::post('feedback/store', 'FeedbackController@store');
+            Route::get('feedback/delete/{id}', 'FeedbackController@destroy');
             Route::get('feedback/{id}', 'FeedbackController@show');
-            Route::get('feedback/{id}/edit', 'FeedbackController@edit');
-            Route::put('feedback/{id}', 'FeedbackController@update');
-            Route::delete('feedback/{id}', 'FeedbackController@destroy');
-
-            Route::get('feedback/delete/{id}','FeedbackController@destroy');
 
 
             // Route::get('report/customer', 'reportController@customer');
@@ -315,8 +309,6 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('/open', 'Front\FrontController@openBox');
 
-            Route::post('/feedback', 'Front\FrontController@feedback');
-            
             Route::get('/coming-soon', 'Front\FrontController@comingSoon');
             
             Route::get('/', 'Front\FrontController@index');
@@ -330,6 +322,11 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             Route::post('/comment', 'Front\FrontController@comment');
 
             Route::get('/blog', 'Front\FrontController@blog');
+
+            // FAQ + feedback (front-end) — each 404s unless enabled in Configuration.
+            Route::get('/faq', 'Front\FrontController@faq');
+            Route::get('/feedback', 'Front\FrontController@feedback');
+            Route::post('/feedback', 'Front\FrontController@feedbackStore');
 
             // Preview an error page without forcing a real failure. Dev/admin only:
             // works when APP_DEBUG is on, or for a signed-in admin. e.g.

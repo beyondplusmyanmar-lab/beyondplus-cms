@@ -3,74 +3,38 @@
 @section('title', 'Feedback')
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12 tile">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <div class="row">
-                        <div class="col-sm-9">
-                          <!--   <a href="{{ url('bp-admin/page/create') }}" class="btn btn-success t">
-                                <i class="fa fa-user"></i>
-                                User Guide
-                            </a> -->
-                        </div>
-                        <div class="col-sm-3 pull-right">
-                            <a href="{{ url('bp-admin/feedback/create') }}" class="btn btn-success  pull-right">
-                                <i class="fa fa-user-plus"></i>
-                                New
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table  class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Sr.no</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($page as $c)
-                        <tr>
-                          <td>
-                              {{$c->id}}
-                          </td>
-                          <td>
-                                {{$c->name ?? "-"}}
-                          </td>
-                            <td>
-                                {{$c->message}}
-                            </td>
-
-                            <td>
-                                <a href="{{ url('bp-admin/feedback/'.$c->id) }}" class="btn btn-xs btn-info">Show</a>
-                                <a href="{{ url('bp-admin/feedback/delete', [$c->id]) }}" class="btn btn-delete btn-xs btn-danger">Delete</a>
-                            </td>
-
-                        </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="pagination"> {{ $page->links() }} </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.box-body -->
+<div class="row">
+    <div class="col-md-12 tile">
+        <div class="box box-danger">
+            <div class="box-header" style="padding-bottom:.75rem;">
+                <h4 class="mb-0">Feedback inbox @if($unread)<span class="badge badge-danger">{{ $unread }} new</span>@endif</h4>
+                <small class="text-muted">Messages submitted from the public feedback form.</small>
             </div>
-            <!-- /.box -->
+            <div class="box-body pt-3" style="border-top:1px solid #eef0f3;">
+                @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th>From</th><th>Subject</th><th style="width:150px">Received</th><th style="width:120px"></th></tr>
+                    </thead>
+                    <tbody>
+                    @forelse($feedback as $item)
+                        <tr @if(!$item->is_read) style="font-weight:600;" @endif>
+                            <td>{{ $item->name }}<div class="small text-muted" style="font-weight:400;">{{ $item->email }}</div></td>
+                            <td>{{ $item->subject ?: '—' }}</td>
+                            <td class="text-muted small" style="font-weight:400;">{{ $item->created_at->diffForHumans() }}</td>
+                            <td>
+                                <a href="{{ url('bp-admin/feedback/'.$item->id) }}" class="btn btn-sm btn-outline-primary">Read</a>
+                                <a href="{{ url('bp-admin/feedback/delete/'.$item->id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this message?')"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="4" class="text-center text-muted py-4">No messages yet.</td></tr>
+                    @endforelse
+                    </tbody>
+                </table>
+                <div class="mt-3">{{ $feedback->links() }}</div>
+            </div>
         </div>
     </div>
-@stop
-
-@section('scripts')
-    <script>
-        $(document).ready(function () {
-        });
-    </script>
+</div>
 @stop

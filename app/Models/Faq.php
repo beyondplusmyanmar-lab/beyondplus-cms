@@ -6,14 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Faq extends Model
 {
-    protected $primaryKey = 'id';
     protected $table = 'faqs';
 
-    protected $fillable = [
+    protected $fillable = ['question', 'answer', 'sort_order', 'is_active'];
 
-         'title', 'type', 'content', 'salt','translate_id','provider_id', 'created_at'
-
-    ];
-
-
+    protected $casts = ['is_active' => 'boolean'];
 }

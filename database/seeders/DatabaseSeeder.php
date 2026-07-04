@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LanguageTableSeeder::class);
         $this->call(CustomTableSeeder::class);
         $this->call(AccessTableSeeder::class);
+        $this->call(FaqTableSeeder::class);
 
     }
 }

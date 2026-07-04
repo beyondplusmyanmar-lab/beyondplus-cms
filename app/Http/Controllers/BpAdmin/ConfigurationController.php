@@ -17,6 +17,8 @@ class ConfigurationController extends Controller
     protected $defaults = [
         'registration_enabled' => 'yes',   // yes | no — allow new customer sign-ups
         'registration_type'    => 'phone', // phone | email | both
+        'faq_enabled'          => 'yes',   // yes | no — public /faq page
+        'feedback_enabled'     => 'yes',   // yes | no — public /feedback form
         'otp_channel'          => 'auto',  // auto | sms | email
         'api_enabled'          => 'yes',   // yes | no
         'admin_login_path'     => '',      // secret admin login slug; blank = default bp-admin/login

@@ -6,19 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Feedback extends Model
 {
-    protected $primaryKey = 'id';
     protected $table = 'feedback';
 
-    protected $fillable = [
+    protected $fillable = ['name', 'email', 'subject', 'message', 'is_read'];
 
-        //  'title','description','provider_id','customer_id','salt'
-         'name', 'email', 'phone', 'subject', 'message', 'post_id', 'user_id'
-
-    ];
-
-    public function customer()
-    {
-        return $this->belongsTo('App\Models\Customers', 'customer_id');
-    }
-
+    protected $casts = ['is_read' => 'boolean'];
 }

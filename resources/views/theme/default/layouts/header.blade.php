@@ -44,6 +44,13 @@
                         @endif
                     @endforeach
 
+                    @if(bp_option('faq_enabled', 'yes') === 'yes')
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/faq') }}">{{ app()->getLocale() === 'mm' ? 'အမေးအဖြေ' : 'FAQ' }}</a></li>
+                    @endif
+                    @if(bp_option('feedback_enabled', 'yes') === 'yes')
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/feedback') }}">{{ app()->getLocale() === 'mm' ? 'တုံ့ပြန်ချက်' : 'Feedback' }}</a></li>
+                    @endif
+
                     <li class="nav-item ms-lg-3 d-flex align-items-center">
                         <div class="bp-lang" role="group" aria-label="Language">
                             <a href="{{ url('lang/en') }}" class="bp-lang__opt {{ app()->getLocale() === 'mm' ? '' : 'active' }}">EN</a>

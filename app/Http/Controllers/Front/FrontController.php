@@ -73,6 +73,29 @@ class FrontController extends Controller
         return view($this->t().'blog', ['title' => 'Blog', 'posts' => bp_post(10)]);
     }
 
+    public function faq(){
+        if (bp_option('faq_enabled', 'yes') !== 'yes') { abort(404); }
+        $faqs = \App\Models\Faq::where('is_active', 1)->orderBy('sort_order')->orderBy('id')->get();
+        return view($this->t().'faq', ['title' => 'FAQ', 'faqs' => $faqs]);
+    }
+
+    public function feedback(){
+        if (bp_option('feedback_enabled', 'yes') !== 'yes') { abort(404); }
+        return view($this->t().'feedback', ['title' => 'Feedback']);
+    }
+
+    public function feedbackStore(Request $request){
+        if (bp_option('feedback_enabled', 'yes') !== 'yes') { abort(404); }
+        $data = $request->validate([
+            'name'    => 'required|string|max:120',
+            'email'   => 'nullable|email|max:190',
+            'subject' => 'nullable|string|max:190',
+            'message' => 'required|string',
+        ]);
+        \App\Models\Feedback::create($data);
+        return redirect('feedback')->with('success', 'Thanks — your message has been sent.');
+    }
+
     public function menu($name) {
         // dd($name);
 
@@ -150,20 +173,6 @@ class FrontController extends Controller
         return 1;
     }
 
-
-    public function feedback(Request $request){
-        // $this->middleware('auth');
-        $this->validate($request, [
-        'name' => 'required',
-        'email' => 'required',
-        'description' => 'required'
-        ]);
-        $inputs = $request->all();
-        // $inputs['user_id'] = Auth::user()->id;
-        Feedback::create($inputs);
-        //return 1;
-        return redirect()->to(url('/'))->with('success', 'Form submitted successfully!');
-    }
 
     // public function search($q){
     //     $product= Product::where('name','=',$q)->paginate(10);

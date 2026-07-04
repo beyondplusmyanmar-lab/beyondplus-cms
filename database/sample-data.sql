@@ -669,6 +669,8 @@ INSERT INTO `bp_block` (`id`,`title`,`body`,`block_url`,`block_type`,`block_acti
 INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) VALUES
 ('registration_enabled','yes','yes',NOW()),
 ('registration_type','phone','yes',NOW()),
+('faq_enabled','yes','yes',NOW()),
+('feedback_enabled','yes','yes',NOW()),
 ('api_enabled','yes','yes',NOW()),
 ('sms_enabled','no','yes',NOW()),
 ('sms_provider','smspoh','yes',NOW()),
@@ -691,11 +693,45 @@ INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) 
 INSERT INTO `bp_modules` (`module_name`,`module_name_mm`,`module_link`,`module_weight`,`module_icon`,`parent_id`,`staff_id`,`section`,`created_at`) VALUES
 ('Configuration','ဖွဲ့စည်းမှု','configuration',5,'fa fa-cogs',8,1,1,NOW()),
 ('Themes','ပုံစံများ','themes',6,'fa fa-paint-brush',8,1,1,NOW()),
-('Plugins','ပလပ်အင်များ','plugins',7,'fa fa-plug',8,1,1,NOW());
+('Plugins','ပလပ်အင်များ','plugins',7,'fa fa-plug',8,1,1,NOW()),
+('FAQ','အမေးအဖြေများ','faq',6,'fa fa-question-circle',0,1,1,NOW()),
+('Feedback','တုံ့ပြန်ချက်များ','feedback',7,'fa fa-comments',0,1,1,NOW());
 
 -- Remove the client-specific "Department Pages" module
 DELETE FROM `bp_access` WHERE `module_id` = 22;
 DELETE FROM `bp_modules` WHERE `module_id` = 22;
+
+-- FAQ + Feedback modules
+DROP TABLE IF EXISTS `faqs`;
+CREATE TABLE `faqs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `question` varchar(255) NOT NULL,
+  `answer` text NOT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `faqs` (`question`,`answer`,`sort_order`,`is_active`,`created_at`,`updated_at`) VALUES
+('How do I log in to the admin panel?','Visit /bp-admin and sign in with your administrator account.',1,1,NOW(),NOW()),
+('Does Beyond Plus CMS support multiple languages?','Yes — content and menus can be translated, and the front-end serves the matching locale automatically.',2,1,NOW(),NOW()),
+('How do I add a new page or post?','From the admin panel open Post or Page, click Add, then fill in the title and content.',3,1,NOW(),NOW()),
+('Can I use my own theme?','Yes. Themes live in resources/views/theme/<name>/ and can be switched from the Themes admin page.',4,1,NOW(),NOW());
+
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE `feedback` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `message` text NOT NULL,
+  `is_read` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Give the demo administrator (superadmin, role 4) full access to every module,
 -- including modules that shipped without any access row (e.g. Category).

@@ -35,7 +35,7 @@
                         </select>
                         <small class="form-text text-muted">Which identifier new customers register with.</small>
                     </div>
-                    <div class="form-group mb-0">
+                    <div class="form-group">
                         <label class="control-label">OTP delivery</label>
                         <select class="form-control" name="otp_channel">
                             @foreach (['auto' => 'Automatic (SMS, then email)', 'sms' => 'SMS (SMSPoh)', 'email' => 'Email (Mailgun)'] as $val => $label)
@@ -43,6 +43,21 @@
                             @endforeach
                         </select>
                         <small class="form-text text-muted">Which provider sends the verification code. Activate and configure the provider on its plugin page. Falls back to the log if unavailable.</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Public FAQ page</label>
+                        <select class="form-control" name="faq_enabled">
+                            <option value="yes" {{ $config['faq_enabled'] === 'yes' ? 'selected' : '' }}>Enabled — show /faq</option>
+                            <option value="no" {{ $config['faq_enabled'] === 'no' ? 'selected' : '' }}>Disabled</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="control-label">Public feedback form</label>
+                        <select class="form-control" name="feedback_enabled">
+                            <option value="yes" {{ $config['feedback_enabled'] === 'yes' ? 'selected' : '' }}>Enabled — show /feedback</option>
+                            <option value="no" {{ $config['feedback_enabled'] === 'no' ? 'selected' : '' }}>Disabled</option>
+                        </select>
+                        <small class="form-text text-muted">Manage FAQs and read messages from the FAQ / Feedback admin pages.</small>
                     </div>
                 </div>
             </div>

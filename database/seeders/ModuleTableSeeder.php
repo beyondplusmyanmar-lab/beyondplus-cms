@@ -22,6 +22,8 @@ class ModuleTableSeeder extends Seeder
                     array("Menu","အညွန်းများ","menu",3,"fa fa-table",0,1),
                     array("Media","မီဒီယာ","media",4,"fa fa-desktop",0,1),
                     array("Slider","ကြော်ငြာ","slider",5,"fa fa-image",0,1),
+                    array("FAQ","အမေးအဖြေများ","faq",6,"fa fa-question-circle",0,1),
+                    array("Feedback","တုံ့ပြန်ချက်များ","feedback",7,"fa fa-comments",0,1),
                     array("User Management","အဖွဲ့ဝင်များ","user",8,"fa fa-windows",0,1),
                     array("Settings","ထိန်းချုပ်ရေး","settings",9,"fa fa-bug",0,1),
                     array("Custom","ပြင်ဆင်ခြင်း","custom",0,"fa fa-windows",0,0),
