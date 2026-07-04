@@ -64,8 +64,9 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label class="control-label">Event Date</label>
-                                {{ Form::text('event_at', null,['class'=>'form-control', 'id' => 'start_date']) }}
+                                <label class="control-label">Event date &amp; time</label>
+                                <input type="datetime-local" name="event_at" id="start_date" class="form-control"
+                                       value="{{ $post->event_at ? \Carbon\Carbon::parse($post->event_at)->format('Y-m-d\TH:i') : '' }}">
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Active</label>
@@ -179,8 +180,7 @@
             } else {
                 $('.scrollbar').removeClass('overflow-y');
             }
-            $('#start_date').datepicker({  format : 'yyyy-mm-dd',autoclose: true,
-            todayHighlight: true});
+            // Event date & time uses the native datetime-local input (no datepicker).
         });
     </script>
 @endpush

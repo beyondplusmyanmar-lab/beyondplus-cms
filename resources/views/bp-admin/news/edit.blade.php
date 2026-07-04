@@ -179,8 +179,7 @@
             } else {
                 $('.scrollbar').removeClass('overflow-y');
             }
-            $('#start_date').datepicker({  format : 'yyyy-mm-dd',autoclose: true,
-            todayHighlight: true});
+            // Event date & time uses the native datetime-local input (no datepicker).
         });
     </script>
 @endpush
