@@ -72,6 +72,13 @@ class Main extends Controller
         }
 
         RateLimiter::hit($throttleKey, 60);
+        try {
+            activity('auth')->log(sprintf(
+                'failed sign-in for %s from %s',
+                \Illuminate\Support\Str::limit((string) $request->input('email'), 60),
+                $request->ip()
+            ));
+        } catch (\Throwable $e) { /* activity_log unavailable */ }
         return view('auth/adminlogin', ['match' => $error, 'loginAction' => $request->url()]);
     }
 

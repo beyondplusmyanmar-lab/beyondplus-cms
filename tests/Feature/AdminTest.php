@@ -73,6 +73,14 @@ class AdminTest extends TestCase
         $this->assertDatabaseHas('activity_log', ['log_name' => 'auth', 'description' => 'signed in']);
     }
 
+    public function test_failed_login_is_recorded_as_activity(): void
+    {
+        $this->post('/bp-admin/login', ['email' => 'x@example.com', 'password' => 'wrong-password']);
+        $this->assertTrue(
+            \Spatie\Activitylog\Models\Activity::where('description', 'like', 'failed sign-in%')->exists()
+        );
+    }
+
     public function test_login_is_rate_limited(): void
     {
         for ($i = 0; $i < 5; $i++) {
