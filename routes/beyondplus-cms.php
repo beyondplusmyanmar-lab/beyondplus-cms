@@ -330,6 +330,21 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('/blog', 'Front\FrontController@blog');
 
+            // Preview an error page without forcing a real failure. Dev/admin only:
+            // works when APP_DEBUG is on, or for a signed-in admin. e.g.
+            // /preview-error/404, /preview-error/500 (the 500 also shows the dev log).
+            Route::get('/preview-error/{code}', function ($code) {
+                abort_unless(config('app.debug') || auth()->guard('admins')->check(), 404);
+                abort_unless(in_array($code, ['401', '403', '404', '419', '429', '500', '503'], true), 404);
+
+                $data = $code === '500'
+                    ? ['exception' => new \Symfony\Component\HttpKernel\Exception\HttpException(
+                        500, '', new \RuntimeException('Simulated error for preview'))]
+                    : [];
+
+                return response()->view("errors.{$code}", $data, (int) $code);
+            })->where('code', '[0-9]+');
+
             Route::get('/{name}', 'Front\FrontController@menu');
             Route::get('/detail/{name}', 'Front\FrontController@post');
             Route::get('/cat/{name}', 'Front\FrontController@cat');
