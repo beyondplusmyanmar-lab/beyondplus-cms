@@ -407,19 +407,5 @@ class FrontController extends Controller
     }
 
 
-    public function openBox(){
-
-        
-        return view($this->t().'openbox', ['title' => 'home' ]);
-    }
-
-
-    public function comingSoon(){
-
-        
-        return view($this->t().'comingsoon', ['title' => 'home' ]);
-    }
-    
-
 }
 ?>

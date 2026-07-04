@@ -307,10 +307,6 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
             Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
-            Route::get('/open', 'Front\FrontController@openBox');
-
-            Route::get('/coming-soon', 'Front\FrontController@comingSoon');
-            
             Route::get('/', 'Front\FrontController@index');
 
             Route::get('/home', 'Front\FrontController@index');
