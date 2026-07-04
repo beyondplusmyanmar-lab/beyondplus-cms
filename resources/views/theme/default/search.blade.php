@@ -4,6 +4,7 @@
 @section('title', 'Search')
 
 @section('content')
+@php $mm = app()->getLocale() === 'mm'; @endphp
 <div class="container py-5">
     <div class="row g-4">
         <aside class="col-lg-3">
@@ -12,8 +13,21 @@
 
         <div class="col-lg-9">
             <h1 class="h3 mb-4">
-                Search results@isset($query) for “{{ $query }}”@endisset
+                @isset($query)
+                    {{ $mm ? '“'.$query.'” အတွက် ရှာဖွေမှုရလဒ်များ' : 'Search results for “'.$query.'”' }}
+                @else
+                    {{ $mm ? 'ရှာဖွေမှု' : 'Search' }}
+                @endisset
             </h1>
+
+            {{-- Search box (also in the header) --}}
+            <form class="mb-4" role="search" action="{{ url('/search') }}" method="GET">
+                <div class="input-group">
+                    <input class="form-control" type="search" name="q" value="{{ $query ?? '' }}"
+                           placeholder="{{ $mm ? 'ရှာဖွေရန်…' : 'Search…' }}" aria-label="Search">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> {{ $mm ? 'ရှာရန်' : 'Search' }}</button>
+                </div>
+            </form>
 
             @isset($posts)
                 @forelse($posts as $post)
@@ -31,10 +45,14 @@
                         </p>
                     </article>
                 @empty
-                    <p class="text-muted">No results found.</p>
+                    <p class="text-muted">{{ $mm ? 'ရှာဖွေမှု မတွေ့ရှိပါ။' : 'No results found.' }}</p>
                 @endforelse
+
+                @if($posts->hasPages())
+                    <div class="mt-4">{{ $posts->links() }}</div>
+                @endif
             @else
-                <p class="text-muted">Enter a search term to find posts.</p>
+                <p class="text-muted">{{ $mm ? 'ရှာဖွေရန် စကားလုံး ရိုက်ထည့်ပါ။' : 'Enter a search term to find content.' }}</p>
             @endisset
         </div>
     </div>

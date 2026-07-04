@@ -26,6 +26,12 @@ class FrontendTest extends TestCase
         $this->get('/bp-admin/login')->assertStatus(200)->assertSee('Sign in', false);
     }
 
+    public function test_search_finds_matching_content(): void
+    {
+        $this->get('/search?q=Multilingual')->assertStatus(200)->assertSee('Building Multilingual Content');
+        $this->get('/search?q=a')->assertStatus(200); // too short: prompt, no error
+    }
+
     public function test_events_calendar_loads(): void
     {
         $this->get('/events')->assertStatus(200);

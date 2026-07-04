@@ -49,6 +49,16 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url('/faq') }}">{{ app()->getLocale() === 'mm' ? 'အမေးအဖြေ' : 'FAQ' }}</a></li>
                     @endif
 
+                    <li class="nav-item ms-lg-3">
+                        <form class="d-flex" role="search" action="{{ url('/search') }}" method="GET">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control" type="search" name="q" value="{{ request('q') }}"
+                                       placeholder="{{ app()->getLocale() === 'mm' ? 'ရှာဖွေရန်…' : 'Search…' }}" aria-label="Search" style="max-width:170px;">
+                                <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+                    </li>
+
                     <li class="nav-item ms-lg-3 d-flex align-items-center">
                         <div class="bp-lang" role="group" aria-label="Language">
                             <a href="{{ url('lang/en') }}" class="bp-lang__opt {{ app()->getLocale() === 'mm' ? '' : 'active' }}">EN</a>

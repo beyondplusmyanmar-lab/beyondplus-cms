@@ -73,6 +73,28 @@ class FrontController extends Controller
         return view($this->t().'blog', ['title' => 'Blog', 'posts' => bp_post(10)]);
     }
 
+    public function search(Request $request){
+        $q = trim((string) $request->query('q', ''));
+        $posts = null;
+
+        if (mb_strlen($q) >= 2) {
+            $posts = \App\Models\Bp_post::whereIn('post_type', ['post', 'page', 'news', 'event'])
+                ->where('post_active', 'yes')
+                ->where('lang', 1)
+                ->where('translate_id', 0)
+                ->where(function ($query) use ($q) {
+                    $query->where('title', 'like', '%'.$q.'%')
+                          ->orWhere('body', 'like', '%'.$q.'%');
+                })
+                ->with('translate')
+                ->orderBy('id', 'desc')
+                ->paginate(10)
+                ->appends(['q' => $q]);
+        }
+
+        return view($this->t().'search', ['title' => 'Search', 'query' => $q ?: null, 'posts' => $posts]);
+    }
+
     public function events(Request $request){
         try {
             $cursor = $request->filled('month')
