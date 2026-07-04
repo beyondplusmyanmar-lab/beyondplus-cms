@@ -18,8 +18,8 @@ class SliderTableSeeder extends Seeder
 
         // [name, image (committed placeholder), weight, description]
         $sliders = [
-            ['Welcome to Beyond Plus CMS', 'la.jpg', 1, 'A modern, multi-language content management system built on Laravel.'],
-            ['Manage Everything in One Place', 'default.jpg', 2, 'Posts, pages, menus, media and more — all from a clean admin panel.'],
+            ['Welcome to Beyond Plus CMS', 'slide-1.svg', 1, 'A modern, multi-language content management system built on Laravel.'],
+            ['Manage Everything in One Place', 'slide-2.svg', 2, 'Posts, pages, menus, media and more — all from a clean admin panel.'],
         ];
 
         foreach ($sliders as [$name, $link, $weight, $desc]) {

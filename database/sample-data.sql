@@ -658,8 +658,8 @@ INSERT INTO `bp_menus` (`menu_id`,`menu_name`,`menu_link`,`post_id`,`menu_weight
 
 -- Demo homepage sliders (use the committed placeholder images)
 INSERT INTO `bp_sliders` (`slider_id`,`slider_name`,`slider_link`,`slider_type`,`slider_weight`,`slider_description`,`staff_id`,`created_at`,`updated_at`) VALUES
-(1,'Welcome to Beyond Plus CMS','la.jpg','slider',1,'A modern, multi-language content management system built on Laravel.',1,NOW(),NOW()),
-(2,'Manage Everything in One Place','default.jpg','slider',2,'Posts, pages, menus, media and more — all from a clean admin panel.',1,NOW(),NOW());
+(1,'Welcome to Beyond Plus CMS','slide-1.svg','slider',1,'A modern, multi-language content management system built on Laravel.',1,NOW(),NOW()),
+(2,'Manage Everything in One Place','slide-2.svg','slider',2,'Posts, pages, menus, media and more — all from a clean admin panel.',1,NOW(),NOW());
 
 -- Demo content block, embedded in the About Us page via the [block]1[/block] shortcode
 INSERT INTO `bp_block` (`id`,`title`,`body`,`block_url`,`block_type`,`block_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
