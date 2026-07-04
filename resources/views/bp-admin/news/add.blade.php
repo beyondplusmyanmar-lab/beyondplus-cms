@@ -45,15 +45,15 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Post Type</label>
-                                <select class="form-control" name="post_type">
+                                <select class="form-control" name="post_type" id="post_type">
                                     <option value="news">News</option>
                                     <option value="event">Event</option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="event-date-group" style="display:none;">
                                 <label class="control-label">Event date &amp; time</label>
                                 <input type="datetime-local" name="event_at" id="start_date" class="form-control" value="{{ date('Y-m-d\TH:i') }}">
-                                <small class="form-text text-muted">Used for events (ignored for plain news).</small>
+                                <small class="form-text text-muted">Shown only for events.</small>
                             </div>
                             
                             <div class="form-group">
@@ -161,7 +161,12 @@
                 $('.scrollbar').removeClass('overflow-y');
             }
 
-            // Event date & time uses the native datetime-local input (no datepicker).
+            // Show the event date/time only when the post type is "event".
+            function toggleEventDate() {
+                $('#event-date-group').toggle($('#post_type').val() === 'event');
+            }
+            $('#post_type').on('change', toggleEventDate);
+            toggleEventDate();
 
         });
         

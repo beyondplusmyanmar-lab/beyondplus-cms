@@ -52,18 +52,18 @@
                                 <label class="control-label">Post Type </label>
 
                                 @if($post->post_type == "event")
-                                    <select class="form-control" name="post_type">
+                                    <select class="form-control" name="post_type" id="post_type">
                                         <option value="news" >News</option>
                                         <option value="event" selected="">Event</option>
                                     </select>
                                 @else
-                                    <select class="form-control" name="post_type">
+                                    <select class="form-control" name="post_type" id="post_type">
                                         <option value="news" selected="">News</option>
                                         <option value="event" >Event</option>
                                     </select>
                                 @endif
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="event-date-group" style="{{ $post->post_type == 'event' ? '' : 'display:none;' }}">
                                 <label class="control-label">Event date &amp; time</label>
                                 <input type="datetime-local" name="event_at" id="start_date" class="form-control"
                                        value="{{ $post->event_at ? \Carbon\Carbon::parse($post->event_at)->format('Y-m-d\TH:i') : '' }}">
@@ -180,7 +180,12 @@
             } else {
                 $('.scrollbar').removeClass('overflow-y');
             }
-            // Event date & time uses the native datetime-local input (no datepicker).
+            // Show the event date/time only when the post type is "event".
+            function toggleEventDate() {
+                $('#event-date-group').toggle($('#post_type').val() === 'event');
+            }
+            $('#post_type').on('change', toggleEventDate);
+            toggleEventDate();
         });
     </script>
 @endpush
