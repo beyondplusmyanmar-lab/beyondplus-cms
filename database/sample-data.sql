@@ -667,6 +667,7 @@ INSERT INTO `bp_block` (`id`,`title`,`body`,`block_url`,`block_type`,`block_acti
 
 -- Configuration defaults (secrets intentionally blank) + admin module
 INSERT INTO `bp_options` (`option_name`,`option_value`,`autoload`,`created_at`) VALUES
+('version','2.3.0','yes',NOW()),
 ('registration_enabled','yes','yes',NOW()),
 ('registration_type','phone','yes',NOW()),
 ('faq_enabled','yes','yes',NOW()),
