@@ -51,6 +51,32 @@ class ReportsController extends Controller
         return view('bp-admin.reports.activity', compact('activities', 'logNames'));
     }
 
+    /** Download the activity log as CSV (respecting the category filter). */
+    public function activityExport(Request $request) {
+        $query = \Spatie\Activitylog\Models\Activity::with('causer')->latest();
+        if ($request->filled('log')) {
+            $query->where('log_name', $request->query('log'));
+        }
+
+        $filename = 'activity-log-'.now()->format('Y-m-d').'.csv';
+
+        return response()->streamDownload(function () use ($query) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['When', 'Who', 'Category', 'Action']);
+            $query->chunk(500, function ($rows) use ($out) {
+                foreach ($rows as $a) {
+                    fputcsv($out, [
+                        optional($a->created_at)->toDateTimeString(),
+                        optional($a->causer)->name ?? optional($a->causer)->email ?? 'System',
+                        $a->log_name,
+                        $a->description,
+                    ]);
+                }
+            });
+            fclose($out);
+        }, $filename, ['Content-Type' => 'text/csv']);
+    }
+
     // protected $generalSettingRepo;
 
     // public function __construct(GeneralSettingRepo $generalSettingRepo) {

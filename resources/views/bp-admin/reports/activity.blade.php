@@ -12,15 +12,18 @@
                         <h4 class="mb-0">Activity log</h4>
                         <small class="text-muted">Every action taken in the admin panel, newest first.</small>
                     </div>
-                    <form method="GET" class="d-flex align-items-center" style="gap:.4rem;">
-                        <label class="mb-0 small text-muted">Category</label>
-                        <select name="log" class="form-control form-control-sm" style="width:auto;" onchange="this.form.submit()">
-                            <option value="">All</option>
-                            @foreach($logNames as $ln)
-                                <option value="{{ $ln }}" {{ request('log') === $ln ? 'selected' : '' }}>{{ ucfirst($ln) }}</option>
-                            @endforeach
-                        </select>
-                    </form>
+                    <div class="d-flex align-items-center" style="gap:.4rem;">
+                        <form method="GET" class="d-flex align-items-center" style="gap:.4rem;">
+                            <label class="mb-0 small text-muted">Category</label>
+                            <select name="log" class="form-control form-control-sm" style="width:auto;" onchange="this.form.submit()">
+                                <option value="">All</option>
+                                @foreach($logNames as $ln)
+                                    <option value="{{ $ln }}" {{ request('log') === $ln ? 'selected' : '' }}>{{ ucfirst($ln) }}</option>
+                                @endforeach
+                            </select>
+                        </form>
+                        <a href="{{ url('bp-admin/activity/export').(request('log') ? '?log='.request('log') : '') }}" class="btn btn-sm btn-outline-primary"><i class="fa fa-download"></i> Export CSV</a>
+                    </div>
                 </div>
             </div>
             <div class="box-body pt-3" style="border-top:1px solid #eef0f3;">

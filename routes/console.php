@@ -2,6 +2,11 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
+
+// Prune activity-log entries older than activitylog.delete_records_older_than_days
+// (365 by default). Requires the scheduler: * * * * * php artisan schedule:run
+Schedule::command('activitylog:clean')->weekly();
 
 /*
 |--------------------------------------------------------------------------

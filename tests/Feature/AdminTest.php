@@ -73,6 +73,12 @@ class AdminTest extends TestCase
         $this->assertDatabaseHas('activity_log', ['log_name' => 'auth', 'description' => 'signed in']);
     }
 
+    public function test_activity_log_exports_csv(): void
+    {
+        $res = $this->actingAs($this->admin(), 'admins')->get('/bp-admin/activity/export');
+        $res->assertStatus(200)->assertHeader('content-type', 'text/csv; charset=utf-8');
+    }
+
     public function test_failed_login_is_recorded_as_activity(): void
     {
         $this->post('/bp-admin/login', ['email' => 'x@example.com', 'password' => 'wrong-password']);

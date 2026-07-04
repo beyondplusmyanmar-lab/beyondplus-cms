@@ -231,6 +231,7 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
 
 
             // Route::get('report/customer', 'reportController@customer');
+            Route::get('activity/export','ReportsController@activityExport');
             Route::get('activity','ReportsController@activityLog');
             Route::get('reports','ReportsController@customerReport');
             Route::get('reports/customer-report-export','ReportsController@customerReportExport');
