@@ -93,7 +93,10 @@ class FrontController extends Controller
             'message' => 'required|string',
         ]);
         \App\Models\Feedback::create($data);
-        return redirect('feedback')->with('success', 'Thanks — your message has been sent.');
+        $msg = app()->getLocale() === 'mm'
+            ? 'ကျေးဇူးတင်ပါသည် — သင့်စာကို ပေးပို့ပြီးပါပြီ။'
+            : 'Thanks — your message has been sent.';
+        return redirect('feedback')->with('success', $msg);
     }
 
     public function menu($name) {

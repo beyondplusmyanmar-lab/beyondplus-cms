@@ -24,7 +24,8 @@ class FaqFeedbackTest extends TestCase
 
     public function test_public_faq_page_loads_when_enabled(): void
     {
-        $this->get('/faq')->assertStatus(200)->assertSee('Frequently Asked Questions');
+        // The heading is localized (mm by default); assert on a seeded FAQ instead.
+        $this->get('/faq')->assertStatus(200)->assertSee('How do I log in to the admin panel?');
     }
 
     public function test_public_faq_page_404_when_disabled(): void

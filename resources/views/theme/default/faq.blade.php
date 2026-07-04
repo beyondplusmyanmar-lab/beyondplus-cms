@@ -1,11 +1,12 @@
 @extends('theme.default.layouts.app')
 
 @section('content')
+@php $mm = app()->getLocale() === 'mm'; @endphp
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-9">
-            <h1 class="bp-section-title text-center mb-2">Frequently Asked Questions</h1>
-            <p class="text-muted text-center mb-4">Answers to the questions we hear most often.</p>
+            <h1 class="bp-section-title text-center mb-2">{{ $mm ? 'မေးလေ့ရှိသော မေးခွန်းများ' : 'Frequently Asked Questions' }}</h1>
+            <p class="text-muted text-center mb-4">{{ $mm ? 'အမေးများသော မေးခွန်းများအတွက် အဖြေများ။' : 'Answers to the questions we hear most often.' }}</p>
 
             <div class="accordion" id="faqAccordion">
                 @forelse($faqs as $faq)
@@ -20,7 +21,7 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-center text-muted py-5">No questions have been published yet.</p>
+                    <p class="text-center text-muted py-5">{{ $mm ? 'မေးခွန်းများ ထည့်သွင်းထားခြင်း မရှိသေးပါ။' : 'No questions have been published yet.' }}</p>
                 @endforelse
             </div>
         </div>
