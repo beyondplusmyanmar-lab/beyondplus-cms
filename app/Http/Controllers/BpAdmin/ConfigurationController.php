@@ -20,6 +20,7 @@ class ConfigurationController extends Controller
         'otp_channel'          => 'auto',  // auto | sms | email
         'api_enabled'          => 'yes',   // yes | no
         'admin_login_path'     => '',      // secret admin login slug; blank = default bp-admin/login
+        'developer_ips'        => '',      // IPs/CIDRs that may see the 500 developer log
         'spa_url'              => '',       // public URL of the headless/SPA app
         'cors_origins'         => '',       // allowed API origins; blank = allow all (*)
         'frontend_mode'        => 'theme',  // theme | spa | headless
@@ -54,6 +55,10 @@ class ConfigurationController extends Controller
                     $value = $this->sanitizeLoginPath($value);
                 }
 
+                if ($key === 'developer_ips') {
+                    $value = $this->sanitizeIpList($value);
+                }
+
                 Bp_options::updateOrCreate(
                     ['option_name' => $key],
                     ['option_value' => $value, 'autoload' => 'yes']
@@ -77,5 +82,22 @@ class ConfigurationController extends Controller
         ];
 
         return in_array($slug, $reserved, true) ? '' : $slug;
+    }
+
+    /** Keep only valid IP addresses and IPv4 CIDR ranges, comma separated. */
+    private function sanitizeIpList($value): string
+    {
+        $entries = preg_split('/[\s,]+/', (string) $value, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        $valid = array_filter($entries, function ($entry) {
+            if (str_contains($entry, '/')) {
+                [$subnet, $bits] = explode('/', $entry, 2);
+                return filter_var($subnet, FILTER_VALIDATE_IP) !== false
+                    && is_numeric($bits) && (int) $bits >= 0 && (int) $bits <= 128;
+            }
+            return filter_var($entry, FILTER_VALIDATE_IP) !== false;
+        });
+
+        return implode(', ', array_unique($valid));
     }
 }

@@ -4,10 +4,14 @@
 @section('icon', 'bi-bug')
 
 @php
-    // Show the real error to developers only (a signed-in admin), never to the
-    // public — even in production where debug is off and this branded page shows.
+    // Show the real error to developers only — a signed-in admin, or a request
+    // from an allow-listed developer IP (managed in Configuration). Never to the
+    // public, even in production where debug is off and this branded page shows.
     $bpIsDeveloper = false;
-    try { $bpIsDeveloper = auth()->guard('admins')->check(); } catch (\Throwable $e) {}
+    try {
+        $bpIsDeveloper = auth()->guard('admins')->check()
+            || bp_ip_allowed(request()->ip(), bp_option('developer_ips', ''));
+    } catch (\Throwable $e) {}
     // In production Laravel wraps the original throwable in an HttpException(500);
     // unwrap it so the log shows the actual cause.
     $bpError = isset($exception) ? ($exception->getPrevious() ?: $exception) : null;

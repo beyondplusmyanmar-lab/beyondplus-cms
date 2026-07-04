@@ -478,6 +478,42 @@ function bp_option($name, $default = '') {
     return $option ? $option->option_value : $default;
 }
 
+/**
+ * Whether an IP is in a comma/newline separated allow-list of IPs and IPv4
+ * CIDR ranges. Used to gate the developer-only 500 log.
+ */
+function bp_ip_allowed($ip, $list) {
+    $ip = trim((string) $ip);
+    if ($ip === '' || trim((string) $list) === '') {
+        return false;
+    }
+    foreach (preg_split('/[\s,]+/', $list, -1, PREG_SPLIT_NO_EMPTY) as $entry) {
+        if (bp_ip_match($ip, $entry)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/** Match a single IP against an exact address or an IPv4 CIDR range. */
+function bp_ip_match($ip, $entry) {
+    if (strpos($entry, '/') === false) {
+        return $ip === $entry;
+    }
+    [$subnet, $bits] = explode('/', $entry, 2);
+    $ipLong = ip2long($ip);
+    $subnetLong = ip2long($subnet);
+    if ($ipLong === false || $subnetLong === false) {
+        return false; // not IPv4 — CIDR ranges are only supported for IPv4
+    }
+    $bits = (int) $bits;
+    if ($bits < 0 || $bits > 32) {
+        return false;
+    }
+    $mask = $bits === 0 ? 0 : (-1 << (32 - $bits)) & 0xFFFFFFFF;
+    return ($ipLong & $mask) === ($subnetLong & $mask);
+}
+
 
 function showBlock($id) {
     

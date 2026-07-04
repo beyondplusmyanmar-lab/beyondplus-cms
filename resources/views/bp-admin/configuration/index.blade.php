@@ -86,7 +86,7 @@
             <div class="tile">
                 <h3 class="tile-title">Admin login security</h3>
                 <div class="tile-body">
-                    <div class="form-group mb-0">
+                    <div class="form-group">
                         <label class="control-label">Hardened login path</label>
                         <div class="input-group">
                             <span class="input-group-text">/bp-admin/</span>
@@ -97,6 +97,11 @@
                         @else
                             <small class="form-text text-muted">Move the real admin login to a secret slug. <code>/bp-admin/login</code> keeps its UI but always returns “invalid credentials”. Blank = disabled. (Letters, numbers, dashes.)</small>
                         @endif
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="control-label">Developer IP allow-list</label>
+                        <textarea class="form-control" name="developer_ips" rows="2" placeholder="203.0.113.4, 10.0.0.0/24">{{ $config['developer_ips'] }}</textarea>
+                        <small class="form-text text-muted">IPs / IPv4 CIDR ranges allowed to see the detailed error (developer log) on a <code>500</code> page — in addition to signed-in admins. Comma or line separated. Your current IP: <code>{{ request()->ip() }}</code>.</small>
                     </div>
                 </div>
             </div>
