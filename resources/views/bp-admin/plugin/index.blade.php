@@ -75,6 +75,7 @@
                                         @endif
                                         @if($plugin['minCmsVersion']) &middot; needs CMS &ge; {{ $plugin['minCmsVersion'] }}@endif
                                     </p>
+                                    <div class="d-flex flex-wrap align-items-center mt-2" style="gap:.4rem;">
                                     @if($plugin['settings'])
                                         <a href="{{ url('bp-admin/plugins/settings?slug='.$plugin['slug']) }}" class="btn btn-sm btn-outline-primary" title="Configure"><i class="fa fa-cog"></i> Settings</a>
                                     @endif
@@ -105,6 +106,7 @@
                                             <button type="submit" class="btn btn-sm btn-outline-danger">Uninstall</button>
                                         </form>
                                     @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
