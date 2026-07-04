@@ -27,6 +27,20 @@ JSON API တို့ ပါဝင်ပါသည်။
 
 ## တပ်ဆင်ခြင်း (Installation)
 
+**အမြန်နည်း (`make`)** — PHP 8.3+, Composer နှင့် MySQL/MariaDB (XAMPP/Laragon စသည်) ရှိရုံဖြင့်:
+
+```bash
+make install    # dependencies, .env, app key, permissions, database — တစ်ကြိမ်တည်း
+make serve      # http://localhost:8899
+```
+
+DB အသုံးပြုသူ/စကားဝှက်/host ကွဲပြားပါက `.env` တွင် ဦးစွာ ပြင်ပါ (Makefile သည် `.env` မှသာ ဖတ်ပြီး
+စကားဝှက်ကို ဘယ်တော့မှ hard-code မလုပ်ပါ)။ command အားလုံးကို `make help` ဖြင့် ကြည့်နိုင်သည်။
+
+---
+
+သို့မဟုတ် အဆင့်လိုက် ကိုယ်တိုင် တပ်ဆင်လိုပါက —
+
 ```bash
 # ၁။ PHP dependencies များ install လုပ်ပါ
 composer install
