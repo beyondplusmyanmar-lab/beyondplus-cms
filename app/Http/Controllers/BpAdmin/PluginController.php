@@ -116,8 +116,11 @@ class PluginController extends Controller
             return redirect()->back()->withErrors('Enter a recipient to test.');
         }
 
-        if (($test['hook'] ?? 'send_sms') === 'send_mail') {
+        $hook = $test['hook'] ?? 'send_sms';
+        if ($hook === 'send_mail') {
             $ok = (bool) bp_apply_filters('send_mail', false, $to, 'Test — Beyond Plus CMS', "This is a test email from the {$slug} plugin.");
+        } elseif ($hook === 'send_telegram') {
+            $ok = (bool) bp_apply_filters('send_telegram', false, "Test message from Beyond Plus CMS ({$slug}): {$to}");
         } else {
             $ok = (bool) bp_apply_filters('send_sms', false, $to, "Test SMS from Beyond Plus CMS ({$slug}).");
         }

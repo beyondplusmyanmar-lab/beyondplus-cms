@@ -80,6 +80,15 @@ class ConfigurationController extends Controller
                 ],
             ],
             [
+                'title'   => 'Feedback notifications',
+                'trigger' => ['label' => 'Contact form submitted', 'icon' => 'fa-comment'],
+                'core'    => ['label' => 'feedback_received', 'sub' => 'CMS action hook'],
+                'providers' => [
+                    ['label' => 'Telegram Feedback', 'sub' => 'Telegram Bot API', 'slug' => 'telegram-feedback', 'active' => $on('telegram-feedback'), 'icon' => 'fa-paper-plane', 'link' => url('bp-admin/plugins/settings?slug=telegram-feedback')],
+                    ['label' => 'Feedback inbox', 'sub' => 'always stored', 'active' => true, 'fallback' => true, 'icon' => 'fa-inbox', 'link' => url('bp-admin/feedback')],
+                ],
+            ],
+            [
                 'title'   => 'Front-end features',
                 'trigger' => ['label' => 'Site visitor', 'icon' => 'fa-globe'],
                 'core'    => ['label' => 'Theme: '.bp_option('theme', 'default'), 'sub' => 'active theme'],

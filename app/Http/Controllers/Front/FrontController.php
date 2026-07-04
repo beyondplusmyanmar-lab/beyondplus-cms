@@ -147,7 +147,10 @@ class FrontController extends Controller
             'subject' => 'nullable|string|max:190',
             'message' => 'required|string|max:5000',
         ]);
-        \App\Models\Feedback::create($data);
+        $feedback = \App\Models\Feedback::create($data);
+
+        // Let plugins react to new feedback (e.g. the Telegram notifier).
+        bp_do_action('feedback_received', $feedback);
 
         return redirect('contact')->with('success', $msg);
     }

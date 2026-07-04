@@ -1,0 +1,23 @@
+{
+    "id": "telegram-feedback",
+    "type": "plugin",
+    "category": "Integrations",
+    "name": "Telegram Feedback",
+    "description": "Sends a Telegram message to your team whenever a visitor submits the contact / feedback form. A demo of connecting the CMS to an external social service through the hook system.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/plugins/telegram-feedback",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1",
+        "extensions": ["curl", "json"]
+    },
+    "permissions": ["http"],
+    "settings": [
+        { "name": "bot_token", "label": "Bot token", "type": "password", "help": "Create a bot with @BotFather and paste its token (e.g. 123456:ABC-DEF...)." },
+        { "name": "chat_id", "label": "Chat ID", "type": "text", "placeholder": "-1001234567890", "help": "The channel / group / user chat ID to notify. Use @userinfobot or getUpdates to find it." }
+    ],
+    "test": { "hook": "send_telegram", "label": "Send a test message", "placeholder": "Hello from Beyond Plus CMS" },
+    "main": "telegram-feedback.php"
+}
