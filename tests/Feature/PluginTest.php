@@ -84,4 +84,19 @@ class PluginTest extends TestCase
         array_map('unlink', glob($tmp.'/*'));
         rmdir($tmp);
     }
+
+    public function test_scan_blocks_file_deletion(): void
+    {
+        $tmp = sys_get_temp_dir().'/scandel'.uniqid();
+        mkdir($tmp);
+        file_put_contents($tmp.'/a.php', "<?php unlink(\$file);");
+        file_put_contents($tmp.'/b.php', "<?php \\Illuminate\\Support\\Facades\\File::deleteDirectory(\$dir);");
+
+        // Deleting files/dirs is a critical (blocking) finding, not just a warning.
+        $scan = \App\Support\PackageGuard::scan($tmp);
+        $this->assertNotEmpty($scan['critical']);
+
+        array_map('unlink', glob($tmp.'/*'));
+        rmdir($tmp);
+    }
 }

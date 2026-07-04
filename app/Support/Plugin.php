@@ -424,7 +424,16 @@ class Plugin
 
         $script = self::path().'/'.$slug.'/uninstall.php';
         if (is_file($script)) {
-            require $script;
+            // Re-scan before running the plugin's own cleanup: a plugin tampered
+            // after activation must not be able to execute destructive code (e.g.
+            // deleting core files) during uninstall.
+            $scan = self::scan($slug);
+            if (! empty($scan['critical'])) {
+                self::audit('uninstall.php skipped — failed security re-scan', $slug);
+                \Illuminate\Support\Facades\Log::warning("Plugin uninstall.php SKIPPED by security scan: {$slug}", $scan['critical']);
+            } else {
+                require $script;
+            }
         }
 
         self::audit('uninstalled', $slug);

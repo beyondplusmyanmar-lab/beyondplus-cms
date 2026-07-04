@@ -30,10 +30,13 @@ class PackageGuard
             '/preg_replace\s*\(\s*([\'"]).*\1\s*[.,]?\s*[\'"][^\'"]*e/i'  => 'preg_replace /e — executes code',
             '/(eval|assert)\s*\(\s*(base64_decode|gzinflate|gzuncompress|str_rot13)/i' => 'obfuscated code execution',
             '/(include|require)(_once)?\s*\(?\s*[\'"]https?:\/\//i'       => 'remote code inclusion',
+            // Deleting files/directories is blocked outright — a plugin must not be
+            // able to remove core or other plugins' files.
+            '/\b(unlink|rmdir)\s*\(/i'                                    => 'file / directory deletion',
+            '/\b(File|Storage)::(delete|deleteDirectory|deleteDirectories|cleanDirectory)\s*\(/' => 'file / directory deletion',
         ];
         $warning = [
             '/\bbase64_decode\s*\(/i'                    => 'base64_decode — can hide payloads',
-            '/\b(unlink|rmdir)\s*\(/i'                   => 'file / directory deletion',
             '/\b(file_put_contents|fwrite|fopen)\s*\(/i' => 'writes to the filesystem',
             '/\bcurl_exec\s*\(/i'                        => 'raw cURL request',
             '/\bmove_uploaded_file\s*\(/i'               => 'handles uploaded files',
