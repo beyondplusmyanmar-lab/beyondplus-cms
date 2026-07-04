@@ -7,7 +7,8 @@
 <style>
     .menu-body { padding: 1rem 1.25rem 1.25rem; min-height: 460px; }
     .box-header { padding-bottom: .75rem; }
-    .insert-list { padding: .75rem 1rem 1rem; }
+    .insert-list { padding: .5rem 1rem .75rem; }
+    .box-header h5 { font-weight: 600; }
     .menu-item-row {
         display: flex; align-items: center; gap: .5rem;
         background: #fff; border: 1px solid #e5e7eb; border-radius: 6px;
@@ -24,8 +25,10 @@
     .menu-item-actions .lang-link { font-size: .78rem; }
     .menu-item-actions .btn { padding: .15rem .45rem; line-height: 1.2; }
     .menu-empty { border: 1px dashed #d1d5db; border-radius: 8px; }
-    .insert-list .form-check { padding: .3rem .25rem; border-bottom: 1px solid #f1f3f5; }
+    .insert-list .form-check { padding: .35rem .5rem; border-bottom: 1px solid #f1f3f5; border-radius: 4px; }
+    .insert-list .form-check:last-child { border-bottom: 0; }
     .insert-list .form-check:hover { background: #f8fafc; }
+    .insert-list .form-check-label { cursor: pointer; }
 </style>
 <div class="row">
     <div class="col-md-8 tile">
@@ -59,19 +62,13 @@
     </div>
     <div class="col-md-4 tile">
         <div class="box box-danger">
-            <div class="box-header">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        {{ Form::open(['url' => 'bp-admin/menu/pagestore', 'method' => 'post', 'files' => 'true']) }}
-                        <h5 class="mb-0"><i class="fa fa-file-o"></i> Pages</h5>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="pull-right btn btn-primary btn-sm">Insert</button>
-                    </div>
-                </div>
+            {{ Form::open(['url' => 'bp-admin/menu/pagestore', 'method' => 'post']) }}
+            <div class="box-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fa fa-file-o"></i> Pages</h5>
+                <button type="submit" class="btn btn-primary btn-sm">Insert</button>
             </div>
             <div class="box-body insert-list" id="scrollbar1">
-                <div class="scrollbar col-md-12">
+                <div class="scrollbar">
                     @forelse($pages as $page)
                         <div class="form-check">
                             {{ Form::checkbox('pages[]', $page->id, false, ['class' => 'form-check-input', 'id' => 'page-'.$page->id]) }}
@@ -81,24 +78,18 @@
                         <p class="text-muted small mb-0">No pages yet.</p>
                     @endforelse
                 </div>
-                {{ Form::close() }}
             </div>
+            {{ Form::close() }}
         </div>
 
         <div class="box box-danger">
-            <div class="box-header">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        {{ Form::open(['url' => 'bp-admin/menu/poststore', 'method' => 'post', 'files' => 'true']) }}
-                        <h5 class="mb-0"><i class="fa fa-newspaper-o"></i> Posts</h5>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="pull-right btn btn-primary btn-sm">Insert</button>
-                    </div>
-                </div>
+            {{ Form::open(['url' => 'bp-admin/menu/poststore', 'method' => 'post']) }}
+            <div class="box-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fa fa-newspaper-o"></i> Posts</h5>
+                <button type="submit" class="btn btn-primary btn-sm">Insert</button>
             </div>
             <div class="box-body insert-list" id="scrollbar2">
-                <div class="scrollbar col-md-12">
+                <div class="scrollbar">
                     @forelse($posts as $post)
                         <div class="form-check">
                             {{ Form::checkbox('posts[]', $post->id, false, ['class' => 'form-check-input', 'id' => 'post-'.$post->id]) }}
@@ -108,8 +99,8 @@
                         <p class="text-muted small mb-0">No posts yet.</p>
                     @endforelse
                 </div>
-                {{ Form::close() }}
             </div>
+            {{ Form::close() }}
         </div>
     </div>
 </div>
