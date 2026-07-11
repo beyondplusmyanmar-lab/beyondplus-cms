@@ -105,8 +105,13 @@ production တွင် ပုန်းကွယ်နေပါသည် (အခ
 
 ရှေ့ဆုံး ပုံစံများကို `resources/views/theme/<name>/` တွင် ထားရှိပါသည်။ အသုံးပြုနေသော
 ပုံစံကို `bp_options` table (`option_name = 'theme'`) တွင် သိမ်းဆည်းထားပြီး၊ မူလ
-တန်ဖိုးမှာ `default` ဖြစ်ပါသည်။ နောက်ထပ် နမူနာပုံစံ (`bptheme1`, `bptheme2`) များလည်း
-ပါဝင်ပါသည်။
+တန်ဖိုးမှာ `default` ဖြစ်ပါသည်။ ကွဲပြားသော ပုံစံ ၅ မျိုး ပါဝင်ပါသည် — `default`
+(Aurora), `bptheme1` (Meridian), `bptheme2` (Nocturne), `bptheme3` (Terra),
+`bptheme4` (Pulse)။
+
+ပုံစံအသစ် ရေးသားရန်၊ လိုအပ်သော view များ နှင့် asset (CSS / JS / ပုံ) များ
+ထားရှိပုံ လမ်းညွှန်ကို [docs/theme-development.md](docs/theme-development.md) တွင်
+ကြည့်ရှုနိုင်ပါသည်။
 
 ## Mobile SPA အတွက် API
 
