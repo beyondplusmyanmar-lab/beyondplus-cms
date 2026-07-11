@@ -1,20 +1,21 @@
-# Theme development guide
+# ပုံစံ ရေးသားရေး လမ်းညွှန် (Theme development guide)
 
-Beyond Plus CMS front-end themes are self-contained folders under
-`resources/views/theme/<slug>/`. A theme is a set of Blade templates that render
-the public site; the active theme is stored in the `bp_options` table
-(`option_name = 'theme'`, default `default`) and switched from the admin
-**Themes** page.
+Beyond Plus CMS ၏ ရှေ့ဆုံး ပုံစံများ (front-end themes) သည်
+`resources/views/theme/<slug>/` အောက်တွင် သီးခြားရပ်တည်နိုင်သော ဖိုလ်ဒါများ
+ဖြစ်ပါသည်။ ပုံစံတစ်ခုသည် အများသုံးဆိုက်ကို render လုပ်ပေးသည့် Blade template
+အစုအဝေးဖြစ်ပြီး၊ အသုံးပြုနေသော ပုံစံကို `bp_options` table (`option_name = 'theme'`၊
+မူလ `default`) တွင် သိမ်းဆည်းထားကာ admin ၏ **Themes** စာမျက်နှာမှ ပြောင်းလဲနိုင်ပါသည်။
 
-> The CMS is the **secure host**: a theme is scanned, compatibility-checked and
-> fingerprinted before it is made active — the same package model as plugins
-> (see [plugin-development.md](plugin-development.md)). Design against this layout
-> and a theme installs, activates and updates unchanged.
+> CMS သည် **လုံခြုံသော host** ဖြစ်ပါသည် — ပုံစံတစ်ခုကို active မလုပ်မီ security scan၊
+> compatibility စစ်ဆေးမှု နှင့် integrity fingerprint ပြုလုပ်သည် (plugin များနှင့်
+> တူညီသော package model — [plugin-development.md](plugin-development.md) ကို ကြည့်ပါ)။
+> ဤ layout အတိုင်း ဒီဇိုင်းရေးဆွဲပါက ပုံစံသည် အပြောင်းအလဲမရှိဘဲ install / activate /
+> update ဖြစ်ပါမည်။
 
-## Anatomy
+## ဖွဲ့စည်းပုံ (Anatomy)
 
-A theme is **Blade only** — every view the front controller can render must
-exist, so the theme works on every route without 404s.
+ပုံစံတစ်ခုသည် **Blade သီးသန့်** ဖြစ်ပါသည် — front controller က render လုပ်နိုင်သော
+view တိုင်း ရှိရမည်ဖြစ်ပြီး၊ ထို့ကြောင့် route တိုင်းတွင် 404 မဖြစ်ဘဲ အလုပ်လုပ်ပါသည်။
 
 ```
 resources/views/theme/my-theme/
@@ -37,7 +38,8 @@ resources/views/theme/my-theme/
     └── fullwidth.blade.php # page template, selected by post_template = "fullwidth"
 ```
 
-Copy the `default` theme as a starting point — it implements every view.
+အစပြုရန်အတွက် `default` ပုံစံကို ကူးယူပါ — ၎င်းသည် view အားလုံးကို
+အကောင်အထည်ဖော်ထားပါသည်။
 
 ## Manifest (`theme.json`)
 
@@ -55,39 +57,44 @@ Copy the `default` theme as a starting point — it implements every view.
 }
 ```
 
-`id` should match the folder slug. `minCmsVersion` is checked before activation —
-a theme that needs a newer CMS is **blocked**, not silently broken.
+`id` သည် ဖိုလ်ဒါ slug နှင့် ကိုက်ညီသင့်ပါသည်။ `minCmsVersion` ကို activate မလုပ်မီ
+စစ်ဆေးပါသည် — CMS ဗားရှင်း အသစ်လိုအပ်သော ပုံစံကို တိတ်တဆိတ် ပျက်စေမည့်အစား
+**ပိတ်ပင်** ထားပါသည်။
 
-## Assets: CSS, JS, images, fonts
+## Asset များ — CSS, JS, ပုံ, font (Assets)
 
-This is the part that trips people up, so it has one hard rule:
+ဤအပိုင်းသည် လူများ မကြာခဏ မှားတတ်သည့်အပိုင်းဖြစ်၍ တိကျသော စည်းမျဉ်း တစ်ခု
+ရှိပါသည် —
 
-> **Only files under `public/` are web-served.** `resources/views/theme/<slug>/`
-> is a Blade view directory — a browser **cannot** `GET` a `.css`, `.js`, `.png`
-> or font from there. Anything referenced by `<link href>`, `<script src>`,
-> `<img src>` or `url(...)` must resolve to a URL under `public/`.
+> **`public/` အောက်ရှိ ဖိုင်များကိုသာ web မှ ဝန်ဆောင်ပေးသည်။**
+> `resources/views/theme/<slug>/` သည် Blade view directory ဖြစ်ပြီး — browser သည်
+> ထိုနေရာမှ `.css`, `.js`, `.png` သို့မဟုတ် font ကို **`GET` မလုပ်နိုင်ပါ**။
+> `<link href>`, `<script src>`, `<img src>` သို့မဟုတ် `url(...)` က ရည်ညွှန်းသမျှသည်
+> `public/` အောက်ရှိ URL တစ်ခုသို့ ရောက်ရှိရပါမည်။
 
-There is **no** asset-publishing step, symlink or `theme_asset()` helper — assets
-are served straight from `public/` by the web server. So you have two patterns:
+asset-publish လုပ်သည့် အဆင့်၊ symlink သို့မဟုတ် `theme_asset()` helper **မရှိပါ** —
+asset များကို web server က `public/` မှ တိုက်ရိုက် ဝန်ဆောင်ပေးပါသည်။ ထို့ကြောင့်
+နည်းလမ်း ၂ ခု ရှိပါသည် —
 
-### Pattern A — inline + CDN + shared public *(recommended, and what the shipped themes do)*
+### နည်းလမ်း A — inline + CDN + shared public *(အကြံပြု၊ ရရှိပြီး ပုံစံများ အသုံးပြုပုံ)*
 
-Keep the theme in its **one folder** with no separate asset files:
+ပုံစံကို သီးခြား asset ဖိုင်များ မပါဘဲ **ဖိုလ်ဒါတစ်ခုတည်း** အတွင်း ထားပါ —
 
-- **CSS** → an inline `<style>` block in `layouts/app.blade.php`.
-- **JS** → an inline `<script>`, plus libraries (Bootstrap, jQuery, fonts) from a
-  **CDN** `<link>` / `<script>`.
-- **Images** → `asset('favicon.svg')` and other files already shipped in
-  `public/` (`public/img/…`), or user-uploaded media via `bp_upload_url(...)`.
+- **CSS** → `layouts/app.blade.php` အတွင်း inline `<style>` block တစ်ခု။
+- **JS** → inline `<script>` တစ်ခု၊ အပြင် library များ (Bootstrap, jQuery, font) ကို
+  **CDN** `<link>` / `<script>` မှ။
+- **ပုံ** → `asset('favicon.svg')` နှင့် `public/` (`public/img/…`) တွင် ရှိပြီးသား
+  ဖိုင်များ၊ သို့မဟုတ် အသုံးပြုသူ upload လုပ်သော media ကို `bp_upload_url(...)` ဖြင့်။
 
-Benefits: the theme is fully covered by the integrity fingerprint, there is **no
-build step**, and the repository stays lean.
+အကျိုးကျေးဇူး — ပုံစံသည် integrity fingerprint ဖြင့် အပြည့်အဝ ကာကွယ်ခံရပြီး၊
+**build step မလို**၊ repository လည်း သေးသွယ်နေပါသည်။
 
-### Pattern B — a per-theme public asset folder *(only when you truly need real files)*
+### နည်းလမ်း B — ပုံစံအလိုက် public asset ဖိုလ်ဒါ *(တကယ် ဖိုင်များ လိုအပ်မှသာ)*
 
-If a theme ships a custom font file, a large stylesheet, a bundled JS file or its
-own logo, put those under `public/`, keyed by slug — mirroring the existing
-`public/theme-previews/` convention — while the Blade stays in `resources/`:
+ပုံစံတစ်ခုတွင် custom font ဖိုင်၊ ကြီးမားသော stylesheet၊ bundle လုပ်ထားသော JS ဖိုင်
+သို့မဟုတ် ကိုယ်ပိုင် logo ပါဝင်ပါက ၎င်းတို့ကို `public/` အောက်တွင် slug ဖြင့် သိမ်းပါ —
+ရှိပြီးသား `public/theme-previews/` သတ်မှတ်ချက်အတိုင်း — Blade ကတော့ `resources/`
+တွင် ဆက်ရှိနေပါစေ —
 
 ```
 public/theme/<slug>/css/style.css      ← web-served static assets
@@ -96,7 +103,7 @@ public/theme/<slug>/img/logo.svg
 resources/views/theme/<slug>/…          ← blade templates (unchanged)
 ```
 
-Reference them with `asset()`:
+၎င်းတို့ကို `asset()` ဖြင့် ရည်ညွှန်းပါ —
 
 ```blade
 <link rel="stylesheet" href="{{ asset('theme/my-theme/css/style.css') }}">
@@ -104,72 +111,75 @@ Reference them with `asset()`:
 <img src="{{ asset('theme/my-theme/img/logo.svg') }}" alt="Logo">
 ```
 
-Two things to know when you choose Pattern B:
+နည်းလမ်း B ကို ရွေးသောအခါ သိထားရမည့် အချက် ၂ ခု —
 
-1. **The integrity check does not cover `public/`.** `Theme::fingerprint()` hashes
-   only the `.php` templates + `theme.json` inside the theme folder. Assets under
-   `public/` sit outside the tamper baseline — fine, just be aware the "Modified"
-   badge won't track them.
-2. **Keep it lean.** Optimise images and avoid committing large binaries; bloated
-   per-theme asset folders are exactly what Pattern A exists to avoid.
+1. **integrity စစ်ဆေးမှုသည် `public/` ကို မခြုံငုံပါ။** `Theme::fingerprint()` သည်
+   ပုံစံဖိုလ်ဒါအတွင်းရှိ `.php` template များ + `theme.json` ကိုသာ hash လုပ်ပါသည်။
+   `public/` အောက်ရှိ asset များသည် tamper baseline ၏ ပြင်ပတွင် ရှိပါသည် —
+   ပြဿနာမရှိပါ၊ သို့သော် "Modified" badge က ၎င်းတို့ကို မခြေရာခံမည်ကို သတိပြုပါ။
+2. **သေးသွယ်အောင် ထားပါ။** ပုံများကို optimize လုပ်ပြီး ကြီးမားသော binary များ
+   commit မလုပ်ပါနှင့်၊ ဖောင်းပွနေသော ပုံစံအလိုက် asset ဖိုလ်ဒါများသည် နည်းလမ်း A
+   ရှိရခြင်း၏ အကြောင်းရင်း ဖြစ်ပါသည်။
 
-### Preview thumbnail
+### နမူနာပုံ (Preview thumbnail)
 
-The admin **Themes** page shows a thumbnail from
-`public/theme-previews/<slug>.png` (falling back to a placeholder icon). Add a
-~1280×800 PNG there so your theme has a card image.
+admin **Themes** စာမျက်နှာသည် `public/theme-previews/<slug>.png` မှ thumbnail တစ်ခု
+ပြသပါသည် (မရှိပါက placeholder icon သို့ ပြန်လဲသည်)။ သင့်ပုံစံတွင် card ပုံ ရရှိရန်
+~1280×800 PNG တစ်ခု ထည့်ပါ။
 
-## Rendering data
+## Data render လုပ်ခြင်း (Rendering data)
 
-The front controller passes data into these views; pull the rest through the
-CMS helpers (no direct DB access needed):
+front controller က ဤ view များထဲသို့ data ထည့်ပေးပါသည်၊ ကျန်အရာများကို CMS helper
+များမှတစ်ဆင့် ရယူပါ (DB ကို တိုက်ရိုက် ချိတ်ဆက်ရန် မလိုပါ) —
 
-| Helper | Returns |
+| Helper | ပြန်ပေးသည် |
 |---|---|
-| `bp_post($limit)` | Latest published posts (with `translate`, `categories`, `creator`) |
-| `bp_menu()` | The nav menu tree (`children`, `translate`, `menu_type`, `menu_link`) |
-| `bp_tax()` | Categories for the sidebar |
-| `bp_slider()` | Home-page slider entries (`slider_link`, `slider_name`, `slider_description`) |
-| `site_information('blogname' \| 'blogdescription' \| 'admin_email')` | Site option row (use `optional(...)->option_value`) |
-| `bp_option('key', 'default')` | Any single option (e.g. `faq_enabled`) |
-| `bp_upload_url($path)` | Public URL for uploaded media (featured images, slides) |
-| `bbParse($post->body)` | Renders post body HTML — wrap it in `.bp-content` |
-| `bp_do_action('theme_footer')` | Lets active plugins inject into the footer |
+| `bp_post($limit)` | ထုတ်ဝေပြီး နောက်ဆုံး post များ (`translate`, `categories`, `creator` နှင့်အတူ) |
+| `bp_menu()` | nav menu tree (`children`, `translate`, `menu_type`, `menu_link`) |
+| `bp_tax()` | sidebar အတွက် category များ |
+| `bp_slider()` | ပင်မ slider entry များ (`slider_link`, `slider_name`, `slider_description`) |
+| `site_information('blogname' \| 'blogdescription' \| 'admin_email')` | site option row (`optional(...)->option_value` သုံးပါ) |
+| `bp_option('key', 'default')` | option တစ်ခုချင်း (ဥပမာ `faq_enabled`) |
+| `bp_upload_url($path)` | upload media အတွက် အများသုံး URL (featured image, slide များ) |
+| `bbParse($post->body)` | post body HTML ကို render လုပ်သည် — `.bp-content` ဖြင့် ထုပ်ပါ |
+| `bp_do_action('theme_footer')` | active plugin များကို footer ထဲ ထည့်သွင်းခွင့်ပြုသည် |
 
-## Conventions the shipped themes follow
+## ရရှိပြီး ပုံစံများ လိုက်နာသော သတ်မှတ်ချက်များ (Conventions)
 
-- **Namespace your CSS** per theme (e.g. `.md-card`, `.nc-card`) so themes read as
-  self-contained. Keep `.bp-content` (the wrapper around `bbParse()` output) and
-  the `bp_*()` helpers as the shared contract — the editor's HTML is
-  theme-agnostic and every theme should style `.bp-content`.
-- **Bilingual (EN / MM).** Switch strings on `app()->getLocale() === 'mm'` and
-  load **Noto Sans Myanmar** so Burmese renders. When a record has a `translate`
-  relation for the active locale, swap to it (see any shipped view for the two-line
-  pattern).
-- **Responsive + accessible.** Mobile-first, visible `:focus-visible`, and respect
-  `prefers-reduced-motion`.
+- **CSS ကို namespace ခွဲပါ** — ပုံစံအလိုက် (ဥပမာ `.md-card`, `.nc-card`) ၍ ပုံစံများ
+  သီးခြားရပ်တည်ပုံ ဖတ်ရှုနိုင်စေရန်။ `.bp-content` (`bbParse()` output ကို
+  ထုပ်ထားသည်) နှင့် `bp_*()` helper များကို မျှဝေသုံး contract အဖြစ် ထားပါ — editor
+  ၏ HTML သည် ပုံစံနှင့် သီးခြားဖြစ်၍ ပုံစံတိုင်းသည် `.bp-content` ကို style
+  လုပ်သင့်ပါသည်။
+- **ဘာသာစကား ၂ မျိုး (EN / MM)။** `app()->getLocale() === 'mm'` ဖြင့် စာသားများ
+  ပြောင်းပြီး **Noto Sans Myanmar** ကို load လုပ်၍ မြန်မာစာ ပေါ်စေပါ။ record တစ်ခုတွင်
+  active locale အတွက် `translate` relation ရှိပါက ၎င်းသို့ ပြောင်းပါ (ရရှိပြီး view
+  တစ်ခုခုတွင် စာကြောင်း ၂ ကြောင်း ပုံစံကို ကြည့်ပါ)။
+- **Responsive + အသုံးပြုနိုင်မှု (accessible)။** Mobile-first၊ မြင်သာသော
+  `:focus-visible`၊ နှင့် `prefers-reduced-motion` ကို လေးစားပါ။
 
-## Security & lifecycle the host enforces
+## host က အတည်ပြုသော security နှင့် lifecycle
 
-- **Static scan** — high-risk PHP (`eval`, shell exec, obfuscation, remote
-  `include`, file deletion) **blocks activation**. Review from Themes → **Scan**.
-  Inline `<script>` in Blade is stripped before scanning, so normal front-end JS is
-  fine; just don't write dangerous PHP.
-- **Compatibility** — `minCmsVersion` is checked before a theme goes active.
-- **Integrity** — a SHA-256 baseline over the theme's `.php` + `theme.json` is
-  stored on activate; changed templates show a **Modified** badge on the Themes
-  page.
-- **Verify in CI/cron** — `php artisan packages:verify` scans, tamper-checks and
-  compatibility-checks every installed theme and plugin, exiting non-zero on any
-  problem.
+- **Static scan** — အန္တရာယ်များသော PHP (`eval`, shell exec, obfuscation, remote
+  `include`, ဖိုင်ဖျက်ခြင်း) သည် **activate ကို ပိတ်ပင်သည်**။ Themes → **Scan** မှ
+  ပြန်ကြည့်ပါ။ Blade အတွင်း inline `<script>` ကို scan မလုပ်မီ ဖယ်ရှားသဖြင့် ပုံမှန်
+  ရှေ့ဆုံး JS သည် အဆင်ပြေပါသည်၊ အန္တရာယ်ရှိသော PHP သာ မရေးပါနှင့်။
+- **Compatibility** — ပုံစံ active မဖြစ်မီ `minCmsVersion` ကို စစ်ဆေးသည်။
+- **Integrity** — ပုံစံ၏ `.php` + `theme.json` အပေါ် SHA-256 baseline ကို activate
+  လုပ်စဉ် သိမ်းသည်၊ ပြောင်းလဲထားသော template များကို Themes စာမျက်နှာတွင်
+  **Modified** badge ဖြင့် ပြသည်။
+- **CI/cron တွင် စစ်ဆေးပါ** — `php artisan packages:verify` သည် install လုပ်ထားသော
+  ပုံစံ နှင့် plugin တိုင်းကို scan၊ tamper-check နှင့် compatibility-check လုပ်ကာ
+  ပြဿနာရှိပါက non-zero ဖြင့် ထွက်သည်။
 
-## Do / don't
+## လုပ်သင့် / မလုပ်သင့် (Do / don't)
 
-- **Do** implement **every** view listed above, guard optional data
-  (`optional(...)`, `bp_option(...)`), and keep the theme in one folder (Pattern A)
-  unless you genuinely need shipped asset files.
-- **Do** put any real static asset under `public/` — it is the only web-served
-  root.
-- **Don't** reference CSS/JS/images from inside `resources/views/theme/...` by URL;
-  they won't load. And don't use `eval`, shell functions, obfuscation or remote
-  `include` in a theme's PHP — the scanner blocks activation.
+- **လုပ်ပါ** — အထက်ဖော်ပြပါ view **တိုင်း** ကို အကောင်အထည်ဖော်ပါ၊ optional data ကို
+  guard လုပ်ပါ (`optional(...)`, `bp_option(...)`)၊ တကယ် ဖိုင်များ မလိုအပ်ပါက ပုံစံကို
+  ဖိုလ်ဒါတစ်ခုတည်း (နည်းလမ်း A) တွင် ထားပါ။
+- **လုပ်ပါ** — တကယ့် static asset မှန်သမျှကို `public/` အောက်တွင် ထားပါ — ၎င်းသည်
+  web မှ ဝန်ဆောင်ပေးသော root တစ်ခုတည်း ဖြစ်သည်။
+- **မလုပ်ပါနှင့်** — `resources/views/theme/...` အတွင်းမှ CSS/JS/ပုံများကို URL ဖြင့်
+  မရည်ညွှန်းပါနှင့်၊ ၎င်းတို့ load မဖြစ်ပါ။ ပုံစံ၏ PHP တွင် `eval`, shell function,
+  obfuscation သို့မဟုတ် remote `include` မသုံးပါနှင့် — scanner က activate ကို
+  ပိတ်ပင်သည်။
