@@ -109,6 +109,14 @@ production တွင် ပုန်းကွယ်နေပါသည် (အခ
 (Aurora), `bptheme1` (Meridian), `bptheme2` (Nocturne), `bptheme3` (Terra),
 `bptheme4` (Pulse)။
 
+**ပါဝင်သော ပုံစံ ၅ မျိုး၏ ရှေ့ဆုံးမြင်ကွင်း —**
+
+| Aurora · clean teal (`default`) | Meridian · editorial (`bptheme1`) | Nocturne · dark glass (`bptheme2`) |
+|:---:|:---:|:---:|
+| ![Aurora](public/theme-previews/default.png) | ![Meridian](public/theme-previews/bptheme1.png) | ![Nocturne](public/theme-previews/bptheme2.png) |
+| **Terra · minimal** (`bptheme3`) | **Pulse · bold gradient** (`bptheme4`) | |
+| ![Terra](public/theme-previews/bptheme3.png) | ![Pulse](public/theme-previews/bptheme4.png) | |
+
 ပုံစံအသစ် ရေးသားရန်၊ လိုအပ်သော view များ နှင့် asset (CSS / JS / ပုံ) များ
 ထားရှိပုံ လမ်းညွှန်ကို [docs/theme-development.md](docs/theme-development.md) တွင်
 ကြည့်ရှုနိုင်ပါသည်။
