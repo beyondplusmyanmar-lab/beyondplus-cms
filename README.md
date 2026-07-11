@@ -22,6 +22,9 @@ JSON API တို့ ပါဝင်ပါသည်။
 
 ![Plugins](docs/screenshots/plugins.png)
 
+plugin အသစ် ရေးသားရန်၊ hook / manifest / lifecycle လမ်းညွှန်ကို
+[docs/plugin-development.md](docs/plugin-development.md) တွင် ကြည့်ရှုနိုင်ပါသည်။
+
 စနစ်၏ ဝန်ဆောင်မှု flow (n8n ပုံစံ) — မည်သည့် plugin/service ဖွင့်ထားပြီး မည်သို့ ချိတ်ဆက်ထားသည်ကို မြင်ကွင်းအဖြစ် ပြသည် —
 
 ![System flow](docs/screenshots/system-flow.png)
