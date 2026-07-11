@@ -3,16 +3,16 @@
     $mm = app()->getLocale() === 'mm';
 @endphp
 <header>
-    <nav class="navbar navbar-expand-lg nc-nav sticky-top">
-        <div class="container">
-            <a class="navbar-brand nc-gradient-text" href="{{ url('/') }}"><span class="nc-brand-dot"></span>{{ $siteName }}</a>
+    <nav class="navbar navbar-expand-lg pl-nav sticky-top">
+        <div class="container py-2">
+            <a class="navbar-brand pl-grad-text fs-4" href="{{ url('/') }}">{{ $siteName }}</a>
 
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#ncNav"
-                    aria-controls="ncNav" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="bi bi-list fs-3 text-light"></i>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#plNav"
+                    aria-controls="plNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-3"></i>
             </button>
 
-            <div class="collapse navbar-collapse" id="ncNav">
+            <div class="collapse navbar-collapse" id="plNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-1">
                     <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">{{ $mm ? 'ပင်မ' : 'Home' }}</a></li>
 
@@ -25,7 +25,7 @@
                         @if($hasChildren)
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ $menu->menu_name }}</a>
-                                <ul class="dropdown-menu dropdown-menu-dark nc-glass border-0">
+                                <ul class="dropdown-menu border-0 shadow" style="border-radius:16px;">
                                     @foreach ($menu->children as $sub)
                                         @php
                                             if ($mm && isset($sub->translate) && $sub->translate->lang == 2) { $sub = $sub->translate; }
@@ -48,24 +48,21 @@
                     <li class="nav-item ms-lg-2">
                         <form class="d-flex" role="search" action="{{ url('/search') }}" method="GET">
                             <div class="input-group input-group-sm">
-                                <input class="form-control" type="search" name="q" value="{{ request('q') }}" placeholder="{{ $mm ? 'ရှာဖွေရန်…' : 'Search…' }}" aria-label="Search" style="max-width:150px;">
-                                <button class="btn btn-nc-ghost btn-sm" type="submit"><i class="bi bi-search"></i></button>
+                                <input class="form-control" type="search" name="q" value="{{ request('q') }}" placeholder="{{ $mm ? 'ရှာဖွေရန်…' : 'Search…' }}" aria-label="Search" style="max-width:150px;border-radius:999px 0 0 999px;">
+                                <button class="btn btn-pl-soft btn-sm" type="submit" style="border-radius:0 999px 999px 0;"><i class="bi bi-search"></i></button>
                             </div>
                         </form>
                     </li>
 
-                    <li class="nav-item ms-lg-2 d-flex align-items-center">
-                        <div class="btn-group btn-group-sm" role="group" aria-label="Language">
-                            <a href="{{ url('lang/en') }}" class="btn btn-sm {{ $mm ? 'btn-nc-ghost' : 'btn-nc' }}">EN</a>
-                            <a href="{{ url('lang/mm') }}" class="btn btn-sm {{ $mm ? 'btn-nc' : 'btn-nc-ghost' }}">မြန်မာ</a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item ms-lg-2">
+                    <li class="nav-item ms-lg-2 d-flex align-items-center gap-2">
+                        <span class="small pl-muted">
+                            <a href="{{ url('lang/en') }}" class="{{ $mm ? 'pl-muted' : 'fw-bold text-primary' }}">EN</a> /
+                            <a href="{{ url('lang/mm') }}" class="{{ $mm ? 'fw-bold text-primary' : 'pl-muted' }}">မြန်မာ</a>
+                        </span>
                         @if (Auth::guard('customer_web')->check())
-                            <a class="btn btn-nc-ghost btn-sm" href="{{ url('customer/profile') }}"><i class="bi bi-person-circle"></i> {{ Auth::guard('customer_web')->user()->first_name }}</a>
+                            <a class="btn btn-pl-soft btn-sm" href="{{ url('customer/profile') }}"><i class="bi bi-person"></i> {{ Auth::guard('customer_web')->user()->first_name }}</a>
                         @else
-                            <a class="btn btn-nc btn-sm" href="{{ url('/customer/sign-in') }}"><i class="bi bi-person"></i> {{ $mm ? 'ဝင်ရန်' : 'Login' }}</a>
+                            <a class="btn btn-pl btn-sm" href="{{ url('/customer/sign-in') }}">{{ $mm ? 'ဝင်ရန်' : 'Login' }}</a>
                         @endif
                     </li>
                 </ul>

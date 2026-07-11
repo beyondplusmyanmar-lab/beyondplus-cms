@@ -1,38 +1,39 @@
-@extends('theme.bptheme2.layouts.app')
+@extends('theme.bptheme4.layouts.app')
 
 @section('title', $post->title)
 
 @section('content')
 @php
     $mm = app()->getLocale() === 'mm';
+    $pill = fn ($name) => 'c'.(abs(crc32((string) $name)) % 5);
     $postCategories = $post->categories;
     if ($mm && isset($post->translate) && $post->translate->lang == 2) { $post = $post->translate; }
 @endphp
 <div class="container py-5">
-    <div class="row g-4">
+    <div class="row justify-content-center">
         <article class="col-lg-8">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-                <div class="d-flex flex-wrap gap-1">
-                    @foreach($postCategories as $cat)
-                        <a href="{{ url('/cat/'.$cat->tax_link) }}" class="nc-badge">{{ $cat->tax_name }}</a>
-                    @endforeach
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach($postCategories as $cat)<a href="{{ url('/cat/'.$cat->tax_link) }}" class="pl-pill {{ $pill($cat->tax_name) }}">{{ $cat->tax_name }}</a>@endforeach
                 </div>
                 @if(Auth::guard('admins')->check() && $post->post_type == 'post')
-                    <a href="{{ url('/bp-admin/post/'.$post->id.'/edit') }}" class="btn btn-nc-ghost btn-sm"><i class="bi bi-pencil"></i> {{ $mm ? 'ပြင်ရန်' : 'Edit' }}</a>
+                    <a href="{{ url('/bp-admin/post/'.$post->id.'/edit') }}" class="btn btn-pl-soft btn-sm"><i class="bi bi-pencil"></i> {{ $mm ? 'ပြင်ရန်' : 'Edit' }}</a>
                 @endif
             </div>
-            <h1 class="h2 text-light mb-2">{{ $post->title }}</h1>
-            <div class="small nc-muted mb-4"><i class="bi bi-person"></i> {{ optional($post->creator)->name ?? 'Admin' }} · {{ $post->created_at->translatedFormat('j F Y') }}</div>
+            <h1 class="pl-display mb-3" style="font-size:clamp(1.9rem,4.5vw,2.9rem);line-height:1.12;">{{ $post->title }}</h1>
+            <div class="small pl-muted mb-4 d-flex align-items-center gap-2">
+                <i class="bi bi-person-circle text-primary"></i> {{ optional($post->creator)->name ?? 'Admin' }} <span>·</span> {{ $post->created_at->translatedFormat('j F Y') }}
+            </div>
 
             @if($post->featured_img)
-                <img src="{{ bp_upload_url($post->featured_img) }}" class="img-fluid rounded-4 mb-4 w-100" alt="{{ $post->title }}">
+                <img src="{{ bp_upload_url($post->featured_img) }}" class="img-fluid mb-4 w-100" style="border-radius:24px;" alt="{{ $post->title }}">
             @endif
 
             <div class="bp-content">{!! bbParse($post->body) !!}</div>
 
             @auth
                 <hr class="my-4">
-                <h5 class="text-light mb-3">{{ $mm ? 'မှတ်ချက်များ' : 'Comments' }}</h5>
+                <h5 class="pl-display mb-3">{{ $mm ? 'မှတ်ချက်များ' : 'Comments' }}</h5>
                 <div class="d-flex gap-2 mb-4">
                     <img src="{{ Auth::user()->avatar ?: asset('/img/blank_profile_pic_60x60.jpg') }}" class="rounded-circle" width="44" height="44" alt="you">
                     <div class="flex-grow-1">
@@ -46,18 +47,13 @@
                         @if($author)
                             <div class="d-flex gap-2 mb-3">
                                 <img src="{{ $author->avatar ?: asset('/img/blank_profile_pic_60x60.jpg') }}" class="rounded-circle" width="38" height="38" alt="{{ $author->name }}">
-                                <div>
-                                    <strong class="text-light">{{ $author->name }}</strong>
-                                    <span class="small nc-muted">· {{ $c->created_at->diffForHumans() }}</span>
-                                    <div class="nc-muted">{{ $c->body }}</div>
-                                </div>
+                                <div><strong>{{ $author->name }}</strong> <span class="small pl-muted">· {{ $c->created_at->diffForHumans() }}</span><div>{{ $c->body }}</div></div>
                             </div>
                         @endif
                     @endforeach
                 @endif
             @endauth
         </article>
-        <aside class="col-lg-4">@include('theme.bptheme2.sidebar')</aside>
     </div>
 </div>
 @stop

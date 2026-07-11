@@ -1,11 +1,11 @@
 {
     "id": "bptheme2",
     "type": "theme",
-    "name": "BP Theme 2",
-    "description": "A second alternative front-end layout on the shared Bootstrap 5 base, offering a different look for the same content.",
-    "version": "1.0.0",
+    "name": "Nocturne",
+    "description": "A dark, glassmorphic theme with an aurora backdrop, violet-to-cyan gradients, frosted-glass cards and a Space Grotesk display face. Great for tech, creative and product-led sites.",
+    "version": "2.0.0",
     "author": "Beyond Plus",
-    "homepage": "https://developers.beyondplus.com/themes/bptheme2",
+    "homepage": "https://developers.beyondplus.com/themes/nocturne",
     "license": "MIT",
     "minCmsVersion": "2.0.0"
 }

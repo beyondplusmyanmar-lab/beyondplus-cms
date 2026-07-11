@@ -1,0 +1,11 @@
+{
+    "id": "bptheme4",
+    "type": "theme",
+    "name": "Pulse",
+    "description": "A bold, vibrant theme with a gradient-mesh hero, rounded cards, colourful category pills and a Poppins display face. Perfect for startups, campaigns and product launches.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/themes/pulse",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0"
+}
