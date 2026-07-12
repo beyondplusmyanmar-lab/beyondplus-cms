@@ -1,9 +1,10 @@
 
 @extends('bp-admin.layouts.admin.index')
 
-@section('title', 'Menu Management')
+@section('title', app()->getLocale() === 'mm' ? 'Menu စီမံခန့်ခွဲမှု' : 'Menu Management')
 
 @section('content')
+@php $mm = app()->getLocale() === 'mm'; @endphp
 <style>
     .menu-body { padding: 1rem 1.25rem 1.25rem; min-height: 460px; }
     .box-header { padding-bottom: .75rem; }
@@ -36,12 +37,12 @@
             <div class="box-header">
                 <div class="row align-items-center">
                     <div class="col-sm-6">
-                        <h4 class="mb-0">Menu structure</h4>
-                        <small class="text-muted">Drag items to reorder. Nested items appear as dropdowns on the site.</small>
+                        <h4 class="mb-0">{{ $mm ? 'Menu ဖွဲ့စည်းပုံ' : 'Menu structure' }}</h4>
+                        <small class="text-muted">{{ $mm ? 'အစီအစဉ် ပြောင်းရန် ဆွဲယူပါ။ အထဲတွင် ထည့်ထားသော item များသည် ဆိုက်တွင် dropdown အဖြစ် ပေါ်သည်။' : 'Drag items to reorder. Nested items appear as dropdowns on the site.' }}</small>
                     </div>
                     <div class="col-sm-6">
                         <a href="{{ url('bp-admin/menu/create') }}" class="btn btn-success pull-right">
-                            <i class="fa fa-plus"></i> Custom link
+                            <i class="fa fa-plus"></i> {{ $mm ? 'စိတ်ကြိုက် link' : 'Custom link' }}
                         </a>
                     </div>
                 </div>
@@ -53,7 +54,7 @@
                 @empty
                     <div class="menu-empty text-center text-muted py-5">
                         <i class="fa fa-bars fa-2x mb-2 d-block"></i>
-                        No menu items yet. Add a custom link, or insert pages/posts from the right.
+                        {{ $mm ? 'menu item မရှိသေးပါ။ စိတ်ကြိုက် link ထည့်ပါ၊ သို့မဟုတ် ညာဘက်မှ စာမျက်နှာ/ပို့စ်များ ထည့်ပါ။' : 'No menu items yet. Add a custom link, or insert pages/posts from the right.' }}
                     </div>
                 @endforelse
             </div>
@@ -64,8 +65,8 @@
         <div class="box box-danger">
             {{ Form::open(['url' => 'bp-admin/menu/pagestore', 'method' => 'post']) }}
             <div class="box-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fa fa-file-o"></i> Pages</h5>
-                <button type="submit" class="btn btn-primary btn-sm">Insert</button>
+                <h5 class="mb-0"><i class="fa fa-file-o"></i> {{ $mm ? 'စာမျက်နှာများ' : 'Pages' }}</h5>
+                <button type="submit" class="btn btn-primary btn-sm">{{ $mm ? 'ထည့်ရန်' : 'Insert' }}</button>
             </div>
             <div class="box-body insert-list" id="scrollbar1">
                 <div class="scrollbar">
@@ -75,7 +76,7 @@
                             <label class="form-check-label" for="page-{{ $page->id }}">{{ $page->title }}</label>
                         </div>
                     @empty
-                        <p class="text-muted small mb-0">No pages yet.</p>
+                        <p class="text-muted small mb-0">{{ $mm ? 'စာမျက်နှာ မရှိသေးပါ။' : 'No pages yet.' }}</p>
                     @endforelse
                 </div>
             </div>
@@ -85,8 +86,8 @@
         <div class="box box-danger">
             {{ Form::open(['url' => 'bp-admin/menu/poststore', 'method' => 'post']) }}
             <div class="box-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fa fa-newspaper-o"></i> Posts</h5>
-                <button type="submit" class="btn btn-primary btn-sm">Insert</button>
+                <h5 class="mb-0"><i class="fa fa-newspaper-o"></i> {{ $mm ? 'ပို့စ်များ' : 'Posts' }}</h5>
+                <button type="submit" class="btn btn-primary btn-sm">{{ $mm ? 'ထည့်ရန်' : 'Insert' }}</button>
             </div>
             <div class="box-body insert-list" id="scrollbar2">
                 <div class="scrollbar">
@@ -96,7 +97,7 @@
                             <label class="form-check-label" for="post-{{ $post->id }}">{{ $post->title }}</label>
                         </div>
                     @empty
-                        <p class="text-muted small mb-0">No posts yet.</p>
+                        <p class="text-muted small mb-0">{{ $mm ? 'ပို့စ် မရှိသေးပါ။' : 'No posts yet.' }}</p>
                     @endforelse
                 </div>
             </div>

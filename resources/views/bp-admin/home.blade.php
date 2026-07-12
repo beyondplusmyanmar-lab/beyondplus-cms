@@ -1,6 +1,7 @@
 @extends('bp-admin.layouts.admin.index')
-@section('title', 'Dashboard')
+@section('title', app()->getLocale() === 'mm' ? 'ဒက်ရှ်ဘုတ်' : 'Dashboard')
 @section('content')
+@php $mm = app()->getLocale() === 'mm'; @endphp
 
 <style>
     .bp-stats { margin-bottom: 6px; }
@@ -37,7 +38,7 @@
             <div class="stat-icon" style="--c:79,70,229;"><i class="fa fa-file-text-o"></i></div>
             <div>
                 <div class="stat-value">{{ $totalPost }}</div>
-                <div class="stat-label">Total Posts</div>
+                <div class="stat-label">{{ $mm ? 'ပို့စ် စုစုပေါင်း' : 'Total Posts' }}</div>
             </div>
         </div>
     </div>
@@ -46,7 +47,7 @@
             <div class="stat-icon" style="--c:2,132,199;"><i class="fa fa-copy"></i></div>
             <div>
                 <div class="stat-value">{{ $totalPage }}</div>
-                <div class="stat-label">Pages</div>
+                <div class="stat-label">{{ $mm ? 'စာမျက်နှာများ' : 'Pages' }}</div>
             </div>
         </div>
     </div>
@@ -55,7 +56,7 @@
             <div class="stat-icon" style="--c:217,119,6;"><i class="fa fa-users"></i></div>
             <div>
                 <div class="stat-value">{{ $allUser }}</div>
-                <div class="stat-label">Members</div>
+                <div class="stat-label">{{ $mm ? 'အဖွဲ့ဝင်များ' : 'Members' }}</div>
             </div>
         </div>
     </div>
@@ -64,7 +65,7 @@
             <div class="stat-icon" style="--c:5,150,105;"><i class="fa fa-picture-o"></i></div>
             <div>
                 <div class="stat-value">{{ $totalMedia }}</div>
-                <div class="stat-label">Media</div>
+                <div class="stat-label">{{ $mm ? 'မီဒီယာ' : 'Media' }}</div>
             </div>
         </div>
     </div>
@@ -74,8 +75,8 @@
     <div class="col-lg-7 mb-4">
         <div class="dash-tile">
             <div class="dash-head">
-                <h5><i class="fa fa-newspaper-o text-muted"></i> Recent Posts</h5>
-                <a href="{{ url('bp-admin/post') }}" class="small">View all</a>
+                <h5><i class="fa fa-newspaper-o text-muted"></i> {{ $mm ? 'မကြာသေးမီ ပို့စ်များ' : 'Recent Posts' }}</h5>
+                <a href="{{ url('bp-admin/post') }}" class="small">{{ $mm ? 'အားလုံး ကြည့်ရန်' : 'View all' }}</a>
             </div>
             @forelse ($post as $p)
                 <a href="{{ url('bp-admin/post/'.$p->id.'/edit') }}" class="dash-item">
@@ -86,7 +87,7 @@
                     <span class="dash-time">{{ $p->updated_at->diffForHumans() }}</span>
                 </a>
             @empty
-                <div class="dash-empty">No posts yet. <a href="{{ url('bp-admin/post/create') }}">Create one</a>.</div>
+                <div class="dash-empty">{{ $mm ? 'ပို့စ် မရှိသေးပါ။' : 'No posts yet.' }} <a href="{{ url('bp-admin/post/create') }}">{{ $mm ? 'တစ်ခု ဖန်တီးပါ' : 'Create one' }}</a>.</div>
             @endforelse
         </div>
     </div>
@@ -94,8 +95,8 @@
     <div class="col-lg-5 mb-4">
         <div class="dash-tile">
             <div class="dash-head">
-                <h5><i class="fa fa-user-plus text-muted"></i> Latest Members</h5>
-                <span class="dash-chip">{{ $allUser }} total</span>
+                <h5><i class="fa fa-user-plus text-muted"></i> {{ $mm ? 'နောက်ဆုံး အဖွဲ့ဝင်များ' : 'Latest Members' }}</h5>
+                <span class="dash-chip">{{ $allUser }} {{ $mm ? 'စုစုပေါင်း' : 'total' }}</span>
             </div>
             @forelse ($latestUsers as $u)
                 <a href="{{ url('bp-admin/user/'.$u->id.'/edit') }}" class="dash-item">
@@ -106,9 +107,9 @@
                     <span class="dash-time">{{ $u->created_at->diffForHumans() }}</span>
                 </a>
             @empty
-                <div class="dash-empty">No members yet.</div>
+                <div class="dash-empty">{{ $mm ? 'အဖွဲ့ဝင် မရှိသေးပါ။' : 'No members yet.' }}</div>
             @endforelse
-            <div class="text-center mt-3"><a href="{{ url('bp-admin/user') }}" class="small">View all users</a></div>
+            <div class="text-center mt-3"><a href="{{ url('bp-admin/user') }}" class="small">{{ $mm ? 'အသုံးပြုသူ အားလုံး ကြည့်ရန်' : 'View all users' }}</a></div>
         </div>
     </div>
 </div>
@@ -117,7 +118,7 @@
     <div class="col-12 mb-4">
         <div class="dash-tile">
             <div class="dash-head">
-                <h5><i class="fa fa-history text-muted"></i> Recent activity</h5>
+                <h5><i class="fa fa-history text-muted"></i> {{ $mm ? 'မကြာသေးမီ လှုပ်ရှားမှုများ' : 'Recent activity' }}</h5>
             </div>
             @forelse ($activities as $a)
                 <div class="dash-item">
@@ -133,7 +134,7 @@
                     <span class="dash-time">{{ $a->created_at->diffForHumans() }}</span>
                 </div>
             @empty
-                <div class="dash-empty">No activity yet — actions taken in the admin panel will appear here.</div>
+                <div class="dash-empty">{{ $mm ? 'လှုပ်ရှားမှု မရှိသေးပါ — admin panel တွင် ပြုလုပ်သော လုပ်ဆောင်ချက်များ ဤနေရာတွင် ပေါ်လာမည်။' : 'No activity yet — actions taken in the admin panel will appear here.' }}</div>
             @endforelse
         </div>
     </div>

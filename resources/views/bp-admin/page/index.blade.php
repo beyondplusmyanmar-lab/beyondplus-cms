@@ -1,25 +1,26 @@
 @extends('bp-admin.layouts.admin.index')
 
-@section('title', 'Page')
+@section('title', app()->getLocale() === 'mm' ? 'စာမျက်နှာ' : 'Page')
 
 @section('content')
+@php $mm = app()->getLocale() === 'mm'; @endphp
     <div class="row">
         <div class="col-md-12 tile">
             <div class="box box-danger">
                 <div class="box-header">
                     <div class="row">
                         <div class="col-sm-7">
-                            <h4 class="mb-0">Pages</h4>
-                            <small class="text-muted">Standalone pages linked from menus.</small>
+                            <h4 class="mb-0">{{ $mm ? 'စာမျက်နှာများ' : 'Pages' }}</h4>
+                            <small class="text-muted">{{ $mm ? 'menu များမှ ချိတ်ဆက်ထားသော သီးခြား စာမျက်နှာများ။' : 'Standalone pages linked from menus.' }}</small>
                         </div>
                         <div class="col-sm-5 pull-right">
                             <a href="{{ url('bp-admin/page/create') }}" class="btn btn-success  pull-right ml-2">
                                 <i class="fa fa-plus"></i>
-                                New page
+                                {{ $mm ? 'စာမျက်နှာ အသစ်' : 'New page' }}
                             </a>
                             <a href="{{ url('bp-admin/user-guide') }}" class="btn btn-secondary  pull-right">
                                 <i class="fa fa-book"></i>
-                                User Guide
+                                {{ $mm ? 'အသုံးပြုသူ လမ်းညွှန်' : 'User Guide' }}
                             </a>
                         </div>
                     </div>
@@ -34,9 +35,9 @@
                     <table  class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Language</th>
-                            <th>Action</th>
+                            <th>{{ $mm ? 'အမည်' : 'Name' }}</th>
+                            <th>{{ $mm ? 'ဘာသာစကား' : 'Language' }}</th>
+                            <th>{{ $mm ? 'လုပ်ဆောင်ချက်' : 'Action' }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -52,8 +53,8 @@
                                 @endisset
                             </td>
                             <td>
-                                <a href="{{ url('bp-admin/page/'.$c->id.'/edit') }}" class="btn btn-xs btn-info">Edit</a>
-                                <a href="{{ url('bp-admin/page/delete', [$c->id]) }}" class="btn btn-delete btn-xs btn-danger" onclick="return confirm('Delete this page?')">Delete</a>
+                                <a href="{{ url('bp-admin/page/'.$c->id.'/edit') }}" class="btn btn-xs btn-info">{{ $mm ? 'ပြင်ရန်' : 'Edit' }}</a>
+                                <a href="{{ url('bp-admin/page/delete', [$c->id]) }}" class="btn btn-delete btn-xs btn-danger" onclick="return confirm('{{ $mm ? 'ဤ စာမျက်နှာကို ဖျက်မှာလား။' : 'Delete this page?' }}')">{{ $mm ? 'ဖျက်ရန်' : 'Delete' }}</a>
                             </td>
                             
                         </tr>

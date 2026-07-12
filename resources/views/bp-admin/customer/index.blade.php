@@ -1,8 +1,9 @@
 @extends('bp-admin.layouts.admin.index')
 
-@section('title', 'Customer')
+@section('title', app()->getLocale() === 'mm' ? 'ဖောက်သည်' : 'Customer')
 
 @section('content')
+@php $mm = app()->getLocale() === 'mm'; @endphp
     <div class="row">
         <div class="col-md-12 tile">
             <div class="box box-danger">
@@ -14,7 +15,7 @@
                              {{ Form::open([
                                 'method' => 'get'
                                 ]) }}
-                              <input type="text" name="search"   class="form-control" placeholder="Search" value="{{\Request::get('search')}}">
+                              <input type="text" name="search"   class="form-control" placeholder="{{ $mm ? 'ရှာရန်' : 'Search' }}" value="{{\Request::get('search')}}">
                              {{ Form::close() }}
                             </div>
                         </div>
@@ -23,7 +24,7 @@
 
                             <a href="{{ url('bp-admin/user/create') }}" class="btn btn-success  pull-right">
                                 <i class="fa fa-user-plus"></i>
-                                New
+                                {{ $mm ? 'အသစ်' : 'New' }}
                             </a>
                         </div>
                     </div>
@@ -34,11 +35,11 @@
                     <table  class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Created Date</th>
-                            <th>Actions</th>
+                            <th>{{ $mm ? 'အမည်' : 'Name' }}</th>
+                            <th>{{ $mm ? 'ဖုန်း' : 'Phone' }}</th>
+                            <th>{{ $mm ? 'အီးမေးလ်' : 'Email' }}</th>
+                            <th>{{ $mm ? 'ဖန်တီးသည့်ရက်' : 'Created Date' }}</th>
+                            <th>{{ $mm ? 'လုပ်ဆောင်ချက်' : 'Actions' }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -53,9 +54,9 @@
                             <td>
         
                                 <div style="float:right">
-                                <a href="{{ url('bp-admin/user/'.$c->id.'/edit') }}" class="btn btn-xs btn-info">Edit</a>
-                                
-                                <a href="{{ url('bp-admin/user/delete',[$c->id]) }}" class="btn btn-delete btn-xs btn-danger">Remove</a>
+                                <a href="{{ url('bp-admin/user/'.$c->id.'/edit') }}" class="btn btn-xs btn-info">{{ $mm ? 'ပြင်ရန်' : 'Edit' }}</a>
+
+                                <a href="{{ url('bp-admin/user/delete',[$c->id]) }}" class="btn btn-delete btn-xs btn-danger">{{ $mm ? 'ဖယ်ရှားရန်' : 'Remove' }}</a>
                                 </div>
                              </td>
                         </tr>
