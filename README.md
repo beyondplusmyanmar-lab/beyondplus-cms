@@ -108,17 +108,19 @@ production တွင် ပုန်းကွယ်နေပါသည် (အခ
 
 ရှေ့ဆုံး ပုံစံများကို `resources/views/theme/<name>/` တွင် ထားရှိပါသည်။ အသုံးပြုနေသော
 ပုံစံကို `bp_options` table (`option_name = 'theme'`) တွင် သိမ်းဆည်းထားပြီး၊ မူလ
-တန်ဖိုးမှာ `default` ဖြစ်ပါသည်။ ကွဲပြားသော ပုံစံ ၅ မျိုး ပါဝင်ပါသည် — `default`
+တန်ဖိုးမှာ `default` ဖြစ်ပါသည်။ ကွဲပြားသော ပုံစံ ၆ မျိုး ပါဝင်ပါသည် — `default`
 (Aurora), `bptheme1` (Meridian), `bptheme2` (Nocturne), `bptheme3` (Terra),
-`bptheme4` (Pulse)။
+`bptheme4` (Pulse), `business` (Business)။ ၎င်းတို့အနက် `business` သည်
+လုပ်ငန်းများအတွက် အထွေထွေသုံး ပုံစံဖြစ်ပြီး၊ admin ၏ **Themes → Customize** မှ
+အကြောင်းအရာ (hero, ဝန်ဆောင်မှု, အရောင် စသဖြင့်) ကို code မထိဘဲ ပြင်နိုင်ပါသည်။
 
-**ပါဝင်သော ပုံစံ ၅ မျိုး၏ ရှေ့ဆုံးမြင်ကွင်း —**
+**ပါဝင်သော ပုံစံ ၆ မျိုး၏ ရှေ့ဆုံးမြင်ကွင်း —**
 
 | Aurora · clean teal (`default`) | Meridian · editorial (`bptheme1`) | Nocturne · dark glass (`bptheme2`) |
 |:---:|:---:|:---:|
 | ![Aurora](public/theme-previews/default.png) | ![Meridian](public/theme-previews/bptheme1.png) | ![Nocturne](public/theme-previews/bptheme2.png) |
-| **Terra · minimal** (`bptheme3`) | **Pulse · bold gradient** (`bptheme4`) | |
-| ![Terra](public/theme-previews/bptheme3.png) | ![Pulse](public/theme-previews/bptheme4.png) | |
+| **Terra · minimal** (`bptheme3`) | **Pulse · bold gradient** (`bptheme4`) | **Business · general-purpose** (`business`) |
+| ![Terra](public/theme-previews/bptheme3.png) | ![Pulse](public/theme-previews/bptheme4.png) | ![Business](public/theme-previews/business.png) |
 
 ပုံစံအသစ် ရေးသားရန်၊ လိုအပ်သော view များ နှင့် asset (CSS / JS / ပုံ) များ
 ထားရှိပုံ လမ်းညွှန်ကို [docs/theme-development.md](docs/theme-development.md) တွင်
