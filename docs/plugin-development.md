@@ -35,6 +35,7 @@ plugins/my-plugin/
   "category": "Communication",
   "name": "My Plugin",
   "description": "What it does.",
+  "description_mm": "ဘာလုပ်ပေးသည်ကို မြန်မာဘာသာဖြင့် (optional)။",
   "version": "1.0.0",
   "author": "You",
   "homepage": "https://developers.beyondplus.com/plugins/my-plugin",
@@ -54,6 +55,11 @@ plugins/my-plugin/
 | `permissions` | plugin လုပ်ဆောင်ချက်ကို ကြေညာသည် (ယခုအခါ သတင်းအချက်အလက်သာ) |
 | `main` | boot ချိန်တွင် hook များ register လုပ်ရန် load လုပ်သော ဖိုင် |
 | `admin_menu` | admin စာမျက်နှာသို့ sidebar link + access ခွင့်ပြုချက် ထည့်သည် |
+| `description_mm` | *(optional)* မြန်မာ locale (`mm`) အတွက် ဖော်ပြချက်။ Plugins စာမျက်နှာသည် locale သည် `mm` ဖြစ်ပြီး ဤ field ရှိမှသာ ၎င်းကို ပြသကာ၊ မဟုတ်ပါက `description` (အင်္ဂလိပ်) သို့ ပြန်ကျသည် |
+
+> **ဘာသာစကား ၂ မျိုး (i18n)** — `description_mm` ကို ကြေညာရုံဖြင့် Plugins
+> စာမျက်နှာတွင် plugin ဖော်ပြချက်ကို မြန်မာလို ပြသပါမည် (code ပြင်ရန် မလို)။
+> `name` ကဲ့သို့ ကျန် identity field များကို ဘာသာမပြန်ဘဲ ထားပါ။
 
 ## Settings (ပလပ်အင် configuration စာမျက်နှာ)
 
