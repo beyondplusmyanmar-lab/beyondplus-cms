@@ -23,7 +23,7 @@
             <div class="d-flex align-items-center py-2" style="gap:1rem;">
                 <a class="navbar-brand mb-0" href="{{ url('/') }}"><i class="bi bi-shop"></i> {{ $siteName }}</a>
 
-                <form class="sf-search flex-grow-1 d-none d-md-block" role="search" action="{{ url('/search') }}" method="GET">
+                <form class="sf-search flex-grow-1 d-none d-md-block" role="search" action="{{ url('/shop') }}" method="GET">
                     <div class="input-group">
                         <input class="form-control" type="search" name="q" value="{{ request('q') }}" placeholder="{{ $mm ? 'ကုန်ပစ္စည်း ရှာရန်…' : 'Search products…' }}" aria-label="Search">
                         <button class="btn" type="submit"><i class="bi bi-search"></i></button>
@@ -43,7 +43,7 @@
             </div>
 
             {{-- Mobile search --}}
-            <form class="sf-search d-md-none pb-2" role="search" action="{{ url('/search') }}" method="GET">
+            <form class="sf-search d-md-none pb-2" role="search" action="{{ url('/shop') }}" method="GET">
                 <div class="input-group">
                     <input class="form-control" type="search" name="q" value="{{ request('q') }}" placeholder="{{ $mm ? 'ကုန်ပစ္စည်း ရှာရန်…' : 'Search products…' }}" aria-label="Search">
                     <button class="btn" type="submit"><i class="bi bi-search"></i></button>

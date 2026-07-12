@@ -201,17 +201,22 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () use ($upload)
     })->whereNumber('id');
 });
 
-/* ---------------- Front: /shop ---------------- */
-Route::middleware('web')->get('shop', function () {
+/* ---------------- Front: /shop (also the product search) ---------------- */
+Route::middleware('web')->get('shop', function (Request $request) {
     abort_unless(bp_plugin_option('commerce', 'shop_enabled', 'yes') === 'yes', 404);
 
-    $products = Schema::hasTable('commerce_products')
-        ? DB::table('commerce_products')->where('is_active', 1)
-            ->orderBy('sort_order')->orderByDesc('id')->paginate(12)
-        : collect();
+    $q = trim((string) $request->query('q', ''));
+    $products = collect();
+    if (Schema::hasTable('commerce_products')) {
+        $products = DB::table('commerce_products')->where('is_active', 1)
+            ->when($q !== '', fn ($query) => $query->where(fn ($sub) => $sub->where('name', 'like', '%'.$q.'%')->orWhere('description', 'like', '%'.$q.'%')))
+            ->orderBy('sort_order')->orderByDesc('id')
+            ->paginate(12)->appends(['q' => $q]);
+    }
 
     return view('commerce::shop', [
         'products'  => $products,
+        'query'     => $q !== '' ? $q : null,
         'currency'  => bp_plugin_option('commerce', 'currency', 'MMK'),
         'themeSlug' => bp_option('theme', 'default'),
     ]);

@@ -6,12 +6,23 @@
 @section('title', app()->getLocale() === 'mm' ? 'ဈေးဆိုင်' : 'Shop')
 
 @section('content')
-@php $mm = app()->getLocale() === 'mm'; @endphp
+@php $mm = app()->getLocale() === 'mm'; $query = $query ?? null; @endphp
 <div class="container py-5">
     <div class="mb-4">
-        <h1 class="h3 mb-1">{{ $mm ? 'ကုန်ပစ္စည်းများ' : 'Shop' }}</h1>
-        <p class="text-muted mb-0">{{ $mm ? 'ကျွန်ုပ်တို့၏ ကုန်ပစ္စည်းများ ကို ကြည့်ရှုပါ။' : 'Browse our products.' }}</p>
+        @if($query)
+            <h1 class="h3 mb-1">{{ $mm ? '“'.$query.'” အတွက် ရလဒ်များ' : 'Results for “'.$query.'”' }}</h1>
+        @else
+            <h1 class="h3 mb-1">{{ $mm ? 'ကုန်ပစ္စည်းများ' : 'Shop' }}</h1>
+            <p class="text-muted mb-0">{{ $mm ? 'ကျွန်ုပ်တို့၏ ကုန်ပစ္စည်းများ ကို ကြည့်ရှုပါ။' : 'Browse our products.' }}</p>
+        @endif
     </div>
+
+    <form class="mb-4" role="search" action="{{ url('/shop') }}" method="GET">
+        <div class="input-group" style="max-width:520px;">
+            <input class="form-control" type="search" name="q" value="{{ $query }}" placeholder="{{ $mm ? 'ကုန်ပစ္စည်း ရှာရန်…' : 'Search products…' }}" aria-label="Search">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> {{ $mm ? 'ရှာရန်' : 'Search' }}</button>
+        </div>
+    </form>
 
     <div class="row g-4">
         @forelse($products as $p)
@@ -35,7 +46,12 @@
         @empty
             <div class="col-12 text-center text-muted py-5">
                 <i class="bi bi-box-seam" style="font-size:2rem;"></i>
-                <p class="mt-2 mb-0">{{ $mm ? 'ကုန်ပစ္စည်း မရှိသေးပါ။' : 'No products yet.' }}</p>
+                @if($query)
+                    <p class="mt-2 mb-1">{{ $mm ? '“'.$query.'” နှင့် ကိုက်ညီသော ကုန်ပစ္စည်း မတွေ့ပါ။' : 'No products match “'.$query.'”.' }}</p>
+                    <a href="{{ url('/shop') }}" class="small">{{ $mm ? 'ကုန်ပစ္စည်း အားလုံး ကြည့်ရန်' : 'View all products' }}</a>
+                @else
+                    <p class="mt-2 mb-0">{{ $mm ? 'ကုန်ပစ္စည်း မရှိသေးပါ။' : 'No products yet.' }}</p>
+                @endif
             </div>
         @endforelse
     </div>
