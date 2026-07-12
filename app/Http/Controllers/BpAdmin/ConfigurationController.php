@@ -111,7 +111,46 @@ class ConfigurationController extends Controller
                     ['label' => 'Events calendar', 'sub' => '/events', 'active' => true, 'fallback' => true, 'icon' => 'fa-calendar', 'link' => url('bp-admin/news')],
                 ],
             ],
+            [
+                'title'   => 'Commerce',
+                'trigger' => ['label' => 'Product / shop page', 'icon' => 'fa-shopping-cart'],
+                'core'    => ['label' => 'Business theme hooks', 'sub' => 'featured products · promotions · locations'],
+                'providers' => [
+                    ['label' => 'Commerce', 'sub' => 'catalogue · /shop', 'slug' => 'commerce', 'active' => $on('commerce'), 'icon' => 'fa-shopping-cart', 'link' => $on('commerce') ? url('bp-admin/commerce') : url('bp-admin/plugins/view?slug=commerce')],
+                    ['label' => 'Commerce Checkout', 'sub' => 'cart · orders (COD)', 'slug' => 'commerce-checkout', 'active' => $on('commerce-checkout'), 'icon' => 'fa-shopping-bag', 'link' => $on('commerce-checkout') ? url('bp-admin/orders') : url('bp-admin/plugins/view?slug=commerce-checkout')],
+                ],
+            ],
         ];
+
+        // Catch-all: any active plugin not covered by a curated flow above still
+        // appears here, so no active add-on is invisible on this page.
+        $covered = [];
+        foreach ($flows as $f) {
+            foreach ($f['providers'] as $p) {
+                if (! empty($p['slug'])) {
+                    $covered[] = $p['slug'];
+                }
+            }
+        }
+        $others = array_values(array_diff($active, $covered));
+        if ($others) {
+            $flows[] = [
+                'title'   => 'Other active plugins',
+                'trigger' => ['label' => 'Active add-ons', 'icon' => 'fa-plug'],
+                'core'    => ['label' => 'Hook system', 'sub' => count($others).' not shown above'],
+                'providers' => array_map(function ($slug) {
+                    $meta = \App\Support\Plugin::meta($slug);
+                    return [
+                        'label'  => $meta['name'] ?? $slug,
+                        'sub'    => $meta['category'] ?? 'plugin',
+                        'slug'   => $slug,
+                        'active' => true,
+                        'icon'   => 'fa-plug',
+                        'link'   => url('bp-admin/plugins/view?slug='.$slug),
+                    ];
+                }, $others),
+            ];
+        }
 
         return view('bp-admin.configuration.flow', ['flows' => $flows, 'activeCount' => count($active)]);
     }
