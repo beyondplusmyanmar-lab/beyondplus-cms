@@ -25,9 +25,12 @@
                         {{ $mm ? 'အောက်တွင် ထည့်ပြီး ဤနေရာတွင် activate လုပ်ပါ။' : ', then activate it here.' }}
                     </small>
                 </div>
-                <div class="input-group" style="max-width:260px;">
-                    <span class="input-group-text"><i class="fa fa-search"></i></span>
-                    <input type="text" id="pluginSearch" class="form-control" placeholder="{{ $mm ? 'ပလပ်အင် ရှာရန်…' : 'Search plugins…' }}" autocomplete="off">
+                <div class="d-flex align-items-center flex-wrap" style="gap:.6rem;">
+                    <a href="{{ url('bp-admin/configuration/flow') }}" class="btn btn-sm btn-outline-secondary" title="{{ $mm ? 'ဤပလပ်အင်များ ဝန်ဆောင်မှုများကို မည်သို့ လမ်းကြောင်းချသည်ကို ကြည့်ရန်' : 'See how these plugins route services' }}"><i class="fa fa-sitemap"></i> {{ $mm ? 'စနစ် ဆက်စပ်ပုံ' : 'System flow' }}</a>
+                    <div class="input-group" style="max-width:220px;">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        <input type="text" id="pluginSearch" class="form-control" placeholder="{{ $mm ? 'ပလပ်အင် ရှာရန်…' : 'Search plugins…' }}" autocomplete="off">
+                    </div>
                 </div>
             </div>
             <!-- /.box-header -->

@@ -1,8 +1,9 @@
 @extends('bp-admin.layouts.admin.index')
 
-@section('title', 'System flow')
+@section('title', app()->getLocale() === 'mm' ? 'စနစ် ဆက်စပ်ပုံ' : 'System flow')
 
 @section('content')
+@php $mm = app()->getLocale() === 'mm'; @endphp
 <style>
     .flow-block { margin-bottom: 2rem; }
     .flow-block h5 { font-weight: 600; margin-bottom: 1rem; }
@@ -37,12 +38,12 @@
             <div class="box-header" style="padding-bottom:.75rem;">
                 <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap:.5rem;">
                     <div>
-                        <h4 class="mb-0">System flow</h4>
-                        <small class="text-muted">How the CMS routes each service through your active plugins ({{ $activeCount }} active).</small>
+                        <h4 class="mb-0">{{ $mm ? 'စနစ် ဆက်စပ်ပုံ' : 'System flow' }}</h4>
+                        <small class="text-muted">{{ $mm ? 'CMS သည် ဝန်ဆောင်မှုတစ်ခုစီကို သင့် အသုံးပြုဆဲ ပလပ်အင်များမှတစ်ဆင့် မည်သို့ လမ်းကြောင်းချသည်ကို ပြသည်' : 'How the CMS routes each service through your active plugins' }} ({{ $activeCount }} {{ $mm ? 'ခု အသုံးပြုဆဲ' : 'active' }}).</small>
                     </div>
                     <div class="d-flex align-items-center" style="gap:.6rem;">
-                        <a href="{{ url('bp-admin/plugins') }}" class="btn btn-sm btn-outline-primary"><i class="fa fa-plug"></i> Plugins</a>
-                        <a href="{{ url('bp-admin/configuration') }}" class="btn btn-sm btn-outline-secondary"><i class="fa fa-cog"></i> Configuration</a>
+                        <a href="{{ url('bp-admin/plugins') }}" class="btn btn-sm btn-outline-primary"><i class="fa fa-plug"></i> {{ $mm ? 'ပလပ်အင်များ' : 'Plugins' }}</a>
+                        <a href="{{ url('bp-admin/configuration') }}" class="btn btn-sm btn-outline-secondary"><i class="fa fa-cog"></i> {{ $mm ? 'ချိန်ညှိမှု' : 'Configuration' }}</a>
                     </div>
                 </div>
             </div>
@@ -68,9 +69,9 @@
                                         <div class="ttl"><i class="fa {{ $p['icon'] }}"></i> {{ $p['label'] }}</div>
                                         <div class="sub">{{ $p['sub'] }}</div>
                                         @if(!empty($p['slug']))
-                                            <span class="flow-badge {{ $p['active'] ? 'on' : 'off' }}">{{ $p['active'] ? 'active plugin' : 'inactive' }}</span>
+                                            <span class="flow-badge {{ $p['active'] ? 'on' : 'off' }}">{{ $p['active'] ? ($mm ? 'အသုံးပြုဆဲ' : 'active plugin') : ($mm ? 'ပိတ်ထား' : 'inactive') }}</span>
                                         @elseif(!empty($p['fallback']))
-                                            <span class="flow-badge {{ $p['active'] ? 'on' : 'off' }}">{{ $p['active'] ? 'in use' : 'standby' }}</span>
+                                            <span class="flow-badge {{ $p['active'] ? 'on' : 'off' }}">{{ $p['active'] ? ($mm ? 'သုံးနေသည်' : 'in use') : ($mm ? 'အရန်' : 'standby') }}</span>
                                         @endif
                                     </{{ $isLink ? 'a' : 'div' }}>
                                 @endforeach
