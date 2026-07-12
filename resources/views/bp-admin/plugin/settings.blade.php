@@ -1,13 +1,14 @@
 @extends('bp-admin.layouts.admin.index')
 
-@section('title', ($meta['name'] ?? $slug).' settings')
+@section('title', ($meta['name'] ?? $slug).' '.(app()->getLocale() === 'mm' ? 'ဆက်တင်' : 'settings'))
 
 @section('content')
+@php $mm = app()->getLocale() === 'mm'; @endphp
 <div class="row">
     <div class="col-md-8 tile">
         <div class="box box-danger">
             <div class="box-header" style="padding-bottom:.75rem;">
-                <h4 class="mb-0"><i class="fa fa-sliders"></i> {{ $meta['name'] ?? $slug }} — settings</h4>
+                <h4 class="mb-0"><i class="fa fa-sliders"></i> {{ $meta['name'] ?? $slug }} — {{ $mm ? 'ဆက်တင်' : 'settings' }}</h4>
                 <small class="text-muted">{{ $meta['description'] ?? '' }}</small>
             </div>
             <div class="box-body pt-3" style="border-top:1px solid #eef0f3;">
@@ -45,8 +46,8 @@
                         </div>
                     @endforeach
 
-                    <a href="{{ url('bp-admin/plugins') }}" class="btn btn-sm btn-outline-secondary">Back</a>
-                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save settings</button>
+                    <a href="{{ url('bp-admin/plugins') }}" class="btn btn-sm btn-outline-secondary">{{ $mm ? 'ပြန်ရန်' : 'Back' }}</a>
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> {{ $mm ? 'ဆက်တင် သိမ်းရန်' : 'Save settings' }}</button>
                 </form>
 
                 @if(!empty($meta['test']))
@@ -54,14 +55,14 @@
                     <form action="{{ url('bp-admin/plugins/test') }}" method="post">
                         {{ csrf_field() }}
                         <input type="hidden" name="slug" value="{{ $slug }}">
-                        <label class="control-label">{{ $meta['test']['label'] ?? 'Send a test message to' }}</label>
+                        <label class="control-label">{{ $meta['test']['label'] ?? ($mm ? 'စမ်းသပ် မက်ဆေ့ချ် ပို့ရန်' : 'Send a test message to') }}</label>
                         <div class="input-group" style="max-width:420px;">
                             <input type="text" class="form-control" name="test_to" placeholder="{{ $meta['test']['placeholder'] ?? '' }}">
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-paper-plane"></i> Send test</button>
+                                <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-paper-plane"></i> {{ $mm ? 'စမ်းသပ် ပို့ရန်' : 'Send test' }}</button>
                             </div>
                         </div>
-                        <small class="form-text text-muted">Uses the saved settings above (save first).</small>
+                        <small class="form-text text-muted">{{ $mm ? 'အထက်ရှိ သိမ်းထားသော ဆက်တင်များကို သုံးသည် (အရင် သိမ်းပါ)။' : 'Uses the saved settings above (save first).' }}</small>
                     </form>
                 @endif
             </div>
