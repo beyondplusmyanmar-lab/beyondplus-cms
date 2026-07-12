@@ -70,6 +70,7 @@ class Plugin
     public static function all(): array
     {
         $active = self::active();
+        $mm = app()->getLocale() === 'mm';
         $plugins = [];
 
         foreach (glob(self::path().'/*', GLOB_ONLYDIR) as $dir) {
@@ -89,7 +90,9 @@ class Plugin
                 'type'         => $meta['type'] ?? 'plugin',
                 'name'         => $meta['name'] ?? ucfirst($slug),
                 'category'     => $meta['category'] ?? 'General',
-                'description'  => $meta['description'] ?? 'No description provided.',
+                'description'  => ($mm && ! empty($meta['description_mm']))
+                    ? $meta['description_mm']
+                    : ($meta['description'] ?? 'No description provided.'),
                 'version'          => $version,
                 'installed_version'=> $installed,
                 'update_available' => $updateAvailable,

@@ -4,6 +4,7 @@
     "category": "Storage",
     "name": "Cloudflare R2 Storage",
     "description": "Stores uploaded images in Cloudflare R2 (S3-compatible object storage) instead of the local disk. Configure below, then activate to switch new uploads to R2.",
+    "description_mm": "Upload လုပ်သော ပုံများကို local disk အစား Cloudflare R2 (S3-compatible object storage) တွင် သိမ်းသည်။ အောက်တွင် ချိန်ညှိပြီး activate လုပ်ကာ upload အသစ်များကို R2 သို့ ပြောင်းပါ။",
     "version": "1.0.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/cloudflare-r2",

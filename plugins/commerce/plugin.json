@@ -4,6 +4,7 @@
     "category": "Commerce",
     "name": "Commerce",
     "description": "Adds products, scheduled promotions and store locations — each with its own admin tab and table — plus a themed /shop page. Fills the Business theme's Featured Products, Promotions, Store Locations and hero Shop button through hooks. Cart and checkout are intentionally out of scope for this version.",
+    "description_mm": "ကုန်ပစ္စည်းများ၊ အချိန်ဇယားဆွဲ ပရိုမိုးရှင်းများ နှင့် ဆိုင်ခွဲ တည်နေရာများ — တစ်ခုစီအတွက် ကိုယ်ပိုင် admin tab နှင့် table — အပြင် theme ပါဝင်သော /shop စာမျက်နှာ ထည့်ပေးသည်။ Business theme ၏ Featured Products၊ Promotions၊ Store Locations နှင့် hero Shop ခလုတ်ကို hook များဖြင့် ဖြည့်ပေးသည်။ Cart နှင့် checkout ကို ဤဗားရှင်းတွင် ရည်ရွယ်ချက်ရှိရှိ မထည့်ထားပါ။",
     "version": "1.2.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/commerce",

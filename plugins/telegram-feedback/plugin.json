@@ -4,6 +4,7 @@
     "category": "Integrations",
     "name": "Telegram Feedback",
     "description": "Sends a Telegram message to your team whenever a visitor submits the contact / feedback form. A demo of connecting the CMS to an external social service through the hook system.",
+    "description_mm": "ဧည့်သည်တစ်ဦး contact / feedback ဖောင် တင်သွင်းတိုင်း သင့်အဖွဲ့ထံ Telegram မက်ဆေ့ချ် ပို့ပေးသည်။ CMS ကို hook စနစ်ဖြင့် ပြင်ပ social service နှင့် ချိတ်ဆက်ပြသည့် နမူနာ။",
     "version": "1.0.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/telegram-feedback",

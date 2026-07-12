@@ -4,6 +4,7 @@
     "category": "Communication",
     "name": "Mailgun",
     "description": "Sends email (OTP and notifications) through the Mailgun HTTP API. Configure it from this plugin's Settings.",
+    "description_mm": "Mailgun HTTP API မှတစ်ဆင့် အီးမေးလ် (OTP နှင့် အကြောင်းကြားချက်များ) ပို့သည်။ ဤပလပ်အင်၏ Settings မှ ချိန်ညှိပါ။",
     "version": "1.0.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/mailgun",

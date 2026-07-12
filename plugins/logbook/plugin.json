@@ -4,6 +4,7 @@
     "category": "Utilities",
     "name": "Logbook",
     "description": "A demo plugin that ships its own database migration, admin page and view. Activating it creates a bp_logbook table; uninstalling drops it.",
+    "description_mm": "ကိုယ်ပိုင် database migration၊ admin စာမျက်နှာ နှင့် view ပါဝင်သော နမူနာ ပလပ်အင်။ activate လုပ်လျှင် bp_logbook table ဖန်တီးပြီး၊ ဖြုတ်လျှင် ပြန်ဖျက်သည်။",
     "version": "1.0.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/logbook",

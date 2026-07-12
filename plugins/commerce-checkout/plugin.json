@@ -4,6 +4,7 @@
     "category": "Commerce",
     "name": "Commerce Checkout",
     "description": "Adds a session cart, a checkout form and orders on top of the Commerce plugin. Orders are recorded as inquiries / cash-on-delivery — there is NO online payment or card handling, so nothing sensitive is collected. Requires the Commerce plugin (products). Opt-in: like every plugin it ships inactive and only runs once an admin activates it.",
+    "description_mm": "Commerce ပလပ်အင်အပေါ်တွင် session cart၊ checkout ဖောင် နှင့် အော်ဒါများ ထည့်ပေးသည်။ အော်ဒါများကို inquiry / ပစ္စည်းရောက်မှ ငွေချေ (COD) အဖြစ် မှတ်တမ်းတင်သည် — online ငွေပေးချေမှု သို့မဟုတ် ကတ် ကိုင်တွယ်မှု မရှိသဖြင့် အရေးကြီးသော အချက်အလက် မစုဆောင်းပါ။ Commerce ပလပ်အင် (ကုန်ပစ္စည်းများ) လိုအပ်သည်။ ပလပ်အင်တိုင်းကဲ့သို့ ပိတ်ထားလျက် ရောက်လာပြီး admin က activate လုပ်မှသာ အလုပ်လုပ်သည်။",
     "version": "1.0.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/commerce-checkout",
