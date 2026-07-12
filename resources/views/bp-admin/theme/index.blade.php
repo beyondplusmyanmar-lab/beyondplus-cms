@@ -54,6 +54,9 @@
                                         @if($theme['minCmsVersion']) &middot; needs CMS &ge; {{ $theme['minCmsVersion'] }}@endif
                                     </p>
                                     @if($theme['slug'] === $active)
+                                        @if($theme['hasSettings'])
+                                            <a href="{{ url('bp-admin/themes/customize?theme='.$theme['slug']) }}" class="btn btn-sm btn-primary" title="Edit this theme's content"><i class="fa fa-sliders"></i> Customize</a>
+                                        @endif
                                         <button class="btn btn-sm btn-outline-secondary" disabled>Currently active</button>
                                     @else
                                         <a href="{{ url('bp-admin/themes/scan?theme='.$theme['slug']) }}" class="btn btn-sm btn-outline-info" title="Security scan"><i class="fa fa-shield"></i> Scan</a>

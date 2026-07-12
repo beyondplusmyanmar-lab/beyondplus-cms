@@ -167,6 +167,8 @@ Route::group(['prefix' => 'bp-admin','namespace'  =>  'BpAdmin', 'middleware' =>
             });
             Route::get('themes', 'ThemeController@index');
             Route::get('themes/scan', 'ThemeController@scan');
+            Route::get('themes/customize', 'ThemeController@customize');
+            Route::post('themes/customize', 'ThemeController@saveCustomize');
             Route::post('themes/activate', 'ThemeController@activate');
             Route::get('plugins', 'PluginController@index');
             Route::get('plugins/view', 'PluginController@show');

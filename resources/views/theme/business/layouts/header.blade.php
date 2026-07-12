@@ -1,7 +1,7 @@
 @php
     $siteName = optional(site_information('blogname'))->option_value ?: config('app.name');
     $mm = app()->getLocale() === 'mm';
-    $ctaLabel = bp_option('biz_nav_cta_label', $mm ? 'ဆက်သွယ်ရန်' : 'Get in touch');
+    $ctaLabel = bp_option('biz_nav_cta_label') ?: ($mm ? 'ဆက်သွယ်ရန်' : 'Get in touch');
     $ctaUrl   = bp_option('biz_nav_cta_url') ?: url('/contact');
 @endphp
 <header>

@@ -7,9 +7,9 @@
     $subtitle = bp_option('biz_hero_subtitle') ?: (optional(site_information('blogdescription'))->option_value
                 ?: ($mm ? 'အရည်အသွေးမြင့် ကုန်ပစ္စည်းများနှင့် ကျွမ်းကျင်သော ဝန်ဆောင်မှုများ ပေးအပ်ပါသည်။'
                         : 'We provide quality products and professional services you can rely on.'));
-    $cta1Label = bp_option('biz_hero_cta_label', $mm ? 'ဆက်သွယ်ရန်' : 'Get in touch');
+    $cta1Label = bp_option('biz_hero_cta_label') ?: ($mm ? 'ဆက်သွယ်ရန်' : 'Get in touch');
     $cta1Url   = bp_option('biz_hero_cta_url') ?: url('/contact');
-    $cta2Label = bp_option('biz_hero_cta2_label', $mm ? 'ဝန်ဆောင်မှုများ' : 'Our services');
+    $cta2Label = bp_option('biz_hero_cta2_label') ?: ($mm ? 'ဝန်ဆောင်မှုများ' : 'Our services');
     $cta2Url   = bp_option('biz_hero_cta2_url') ?: url('/#services');
 
     $sliders = bp_slider();

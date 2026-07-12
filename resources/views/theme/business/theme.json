@@ -3,9 +3,89 @@
     "type": "theme",
     "name": "Business",
     "description": "A general-purpose business theme with a configurable homepage (hero, services, about, why-choose-us, statistics, testimonials, news, FAQ, contact). Design tokens are option-driven so most small businesses can launch without editing code, and POS sections (featured products, promotions, store locations) fill in automatically when a commerce plugin is installed.",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/themes/business",
     "license": "MIT",
-    "minCmsVersion": "2.0.0"
+    "minCmsVersion": "2.0.0",
+    "settings": [
+        { "group": "Hero", "name": "biz_hero_title", "label": "Headline", "type": "text", "default": "", "placeholder": "Defaults to your site name", "help": "Leave blank to use your site name." },
+        { "group": "Hero", "name": "biz_hero_subtitle", "label": "Subtitle", "type": "textarea", "default": "", "placeholder": "We provide quality products and professional services you can rely on." },
+        { "group": "Hero", "name": "biz_hero_cta_label", "label": "Primary button label", "type": "text", "default": "", "placeholder": "Get in touch" },
+        { "group": "Hero", "name": "biz_hero_cta_url", "label": "Primary button link", "type": "text", "default": "", "placeholder": "Defaults to the contact page" },
+        { "group": "Hero", "name": "biz_hero_cta2_label", "label": "Secondary button label", "type": "text", "default": "", "placeholder": "Our services" },
+        { "group": "Hero", "name": "biz_hero_cta2_url", "label": "Secondary button link", "type": "text", "default": "", "placeholder": "#services" },
+
+        { "group": "Services", "name": "biz_services_json", "label": "Service cards", "type": "repeater", "add_label": "Add service",
+          "fields": [
+            { "name": "icon", "label": "Icon", "type": "text", "col": 2, "default": "bi-check2-circle", "placeholder": "bi-gem" },
+            { "name": "name", "label": "Name", "type": "text", "col": 4 },
+            { "name": "desc", "label": "Short description", "type": "textarea", "col": 4 },
+            { "name": "url", "label": "Link (optional)", "type": "text", "col": 2 }
+          ],
+          "default": [
+            { "icon": "bi-gem", "name": "Quality Products", "desc": "Dependable, high-quality products for every need.", "url": "" },
+            { "icon": "bi-people", "name": "Professional Service", "desc": "An experienced team ready to help you succeed.", "url": "" },
+            { "icon": "bi-truck", "name": "Fast Delivery", "desc": "On-time, reliable delivery across the country.", "url": "" },
+            { "icon": "bi-headset", "name": "Ongoing Support", "desc": "Responsive support before and after every sale.", "url": "" }
+          ],
+          "help": "Bootstrap Icons name, e.g. bi-gem. Delete all rows to hide this section." },
+
+        { "group": "About", "name": "biz_about_title", "label": "Title", "type": "text", "default": "", "placeholder": "About Our Company" },
+        { "group": "About", "name": "biz_about_body", "label": "Introduction", "type": "textarea", "default": "" },
+        { "group": "About", "name": "biz_about_mission", "label": "Mission", "type": "text", "default": "" },
+        { "group": "About", "name": "biz_about_vision", "label": "Vision", "type": "text", "default": "" },
+        { "group": "About", "name": "biz_about_years", "label": "Years in business", "type": "text", "default": "", "placeholder": "15" },
+        { "group": "About", "name": "biz_about_image", "label": "Image", "type": "image", "default": "", "help": "Upload path or full URL. Leave blank to show a years/logo card." },
+
+        { "group": "Why Choose Us", "name": "biz_features_json", "label": "Reasons", "type": "repeater", "add_label": "Add reason",
+          "fields": [ { "name": "name", "label": "Reason", "type": "text", "col": 12 } ],
+          "default": [
+            { "name": "Quality Products" }, { "name": "Trusted Service" }, { "name": "Fast Delivery" }, { "name": "Professional Team" }
+          ] },
+
+        { "group": "Statistics", "name": "biz_stats_json", "label": "Counters", "type": "repeater", "add_label": "Add counter",
+          "fields": [
+            { "name": "num", "label": "Number", "type": "text", "col": 4, "placeholder": "1200+" },
+            { "name": "label", "label": "Label", "type": "text", "col": 8, "placeholder": "Customers" }
+          ],
+          "default": [
+            { "num": "1200+", "label": "Customers" }, { "num": "15", "label": "Years Experience" },
+            { "num": "500+", "label": "Products" }, { "num": "98%", "label": "Satisfaction" }
+          ] },
+
+        { "group": "Testimonials", "name": "biz_testimonials_json", "label": "Customer quotes", "type": "repeater", "add_label": "Add testimonial",
+          "fields": [
+            { "name": "quote", "label": "Quote", "type": "textarea", "col": 6 },
+            { "name": "name", "label": "Name", "type": "text", "col": 3 },
+            { "name": "role", "label": "Role", "type": "text", "col": 2 },
+            { "name": "rating", "label": "Stars", "type": "select", "col": 1, "options": { "5": "5", "4": "4", "3": "3", "2": "2", "1": "1" }, "default": "5" }
+          ],
+          "default": [],
+          "help": "Empty by default so no placeholder reviews appear on a live site. Add real testimonials to show this section." },
+
+        { "group": "Contact", "name": "biz_phone", "label": "Phone", "type": "text", "default": "" },
+        { "group": "Contact", "name": "biz_email", "label": "Email", "type": "text", "default": "", "help": "Falls back to the site admin email." },
+        { "group": "Contact", "name": "biz_address", "label": "Address", "type": "textarea", "default": "" },
+        { "group": "Contact", "name": "biz_hours", "label": "Business hours", "type": "textarea", "default": "", "placeholder": "Mon–Fri: 9am–6pm\nSat: 9am–1pm" },
+        { "group": "Contact", "name": "biz_map_embed", "label": "Map embed URL", "type": "text", "default": "", "help": "Leave blank to auto-generate a map from the address." },
+
+        { "group": "Social links", "name": "biz_social_facebook", "label": "Facebook URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "biz_social_instagram", "label": "Instagram URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "biz_social_twitter", "label": "X / Twitter URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "biz_social_youtube", "label": "YouTube URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "biz_social_linkedin", "label": "LinkedIn URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "biz_social_tiktok", "label": "TikTok URL", "type": "text", "default": "" },
+
+        { "group": "Colours", "name": "theme_color_primary", "label": "Primary", "type": "color", "default": "#2563eb" },
+        { "group": "Colours", "name": "theme_color_primary_dark", "label": "Primary (dark)", "type": "color", "default": "#1d4ed8" },
+        { "group": "Colours", "name": "theme_color_secondary", "label": "Secondary / dark", "type": "color", "default": "#0f172a" },
+        { "group": "Colours", "name": "theme_color_accent", "label": "Accent", "type": "color", "default": "#f59e0b" },
+
+        { "group": "Advanced", "name": "biz_nav_cta_label", "label": "Header button label", "type": "text", "default": "", "placeholder": "Get in touch" },
+        { "group": "Advanced", "name": "biz_nav_cta_url", "label": "Header button link", "type": "text", "default": "" },
+        { "group": "Advanced", "name": "biz_news_count", "label": "News items on homepage", "type": "number", "default": "3" },
+        { "group": "Advanced", "name": "biz_faq_count", "label": "FAQs on homepage", "type": "number", "default": "6" },
+        { "group": "Advanced", "name": "biz_og_image", "label": "Social share image", "type": "image", "default": "", "help": "Used for Open Graph / link previews." }
+    ]
 }

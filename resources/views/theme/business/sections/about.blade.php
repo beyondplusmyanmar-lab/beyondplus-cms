@@ -2,7 +2,7 @@
 @php
     $mm = app()->getLocale() === 'mm';
     $siteName = optional(site_information('blogname'))->option_value ?: config('app.name');
-    $title = bp_option('biz_about_title', $mm ? 'ကျွန်ုပ်တို့အကြောင်း' : 'About Our Company');
+    $title = bp_option('biz_about_title') ?: ($mm ? 'ကျွန်ုပ်တို့အကြောင်း' : 'About Our Company');
     $body  = bp_option('biz_about_body') ?: ($mm
         ? 'ကျွန်ုပ်တို့သည် ဖောက်သည်များအား အရည်အသွေးမြင့် ကုန်ပစ္စည်းများနှင့် ယုံကြည်စိတ်ချရသော ဝန်ဆောင်မှုများ ပေးအပ်ရန် ကတိကဝတ်ပြုထားပါသည်။'
         : 'We are committed to delivering quality products and dependable service to every customer, building lasting relationships through trust and consistency.');

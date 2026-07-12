@@ -54,6 +54,7 @@ class Theme
                 'license'       => $meta['license'] ?? '',
                 'minCmsVersion' => $meta['minCmsVersion'] ?? '',
                 'active'        => $isActive,
+                'hasSettings'   => ! empty($meta['settings']),
                 'tampered'      => $isActive && self::isTampered($slug),
                 'preview'       => file_exists(public_path('theme-previews/'.$slug.'.png'))
                     ? 'theme-previews/'.$slug.'.png' : null,
@@ -73,6 +74,44 @@ class Theme
     public static function checkRequirements(string $slug): array
     {
         return PackageGuard::checkRequirements(self::meta($slug), Plugin::CMS_VERSION);
+    }
+
+    /**
+     * A theme's declared settings fields (from theme.json "settings"). Themes
+     * store each value under the field's own name (e.g. biz_hero_title) so the
+     * theme's Blade reads it with a plain bp_option(); no key prefixing.
+     *
+     * Fields may carry a "group" (for form headings) and a "repeater" type with
+     * a nested "fields" array (stored as a JSON array under one option).
+     */
+    public static function settingsSchema(string $slug): array
+    {
+        $settings = self::meta($slug)['settings'] ?? [];
+        return is_array($settings) ? $settings : [];
+    }
+
+    /** The default for a field, normalised to the string stored in bp_options. */
+    protected static function defaultValue(array $field): string
+    {
+        $default = $field['default'] ?? '';
+        // Repeater / any array default is stored as JSON (matches the theme's json_decode()).
+        return is_array($default) ? json_encode($default, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : (string) $default;
+    }
+
+    /**
+     * Create option rows for a theme's settings from their declared defaults —
+     * the "install seeder". firstOrCreate is non-destructive: it never touches a
+     * value the owner has already set, so re-activating keeps their edits.
+     */
+    public static function seedDefaults(string $slug): void
+    {
+        foreach (self::settingsSchema($slug) as $field) {
+            if (empty($field['name'])) { continue; }
+            Bp_options::firstOrCreate(
+                ['option_name' => $field['name']],
+                ['option_value' => self::defaultValue($field), 'autoload' => 'yes']
+            );
+        }
     }
 
     public static function isTampered(string $slug): bool
@@ -116,6 +155,7 @@ class Theme
 
         Bp_options::updateOrCreate(['option_name' => 'theme'], ['option_value' => $slug]);
         self::storeFingerprint($slug);
+        self::seedDefaults($slug); // create any missing content options (non-destructive)
 
         $who = optional(auth('admins')->user())->email ?? 'system';
         Log::info("Theme activated: {$slug} (by {$who})");
