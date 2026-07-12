@@ -24,9 +24,12 @@ class Language
     {
         if (Session::has('applocale')) {
             App::setLocale(Session::get('applocale'));
-        } else { // This is optional as Laravel will automatically set the fallback language if there is none specified
-            App::setLocale(Config::get('app.fallback_locale'));
-            Session::put('applocale', Config::get('app.fallback_locale'));
+        } else {
+            // Default the admin to the app's primary locale (app.locale, e.g. mm),
+            // matching the front-end, until the admin picks a language via the
+            // EN / မြန်မာ toggle (their choice then persists in the session).
+            App::setLocale(Config::get('app.locale'));
+            Session::put('applocale', Config::get('app.locale'));
         }
         return $next($request);
     }
