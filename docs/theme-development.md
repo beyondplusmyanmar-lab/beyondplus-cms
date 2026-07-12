@@ -61,6 +61,65 @@ resources/views/theme/my-theme/
 စစ်ဆေးပါသည် — CMS ဗားရှင်း အသစ်လိုအပ်သော ပုံစံကို တိတ်တဆိတ် ပျက်စေမည့်အစား
 **ပိတ်ပင်** ထားပါသည်။
 
+## Settings — Customize စာမျက်နှာ (Theme settings)
+
+ပုံစံတစ်ခုသည် ၎င်း၏ ပြင်ဆင်နိုင်သော အကြောင်းအရာ field များကို `theme.json` ၏
+`"settings"` array တွင် ကြေညာနိုင်ပါသည်။ ကြေညာထားပါက admin ၏ **Themes**
+စာမျက်နှာရှိ active ပုံစံ card ပေါ်တွင် **Customize** ခလုတ် ပေါ်လာပြီး၊ CMS က ထို
+field များအတွက် form တစ်ခု အလိုအလျောက် render လုပ်ပေးကာ တန်ဖိုးများကို
+သိမ်းဆည်းပေးသည် — အသုံးပြုသူသည် code မထိဘဲ ဆိုက်၏ အကြောင်းအရာကို ပြင်နိုင်ပါသည်။
+
+> plugin settings နှင့် တူညီသော model ([plugin-development.md](plugin-development.md))
+> ဖြစ်သည် — သို့သော် plugin များနှင့်မတူဘဲ **ပုံစံ၏ တန်ဖိုးများကို field ၏ `name`
+> အတိုင်း တိုက်ရိုက် သိမ်းသည် (prefix မရှိ)**၊ ထို့ကြောင့် ပုံစံ Blade ထဲမှ
+> `bp_option('name', 'default')` ဖြင့် တိုက်ရိုက် ဖတ်ပါ။
+
+```json
+"settings": [
+  { "group": "Hero", "name": "biz_hero_title", "label": "Headline", "type": "text", "default": "" },
+  { "group": "Hero", "name": "biz_hero_subtitle", "label": "Subtitle", "type": "textarea", "default": "" },
+  { "group": "Colours", "name": "theme_color_primary", "label": "Primary", "type": "color", "default": "#2563eb" },
+  { "group": "Services", "name": "biz_services_json", "label": "Service cards", "type": "repeater", "add_label": "Add service",
+    "fields": [
+      { "name": "icon", "label": "Icon", "type": "text", "col": 2 },
+      { "name": "name", "label": "Name", "type": "text", "col": 5 },
+      { "name": "desc", "label": "Description", "type": "textarea", "col": 5 }
+    ],
+    "default": [ { "icon": "bi-gem", "name": "Quality Products", "desc": "…" } ] }
+]
+```
+
+field ၏ property များ —
+
+| Property | အဓိပ္ပာယ် |
+|---|---|
+| `name` (မဖြစ်မနေ) | option key — ပုံစံက `bp_option($name)` ဖြင့် ဖတ်သည် |
+| `label` | form ရှိ field ခေါင်းစဉ် |
+| `type` | `text` (မူလ)၊ `textarea`၊ `select` (`options` map နှင့်)၊ `checkbox` (`yes`/`no`)၊ `color`၊ `image`၊ `repeater` |
+| `default` | မူလတန်ဖိုး (အောက်ရှိ seed ကို ကြည့်ပါ) |
+| `group` | form ကို ခေါင်းစဉ်အလိုက် စုပေးသည် (optional) |
+| `help` / `placeholder` | အကူအညီ စာသား (optional) |
+
+**Repeater** — "row" များ ထပ်တလဲလဲ ထည့်နိုင်သော field (ဝန်ဆောင်မှု card၊ statistics
+counter၊ သုံးသပ်ချက် စသဖြင့်)။ ၎င်း၏ `fields` သည် row တစ်ခုချင်း၏ sub-field များ
+ဖြစ်ပြီး၊ CMS သည် တန်ဖိုးများကို **JSON array** အဖြစ် option တစ်ခုတည်းတွင် သိမ်းသည်။
+ပုံစံ Blade ထဲမှ `json_decode(bp_option($name, '[]'), true)` ဖြင့် ဖတ်ပါ။ ဗလာ row
+များကို သိမ်းစဉ် အလိုအလျောက် ဖယ်ရှားသည်။
+
+### Install seeder — activate လုပ်စဉ် မူလတန်ဖိုး ထည့်ခြင်း
+
+ပုံစံကို activate လုပ်သောအခါ CMS သည် schema ရှိ field တိုင်း၏ `default` ဖြင့် option
+row များကို **အလိုအလျောက် ဖန်တီးပေးသည်** (`firstOrCreate`)။ ၎င်းသည်
+**ဖျက်ဆီးမှုမရှိ** — ရှိပြီးသား တန်ဖိုး (အသုံးပြုသူ ပြင်ထားသည်) ကို ဘယ်တော့မှ
+မ overwrite လုပ်ပါ။ ထို့ကြောင့် fresh install တွင် homepage သည် မူလ အကြောင်းအရာဖြင့်
+ပြည့်စုံနေပြီး၊ ပုံစံကို ပြန် activate လုပ်လျှင်လည်း အသုံးပြုသူ၏ ပြင်ဆင်မှုများ
+ကျန်ရှိနေပါသည်။
+
+> **သတိ** — `bp_option($name, $default)` သည် option row ရှိပြီး တန်ဖိုး ဗလာ (`""`)
+> ဖြစ်ပါက `$default` အစား ဗလာကို ပြန်ပေးသည်။ ထို့ကြောင့် bilingual သို့မဟုတ်
+> dynamic fallback လိုသော field များတွင် `bp_option($name) ?: $default` ပုံစံကို
+> သုံးပါ — seed က ဗလာ ဖြစ်လျှင်ပင် fallback ကို ဆက်သုံးနိုင်စေရန်။
+
 ## Asset များ — CSS, JS, ပုံ, font (Assets)
 
 ဤအပိုင်းသည် လူများ မကြာခဏ မှားတတ်သည့်အပိုင်းဖြစ်၍ တိကျသော စည်းမျဉ်း တစ်ခု
