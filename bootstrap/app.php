@@ -21,6 +21,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->namespace('App\Http\Controllers')
                 ->group(base_path('routes/web.php'));
 
+            // Routes shipped by active plugins. Registered BEFORE the CMS routes
+            // so a plugin can own a front-end URL (e.g. /shop): the CMS ends with
+            // a single-segment catch-all "/{name}", and first-registered wins, so
+            // plugin pages would otherwise be shadowed by it. Plugins declare
+            // distinct paths, so they don't collide with the specific CMS routes.
+            \App\Support\Plugin::bootRoutes();
+
             // Locale-prefixed CMS routes. "mm" is the un-prefixed default and
             // must be registered LAST, otherwise its catch-all "/{name}" route
             // shadows the prefixed routes (e.g. /en).
@@ -33,9 +40,6 @@ return Application::configure(basePath: dirname(__DIR__))
                     ->namespace('App\Http\Controllers')
                     ->group(base_path('routes/beyondplus-cms.php'));
             }
-
-            // Routes shipped by active plugins.
-            \App\Support\Plugin::bootRoutes();
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

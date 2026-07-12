@@ -1,0 +1,28 @@
+{
+    "id": "commerce",
+    "type": "plugin",
+    "category": "Commerce",
+    "name": "Commerce",
+    "description": "Adds a product catalogue with its own admin page and table, a themed /shop page, and fills the Business theme's Featured Products / hero Shop button through hooks. Cart and checkout are intentionally out of scope for this first version.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/plugins/commerce",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1"
+    },
+    "permissions": ["database"],
+    "main": "commerce.php",
+    "admin_menu": {
+        "title": "Products",
+        "link": "commerce",
+        "icon": "fa fa-shopping-cart",
+        "parent": 8
+    },
+    "settings": [
+        { "name": "currency", "label": "Currency label", "type": "text", "default": "MMK", "help": "Shown after each price, e.g. MMK, Ks, $." },
+        { "name": "featured_count", "label": "Featured products on the homepage", "type": "text", "default": "4" },
+        { "name": "shop_enabled", "label": "Enable the /shop page and hero Shop button", "type": "checkbox", "default": "yes" }
+    ]
+}
