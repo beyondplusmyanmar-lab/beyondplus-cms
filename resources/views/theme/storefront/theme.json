@@ -1,0 +1,54 @@
+{
+    "id": "storefront",
+    "type": "theme",
+    "name": "Storefront",
+    "description": "A product-first shopping theme for a single-shop online store (Shopee-style): a search+cart header, promo banner, category strip and product grids that fill from the Commerce plugin. Pair it with the Storefront plugin, which seeds the Shop/Cart menu and a landing page on activation. Commerce + Commerce Checkout provide /shop, /cart and orders.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/themes/storefront",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "settings": [
+        { "group": "Shop", "name": "sf_hero_title", "label": "Banner headline", "type": "text", "default": "", "placeholder": "Defaults to your site name" },
+        { "group": "Shop", "name": "sf_hero_subtitle", "label": "Banner subtitle", "type": "textarea", "default": "", "placeholder": "Great products, delivered to your door." },
+        { "group": "Shop", "name": "sf_hero_cta_label", "label": "Banner button label", "type": "text", "default": "", "placeholder": "Shop now" },
+        { "group": "Shop", "name": "sf_free_shipping_note", "label": "Top strip note", "type": "text", "default": "", "placeholder": "Free delivery over 50,000 Ks" },
+
+        { "group": "Categories", "name": "sf_categories_json", "label": "Category shortcuts", "type": "repeater", "add_label": "Add category",
+          "fields": [
+            { "name": "icon", "label": "Icon", "type": "text", "col": 3, "default": "bi-tag" },
+            { "name": "name", "label": "Name", "type": "text", "col": 5 },
+            { "name": "url", "label": "Link", "type": "text", "col": 4, "default": "/shop" }
+          ],
+          "default": [
+            { "icon": "bi-phone", "name": "Electronics", "url": "/shop" },
+            { "icon": "bi-bag", "name": "Fashion", "url": "/shop" },
+            { "icon": "bi-house", "name": "Home", "url": "/shop" },
+            { "icon": "bi-heart", "name": "Beauty", "url": "/shop" },
+            { "icon": "bi-cup-hot", "name": "Grocery", "url": "/shop" },
+            { "icon": "bi-controller", "name": "Toys", "url": "/shop" }
+          ] },
+
+        { "group": "Contact", "name": "sf_phone", "label": "Phone", "type": "text", "default": "" },
+        { "group": "Contact", "name": "sf_email", "label": "Email", "type": "text", "default": "" },
+        { "group": "Contact", "name": "sf_address", "label": "Address", "type": "textarea", "default": "" },
+
+        { "group": "Social links", "name": "sf_social_facebook", "label": "Facebook URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "sf_social_instagram", "label": "Instagram URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "sf_social_tiktok", "label": "TikTok URL", "type": "text", "default": "" },
+
+        { "group": "Colours", "name": "sf_color_primary", "label": "Primary", "type": "color", "default": "#ee4d2d" },
+        { "group": "Colours", "name": "sf_color_primary_dark", "label": "Primary (dark)", "type": "color", "default": "#d73211" },
+        { "group": "Colours", "name": "sf_color_accent", "label": "Accent", "type": "color", "default": "#ffb400" }
+    ],
+    "seed": {
+        "pages": [
+            { "title": "About the shop", "slug": "about", "template": "default", "body": "Welcome to our shop. Edit this page from the admin to tell customers about your store." },
+            { "title": "Shipping & Returns", "slug": "shipping", "template": "default", "body": "Describe your delivery areas, times and return policy here." }
+        ],
+        "menu": [
+            { "label": "About", "link": "about", "type": "default" },
+            { "label": "Shipping", "link": "shipping", "type": "default" }
+        ]
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "id": "storefront",
+    "type": "plugin",
+    "category": "Commerce",
+    "name": "Storefront Setup",
+    "description": "Setup companion for the Storefront theme. On activation it seeds the shop's starter pages (About, Shipping) and the nav menu that link them, reading the seed block declared in the active Storefront theme's theme.json. Uninstalling removes what it seeded. Pair with the Storefront theme + Commerce plugins.",
+    "description_mm": "Storefront theme အတွက် setup companion။ activate လုပ်သောအခါ ဆိုင်၏ စတင် စာမျက်နှာများ (About, Shipping) နှင့် ၎င်းတို့ကို ချိတ်ဆက်သော nav menu ကို — active Storefront theme ၏ theme.json ရှိ seed အချက်အလက်ကို ဖတ်၍ — seed လုပ်ပေးသည်။ ဖြုတ်လျှင် seed လုပ်ထားသည်များကို ပြန်ဖယ်သည်။ Storefront theme + Commerce ပလပ်အင်များနှင့် တွဲသုံးပါ။",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/plugins/storefront",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1"
+    },
+    "permissions": ["database"],
+    "main": "storefront.php"
+}
