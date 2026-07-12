@@ -1,7 +1,10 @@
 {{-- One repeater row. Shared by existing rows (numeric $index) and the JS
      clone template ($index = "__INDEX__"). $name, $fields, $index, $row. --}}
 @php $rowName = $name.'['.$index.']'; @endphp
-<div class="bz-rep-row" style="position:relative;border:1px solid #e5e7eb;border-radius:8px;padding:12px 12px 4px;margin-bottom:10px;background:#fff;">
+<div class="bz-rep-row" style="border:1px solid #e5e7eb;border-radius:8px;padding:8px 12px 4px;margin-bottom:10px;background:#fff;">
+    <div class="d-flex justify-content-end" style="margin-bottom:-4px;">
+        <button type="button" class="btn btn-link btn-sm text-danger bz-rep-del p-0" style="font-size:.8rem;text-decoration:none;"><i class="fa fa-times-circle"></i> Remove</button>
+    </div>
     <div class="row">
         @foreach($fields as $sf)
             @php
@@ -26,5 +29,4 @@
             </div>
         @endforeach
     </div>
-    <button type="button" class="btn btn-link btn-sm text-danger bz-rep-del p-0 mb-1" style="position:absolute;top:6px;right:10px;"><i class="fa fa-times-circle"></i> Remove</button>
 </div>
