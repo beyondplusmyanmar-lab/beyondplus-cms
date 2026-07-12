@@ -84,7 +84,13 @@ class FrontController extends Controller
                 ->where('translate_id', 0)
                 ->where(function ($query) use ($q) {
                     $query->where('title', 'like', '%'.$q.'%')
-                          ->orWhere('body', 'like', '%'.$q.'%');
+                          ->orWhere('body', 'like', '%'.$q.'%')
+                          // Also match the record's translation (e.g. Myanmar
+                          // content) so search works in either language.
+                          ->orWhereHas('translate', function ($t) use ($q) {
+                              $t->where('title', 'like', '%'.$q.'%')
+                                ->orWhere('body', 'like', '%'.$q.'%');
+                          });
                 })
                 ->with('translate')
                 ->orderBy('id', 'desc')
