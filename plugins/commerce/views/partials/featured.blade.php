@@ -17,6 +17,8 @@
                 <div class="fw-bold" style="color:var(--bz-primary,#2563eb);">
                     {{ number_format((float) $p->price) }} {{ $currency }}
                 </div>
+                {{-- Extension slot: a checkout plugin can add an "Add to cart" button here. --}}
+                {!! bp_apply_filters('commerce_product_actions', '', $p) !!}
             </div>
         </div>
     </div>

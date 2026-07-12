@@ -4,7 +4,7 @@
     "category": "Commerce",
     "name": "Commerce",
     "description": "Adds products, scheduled promotions and store locations — each with its own admin tab and table — plus a themed /shop page. Fills the Business theme's Featured Products, Promotions, Store Locations and hero Shop button through hooks. Cart and checkout are intentionally out of scope for this version.",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/commerce",
     "license": "MIT",

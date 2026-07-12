@@ -1,0 +1,28 @@
+{
+    "id": "commerce-checkout",
+    "type": "plugin",
+    "category": "Commerce",
+    "name": "Commerce Checkout",
+    "description": "Adds a session cart, a checkout form and orders on top of the Commerce plugin. Orders are recorded as inquiries / cash-on-delivery — there is NO online payment or card handling, so nothing sensitive is collected. Requires the Commerce plugin (products). Opt-in: like every plugin it ships inactive and only runs once an admin activates it.",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/plugins/commerce-checkout",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1"
+    },
+    "permissions": ["database"],
+    "main": "commerce-checkout.php",
+    "admin_menu": {
+        "title": "Orders",
+        "link": "orders",
+        "icon": "fa fa-shopping-bag",
+        "parent": 8
+    },
+    "settings": [
+        { "name": "checkout_enabled", "label": "Enable the cart & checkout", "type": "checkbox", "default": "yes", "help": "Turn off to hide Add-to-cart and /cart without deactivating the plugin." },
+        { "name": "order_prefix", "label": "Order number prefix", "type": "text", "default": "ORD" },
+        { "name": "thankyou_message", "label": "Thank-you message", "type": "textarea", "default": "Thank you! We have received your order and will contact you shortly to confirm." }
+    ]
+}

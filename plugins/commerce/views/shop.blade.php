@@ -28,6 +28,7 @@
                             <p class="card-text text-muted small mb-2">{{ \Illuminate\Support\Str::limit($p->description, 70) }}</p>
                         @endif
                         <div class="fw-bold text-primary">{{ number_format((float) $p->price) }} {{ $currency }}</div>
+                        {!! bp_apply_filters('commerce_product_actions', '', $p) !!}
                     </div>
                 </div>
             </div>
