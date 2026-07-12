@@ -15,6 +15,7 @@
             </div>
             <div class="box-body pt-3" style="border-top:1px solid #eef0f3;">
                 @component('bp-admin.inc.alert')@endcomponent
+                @include('commerce::admin._tabs')
 
                 <table class="table table-hover align-middle mb-0">
                     <thead>

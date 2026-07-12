@@ -10,3 +10,5 @@
 use Illuminate\Support\Facades\Schema;
 
 Schema::dropIfExists('commerce_products');
+Schema::dropIfExists('commerce_promotions');
+Schema::dropIfExists('commerce_branches');

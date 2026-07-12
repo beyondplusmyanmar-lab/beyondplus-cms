@@ -3,7 +3,7 @@
     "type": "theme",
     "name": "Business",
     "description": "A general-purpose business theme with a configurable homepage (hero, services, about, why-choose-us, statistics, testimonials, news, FAQ, contact). Design tokens are option-driven so most small businesses can launch without editing code, and POS sections (featured products, promotions, store locations) fill in automatically when a commerce plugin is installed.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/themes/business",
     "license": "MIT",

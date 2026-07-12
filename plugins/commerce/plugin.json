@@ -3,8 +3,8 @@
     "type": "plugin",
     "category": "Commerce",
     "name": "Commerce",
-    "description": "Adds a product catalogue with its own admin page and table, a themed /shop page, and fills the Business theme's Featured Products / hero Shop button through hooks. Cart and checkout are intentionally out of scope for this first version.",
-    "version": "1.0.0",
+    "description": "Adds products, scheduled promotions and store locations — each with its own admin tab and table — plus a themed /shop page. Fills the Business theme's Featured Products, Promotions, Store Locations and hero Shop button through hooks. Cart and checkout are intentionally out of scope for this version.",
+    "version": "1.1.0",
     "author": "Beyond Plus",
     "homepage": "https://developers.beyondplus.com/plugins/commerce",
     "license": "MIT",
@@ -15,7 +15,7 @@
     "permissions": ["database"],
     "main": "commerce.php",
     "admin_menu": {
-        "title": "Products",
+        "title": "Commerce",
         "link": "commerce",
         "icon": "fa fa-shopping-cart",
         "parent": 8

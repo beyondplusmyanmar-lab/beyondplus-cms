@@ -17,5 +17,6 @@
     @include('theme.business.sections.testimonials')
     @include('theme.business.sections.news')
     @include('theme.business.sections.faq')
+    @include('theme.business.sections.locations')
     @include('theme.business.sections.contact')
 @stop

@@ -44,6 +44,55 @@ bp_add_filter('business_featured_products', function ($html) {
 });
 
 /**
+ * Promotions — fills the theme's `business_promotions` slot with campaigns that
+ * are active AND currently within their (optional) start/end window.
+ */
+bp_add_filter('business_promotions', function ($html) {
+    if (! Schema::hasTable('commerce_promotions')) {
+        return $html;
+    }
+    try {
+        $now = now();
+        $promos = DB::table('commerce_promotions')
+            ->where('is_active', 1)
+            ->where(fn ($q) => $q->whereNull('starts_at')->orWhere('starts_at', '<=', $now))
+            ->where(fn ($q) => $q->whereNull('ends_at')->orWhere('ends_at', '>=', $now))
+            ->orderBy('sort_order')->orderByDesc('id')->get();
+
+        if ($promos->isEmpty()) {
+            return $html;
+        }
+
+        return $html.view('commerce::partials.promotions', ['promos' => $promos])->render();
+    } catch (\Throwable $e) {
+        return $html;
+    }
+});
+
+/**
+ * Store Locations — fills the theme's `business_store_locations` slot with the
+ * active branches.
+ */
+bp_add_filter('business_store_locations', function ($html) {
+    if (! Schema::hasTable('commerce_branches')) {
+        return $html;
+    }
+    try {
+        $branches = DB::table('commerce_branches')
+            ->where('is_active', 1)
+            ->orderBy('sort_order')->orderByDesc('id')->get();
+
+        if ($branches->isEmpty()) {
+            return $html;
+        }
+
+        return $html.view('commerce::partials.locations', ['branches' => $branches])->render();
+    } catch (\Throwable $e) {
+        return $html;
+    }
+});
+
+/**
  * Hero — add a "Shop Now" button to the theme's `business_hero_actions` filter
  * when the shop is enabled and at least one product is live.
  */
