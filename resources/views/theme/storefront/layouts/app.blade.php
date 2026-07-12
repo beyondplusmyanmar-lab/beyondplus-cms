@@ -41,6 +41,12 @@
             --bs-primary: var(--sf-primary);
             --bs-link-color: var(--sf-primary);
             --bs-link-hover-color: var(--sf-primary-dark);
+            /* Alias the tokens the Commerce plugin's cards use so they inherit
+               the storefront palette instead of the Business theme's defaults. */
+            --bz-primary: var(--sf-primary);
+            --bz-surface: var(--sf-bg);
+            --bz-muted:   var(--sf-muted);
+            --bz-border:  var(--sf-border);
         }
         body { font-family: 'Inter', 'Noto Sans Myanmar', system-ui, sans-serif; color: var(--sf-text); background: var(--sf-bg); }
         a { text-decoration: none; }
