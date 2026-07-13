@@ -1,5 +1,44 @@
 # Changelog
 
+## 2.5.0
+
+A backward-compatible feature release focused on commerce and localization.
+
+### Added
+- **Commerce plugin** — a product catalogue, plus **promotions** and **store
+  locations** surfaced through theme slots, hooks and admin tabs.
+- **Commerce-Checkout plugin** — cart, checkout and orders (no payment gateway),
+  serving `/shop`, `/cart` and `/orders`.
+- **Storefront theme** — a product-first shopping theme (Shopee-style) with a
+  search+cart header, promo banner, category strip and product grids that fill
+  from Commerce. Paired with a **Storefront Setup plugin** that seeds the
+  Shop/Cart menu and a landing page on activation.
+- **Business theme** — a general-purpose, option-driven business homepage (hero,
+  services, about, why-choose-us, stats, testimonials, news, FAQ, contact) whose
+  POS sections fill in automatically when a commerce plugin is installed.
+- **Theme Customize page** — per-theme settings schema with seed-on-activate.
+- Plugin routes can now **own front-end URLs**, so plugins add real storefront
+  paths without touching core routing.
+- **Localized plugin descriptions** (`description_mm`), documented in the plugin
+  guide.
+
+### Changed
+- **Myanmar localization** across the admin — Dashboard, Posts, Pages, Menu,
+  Media, Users, General / Configuration / System settings, the Plugins pages and
+  the System flow page; the admin dashboard now defaults to the app locale (mm).
+- **Docs translated to Myanmar** — the theme development guide, the plugin guide
+  (linked from the README) and the plugin/theme portal doc.
+- README refreshed — a 7-theme gallery, a storefront preview, and aligned
+  commerce card colours; the System flow page now shows Commerce plus a catch-all.
+- Bumped `Plugin::CMS_VERSION` to `2.5.0`.
+
+### Fixed
+- Added the missing `sitemap.xml` and RSS views, which previously 500'd on every
+  theme.
+- Storefront search now searches products (via `/shop`), and site search also
+  matches translated (Myanmar) content.
+- The repeater **Remove** button no longer overlaps the last field's label.
+
 ## 2.4.0
 
 A backward-compatible release focused on the front-end theme system.
