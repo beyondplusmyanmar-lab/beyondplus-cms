@@ -8,7 +8,7 @@ JSON API တို့ ပါဝင်ပါသည်။
 
 ## မျက်နှာပြင်ဓာတ်ပုံများ (Screenshots)
 
-| ရှေ့ဆုံးစာမျက်နှာ | စီမံခန့်ခွဲမှု — ပုံစံများ |
+| ရှေ့ဆုံးစာမျက်နှာ — Storefront ပုံစံ | စီမံခန့်ခွဲမှု — ပုံစံများ |
 |---|---|
 | ![Front-end](docs/screenshots/frontend.png) | ![Admin themes](docs/screenshots/admin-themes.png) |
 | **SPA နမူနာစာမျက်နှာ** (`/spa-example.html`) | **API စာရွက်စာတမ်း** (Swagger) |
