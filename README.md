@@ -10,7 +10,7 @@ JSON API တို့ ပါဝင်ပါသည်။
 
 | ရှေ့ဆုံးစာမျက်နှာ — Storefront ပုံစံ | စီမံခန့်ခွဲမှု — ပုံစံများ |
 |---|---|
-| <img src="docs/screenshots/frontend.png" alt="Front-end" width="480"> | <img src="docs/screenshots/admin-themes.png" alt="Admin themes" width="254"> |
+| <img src="docs/screenshots/frontend.png" alt="Front-end" width="480"> | <img src="docs/screenshots/admin-themes.png" alt="Admin themes" width="480"> |
 | **SPA နမူနာစာမျက်နှာ** (`/spa-example.html`) | **API စာရွက်စာတမ်း** (Swagger) |
 | ![SPA example](docs/screenshots/spa-example.png) | ![API docs](docs/screenshots/api-docs.png) |
 
