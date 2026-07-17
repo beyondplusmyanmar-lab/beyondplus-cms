@@ -9,7 +9,12 @@
             $totals = $order['totals'] ?? [];
             $grandMinor = $totals['grand_total_minor'] ?? null;
             $currency = $totals['currency'] ?? '';
-            $grand = $grandMinor === null ? null : rtrim(rtrim(number_format($grandMinor / 100, 2), '0'), '.');
+            // Currency-aware minor→display: MMK is zero-decimal, so no /100 (else
+            // 1,500 MMK shows as "15"). Only 2-decimal currencies divide.
+            $zeroDecimal = ['MMK', 'JPY', 'KRW', 'VND', 'IDR', 'LAK', 'KHR'];
+            $exp = in_array(strtoupper((string) $currency), $zeroDecimal, true) ? 0 : 2;
+            $fmt = fn ($minor) => number_format($exp === 0 ? (int) $minor : $minor / (10 ** $exp), $exp);
+            $grand = $grandMinor === null ? null : $fmt($grandMinor);
         @endphp
         <div class="card" style="padding:32px 30px; margin-bottom:20px; text-align:center;">
             <div class="jade" style="font-size:15px; font-weight:700; letter-spacing:.5px;">✓ {{ $mm ? 'ကျေးဇူးတင်ပါသည်' : 'THANK YOU' }}</div>
@@ -31,7 +36,7 @@
                     @foreach ($order['lines'] as $line)
                         <div style="display:flex; justify-content:space-between; padding:6px 0;">
                             <span>{{ $line['name'] ?? $line['sku'] }} <span class="muted">× {{ $line['qty'] }}</span></span>
-                            <span>{{ rtrim(rtrim(number_format(($line['line_total_minor'] ?? 0) / 100, 2), '0'), '.') }}</span>
+                            <span>{{ $fmt($line['line_total_minor'] ?? 0) }}</span>
                         </div>
                     @endforeach
                 </div>
