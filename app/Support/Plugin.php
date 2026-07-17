@@ -170,6 +170,11 @@ class Plugin
 
         // Compatibility gate: don't install a plugin this environment can't run.
         $problems = self::checkRequirements($slug);
+        // Dependency gate: every required plugin must already be active, so a
+        // package never boots against a capability that is not there.
+        foreach (self::missingDependencies($slug) as $dep) {
+            $problems[] = "needs plugin: {$dep} (activate it first)";
+        }
         if ($problems) {
             return ['blocked' => true, 'requirements' => $problems];
         }
@@ -243,6 +248,94 @@ class Plugin
         return PackageGuard::checkRequirements(self::meta($slug), self::CMS_VERSION);
     }
 
+    // ---- capabilities & inter-plugin dependencies -----------------------
+
+    /**
+     * The capability tokens a plugin declares it PROVIDES (manifest `capabilities`),
+     * e.g. ["orders.create", "orders.read"]. Free-form strings; the CMS treats them
+     * as opaque identifiers other packages can require.
+     *
+     * @return array<int,string>
+     */
+    public static function capabilitiesOf(string $slug): array
+    {
+        $caps = self::meta(basename($slug))['capabilities'] ?? [];
+
+        return is_array($caps) ? array_values(array_filter(array_map('strval', $caps))) : [];
+    }
+
+    /**
+     * The plugin ids a package declares it REQUIRES to be active. Accepts either
+     * `requires.plugins: [...]` (alongside php/extensions) or a flat top-level
+     * `requires: [...]` array (the shape themes use), so both manifest styles work.
+     *
+     * @param array<string,mixed>|null $meta Pass a theme's meta to reuse this for themes.
+     * @return array<int,string>
+     */
+    public static function requiredPlugins(string $slug, ?array $meta = null): array
+    {
+        $meta ??= self::meta(basename($slug));
+        $req = $meta['requires'] ?? [];
+        // Flat array form: requires: ["doeh-commerce"].
+        if (is_array($req) && array_is_list($req)) {
+            $list = $req;
+        } else {
+            $list = is_array($req) && isset($req['plugins']) && is_array($req['plugins']) ? $req['plugins'] : [];
+        }
+
+        return array_values(array_filter(array_map(fn ($s) => basename((string) $s), $list)));
+    }
+
+    /**
+     * Required plugin ids that are NOT currently active — the unmet dependencies
+     * that must block activation (and boot). Empty = all satisfied.
+     *
+     * @param array<string,mixed>|null $meta
+     * @return array<int,string>
+     */
+    public static function missingDependencies(string $slug, ?array $meta = null): array
+    {
+        $active = self::active();
+
+        return array_values(array_diff(self::requiredPlugins($slug, $meta), $active));
+    }
+
+    /**
+     * Active plugins that require $slug — i.e. would break if it were deactivated.
+     *
+     * @return array<int,string>
+     */
+    public static function dependents(string $slug): array
+    {
+        $slug = basename($slug);
+        $out = [];
+        foreach (self::active() as $other) {
+            if ($other !== $slug && in_array($slug, self::requiredPlugins($other), true)) {
+                $out[] = $other;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Capability token => list of active plugin slugs providing it. A discovery
+     * map so a theme or plugin can ask "who provides orders.create?".
+     *
+     * @return array<string,array<int,string>>
+     */
+    public static function capabilityRegistry(): array
+    {
+        $map = [];
+        foreach (self::active() as $slug) {
+            foreach (self::capabilitiesOf($slug) as $cap) {
+                $map[$cap][] = $slug;
+            }
+        }
+
+        return $map;
+    }
+
     // ---- integrity (tamper detection) -----------------------------------
 
     /** A SHA-256 fingerprint over all the plugin's PHP files + its manifest. */
@@ -305,9 +398,16 @@ class Plugin
     /** Deactivate the plugin — its data / tables are kept (use uninstall to remove). */
     public static function deactivate(string $slug): void
     {
-        self::setActive(array_filter(self::active(), fn ($s) => $s !== basename($slug)));
+        $slug = basename($slug);
+        // Dependency guard: refuse to pull a plugin out from under active packages
+        // that require it (the controller warns first, but keep the invariant here
+        // too so no caller can leave a dependent booting against a missing dep).
+        if (self::dependents($slug)) {
+            return;
+        }
+        self::setActive(array_filter(self::active(), fn ($s) => $s !== $slug));
         self::unregisterMenu($slug);
-        self::audit('deactivated', basename($slug));
+        self::audit('deactivated', $slug);
     }
 
     /**
@@ -466,6 +566,12 @@ class Plugin
 
         foreach ($plugins as $plugin) {
             if (! $plugin['active']) {
+                continue;
+            }
+            // Defensive: skip a plugin whose required plugins are not active (e.g.
+            // a dependency was force-removed). Its routes are likewise skipped
+            // because bootRoutes reads the same active set.
+            if (self::missingDependencies($plugin['slug'])) {
                 continue;
             }
             try {

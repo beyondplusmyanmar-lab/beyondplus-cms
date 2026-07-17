@@ -164,7 +164,15 @@ class PluginController extends Controller
 
     public function deactivate(Request $request)
     {
-        Plugin::deactivate((string) $request->input('slug'));
+        $slug = (string) $request->input('slug');
+        $dependents = Plugin::dependents($slug);
+        if ($dependents) {
+            return redirect()->back()->withErrors(
+                'Cannot deactivate — these active plugins depend on it: '.implode(', ', $dependents).
+                '. Deactivate them first.'
+            );
+        }
+        Plugin::deactivate($slug);
 
         return redirect()->back()->with('success', 'Plugin deactivated (its data is kept).');
     }
