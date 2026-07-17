@@ -36,7 +36,7 @@ Route::middleware('web')->group(function () {
     };
 
     Route::get('/doeh-demo', function () {
-        return response()->view('doeh-commerce-demo::shop', [
+        return doeh_commerce_view('shop', [
             'products' => doeh_demo_products(),
             'cart'     => session('doeh_demo_cart', []),
             'ready'    => function_exists('doeh_commerce') && doeh_commerce() !== null,
@@ -77,7 +77,7 @@ Route::middleware('web')->group(function () {
             }
         }
 
-        return response()->view('doeh-commerce-demo::cart', [
+        return doeh_commerce_view('cart', [
             'lines' => $lines,
             'ready' => function_exists('doeh_commerce') && doeh_commerce() !== null,
         ]);
@@ -127,7 +127,7 @@ Route::middleware('web')->group(function () {
         $connector = function_exists('doeh_commerce') ? doeh_commerce() : null;
         $result = $connector ? $connector->getOrder($id) : ['ok' => false, 'code' => 'EDGE_TRANSPORT'];
 
-        return response()->view('doeh-commerce-demo::order', [
+        return doeh_commerce_view('order', [
             'ok'    => $result['ok'] ?? false,
             'order' => $result['order'] ?? null,
             'error' => $result['ok'] ?? false ? null : doeh_demo_message($result['code'] ?? 'EDGE_TRANSPORT'),

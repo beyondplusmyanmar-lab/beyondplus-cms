@@ -143,6 +143,12 @@ class Theme
         }
 
         $problems = self::checkRequirements($slug);
+        // A theme may require plugins (its manifest `requires` may list plugin ids,
+        // e.g. a commerce theme needing doeh-commerce). Enforce them like a plugin's
+        // dependencies so a theme never activates against a capability that is off.
+        foreach (Plugin::missingDependencies($slug, self::meta($slug)) as $dep) {
+            $problems[] = "needs plugin: {$dep} (activate it first)";
+        }
         if ($problems) {
             return ['blocked' => true, 'requirements' => $problems];
         }

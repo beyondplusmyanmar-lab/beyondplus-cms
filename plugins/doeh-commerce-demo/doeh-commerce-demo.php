@@ -59,3 +59,24 @@ if (! function_exists('doeh_demo_products')) {
         return array_values($out); // de-duped by SKU
     }
 }
+
+if (! function_exists('doeh_commerce_view')) {
+    /**
+     * Render a commerce-flow page, letting the ACTIVE THEME own the presentation.
+     *
+     * If the theme provides `theme.<active>.commerce.<name>` it is used (so a
+     * business theme skins the cart/checkout/confirmation in its own chrome);
+     * otherwise the plugin's self-contained default view is the fallback. This is
+     * the WooCommerce template-override model: the plugin owns the flow + default
+     * templates, the theme owns the look.
+     *
+     * @param array<string,mixed> $data
+     */
+    function doeh_commerce_view(string $name, array $data)
+    {
+        $themeView = 'theme.'.\App\Support\Theme::active().'.commerce.'.$name;
+        $view = view()->exists($themeView) ? $themeView : 'doeh-commerce-demo::'.$name;
+
+        return response()->view($view, $data);
+    }
+}
