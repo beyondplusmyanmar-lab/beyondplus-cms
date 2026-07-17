@@ -1,11 +1,11 @@
 {{-- Self-contained reference chrome. A production theme would use its own layout
-     and its own styling — this exists only so the demo renders on any theme. --}}
+     and its own styling — this is the default rendering, used when the active theme does not override these pages. --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'DOEH Commerce demo')</title>
+    <title>@yield('title', 'DOEH Commerce')</title>
     <style>
         :root { --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --brand:#6366f1; --ok:#16a34a; --bg:#f8fafc; }
         * { box-sizing: border-box; }

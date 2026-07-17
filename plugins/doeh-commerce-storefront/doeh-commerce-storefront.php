@@ -1,38 +1,38 @@
 <?php
 
 /**
- * DOEH Commerce Demo — a reference checkout over the DOEH Commerce connector.
+ * DOEH Commerce Storefront — the storefront flow over the DOEH Commerce connector.
  *
- * This is intentionally the ONLY place in the bridge that owns commerce UI, and
- * it is a REFERENCE: it shows a merchant (and a theme author) the exact shape of
- * the flow — fixture → cart → doeh_commerce()->createOrder() → confirmation —
- * and nothing more. A production theme would render its own cart and pages and
- * call the same connector; this plugin is what they copy from.
+ * This is the ONLY place in the bridge that owns commerce UI, and it owns it as a
+ * pluggable FLOW: fixture → cart → doeh_commerce()->createOrder() → confirmation.
+ * It ships default templates so it works standalone, but a theme may override
+ * theme.<active>.commerce.{shop,cart,order} to render the same flow in its own
+ * chrome (see doeh_commerce_view()) — the WooCommerce template-override model.
  *
  * It holds no secret and speaks to DOEH only through doeh_commerce(); the cart is
- * plain session state. Routes + views live here (a THEME cannot own routes in this
- * CMS); the pages are self-contained so the reference renders on any theme.
+ * plain session state. Routes + views live here because a THEME cannot own routes
+ * in this CMS; the default pages are self-contained so the flow works on any theme.
  *
- * This file registers the fixture helper only; the flow is in routes.php.
+ * This file registers the fixture + view helpers; the flow is in routes.php.
  */
 
-if (! function_exists('doeh_demo_products')) {
+if (! function_exists('doeh_storefront_products')) {
     /**
-     * The demo product fixture (manifest `products_json`), normalized to
+     * The product fixture (manifest `products_json`), normalized to
      * [['sku'=>…, 'name'=>…, 'price_hint'=>…], …]. Rows without a SKU are dropped.
      *
      * @return array<int, array{sku:string, name:string, price_hint:string}>
      */
-    function doeh_demo_products(): array
+    function doeh_storefront_products(): array
     {
-        $raw = bp_plugin_option('doeh-commerce-demo', 'products_json');
+        $raw = bp_plugin_option('doeh-commerce-storefront', 'products_json');
         $rows = is_string($raw) ? json_decode($raw, true) : $raw;
 
         // Fresh install: the operator hasn't saved settings yet, so fall back to
         // the manifest's declared default (one source of truth) rather than show
         // an empty shop.
         if (! is_array($rows) || $rows === []) {
-            foreach (\App\Support\Plugin::settingsSchema('doeh-commerce-demo') as $field) {
+            foreach (\App\Support\Plugin::settingsSchema('doeh-commerce-storefront') as $field) {
                 if (($field['name'] ?? '') === 'products_json') {
                     $rows = $field['default'] ?? [];
                     break;
@@ -75,7 +75,7 @@ if (! function_exists('doeh_commerce_view')) {
     function doeh_commerce_view(string $name, array $data)
     {
         $themeView = 'theme.'.\App\Support\Theme::active().'.commerce.'.$name;
-        $view = view()->exists($themeView) ? $themeView : 'doeh-commerce-demo::'.$name;
+        $view = view()->exists($themeView) ? $themeView : 'doeh-commerce-storefront::'.$name;
 
         return response()->view($view, $data);
     }

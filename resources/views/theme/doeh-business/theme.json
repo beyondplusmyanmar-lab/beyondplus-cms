@@ -9,7 +9,7 @@
     "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
     "license": "MIT",
     "minCmsVersion": "2.0.0",
-    "requires": ["doeh-identity", "doeh-commerce", "doeh-commerce-demo"],
+    "requires": ["doeh-identity", "doeh-commerce", "doeh-commerce-storefront"],
     "settings": [
         { "group": "Brand", "name": "biz_shop_name", "label": "Shop name", "type": "text", "default": "", "placeholder": "Defaults to your site name" },
         { "group": "Brand", "name": "biz_accent", "label": "Accent colour", "type": "color", "default": "#b0803f" },

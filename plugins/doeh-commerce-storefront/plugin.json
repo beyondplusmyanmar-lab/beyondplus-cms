@@ -1,0 +1,36 @@
+{
+    "id": "doeh-commerce-storefront",
+    "type": "plugin",
+    "category": "Commerce",
+    "name": "DOEH Commerce Storefront",
+    "description": "The storefront flow over the DOEH Commerce connector: a product fixture, a session cart, and the shop → cart → checkout → order routes that call doeh_commerce()->createOrder(). It ships default templates so it works standalone, and a theme may override theme.<active>.commerce.{shop,cart,order} to own the presentation. Depends on the DOEH Commerce connector.",
+    "description_mm": "DOEH Commerce connector အပေါ်ရှိ storefront flow — product fixture၊ session cart နှင့် doeh_commerce()->createOrder() ကိုခေါ်သော shop → cart → checkout → order routes များ။ default template များပါဝင်၍ တစ်ခုတည်း အလုပ်လုပ်ပြီး theme က theme.<active>.commerce.{shop,cart,order} ကို override လုပ်၍ presentation ကို ပိုင်နိုင်သည်။ DOEH Commerce connector လိုအပ်သည်။",
+    "version": "0.1.0",
+    "author": "Beyond Plus",
+    "homepage": "https://github.com/beyondplusmyanmar-lab/doeh-cms-commerce-plugin",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1",
+        "plugins": ["doeh-commerce"]
+    },
+    "capabilities": ["commerce.storefront"],
+    "main": "doeh-commerce-storefront.php",
+    "settings": [
+        {
+            "name": "products_json",
+            "label": "Storefront products",
+            "type": "repeater",
+            "add_label": "Add product",
+            "fields": [
+                { "name": "sku", "label": "SKU (must exist in your DOEH catalog)", "type": "text", "col": 4 },
+                { "name": "name", "label": "Display name", "type": "text", "col": 5 },
+                { "name": "price_hint", "label": "Price hint (display only)", "type": "text", "col": 3, "default": "" }
+            ],
+            "default": [
+                { "sku": "D-001", "name": "Sample Product", "price_hint": "1,500 MMK" }
+            ],
+            "help": "The products the storefront shows. SKUs must exist in the DOEH catalog for the shop the connector's key belongs to (in the sandbox, D-001 works). The price hint is display-only — DOEH computes the real total at checkout."
+        }
+    ]
+}

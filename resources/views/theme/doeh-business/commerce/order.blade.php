@@ -1,4 +1,4 @@
-{{-- Overrides doeh-commerce-demo::order. Data (ok, order, error) from the plugin route. --}}
+{{-- Overrides doeh-commerce-storefront::order. Data (ok, order, error) from the plugin route. --}}
 @extends('theme.doeh-business.layouts.app')
 @section('title', 'Order')
 
@@ -48,5 +48,5 @@
         <div class="notice err">{{ $error ?? ($mm ? 'မှာယူမှုကို ရှာမတွေ့ပါ။' : 'That order could not be found.') }}</div>
     @endif
 
-    <p style="margin-top:18px;"><a href="{{ url('/doeh-demo') }}">{{ $mm ? '← ဈေးဆိုင်သို့ ပြန်သွားရန်' : '← Back to the shop' }}</a></p>
+    <p style="margin-top:18px;"><a href="{{ url('/store') }}">{{ $mm ? '← ဈေးဆိုင်သို့ ပြန်သွားရန်' : '← Back to the shop' }}</a></p>
 @endsection

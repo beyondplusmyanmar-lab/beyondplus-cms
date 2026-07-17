@@ -1,12 +1,12 @@
-@extends('doeh-commerce-demo::layout')
-@section('title', 'DOEH Commerce demo — cart')
+@extends('doeh-commerce-storefront::layout')
+@section('title', 'DOEH Commerce — cart')
 
 @section('content')
     <h1>Your cart</h1>
     <p class="sub">DOEH computes the real total at checkout — the prices here are only hints.</p>
 
     @if (empty($lines))
-        <div class="card muted">Your cart is empty. <a class="plain" href="{{ url('/doeh-demo') }}">Back to the shop →</a></div>
+        <div class="card muted">Your cart is empty. <a class="plain" href="{{ url('/store') }}">Back to the shop →</a></div>
     @else
         <div class="card">
             <table>
@@ -17,7 +17,7 @@
                             <div class="hint">SKU {{ $l['sku'] }} · qty {{ $l['qty'] }}@if($l['price_hint']) · {{ $l['price_hint'] }}@endif</div>
                         </td>
                         <td class="r">
-                            <form method="POST" action="{{ url('/doeh-demo/cart/remove') }}">
+                            <form method="POST" action="{{ url('/store/cart/remove') }}">
                                 @csrf
                                 <input type="hidden" name="sku" value="{{ $l['sku'] }}">
                                 <button class="btn sec" type="submit">Remove</button>
@@ -28,7 +28,7 @@
             </table>
         </div>
 
-        <form method="POST" action="{{ url('/doeh-demo/checkout') }}" class="card">
+        <form method="POST" action="{{ url('/store/checkout') }}" class="card">
             @csrf
             <label class="hint" for="phone">Customer phone (optional)</label>
             <input id="phone" name="phone" type="tel" placeholder="+95912345678"
@@ -39,6 +39,6 @@
             @endunless
         </form>
 
-        <p><a class="plain" href="{{ url('/doeh-demo') }}">← Keep shopping</a></p>
+        <p><a class="plain" href="{{ url('/store') }}">← Keep shopping</a></p>
     @endif
 @endsection

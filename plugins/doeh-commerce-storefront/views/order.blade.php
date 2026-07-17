@@ -1,5 +1,5 @@
-@extends('doeh-commerce-demo::layout')
-@section('title', 'DOEH Commerce demo — order')
+@extends('doeh-commerce-storefront::layout')
+@section('title', 'DOEH Commerce — order')
 
 @section('content')
     @if ($ok && $order)
@@ -51,5 +51,5 @@
         <div class="err">{{ $error ?? 'That order could not be found.' }}</div>
     @endif
 
-    <p style="margin-top:16px;"><a class="plain" href="{{ url('/doeh-demo') }}">← Back to the shop</a></p>
+    <p style="margin-top:16px;"><a class="plain" href="{{ url('/store') }}">← Back to the shop</a></p>
 @endsection

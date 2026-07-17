@@ -1,17 +1,17 @@
 <?php
 
 /**
- * DOEH Commerce Demo routes — loaded only while the plugin (and its required
+ * DOEH Commerce Storefront routes — loaded only while the plugin (and its required
  * doeh-commerce connector) are active.
  *
- *   GET  /doeh-demo               the fixture "shop" (product cards + add)
- *   POST /doeh-demo/cart/add      add a SKU to the session cart
- *   POST /doeh-demo/cart/remove   remove a SKU
- *   GET  /doeh-demo/cart          the cart + a Place order button
- *   POST /doeh-demo/checkout      → doeh_commerce()->createOrder() → redirect
- *   GET  /doeh-demo/order/{id}    confirmation, read back via getOrder()
+ *   GET  /store               the fixture "shop" (product cards + add)
+ *   POST /store/cart/add      add a SKU to the session cart
+ *   POST /store/cart/remove   remove a SKU
+ *   GET  /store/cart          the cart + a Place order button
+ *   POST /store/checkout      → doeh_commerce()->createOrder() → redirect
+ *   GET  /store/order/{id}    confirmation, read back via getOrder()
  *
- * The cart is session state (doeh_demo_cart: sku => qty). The order credential is
+ * The cart is session state (doeh_store_cart: sku => qty). The order credential is
  * the merchant key inside the connector — never anything from this request.
  */
 
@@ -26,48 +26,48 @@ Route::middleware('web')->group(function () {
     // A create that times out and is retried therefore replays one order, never
     // duplicates it — the property a checkout must have.
     $idemFor = function (array $cart): string {
-        $key = session('doeh_demo_idem');
+        $key = session('doeh_store_idem');
         if (! $key) {
-            $key = 'demo_'.Str::uuid()->toString();
-            session(['doeh_demo_idem' => $key]);
+            $key = 'store_'.Str::uuid()->toString();
+            session(['doeh_store_idem' => $key]);
         }
 
         return $key;
     };
 
-    Route::get('/doeh-demo', function () {
+    Route::get('/store', function () {
         return doeh_commerce_view('shop', [
-            'products' => doeh_demo_products(),
-            'cart'     => session('doeh_demo_cart', []),
+            'products' => doeh_storefront_products(),
+            'cart'     => session('doeh_store_cart', []),
             'ready'    => function_exists('doeh_commerce') && doeh_commerce() !== null,
         ]);
-    })->name('doeh-demo.shop');
+    })->name('doeh-storefront.shop');
 
-    Route::post('/doeh-demo/cart/add', function (Request $request) {
+    Route::post('/store/cart/add', function (Request $request) {
         $sku = trim((string) $request->input('sku'));
-        $known = array_column(doeh_demo_products(), 'sku');
+        $known = array_column(doeh_storefront_products(), 'sku');
         if ($sku !== '' && in_array($sku, $known, true)) {
-            $cart = session('doeh_demo_cart', []);
+            $cart = session('doeh_store_cart', []);
             $cart[$sku] = min(($cart[$sku] ?? 0) + 1, 99);
-            session(['doeh_demo_cart' => $cart]);
+            session(['doeh_store_cart' => $cart]);
         }
 
-        return redirect('/doeh-demo/cart');
-    })->middleware('throttle:60,1')->name('doeh-demo.cart.add');
+        return redirect('/store/cart');
+    })->middleware('throttle:60,1')->name('doeh-storefront.cart.add');
 
-    Route::post('/doeh-demo/cart/remove', function (Request $request) {
+    Route::post('/store/cart/remove', function (Request $request) {
         $sku = trim((string) $request->input('sku'));
-        $cart = session('doeh_demo_cart', []);
+        $cart = session('doeh_store_cart', []);
         unset($cart[$sku]);
-        session(['doeh_demo_cart' => $cart]);
+        session(['doeh_store_cart' => $cart]);
 
-        return redirect('/doeh-demo/cart');
-    })->middleware('throttle:60,1')->name('doeh-demo.cart.remove');
+        return redirect('/store/cart');
+    })->middleware('throttle:60,1')->name('doeh-storefront.cart.remove');
 
-    Route::get('/doeh-demo/cart', function () {
-        $cart = session('doeh_demo_cart', []);
+    Route::get('/store/cart', function () {
+        $cart = session('doeh_store_cart', []);
         $byId = [];
-        foreach (doeh_demo_products() as $p) {
+        foreach (doeh_storefront_products() as $p) {
             $byId[$p['sku']] = $p;
         }
         $lines = [];
@@ -81,22 +81,22 @@ Route::middleware('web')->group(function () {
             'lines' => $lines,
             'ready' => function_exists('doeh_commerce') && doeh_commerce() !== null,
         ]);
-    })->name('doeh-demo.cart');
+    })->name('doeh-storefront.cart');
 
-    Route::post('/doeh-demo/checkout', function (Request $request) use ($idemFor) {
+    Route::post('/store/checkout', function (Request $request) use ($idemFor) {
         $connector = function_exists('doeh_commerce') ? doeh_commerce() : null;
         if (! $connector) {
             // Admin-facing: the connector is off/unconfigured. Never a customer crash.
-            return redirect('/doeh-demo/cart')->withErrors('DOEH Commerce is not configured.');
+            return redirect('/store/cart')->withErrors('DOEH Commerce is not configured.');
         }
 
-        $cart = session('doeh_demo_cart', []);
+        $cart = session('doeh_store_cart', []);
         $lines = [];
         foreach ($cart as $sku => $qty) {
             $lines[] = ['sku' => (string) $sku, 'qty' => (int) $qty];
         }
         if (! $lines) {
-            return redirect('/doeh-demo/cart')->withErrors('Your cart is empty.');
+            return redirect('/store/cart')->withErrors('Your cart is empty.');
         }
 
         $phone = trim((string) $request->input('phone'));
@@ -110,34 +110,34 @@ Route::middleware('web')->group(function () {
         if (! ($result['ok'] ?? false)) {
             // Map the stable connector code to friendly copy — the theme decides
             // the words; the customer never sees an HTTP status or edge code.
-            return redirect('/doeh-demo/cart')->withErrors(
-                doeh_demo_message($result['code'] ?? 'EDGE_TRANSPORT')
+            return redirect('/store/cart')->withErrors(
+                doeh_storefront_message($result['code'] ?? 'EDGE_TRANSPORT')
             );
         }
 
         // Success: clear the cart AND rotate the idempotency key so the next order
         // is a new order, not a replay of this one.
-        session()->forget(['doeh_demo_cart', 'doeh_demo_idem']);
+        session()->forget(['doeh_store_cart', 'doeh_store_idem']);
         $id = (string) ($result['order']['id'] ?? '');
 
-        return redirect('/doeh-demo/order/'.$id);
-    })->middleware('throttle:20,1')->name('doeh-demo.checkout');
+        return redirect('/store/order/'.$id);
+    })->middleware('throttle:20,1')->name('doeh-storefront.checkout');
 
-    Route::get('/doeh-demo/order/{id}', function (string $id) {
+    Route::get('/store/order/{id}', function (string $id) {
         $connector = function_exists('doeh_commerce') ? doeh_commerce() : null;
         $result = $connector ? $connector->getOrder($id) : ['ok' => false, 'code' => 'EDGE_TRANSPORT'];
 
         return doeh_commerce_view('order', [
             'ok'    => $result['ok'] ?? false,
             'order' => $result['order'] ?? null,
-            'error' => $result['ok'] ?? false ? null : doeh_demo_message($result['code'] ?? 'EDGE_TRANSPORT'),
+            'error' => $result['ok'] ?? false ? null : doeh_storefront_message($result['code'] ?? 'EDGE_TRANSPORT'),
         ]);
-    })->where('id', '[A-Za-z0-9_]+')->name('doeh-demo.order');
+    })->where('id', '[A-Za-z0-9_]+')->name('doeh-storefront.order');
 });
 
-if (! function_exists('doeh_demo_message')) {
+if (! function_exists('doeh_storefront_message')) {
     /** Friendly copy for the connector's stable error codes (theme-replaceable). */
-    function doeh_demo_message(string $code): string
+    function doeh_storefront_message(string $code): string
     {
         return [
             'EDGE_UNKNOWN_SKU'               => 'One of these products is no longer available.',

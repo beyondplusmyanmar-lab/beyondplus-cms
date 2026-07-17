@@ -1,4 +1,4 @@
-{{-- Overrides doeh-commerce-demo::shop — the flow plugin renders this when the
+{{-- Overrides doeh-commerce-storefront::shop — the flow plugin renders this when the
      DOEH Business theme is active, so the shop lives in the theme's own chrome.
      Data (products, cart, ready) comes from the plugin's route. --}}
 @extends('theme.doeh-business.layouts.app')
@@ -24,7 +24,7 @@
                         <div class="muted" style="font-size:13px;">{{ $mm ? 'ကုဒ်' : 'SKU' }} {{ $p['sku'] }}</div>
                     </div>
                     @if ($p['price_hint'])<div class="jade" style="font-weight:700;">{{ $p['price_hint'] }}</div>@endif
-                    <form method="POST" action="{{ url('/doeh-demo/cart/add') }}" style="margin-top:auto;">
+                    <form method="POST" action="{{ url('/store/cart/add') }}" style="margin-top:auto;">
                         @csrf
                         <input type="hidden" name="sku" value="{{ $p['sku'] }}">
                         <button class="btn" type="submit" style="width:100%;">{{ $mm ? 'ခြင်းထဲ ထည့်ရန်' : 'Add to cart' }}</button>
@@ -32,6 +32,6 @@
                 </div>
             @endforeach
         </div>
-        <p style="margin-top:20px;"><a href="{{ url('/doeh-demo/cart') }}">{{ $mm ? 'ခြင်းကြည့်ရန် →' : 'View cart →' }}</a></p>
+        <p style="margin-top:20px;"><a href="{{ url('/store/cart') }}">{{ $mm ? 'ခြင်းကြည့်ရန် →' : 'View cart →' }}</a></p>
     @endif
 @endsection
