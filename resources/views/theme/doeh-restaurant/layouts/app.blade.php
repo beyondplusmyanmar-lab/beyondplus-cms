@@ -66,7 +66,7 @@
         /* Header */
         .r-head { background: color-mix(in srgb, var(--paper) 85%, #fff); border-bottom: 1px solid var(--line);
                   position: sticky; top: 0; z-index: 30; backdrop-filter: saturate(1.1) blur(6px); }
-        .r-head .row { display: flex; align-items: center; gap: 20px; padding: 15px 0; }
+        .r-head .row { display: flex; align-items: center; gap: 20px; padding-block: 15px; }
         .r-brand { font-family: "Fraunces","Noto Serif Myanmar",Georgia,serif; font-weight: 600; font-size: 22px; color: var(--ink); }
         .r-brand:hover { text-decoration: none; }
         .r-nav { display: flex; gap: 18px; }
@@ -94,7 +94,7 @@
 
         main { padding: 36px 0 72px; }
         .r-foot { border-top: 1px solid var(--line); }
-        .r-foot .inner { padding: 26px 0; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .r-foot .inner { padding-block: 26px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 
         @media (max-width: 560px) {
             .r-head .row { gap: 12px; }

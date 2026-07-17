@@ -1,0 +1,21 @@
+{
+    "id": "doeh-retail",
+    "type": "theme",
+    "name": "DOEH Retail",
+    "description": "A crisp, product-first retail storefront wired to the DOEH platform. A confident product grid, sign-in and a live rewards balance in the header (DOEH Identity), and a shop → cart → checkout → order flow that produces real DOEH orders (DOEH Commerce). The theme owns all presentation; the plugins own auth, tokens and the Orders API. Requires the DOEH Identity, Commerce and Commerce Storefront plugins.",
+    "description_mm": "DOEH platform နှင့် ချိတ်ဆက်ထားသော product-first retail storefront။ product grid၊ header တွင် sign-in နှင့် rewards balance (DOEH Identity)၊ shop → cart → checkout → order flow က DOEH order အစစ်များ ဖန်တီးသည် (DOEH Commerce)။ theme က presentation အားလုံးကို ပိုင်ပြီး plugin များက auth, token နှင့် Orders API ကို ပိုင်သည်။ DOEH Identity, Commerce နှင့် Commerce Storefront plugin လိုအပ်သည်။",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": ["doeh-identity", "doeh-commerce", "doeh-commerce-storefront"],
+    "commerce_views": ["shop", "cart", "order"],
+    "settings": [
+        { "group": "Brand", "name": "rt_name", "label": "Shop name", "type": "text", "default": "", "placeholder": "Defaults to your site name" },
+        { "group": "Brand", "name": "rt_brand", "label": "Brand colour", "type": "color", "default": "#2e4ce0" },
+        { "group": "Home", "name": "rt_hero_title", "label": "Hero headline", "type": "text", "default": "", "placeholder": "Shop online, pick up in store." },
+        { "group": "Home", "name": "rt_hero_sub", "label": "Hero subtitle", "type": "text", "default": "", "placeholder": "Real stock, real prices, ready when you are." },
+        { "group": "Home", "name": "rt_pickup", "label": "Show pickup badges", "type": "checkbox", "default": "yes" }
+    ]
+}
