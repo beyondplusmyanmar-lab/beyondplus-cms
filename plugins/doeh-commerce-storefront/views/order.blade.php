@@ -7,9 +7,13 @@
             $totals = $order['totals'] ?? [];
             $grandMinor = $totals['grand_total_minor'] ?? null;
             $currency = $totals['currency'] ?? '';
-            // Minor units → display. MMK has no minor unit in practice, but the API
-            // is minor-unit throughout, so divide by 100 and drop a trailing .00.
-            $grand = $grandMinor === null ? null : rtrim(rtrim(number_format($grandMinor / 100, 2), '0'), '.');
+            // Minor units → display, currency-aware. MMK (and other zero-decimal
+            // currencies) ARE stored as whole units, so dividing by 100 would show
+            // 1,500 MMK as "15". Only 2-decimal currencies get the /100.
+            $zeroDecimal = ['MMK', 'JPY', 'KRW', 'VND', 'IDR', 'LAK', 'KHR'];
+            $exp = in_array(strtoupper((string) $currency), $zeroDecimal, true) ? 0 : 2;
+            $fmt = fn ($minor) => number_format($exp === 0 ? (int) $minor : $minor / (10 ** $exp), $exp);
+            $grand = $grandMinor === null ? null : $fmt($grandMinor);
         @endphp
         <h1><span class="ok-badge">✓ Thank you!</span></h1>
         <p class="sub">Your order was placed with DOEH.</p>
@@ -40,7 +44,7 @@
                                 <div class="name">{{ $line['name'] ?? $line['sku'] }}</div>
                                 <div class="hint">SKU {{ $line['sku'] }} · qty {{ $line['qty'] }}</div>
                             </td>
-                            <td class="r">{{ rtrim(rtrim(number_format(($line['line_total_minor'] ?? 0) / 100, 2), '0'), '.') }}</td>
+                            <td class="r">{{ $fmt($line['line_total_minor'] ?? 0) }}</td>
                         </tr>
                     @endforeach
                 </table>
