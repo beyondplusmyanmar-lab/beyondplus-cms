@@ -20,7 +20,7 @@
     @if (empty($products))
         <div class="rt-card rt-muted" style="padding:24px; text-align:center;">{{ $mm ? 'ပစ္စည်းများ မကြာမီ ရောက်လာမည်။' : 'Products coming soon.' }}</div>
     @else
-        <div class="rt-grid">
+        <div class="rt-grid{{ bp_option('rt_grid', 'comfortable') === 'compact' ? ' rt-compact' : '' }}">
             @foreach ($products as $p)
                 @include('theme.doeh-retail.partials.card', ['p' => $p, 'ready' => $ready, 'mm' => $mm, 'pickup' => $pickup])
             @endforeach

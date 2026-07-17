@@ -9,6 +9,10 @@
         $brand = bp_option('rt_brand', '#2e4ce0');
     @endphp
     <title>@hasSection('title')@yield('title') — {{ $siteName }}@else{{ $siteName }}@endif</title>
+    @php $favOpt = trim((string) bp_option('rt_favicon')); @endphp
+    @if ($favOpt !== '')
+        <link rel="icon" href="{{ \Illuminate\Support\Str::startsWith($favOpt, ['http', '/']) ? $favOpt : bp_upload_url($favOpt) }}">
+    @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -81,6 +85,7 @@
 
         /* Product grid + card — the signature */
         .rt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+        .rt-grid.rt-compact { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
         .rt-prod { display: flex; flex-direction: column; overflow: hidden; }
         .rt-prod .swatch { aspect-ratio: 4 / 3; display: grid; place-items: center;
                  background: linear-gradient(135deg, var(--brand-tint), #fff);

@@ -9,16 +9,20 @@
         $products = function_exists('doeh_storefront_products') ? doeh_storefront_products() : [];
         $ready = function_exists('doeh_commerce') && doeh_commerce() !== null;
         $featured = array_slice($products, 0, 4);
-        $loyalty = function_exists('bp_apply_filters') ? trim(bp_apply_filters('doeh_loyalty_panel', '')) : '';
+        $showHero = (bp_option('sv_show_hero', 'yes') ?: 'yes') === 'yes';
+        $showLoyalty = (bp_option('sv_show_loyalty', 'yes') ?: 'yes') === 'yes';
+        $loyalty = ($showLoyalty && function_exists('bp_apply_filters')) ? trim(bp_apply_filters('doeh_loyalty_panel', '')) : '';
     @endphp
 
     {{-- Hero: a calm promise --}}
+    @if ($showHero)
     <section style="padding:20px 0 36px; text-align:center;">
         <div class="sv-eyebrow" style="margin-bottom:14px;">{{ $mm ? 'ချိန်းဆို၍' : 'By appointment' }}</div>
         <h1 style="font-size:40px; line-height:1.1; margin-bottom:14px;">{{ $heroTitle }}</h1>
         <p class="sv-muted" style="font-size:18px; max-width:42ch; margin:0 auto 24px;">{{ $heroSub }}</p>
         <a class="sv-btn" href="{{ url('/store') }}">{{ $mm ? 'ဝန်ဆောင်မှုများ ကြည့်ရန်' : 'View services' }}</a>
     </section>
+    @endif
 
     {{-- Rewards (DOEH Identity) --}}
     @if ($loyalty !== '')

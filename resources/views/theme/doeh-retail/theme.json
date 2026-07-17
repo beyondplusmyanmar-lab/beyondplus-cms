@@ -4,7 +4,7 @@
     "name": "DOEH Retail",
     "description": "A crisp, product-first retail storefront wired to the DOEH platform. A confident product grid, sign-in and a live rewards balance in the header (DOEH Identity), and a shop → cart → checkout → order flow that produces real DOEH orders (DOEH Commerce). The theme owns all presentation; the plugins own auth, tokens and the Orders API. Requires the DOEH Identity, Commerce and Commerce Storefront plugins.",
     "description_mm": "DOEH platform နှင့် ချိတ်ဆက်ထားသော product-first retail storefront။ product grid၊ header တွင် sign-in နှင့် rewards balance (DOEH Identity)၊ shop → cart → checkout → order flow က DOEH order အစစ်များ ဖန်တီးသည် (DOEH Commerce)။ theme က presentation အားလုံးကို ပိုင်ပြီး plugin များက auth, token နှင့် Orders API ကို ပိုင်သည်။ DOEH Identity, Commerce နှင့် Commerce Storefront plugin လိုအပ်သည်။",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "author": "Beyond Plus",
     "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
     "license": "MIT",
@@ -17,6 +17,11 @@
         { "group": "Brand", "name": "rt_brand", "label": "Brand colour", "type": "color", "default": "#2e4ce0" },
         { "group": "Home", "name": "rt_hero_title", "label": "Hero headline", "type": "text", "default": "", "placeholder": "Shop online, pick up in store." },
         { "group": "Home", "name": "rt_hero_sub", "label": "Hero subtitle", "type": "text", "default": "", "placeholder": "Real stock, real prices, ready when you are." },
-        { "group": "Home", "name": "rt_pickup", "label": "Show pickup badges", "type": "checkbox", "default": "yes" }
+        { "group": "Home", "name": "rt_pickup", "label": "Show pickup badges", "type": "checkbox", "default": "yes" },
+        { "group": "Brand", "name": "rt_logo", "label": "Logo", "type": "image", "default": "", "help": "Shown in the header instead of the name. Uploads path or full URL; ~36px tall works best." },
+        { "group": "Brand", "name": "rt_favicon", "label": "Favicon", "type": "image", "default": "", "help": "Browser-tab icon. Uploads path or full URL (PNG/SVG/ICO)." },
+        { "group": "Sections", "name": "rt_show_hero", "label": "Show the hero section", "type": "checkbox", "default": "yes" },
+        { "group": "Sections", "name": "rt_show_loyalty", "label": "Show the rewards section", "type": "checkbox", "default": "yes", "help": "Only appears when DOEH Identity is active anyway; this hides it entirely." },
+        { "group": "Home", "name": "rt_grid", "label": "Product grid density", "type": "select", "options": { "comfortable": "Comfortable", "compact": "Compact" }, "default": "comfortable", "help": "Compact fits more products per row (home and /store)." }
     ]
 }

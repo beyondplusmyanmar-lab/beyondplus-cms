@@ -7,15 +7,19 @@
         $heroTitle = trim((string) bp_option('biz_hero_title')) ?: ($mm ? 'ကောင်းသောအရာများ၊ လွယ်ကူစွာ မှာယူပါ။' : 'Good things, ordered simply.');
         $heroSub = trim((string) bp_option('biz_hero_subtitle')) ?: ($mm ? 'ကြည့်ရှု၊ ဝင်ရောက်ပြီး မှာယူတိုင်း ဆုမှတ်များ ရယူပါ။' : 'Browse, sign in, and earn rewards on every order.');
         $products = function_exists('doeh_storefront_products') ? doeh_storefront_products() : [];
-        $loyalty = function_exists('bp_apply_filters') ? trim(bp_apply_filters('doeh_loyalty_panel', '')) : '';
+        $showHero = (bp_option('biz_show_hero', 'yes') ?: 'yes') === 'yes';
+        $showLoyalty = (bp_option('biz_show_loyalty', 'yes') ?: 'yes') === 'yes';
+        $loyalty = ($showLoyalty && function_exists('bp_apply_filters')) ? trim(bp_apply_filters('doeh_loyalty_panel', '')) : '';
     @endphp
 
     {{-- Hero --}}
+    @if ($showHero)
     <section class="card" style="padding:44px 40px; margin-bottom:28px; background:linear-gradient(180deg,#fff, #fdfaf5);">
         <h1 style="font-size:34px; margin:0 0 10px; max-width:22ch;">{{ $heroTitle }}</h1>
         <p class="muted" style="font-size:18px; margin:0 0 22px; max-width:48ch;">{{ $heroSub }}</p>
         <a class="btn" href="{{ url('/store') }}">{{ $mm ? 'ဈေးဆိုင်သို့' : 'Shop now' }}</a>
     </section>
+    @endif
 
     {{-- Loyalty (DOEH Identity) — renders a sign-in prompt or the live balance --}}
     @if ($loyalty !== '')

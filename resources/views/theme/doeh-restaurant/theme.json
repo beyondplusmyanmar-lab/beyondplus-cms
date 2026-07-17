@@ -4,7 +4,7 @@
     "name": "DOEH Restaurant",
     "description": "A warm, menu-first restaurant storefront wired to the DOEH platform. The header carries DOEH sign-in and a live rewards balance (DOEH Identity); the menu → order → confirmation flow produces real DOEH orders (DOEH Commerce). Built as a printed-menu card, a check, and an order ticket. The theme owns all presentation; the plugins own auth, tokens and the Orders API. Requires the DOEH Identity, Commerce and Commerce Storefront plugins.",
     "description_mm": "DOEH platform နှင့် ချိတ်ဆက်ထားသော menu-first စားသောက်ဆိုင် storefront။ header တွင် DOEH sign-in နှင့် rewards balance (DOEH Identity)၊ menu → order → confirmation flow က DOEH order အစစ်များ ဖန်တီးသည် (DOEH Commerce)။ theme က presentation အားလုံးကို ပိုင်ပြီး plugin များက auth, token နှင့် Orders API ကို ပိုင်သည်။ DOEH Identity, Commerce နှင့် Commerce Storefront plugin လိုအပ်သည်။",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "author": "Beyond Plus",
     "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
     "license": "MIT",
@@ -16,6 +16,10 @@
         { "group": "Brand", "name": "r_name", "label": "Restaurant name", "type": "text", "default": "", "placeholder": "Defaults to your site name" },
         { "group": "Brand", "name": "r_tagline", "label": "Tagline", "type": "text", "default": "", "placeholder": "Freshly made, ready to order." },
         { "group": "Brand", "name": "r_clay", "label": "Primary colour", "type": "color", "default": "#be5f37" },
-        { "group": "Menu", "name": "r_menu_note", "label": "Menu note", "type": "text", "default": "", "placeholder": "Prices are confirmed at checkout." }
+        { "group": "Menu", "name": "r_menu_note", "label": "Menu note", "type": "text", "default": "", "placeholder": "Prices are confirmed at checkout." },
+        { "group": "Brand", "name": "r_logo", "label": "Logo", "type": "image", "default": "", "help": "Shown in the header instead of the name. Uploads path or full URL; ~36px tall works best." },
+        { "group": "Brand", "name": "r_favicon", "label": "Favicon", "type": "image", "default": "", "help": "Browser-tab icon. Uploads path or full URL (PNG/SVG/ICO)." },
+        { "group": "Sections", "name": "r_show_hero", "label": "Show the hero section", "type": "checkbox", "default": "yes" },
+        { "group": "Sections", "name": "r_show_loyalty", "label": "Show the rewards section", "type": "checkbox", "default": "yes", "help": "Only appears when DOEH Identity is active anyway; this hides it entirely." }
     ]
 }

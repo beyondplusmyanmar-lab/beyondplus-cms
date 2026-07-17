@@ -4,7 +4,7 @@
     "name": "DOEH Service",
     "description": "A calm, by-appointment storefront for a service business — salon, clinic, repair, home services — wired to the DOEH platform. A spacious service list, sign-in and a live rewards balance in the header (DOEH Identity), and a book → requests → confirmation flow that records real DOEH orders (DOEH Commerce). v1 is order-styled: it captures the requested services; scheduling is arranged off-platform. The theme owns all presentation; the plugins own auth, tokens and the Orders API. Requires the DOEH Identity, Commerce and Commerce Storefront plugins.",
     "description_mm": "ဝန်ဆောင်မှုလုပ်ငန်း — ဆံသ၊ ဆေးခန်း၊ ပြုပြင်ရေး၊ အိမ်ဝန်ဆောင်မှု — အတွက် appointment-based storefront၊ DOEH platform နှင့် ချိတ်ဆက်ထားသည်။ ဝန်ဆောင်မှုစာရင်း၊ header တွင် sign-in နှင့် rewards balance (DOEH Identity)၊ book → requests → confirmation flow က DOEH order အစစ်များ မှတ်တမ်းတင်သည် (DOEH Commerce)။ v1 သည် order-styled — တောင်းဆိုသော ဝန်ဆောင်မှုများကို မှတ်တမ်းတင်ပြီး အချိန်ဇယားကို platform ပြင်ပတွင် ညှိနှိုင်းသည်။ DOEH Identity, Commerce နှင့် Commerce Storefront plugin လိုအပ်သည်။",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "author": "Beyond Plus",
     "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
     "license": "MIT",
@@ -17,6 +17,10 @@
         { "group": "Brand", "name": "sv_brand", "label": "Brand colour", "type": "color", "default": "#5e8168" },
         { "group": "Home", "name": "sv_hero_title", "label": "Hero headline", "type": "text", "default": "", "placeholder": "Care, by appointment." },
         { "group": "Home", "name": "sv_hero_sub", "label": "Hero subtitle", "type": "textarea", "default": "", "placeholder": "Choose a service and request a time — we'll confirm with you." },
-        { "group": "Services", "name": "sv_note", "label": "Services note", "type": "text", "default": "", "placeholder": "Prices are confirmed at booking." }
+        { "group": "Services", "name": "sv_note", "label": "Services note", "type": "text", "default": "", "placeholder": "Prices are confirmed at booking." },
+        { "group": "Brand", "name": "sv_logo", "label": "Logo", "type": "image", "default": "", "help": "Shown in the header instead of the name. Uploads path or full URL; ~36px tall works best." },
+        { "group": "Brand", "name": "sv_favicon", "label": "Favicon", "type": "image", "default": "", "help": "Browser-tab icon. Uploads path or full URL (PNG/SVG/ICO)." },
+        { "group": "Sections", "name": "sv_show_hero", "label": "Show the hero section", "type": "checkbox", "default": "yes" },
+        { "group": "Sections", "name": "sv_show_loyalty", "label": "Show the rewards section", "type": "checkbox", "default": "yes", "help": "Only appears when DOEH Identity is active anyway; this hides it entirely." }
     ]
 }

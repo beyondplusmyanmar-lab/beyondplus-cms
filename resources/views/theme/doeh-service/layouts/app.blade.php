@@ -9,6 +9,10 @@
         $brand = bp_option('sv_brand', '#5e8168');
     @endphp
     <title>@hasSection('title')@yield('title') · {{ $siteName }}@else{{ $siteName }}@endif</title>
+    @php $favOpt = trim((string) bp_option('sv_favicon')); @endphp
+    @if ($favOpt !== '')
+        <link rel="icon" href="{{ \Illuminate\Support\Str::startsWith($favOpt, ['http', '/']) ? $favOpt : bp_upload_url($favOpt) }}">
+    @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

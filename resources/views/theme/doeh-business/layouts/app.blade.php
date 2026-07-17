@@ -9,6 +9,10 @@
         $accent = bp_option('biz_accent', '#b0803f');
     @endphp
     <title>@hasSection('title')@yield('title') — {{ $siteName }}@else{{ $siteName }}@endif</title>
+    @php $favOpt = trim((string) bp_option('biz_favicon')); @endphp
+    @if ($favOpt !== '')
+        <link rel="icon" href="{{ \Illuminate\Support\Str::startsWith($favOpt, ['http', '/']) ? $favOpt : bp_upload_url($favOpt) }}">
+    @endif
     <style>
         :root {
             --accent: {{ $accent }};

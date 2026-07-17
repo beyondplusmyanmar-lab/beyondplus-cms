@@ -1,11 +1,13 @@
 @php
     $siteName = trim((string) bp_option('biz_shop_name')) ?: (optional(site_information('blogname'))->option_value ?: config('app.name'));
     $mm = app()->getLocale() === 'mm';
+    $logoOpt = trim((string) bp_option('biz_logo'));
+    $logoUrl = $logoOpt === '' ? '' : (\Illuminate\Support\Str::startsWith($logoOpt, ['http', '/']) ? $logoOpt : bp_upload_url($logoOpt));
     $cartCount = array_sum(array_map('intval', (array) session('doeh_store_cart', [])));
 @endphp
 <header class="site">
     <div class="wrap bar">
-        <a class="brand serif" href="{{ url('/') }}">{{ $siteName }}</a>
+        <a class="brand serif" href="{{ url('/') }}">@if ($logoUrl)<img src="{{ $logoUrl }}" alt="{{ $siteName }}" style="height:36px; width:auto; display:block;">@else{{ $siteName }}@endif</a>
         <nav>
             <a href="{{ url('/') }}">{{ $mm ? 'ပင်မ' : 'Home' }}</a>
             <a href="{{ url('/store') }}">{{ $mm ? 'ဈေးဆိုင်' : 'Shop' }}</a>

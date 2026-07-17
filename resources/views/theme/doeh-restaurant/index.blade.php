@@ -8,16 +8,20 @@
         $tagline = trim((string) bp_option('r_tagline')) ?: ($mm ? 'အသစ်ချက်၊ အော်ဒါတင်ရန် အသင့်။' : 'Freshly made, ready to order.');
         $products = function_exists('doeh_storefront_products') ? doeh_storefront_products() : [];
         $picks = array_slice($products, 0, 4);
-        $loyalty = function_exists('bp_apply_filters') ? trim(bp_apply_filters('doeh_loyalty_panel', '')) : '';
+        $showHero = (bp_option('r_show_hero', 'yes') ?: 'yes') === 'yes';
+        $showLoyalty = (bp_option('r_show_loyalty', 'yes') ?: 'yes') === 'yes';
+        $loyalty = ($showLoyalty && function_exists('bp_apply_filters')) ? trim(bp_apply_filters('doeh_loyalty_panel', '')) : '';
     @endphp
 
     {{-- Masthead: the restaurant leads with itself, not a marketing card --}}
+    @if ($showHero)
     <section style="padding:22px 0 34px; text-align:center;">
         <div class="r-eyebrow" style="margin-bottom:12px;">{{ $mm ? 'ယနေ့ မီနူး' : "Today's kitchen" }}</div>
         <h1 style="font-size:44px; line-height:1.05; margin-bottom:12px;">{{ $siteName }}</h1>
         <p class="r-muted" style="font-size:19px; max-width:34ch; margin:0 auto 22px;">{{ $tagline }}</p>
         <a class="r-btn" href="{{ url('/store') }}">{{ $mm ? 'မီနူး ကြည့်ရန်' : 'See the menu' }}</a>
     </section>
+    @endif
 
     {{-- Rewards (DOEH Identity): a sign-in prompt, or the live balance --}}
     @if ($loyalty !== '')
