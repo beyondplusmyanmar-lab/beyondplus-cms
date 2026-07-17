@@ -1,0 +1,49 @@
+{
+    "id": "doeh-commerce",
+    "type": "plugin",
+    "category": "Commerce",
+    "name": "DOEH Commerce",
+    "description": "Connects this site to the DOEH Orders API so a theme can submit and read orders. A server-side connector only — it owns API auth, request signing, payload mapping, error normalization and order retrieval; it renders NO cart, catalog or checkout UI (themes own all presentation). The merchant secret key stays on the server and is never exposed to the browser; a customer's sign-in is never used as the order credential.",
+    "description_mm": "ဤဆိုက်ကို DOEH Orders API နှင့် ချိတ်ဆက်ပေးပြီး theme တစ်ခုက order များ တင်သွင်း/ဖတ်ရှုနိုင်စေသည်။ Server-side connector သာဖြစ်သည် — API auth, request signing, payload mapping, error normalization နှင့် order retrieval ကိုသာ ကိုင်တွယ်ပြီး cart/catalog/checkout UI မ render ပါ (theme က presentation အားလုံးကို ပိုင်သည်)။ Merchant secret key ကို server ပေါ်တွင်သာ ထားရှိပြီး browser သို့ ဘယ်တော့မှ မထုတ်ပါ။ customer ၏ sign-in ကို order credential အဖြစ် အသုံးမပြုပါ။",
+    "version": "0.1.0",
+    "author": "Beyond Plus",
+    "homepage": "https://github.com/beyondplusmyanmar-lab/doeh-cms-commerce-plugin",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1"
+    },
+    "permissions": ["http"],
+    "main": "doeh-commerce.php",
+    "settings": [
+        {
+            "name": "environment",
+            "label": "Environment",
+            "type": "select",
+            "options": { "sandbox": "Sandbox (test)", "production": "Production (live)" },
+            "default": "sandbox",
+            "help": "Selects the DOEH Orders API host. Sandbox = sandbox-api.doehpos.com; Production = api.doehpos.com. The key's own environment (sk_test_ / sk_live_) must match."
+        },
+        {
+            "name": "secret_key",
+            "label": "Merchant Secret Key",
+            "type": "password",
+            "help": "The sk_test_… / sk_live_… key for THIS shop, with the orders scope. SERVER-SIDE ONLY — it stays on this server and is never sent to the browser. Treat it like a password."
+        },
+        {
+            "name": "default_fulfillment",
+            "label": "Default fulfilment",
+            "type": "select",
+            "options": { "": "None (let the theme decide)", "pickup": "Pickup", "delivery": "Delivery", "dine_in": "Dine in" },
+            "default": "",
+            "help": "Applied to a submission when the theme does not set one. Optional."
+        },
+        {
+            "name": "enabled",
+            "label": "Enable order submission",
+            "type": "checkbox",
+            "default": "yes",
+            "help": "When off, the connector refuses every call (a kill switch without deactivating the plugin)."
+        }
+    ]
+}
