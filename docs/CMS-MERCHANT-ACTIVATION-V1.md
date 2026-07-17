@@ -40,7 +40,7 @@ introduced **later**, when fulfilment execution becomes a platform capability.
 | 2 | **Theme enhancement pass** — enrich the four DOEH themes' EXISTING settings schemas (logo, favicon, brand knobs, section toggles). Rides the Theme Customize page shipped in CMS 2.5.0 — not a new customizer. | ✅ built (all four themes: logo + favicon + hero/rewards toggles; retail grid density) |
 | 3 | **Merchant setup wizard** — install → select theme → configure branding → paste `sk_live_` → live-validate against the Orders API → preview → publish. Keys are **collected and validated, never minted** (issuance is the DOEH developer portal's job). Identity (`pk_`/`client_id`) is an **optional, skippable** step — commerce works without it. | ✅ built (`doeh-setup` 0.1.0: six re-entrant steps, live key proof, no-store-on-failure) |
 | 4 | **Developer examples** — `docs/examples/`: loyalty widget, minimal theme, commerce extension. The guides and contracts already exist. | ✅ built (three examples, each installed + activated + walked against the live sandbox before shipping) |
-| 5 | **First merchant deployment** — one real merchant: own install, real domain, real `sk_live_`, real orders. | pending (gated on 1–4) |
+| 5 | **First merchant deployment** — one real merchant: own install, real domain, real `sk_live_`, real orders. Runbook: [MERCHANT-DEPLOYMENT-V1.md](./MERCHANT-DEPLOYMENT-V1.md) — treat it as a production acceptance test; the deliverable is the evidence table, not code. | runbook ready; execution human-gated |
 
 ## Explicitly out of scope
 
