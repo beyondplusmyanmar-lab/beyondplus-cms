@@ -48,6 +48,18 @@ if ($result && $result['ok']) {
 You send **what and how many only**. The server resolves SKUs, prices, tax,
 discounts and totals — never send a price, currency or grand total.
 
+### Fulfilment is a preference, not an instruction
+
+`fulfillment.type` is the customer's stated preference (`pickup` | `delivery` |
+`dine_in`), forwarded verbatim — the connector computes no fee, route or ETA,
+and the Orders API decides which types it accepts. A value outside the three
+known types is dropped client-side, never sent; when omitted, the plugin
+setting **Default fulfilment** applies (or nothing is sent and the API defaults
+to pickup). Note that the API currently refuses `delivery` with
+`EDGE_FULFILLMENT_NOT_AVAILABLE` until the platform's delivery slice lands —
+handle that code like any other. (The storefront plugin collects this
+preference from the customer; see its README.)
+
 ### Or through hooks (no class dependency)
 
 ```php
@@ -76,7 +88,8 @@ failure: ['ok' => false, 'status' => int, 'code' => 'EDGE_…'|'API_KEY_…', 's
 ```
 
 Never parse human text — branch on `ok`, and on the stable UPPER_SNAKE `code`
-(e.g. `EDGE_UNKNOWN_SKU`, `EDGE_INSUFFICIENT_STOCK`, `API_KEY_INVALID`).
+(e.g. `EDGE_UNKNOWN_SKU`, `EDGE_INSUFFICIENT_STOCK`,
+`EDGE_FULFILLMENT_NOT_AVAILABLE`, `API_KEY_INVALID`).
 
 ## Not in v1
 
