@@ -1,0 +1,19 @@
+{
+    "id": "example-theme",
+    "type": "theme",
+    "name": "Example Storefront",
+    "description": "A deliberately minimal DOEH storefront theme: every required file, nothing else. Copy it, rename the slug and the ex_ setting prefix, and grow it into your own vertical. English-only for readability — a real theme should meet the full quality floor in THEME-DESIGN-GUIDE.md.",
+    "version": "0.1.0",
+    "author": "You",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": ["doeh-identity", "doeh-commerce", "doeh-commerce-storefront"],
+    "commerce_views": ["shop", "cart", "order"],
+    "fulfillment_types": ["pickup", "dine_in"],
+    "settings": [
+        { "group": "Brand", "name": "ex_name", "label": "Shop name", "type": "text", "default": "", "placeholder": "Defaults to your site name" },
+        { "group": "Brand", "name": "ex_brand", "label": "Brand colour", "type": "color", "default": "#2563eb" },
+        { "group": "Brand", "name": "ex_logo", "label": "Logo", "type": "image", "default": "", "help": "Shown in the header instead of the name. Uploads path or full URL." },
+        { "group": "Sections", "name": "ex_show_hero", "label": "Show the hero section", "type": "checkbox", "default": "yes" }
+    ]
+}

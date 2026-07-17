@@ -1,0 +1,20 @@
+{
+    "id": "example-loyalty-widget",
+    "type": "plugin",
+    "category": "Commerce",
+    "name": "Example: Points-to-Reward Widget",
+    "description": "A minimal example plugin: a browser-side loyalty widget showing the customer's progress toward a reward, built ONLY on the public window.DoehIdentity API. Copy it as the starting point for your own identity-aware UI.",
+    "version": "0.1.0",
+    "author": "You",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1",
+        "plugins": ["doeh-identity"]
+    },
+    "main": "example-loyalty-widget.php",
+    "settings": [
+        { "name": "reward_target", "label": "Points needed for the reward", "type": "text", "default": "5000" },
+        { "name": "reward_label", "label": "Reward name", "type": "text", "default": "Free coffee" }
+    ]
+}
