@@ -81,7 +81,16 @@
   function dropSession() {
     mem.accessToken = null;
     mem.expiresAt = 0;
+    customerCache = null;
     refresh.clear();
+  }
+
+  // Tell theme JS the session state changed (sign-out, boot, widget re-render).
+  // Themes listen:  document.addEventListener('doeh:identity', fn)
+  function announce() {
+    try {
+      document.dispatchEvent(new CustomEvent("doeh:identity", { detail: { signedIn: isSignedIn() } }));
+    } catch (e) {}
   }
 
   // ---- discovery (cached per tab) -------------------------------------------
@@ -205,6 +214,26 @@
     }
   }
 
+  // ---- customer snapshot for themes -----------------------------------------
+  // What this trust class may know about the signed-in customer: their loyalty
+  // standing at THIS shop. No name, no phone, no profile — profile.pii is a
+  // sensitive scope reserved for native clients platform-wide. Themes wanting
+  // to show profile data link out to the DOEH-hosted page instead.
+  var customerCache = null;
+  async function getCustomer(force) {
+    if (!isSignedIn()) return null;
+    if (customerCache && !force) return customerCache;
+    var r = await loyaltyBalance();
+    if (r.state !== "ok") return { state: r.state };
+    var d = (r.data && r.data.data) || {};
+    customerCache = {
+      state: "ok",
+      customerId: d.customer_id != null ? d.customer_id : null,
+      pointsBalance: d.points_balance != null ? d.points_balance : null,
+    };
+    return customerCache;
+  }
+
   async function signOut() {
     var rt = refresh.get();
     dropSession();
@@ -219,6 +248,7 @@
       } catch (e) {}
     }
     render();
+    announce();
   }
 
   // "Signed in" for widget purposes = we hold a live access token or a refresh
@@ -342,6 +372,7 @@
     signIn: function () { return signIn(); },
     signOut: signOut,
     isSignedIn: isSignedIn,
+    getCustomer: getCustomer,
     getCustomerToken: function () { return getAccessToken(false); },
     render: render,
   };
@@ -356,6 +387,7 @@
     }
     expandShortcodes();
     render();
+    announce();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

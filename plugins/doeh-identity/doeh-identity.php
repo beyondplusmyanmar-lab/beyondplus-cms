@@ -52,7 +52,7 @@ if (! function_exists('doeh_identity_config')) {
             'publishableKey' => (string) bp_plugin_option('doeh-identity', 'publishable_key'),
             'redirectUri'    => $redirectUri,
             'scope'          => 'loyalty:read',
-            'version'        => '0.1.0',
+            'version'        => '0.2.0',
         ];
     }
 }

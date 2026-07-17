@@ -5,7 +5,7 @@
     "name": "DOEH Identity",
     "description": "Let website visitors sign in with their DOEH customer identity (hosted OAuth 2.1 + PKCE) and see a protected member area — sign-in and a read-only loyalty dashboard. Wallet and profile are handed off to DOEH-hosted pages, never rendered here. A browser-only public client: no customer tokens ever touch the CMS server.",
     "description_mm": "ဝဘ်ဆိုက်လာရောက်သူများကို ၎င်းတို့၏ DOEH customer identity ဖြင့် (hosted OAuth 2.1 + PKCE) ဝင်ရောက်ခွင့်ပြုပြီး ကာကွယ်ထားသော member area — sign-in နှင့် ဖတ်ရုံ loyalty dashboard — ကို ပြသပေးသည်။ Wallet နှင့် profile ကို DOEH-hosted စာမျက်နှာများသို့ လွှဲပြောင်းပေးပြီး ဤနေရာတွင် မ render ပါ။ Browser-only public client — customer token များ CMS server ကို ဘယ်တော့မှ မထိပါ။",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "author": "Beyond Plus",
     "homepage": "https://github.com/beyondplusmyanmar-lab/doeh-cms-identity-plugin",
     "license": "MIT",

@@ -50,8 +50,16 @@ source on purpose and grant nothing without the customer's own sign-in.
 | `signIn()` | start the hosted-login redirect |
 | `signOut()` | revoke the session and re-render widgets |
 | `isSignedIn()` | whether a customer session exists in this tab |
+| `getCustomer()` | resolves `{ state, customerId, pointsBalance }` (cached; pass `true` to refetch) or `null` when signed out |
 | `getCustomerToken()` | resolves an access token (or `null`) — for DOEH consumer API calls **only** |
 | `render()` | re-render all mount points |
+
+The plugin fires `doeh:identity` on `document` whenever the session state
+changes (boot, sign-out) — listen to it to re-render your own account UI.
+
+`getCustomer()` intentionally has **no name/phone/profile fields**: profile
+data is a sensitive scope reserved for DOEH's native apps platform-wide. Link
+to the DOEH-hosted profile page instead of trying to render one.
 
 Never persist the token `getCustomerToken()` returns and never send it to any
 host other than the DOEH consumer API — including your own server.
