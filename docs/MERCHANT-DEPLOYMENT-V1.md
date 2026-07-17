@@ -41,8 +41,9 @@ If DB credentials/host differ from the defaults, edit `.env` **before**
 the repo [README](../README.md): `composer install` → `cp .env.example .env` →
 set DB → `php artisan migrate --seed`.
 
-Set `APP_URL` to the real storefront domain, `APP_ENV=production`,
-`APP_DEBUG=false`.
+For production, start from **[`.env.production.example`](../.env.production.example)**
+(annotated: APP_ENV/DEBUG/URL, MySQL block, SMTP, `TRUSTED_PROXIES`) instead of
+the dev example. DOEH keys are **not** env values — the wizard owns them.
 
 ## 3. Create the admin account and log in
 
@@ -51,6 +52,10 @@ immediately. This admin is the **merchant's** account — the goal of the whole
 exercise is that they operate it without developer help.
 
 ## 4. Run the DOEH Setup wizard
+
+**One click first:** on a fresh install no plugins are active, including the
+wizard itself — go to **Admin → Plugins** and activate **DOEH Setup Wizard**
+(it requires nothing; everything else flows from it). Then:
 
 **Admin → DOEH Setup** (`/bp-admin/doeh-setup`). Six re-entrant steps — each
 step's done-ness is computed from live config, so partial runs are safe and any
@@ -115,6 +120,25 @@ With the merchant watching (ideally driving):
 
 The "missing features" list is the **only** input that opens Commerce v2
 work — a feature is built when a real merchant hits its absence, not before.
+
+## Preflight smoke checklist (rehearsed 2026-07-17, 19/19 on a staged instance)
+
+The whole §3–§4 path is drivable end-to-end before any merchant is present,
+using a **sandbox** `sk_test_` (mint → walk → revoke). A staged rehearsal must
+show, in order:
+
+- [ ] admin login works; password changed
+- [ ] Plugins page activates **doeh-setup** (security scan passes)
+- [ ] wizard opens at step 1 on a fresh install
+- [ ] step 1 activates identity → commerce → storefront in dependency order
+- [ ] step 2 offers all four DOEH themes with fulfilment badges
+- [ ] step 4 refuses a malformed key AND a well-formed fake key (live proof), storing neither
+- [ ] step 4 accepts a real key only after the live Orders-API probe answers
+- [ ] step 5 skip works (commerce-only merchant is valid)
+- [ ] wizard re-opens at the done checklist; storefront `/` renders the chosen
+      vertical; `/store` serves
+- [ ] rehearsal key revoked; instance reset (`php artisan migrate:fresh --seed`)
+      before the merchant's real walk
 
 ## Failure / rollback notes
 
