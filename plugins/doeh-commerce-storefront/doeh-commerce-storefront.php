@@ -60,6 +60,51 @@ if (! function_exists('doeh_storefront_products')) {
     }
 }
 
+if (! function_exists('doeh_storefront_fulfillment_types')) {
+    /**
+     * The fulfilment choices this storefront OFFERS, declared by the active theme
+     * (manifest `fulfillment_types`, e.g. ["pickup","dine_in"]). The theme knows
+     * its vertical: a restaurant offers dine-in, a service business offers none
+     * ([]). A theme that declares nothing gets ['pickup'] — the pre-v1.1 shape.
+     *
+     * This is a PREFERENCE the customer states, nothing more. The storefront never
+     * computes fees, routes, ETAs or rider state; the Orders API stays the
+     * authority on which types it accepts (today it refuses `delivery` with
+     * EDGE_FULFILLMENT_NOT_AVAILABLE until the platform's delivery slice lands —
+     * offering it here is a manifest flip, not a code change, when that day comes).
+     *
+     * @return array<int, string> subset of pickup|delivery|dine_in
+     */
+    function doeh_storefront_fulfillment_types(): array
+    {
+        $meta = \App\Support\Theme::meta(\App\Support\Theme::active());
+        $declared = $meta['fulfillment_types'] ?? null;
+        if (! is_array($declared)) {
+            return ['pickup'];
+        }
+
+        // Whitelist mirrors the connector's FULFILLMENT constant (the wire values).
+        $known = ['pickup', 'delivery', 'dine_in'];
+
+        return array_values(array_unique(array_filter(
+            array_map('strval', $declared),
+            fn (string $t) => in_array($t, $known, true)
+        )));
+    }
+}
+
+if (! function_exists('doeh_storefront_fulfillment_label')) {
+    /** Display copy for a fulfilment type in the DEFAULT templates (a theme owns its own words). */
+    function doeh_storefront_fulfillment_label(string $type): array
+    {
+        return [
+            'pickup'   => ['Pickup', 'Collect from the store'],
+            'delivery' => ['Delivery', 'Delivered to your address'],
+            'dine_in'  => ['Dine in', 'Enjoy at the store'],
+        ][$type] ?? [ucfirst($type), ''];
+    }
+}
+
 if (! function_exists('doeh_commerce_view')) {
     /**
      * Render a commerce-flow page, letting the ACTIVE THEME own the presentation.

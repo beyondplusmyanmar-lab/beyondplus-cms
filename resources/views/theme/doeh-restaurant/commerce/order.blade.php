@@ -31,6 +31,16 @@
                 <span class="r-serif" style="font-size:20px;">{{ $order['id'] ?? '—' }}</span>
             </div>
             <div class="r-muted" style="font-size:14px; margin-top:4px;">{{ $order['status'] ?? 'received' }} · {{ $order['payment_status'] ?? 'unpaid' }}</div>
+            @if (! empty($fulfillment))
+                @php
+                    $ftLabel = [
+                        'pickup'   => $mm ? 'လာယူမည်' : 'Pickup',
+                        'dine_in'  => $mm ? 'ဆိုင်တွင် သုံးဆောင်မည်' : 'Dine in',
+                        'delivery' => $mm ? 'အိမ်အရောက် ပို့မည်' : 'Delivery',
+                    ][$fulfillment] ?? ucfirst($fulfillment);
+                @endphp
+                <div style="font-size:14px; margin-top:8px;"><span class="r-eyebrow" style="font-size:11px;">{{ $mm ? 'ရယူမည့်ပုံစံ' : 'Fulfilment' }}</span> · {{ $ftLabel }}</div>
+            @endif
 
             @if (! empty($order['lines']))
                 <div style="border-top:1px dashed var(--line); margin-top:16px; padding-top:8px;">

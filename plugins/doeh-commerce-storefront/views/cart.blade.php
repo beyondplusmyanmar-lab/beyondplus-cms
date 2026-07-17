@@ -30,6 +30,18 @@
 
         <form method="POST" action="{{ url('/store/checkout') }}" class="card">
             @csrf
+            @if (count($fulfillment_types ?? []) > 1)
+                <fieldset style="border:1px solid var(--line); border-radius:9px; padding:12px 14px; margin:0 0 14px;">
+                    <legend class="hint" style="padding:0 6px;">How would you like to receive it?</legend>
+                    @foreach ($fulfillment_types as $t)
+                        @php [$label, $desc] = doeh_storefront_fulfillment_label($t); @endphp
+                        <label style="display:flex; gap:10px; align-items:baseline; padding:6px 2px; cursor:pointer;">
+                            <input type="radio" name="fulfillment" value="{{ $t }}" @checked($loop->first)>
+                            <span><span class="name">{{ $label }}</span>@if($desc) <span class="hint">— {{ $desc }}</span>@endif</span>
+                        </label>
+                    @endforeach
+                </fieldset>
+            @endif
             <label class="hint" for="phone">Customer phone (optional)</label>
             <input id="phone" name="phone" type="tel" placeholder="+95912345678"
                    style="width:100%; padding:10px; border:1px solid var(--line); border-radius:9px; margin:6px 0 14px; font:inherit;">

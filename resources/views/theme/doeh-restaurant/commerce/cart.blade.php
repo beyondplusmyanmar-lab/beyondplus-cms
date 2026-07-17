@@ -36,6 +36,25 @@
 
         <form method="POST" action="{{ url('/store/checkout') }}" class="r-card" style="padding:22px 24px;">
             @csrf
+            @if (count($fulfillment_types ?? []) > 1)
+                @php
+                    $ftCopy = [
+                        'pickup'  => [$mm ? 'လာယူမည်' : 'Pickup',  $mm ? 'ကောင်တာမှာ လာယူပါ' : 'Collect at the counter'],
+                        'dine_in' => [$mm ? 'ဆိုင်တွင် သုံးဆောင်မည်' : 'Dine in', $mm ? 'စားပွဲသို့ ပို့ပေးပါမည်' : 'We’ll bring it to your table'],
+                        'delivery'=> [$mm ? 'အိမ်အရောက် ပို့မည်' : 'Delivery', $mm ? 'သင့်လိပ်စာသို့ ပို့ပေးပါမည်' : 'Delivered to your address'],
+                    ];
+                @endphp
+                <div class="r-eyebrow" style="color:var(--muted); margin-bottom:8px;">{{ $mm ? 'ဘယ်လို ရယူမလဲ' : 'How would you like it?' }}</div>
+                <div style="display:grid; gap:6px; margin:0 0 16px;">
+                    @foreach ($fulfillment_types as $t)
+                        @php [$ftLabel, $ftDesc] = $ftCopy[$t] ?? [ucfirst($t), '']; @endphp
+                        <label style="display:flex; gap:10px; align-items:baseline; padding:9px 12px; border:1px solid var(--line); border-radius:11px; cursor:pointer; background:var(--paper);">
+                            <input type="radio" name="fulfillment" value="{{ $t }}" @checked($loop->first)>
+                            <span><strong>{{ $ftLabel }}</strong> <span class="r-muted" style="font-size:13px;">— {{ $ftDesc }}</span></span>
+                        </label>
+                    @endforeach
+                </div>
+            @endif
             <label class="r-eyebrow" for="phone" style="color:var(--muted);">{{ $mm ? 'ဖုန်း (မထည့်လည်းရ)' : 'Phone (optional)' }}</label>
             <input id="phone" name="phone" type="tel" placeholder="+95912345678"
                    style="width:100%; padding:12px; border:1px solid var(--line); border-radius:11px; margin:8px 0 8px; font:inherit; background:var(--paper);">

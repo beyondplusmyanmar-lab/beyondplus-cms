@@ -111,6 +111,31 @@ Run against the live DOEH sandbox; all green as of 2026-07-17:
   generic 200; real-not-owned is byte-identical to nonexistent — 7/7 green
   (`doeh-commerce-storefront` 0.1.2 security patch).
 
+## v1.1 addendum — fulfilment preference collection (2026-07-17)
+
+v1.1 (`doeh-commerce-storefront` 0.2.0) adds **fulfilment preference
+collection**: a theme declares `fulfillment_types` in its manifest (a subset of
+`pickup` / `delivery` / `dine_in`; `[]` opts out), the cart shows a selector
+when there are ≥ 2 choices, and the chosen type is forwarded verbatim as the
+Orders API's existing `fulfillment.type` field. A value the store does not offer
+is rejected (`EDGE_INVALID_FULFILLMENT`), never coerced. The confirmation page
+shows what the session chose.
+
+**This is a customer preference only.** The storefront computes no delivery fee,
+rider assignment, route, ETA or logistics status — actual fulfilment execution
+remains outside the storefront contract, and the Orders API stays the authority
+on which types it accepts. **No Orders API contract change**: `fulfillment.type`
+predates v1.1, and the connector (`doeh-commerce` 0.1.0) already mapped it — the
+connector is untouched. The API currently refuses `delivery`
+(`EDGE_FULFILLMENT_NOT_AVAILABLE`, deferred to the platform's delivery slice),
+so no shipped manifest offers it yet; enabling it later is a manifest flip, not
+a reopen. The "Shipping / fulfilment engine" exclusion above is unchanged.
+
+Shipped manifests: restaurant `["pickup","dine_in"]` · retail `["pickup"]` ·
+business `["pickup"]` · service `[]` (a service request is an appointment
+discussion, not fulfilment). Absent declaration = `["pickup"]` (pre-v1.1
+behaviour: no selector, nothing submitted, API default applies).
+
 ## Return conditions (when the freeze reopens)
 
 Reopen only for:
