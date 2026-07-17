@@ -1,0 +1,47 @@
+{
+    "id": "doeh-identity",
+    "type": "plugin",
+    "category": "Identity",
+    "name": "DOEH Identity",
+    "description": "Let website visitors sign in with their DOEH customer identity (hosted OAuth 2.1 + PKCE) and see a protected member area — sign-in and a read-only loyalty dashboard. Wallet and profile are handed off to DOEH-hosted pages, never rendered here. A browser-only public client: no customer tokens ever touch the CMS server.",
+    "description_mm": "ဝဘ်ဆိုက်လာရောက်သူများကို ၎င်းတို့၏ DOEH customer identity ဖြင့် (hosted OAuth 2.1 + PKCE) ဝင်ရောက်ခွင့်ပြုပြီး ကာကွယ်ထားသော member area — sign-in နှင့် ဖတ်ရုံ loyalty dashboard — ကို ပြသပေးသည်။ Wallet နှင့် profile ကို DOEH-hosted စာမျက်နှာများသို့ လွှဲပြောင်းပေးပြီး ဤနေရာတွင် မ render ပါ။ Browser-only public client — customer token များ CMS server ကို ဘယ်တော့မှ မထိပါ။",
+    "version": "0.1.0",
+    "author": "Beyond Plus",
+    "homepage": "https://github.com/beyondplusmyanmar-lab/doeh-cms-identity-plugin",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1"
+    },
+    "permissions": ["http"],
+    "main": "doeh-identity.php",
+    "settings": [
+        {
+            "name": "environment",
+            "label": "Environment",
+            "type": "select",
+            "options": { "sandbox": "Sandbox (test)", "production": "Production (live)" },
+            "default": "sandbox",
+            "help": "Selects the DOEH Identity issuer and consumer API. Sandbox = auth-sandbox.doehpos.com; Production = auth.doehpos.com."
+        },
+        {
+            "name": "client_id",
+            "label": "OAuth Client ID",
+            "type": "text",
+            "help": "The app_… client id issued for THIS website (one DOEH Application per merchant site). Public value."
+        },
+        {
+            "name": "publishable_key",
+            "label": "Publishable Key",
+            "type": "text",
+            "help": "The pk_test_… / pk_live_… key issued for this shop. Publishable by design — it grants nothing without the customer's sign-in."
+        },
+        {
+            "name": "enabled",
+            "label": "Enable sign-in",
+            "type": "checkbox",
+            "default": "yes",
+            "help": "When off, the widgets render nothing (kill switch without deactivating the plugin)."
+        }
+    ]
+}
