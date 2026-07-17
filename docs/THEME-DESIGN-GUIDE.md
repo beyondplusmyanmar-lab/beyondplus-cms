@@ -6,10 +6,13 @@ the override points, and the identity/commerce integration rules. This is the
 [DOEH-BRIDGE-EXTENSION-CONTRACT.md](./DOEH-BRIDGE-EXTENSION-CONTRACT.md) (the
 "what the surface is").
 
-Two reference themes ship with these rules applied:
+Four reference themes ship with these rules applied:
 - **`doeh-business`** — a neutral single-shop storefront.
 - **`doeh-restaurant`** — a menu-first restaurant (leader-dot menu card, check,
-  order ticket).
+  order ticket; the fulfilment-selector reference).
+- **`doeh-retail`** — a product-card grid retail store.
+- **`doeh-service`** — an order-styled service/appointment business (the
+  fulfilment opt-out reference).
 
 Copy from whichever is closer to your vertical.
 
@@ -42,9 +45,14 @@ resources/views/theme/<slug>/
 ```json
 {
   "requires": ["doeh-identity", "doeh-commerce", "doeh-commerce-storefront"],
-  "commerce_views": ["shop", "cart", "order"]
+  "commerce_views": ["shop", "cart", "order"],
+  "fulfillment_types": ["pickup", "dine_in"]
 }
 ```
+
+`fulfillment_types` declares which fulfilment choices your vertical offers
+(subset of `pickup` / `delivery` / `dine_in`; see §3). Leave it out for
+pickup-only; declare `[]` to opt out entirely.
 
 ## 3. Commerce override contract
 
@@ -54,8 +62,8 @@ providing `commerce/{shop,cart,order}.blade.php`. Each receives:
 | View | Receives |
 |---|---|
 | `shop` | `products` (`[{sku,name,price_hint}]`), `cart`, `ready` (bool) |
-| `cart` | `lines` (products + `qty`), `ready` (bool) |
-| `order` | `ok` (bool), `order` (DOEH order or null), `error` (string or null) |
+| `cart` | `lines` (products + `qty`), `ready` (bool), `fulfillment_types` (array) |
+| `order` | `ok` (bool), `order` (DOEH order or null), `error` (string or null), `fulfillment` (string or null) |
 
 Add-to-cart / remove / checkout are plain forms posting to the plugin routes —
 copy the markup from a reference theme:
@@ -67,6 +75,57 @@ copy the markup from a reference theme:
 </form>
 ```
 Products for the home page come from `doeh_storefront_products()`.
+
+### The fulfilment selector (v1.1)
+
+Your manifest's `fulfillment_types` drives a radio group in the **cart** view.
+Declare only what your vertical really offers — a restaurant says
+`["pickup", "dine_in"]`, a service business says `[]` (a service request is an
+appointment discussion, not fulfilment). List `pickup` first: it is the safe
+default and gets pre-checked. Do **not** declare `delivery` yet — the Orders API
+refuses it until the platform's delivery slice lands; when that day comes,
+offering it is a manifest flip, no theme code change.
+
+In `commerce/cart.blade.php`, inside the checkout form, render the choice only
+when there is one (≥ 2 types) and own your labels (bilingual, on-brand):
+
+```blade
+@if (count($fulfillment_types ?? []) > 1)
+    @php
+        $ftCopy = [
+            'pickup'  => [$mm ? 'လာယူမည်' : 'Pickup',  $mm ? 'ကောင်တာမှာ လာယူပါ' : 'Collect at the counter'],
+            'dine_in' => [$mm ? 'ဆိုင်တွင် သုံးဆောင်မည်' : 'Dine in', $mm ? 'စားပွဲသို့ ပို့ပေးပါမည်' : 'We’ll bring it to your table'],
+        ];
+    @endphp
+    @foreach ($fulfillment_types as $t)
+        @php [$ftLabel, $ftDesc] = $ftCopy[$t] ?? [ucfirst($t), '']; @endphp
+        <label>
+            <input type="radio" name="fulfillment" value="{{ $t }}" @checked($loop->first)>
+            <strong>{{ $ftLabel }}</strong> — {{ $ftDesc }}
+        </label>
+    @endforeach
+@endif
+```
+
+In `commerce/order.blade.php`, show what the customer chose (only when chosen —
+`$fulfillment` is null for a plain checkout, so guard it):
+
+```blade
+@if (! empty($fulfillment))
+    {{-- e.g. "Fulfilment · Dine in" on the ticket --}}
+@endif
+```
+
+Rules:
+- Submit the values from `$fulfillment_types` **verbatim** — the plugin rejects
+  anything else (`EDGE_INVALID_FULFILLMENT`), it never coerces.
+- It is a preference, nothing more: no fee, ETA or logistics UI in the theme.
+- A theme that skips the block entirely still works — nothing is submitted and
+  the API defaults to pickup.
+
+Copy the working markup from `doeh-restaurant` (`commerce/cart.blade.php` — the
+bordered radio rows on the check; `commerce/order.blade.php` — the fulfilment
+line on the ticket).
 
 ### Money is in minor units — format it currency-aware
 
