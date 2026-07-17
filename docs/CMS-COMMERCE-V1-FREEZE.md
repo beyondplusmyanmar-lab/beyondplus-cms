@@ -102,7 +102,10 @@ Reopening the freeze must not weaken any of these rules.
 
 Run against the live DOEH sandbox; all green as of 2026-07-17:
 - `doeh-pos-web` `deploy/dip/golden-client-cms.php` — identity/OAuth surface (25/25)
-- `doeh-pos-web` `deploy/dip/golden-client-commerce.php` — Orders connector (8/8)
+- `doeh-pos-web` `deploy/dip/golden-client-commerce.php` — Orders connector
+  (8/8 at the freeze; now **11/11** — v1.1 added the fulfilment contract checks:
+  `delivery` → 422 `EDGE_FULFILLMENT_NOT_AVAILABLE`, `dine_in` passes the gate,
+  and a real 201 create with `fulfillment.type=dine_in`)
 - Browser walks (headless, sandbox): identity sign-in + loyalty, storefront
   checkout, and the full business-theme journey (identity + commerce in one
   theme) — all green.
@@ -110,6 +113,12 @@ Run against the live DOEH sandbox; all green as of 2026-07-17:
   details; another session does not; sequential ids leak nothing; invalid id →
   generic 200; real-not-owned is byte-identical to nonexistent — 7/7 green
   (`doeh-commerce-storefront` 0.1.2 security patch).
+- v1.1 fulfilment-selector HTTP walk (cookie-jar, live sandbox orders): restaurant
+  theme **9/9** (selector shows pickup + dine_in and no delivery, pickup
+  pre-checked, dine_in order created and shown on the confirmation, non-offered
+  and forged values rejected never coerced, field-omitted checkout still works,
+  stranger session still gets the generic page) + service theme **3/3** (no
+  selector, injected value rejected, booking flow unaffected).
 
 ## v1.1 addendum — fulfilment preference collection (2026-07-17)
 
