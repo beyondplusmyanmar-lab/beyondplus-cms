@@ -5,7 +5,7 @@
     "name": "DOEH Commerce Storefront",
     "description": "The storefront flow over the DOEH Commerce connector: a product fixture, a session cart, and the shop → cart → checkout → order routes that call doeh_commerce()->createOrder(). It ships default templates so it works standalone, and a theme may override theme.<active>.commerce.{shop,cart,order} to own the presentation. Depends on the DOEH Commerce connector.",
     "description_mm": "DOEH Commerce connector အပေါ်ရှိ storefront flow — product fixture၊ session cart နှင့် doeh_commerce()->createOrder() ကိုခေါ်သော shop → cart → checkout → order routes များ။ default template များပါဝင်၍ တစ်ခုတည်း အလုပ်လုပ်ပြီး theme က theme.<active>.commerce.{shop,cart,order} ကို override လုပ်၍ presentation ကို ပိုင်နိုင်သည်။ DOEH Commerce connector လိုအပ်သည်။",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "author": "Beyond Plus",
     "homepage": "https://github.com/beyondplusmyanmar-lab/doeh-cms-commerce-plugin",
     "license": "MIT",

@@ -211,6 +211,12 @@ The session cart is `doeh_store_cart` (`sku => qty`).
 5. **Branch on stable `code`, not HTTP status or human text.** Show your own copy.
 6. **Declare dependencies.** If your theme/plugin needs a DOEH package, list it in
    `requires` so activation is ordered and enforced.
+7. **An order id is a reference, not a credential.** Never reveal order details
+   from an id alone — the `/store/order/{id}` route already binds the
+   confirmation to the session that placed it, so your `commerce.order` view
+   just renders what it is handed. If you build your own order-lookup surface,
+   session- or identity-bind it the same way, return a generic 200 for anything
+   the caller did not place, and never 404 (a 404 leaks which ids exist).
 
 Following these keeps a theme free to change entirely without touching commerce
 security — which is the whole point of the split.

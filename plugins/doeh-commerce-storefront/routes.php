@@ -115,15 +115,49 @@ Route::middleware('web')->group(function () {
             );
         }
 
-        // Success: clear the cart AND rotate the idempotency key so the next order
-        // is a new order, not a replay of this one.
-        session()->forget(['doeh_store_cart', 'doeh_store_idem']);
         $id = (string) ($result['order']['id'] ?? '');
+
+        // Object-level authorization for the confirmation page: remember that THIS
+        // session placed THIS order, so /store/order/{id} only reveals details to
+        // the browser that created it. The order id is a reference, not a
+        // credential — without this, its sequential ids are trivially enumerable.
+        if ($id !== '') {
+            $placed = (array) session('doeh_store_orders', []);
+            $placed[$id] = ['created_at' => time()];
+            if ($phone !== '') {
+                $placed[$id]['phone_hash'] = hash('sha256', $phone); // for a future receipt check
+            }
+            session(['doeh_store_orders' => $placed]);
+        }
+
+        // Clear the cart AND rotate the idempotency key so the next order is a new
+        // order, not a replay of this one.
+        session()->forget(['doeh_store_cart', 'doeh_store_idem']);
 
         return redirect('/store/order/'.$id);
     })->middleware('throttle:20,1')->name('doeh-storefront.checkout');
 
-    Route::get('/store/order/{id}', function (string $id) {
+    // How long a guest confirmation stays viewable in the session that placed it.
+    $confirmationTtl = 24 * 3600;
+
+    Route::get('/store/order/{id}', function (string $id) use ($confirmationTtl) {
+        // Only the session that placed this order may see its details. For every
+        // other id — a real order this session did not place, OR a nonexistent one —
+        // we return the SAME generic confirmation, so the page is not an oracle for
+        // which order ids exist. No merchant API call is made in that case.
+        $placed = (array) session('doeh_store_orders', []);
+        $entry = $placed[$id] ?? null;
+        $owned = is_array($entry) && (time() - (int) ($entry['created_at'] ?? 0) < $confirmationTtl);
+
+        if (! $owned) {
+            return doeh_commerce_view('order', [
+                'ok'    => false,
+                'order' => null,
+                // Neutral, existence-agnostic copy — never "not found".
+                'error' => 'Order received. Open the confirmation from your checkout to see the details.',
+            ]);
+        }
+
         $connector = function_exists('doeh_commerce') ? doeh_commerce() : null;
         $result = $connector ? $connector->getOrder($id) : ['ok' => false, 'code' => 'EDGE_TRANSPORT'];
 

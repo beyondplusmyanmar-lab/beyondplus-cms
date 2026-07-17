@@ -87,8 +87,16 @@ before any code. None of them may be added to the frozen packages in place.
   and must never merge. No code path in `doeh-commerce` accepts a customer token.
 - **Identity P1.** The identity plugin's PHP layer never reads, stores, logs or
   forwards a customer access/refresh token; all token handling is browser-side.
+- **Public order references are not authorization credentials.** An `ord_…` id
+  is a reference, not a capability. Customer order details are shown only from
+  the checkout session that created the order (session-bound, 24 h). Any other
+  request — a real order this session did not place, or a nonexistent id — gets
+  the same generic 200 confirmation with no details and never a 404, so the page
+  is not an oracle for which order ids exist. Themes must never build a page that
+  reveals order contents from an id alone. (Guest checkout stays login-free; the
+  binding is the session, not an account.)
 
-Reopening the freeze must not weaken either rule.
+Reopening the freeze must not weaken any of these rules.
 
 ## Acceptance (the proof behind the freeze)
 
@@ -98,6 +106,10 @@ Run against the live DOEH sandbox; all green as of 2026-07-17:
 - Browser walks (headless, sandbox): identity sign-in + loyalty, storefront
   checkout, and the full business-theme journey (identity + commerce in one
   theme) — all green.
+- Storefront confirmation IDOR acceptance (cookie-jar, sandbox): own session sees
+  details; another session does not; sequential ids leak nothing; invalid id →
+  generic 200; real-not-owned is byte-identical to nonexistent — 7/7 green
+  (`doeh-commerce-storefront` 0.1.2 security patch).
 
 ## Return conditions (when the freeze reopens)
 
