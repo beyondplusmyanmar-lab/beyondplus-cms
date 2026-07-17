@@ -37,6 +37,11 @@
 
                 @if (Auth::guard('customer_web')->check())
                     <a class="sf-navlink d-none d-sm-inline" href="{{ url('customer/profile') }}"><i class="bi bi-person-circle"></i> {{ Auth::guard('customer_web')->user()->first_name }}</a>
+                @elseif (function_exists('doeh_identity_enabled') && doeh_identity_enabled())
+                    {{-- DOEH account slot. The theme owns this UI; the footer script drives it
+                         through window.DoehIdentity (sign-in state, points, sign-out). The
+                         shop's own /customer/sign-in stays reachable from checkout. --}}
+                    <div class="dropdown d-none d-sm-block" id="sf-doeh-account"></div>
                 @else
                     <a class="sf-navlink d-none d-sm-inline" href="{{ url('/customer/sign-in') }}"><i class="bi bi-person"></i> {{ $mm ? 'ဝင်ရန်' : 'Login' }}</a>
                 @endif

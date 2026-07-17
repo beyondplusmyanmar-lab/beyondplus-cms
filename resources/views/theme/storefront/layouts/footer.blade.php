@@ -49,3 +49,50 @@
         @php bp_do_action('theme_footer') @endphp
     </div>
 </footer>
+
+@if (function_exists('doeh_identity_enabled') && doeh_identity_enabled())
+{{-- Header DOEH account slot. THEME-owned UI on top of the identity plugin's
+     browser API (window.DoehIdentity) — the theme never sees a token and never
+     calls the DOEH API itself. Wakes on the plugin's `doeh:identity` event
+     (the widget JS is deferred, so it is not defined when this runs). --}}
+<script>
+(function () {
+    var slot = document.getElementById('sf-doeh-account');
+    if (!slot) return;
+    var mm = {{ $mm ? 'true' : 'false' }};
+    var t = {
+        signIn:  mm ? 'ဝင်ရန်' : 'Sign in',
+        account: mm ? 'ကျွန်ုပ်အကောင့်' : 'My account',
+        points:  mm ? 'အမှတ်များ' : 'Points',
+        signOut: mm ? 'ထွက်ရန်' : 'Sign out',
+        loading: mm ? 'ဖွင့်နေသည်…' : 'Loading…'
+    };
+    function draw() {
+        var id = window.DoehIdentity;
+        if (!id) return;
+        if (!id.isSignedIn()) {
+            slot.innerHTML = '<a class="sf-navlink" href="#"><i class="bi bi-person"></i> ' + t.signIn + '</a>';
+            slot.firstChild.addEventListener('click', function (e) { e.preventDefault(); id.signIn(); });
+            return;
+        }
+        slot.innerHTML =
+            '<a class="sf-navlink dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">' +
+                '<i class="bi bi-person-circle"></i> ' + t.account + '</a>' +
+            '<ul class="dropdown-menu dropdown-menu-end">' +
+                '<li><span class="dropdown-item-text small text-muted">' + t.points + '</span></li>' +
+                '<li><span class="dropdown-item-text fw-bold" id="sf-doeh-points">' + t.loading + '</span></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item" href="#" id="sf-doeh-signout">' + t.signOut + '</a></li>' +
+            '</ul>';
+        slot.querySelector('#sf-doeh-signout').addEventListener('click', function (e) { e.preventDefault(); id.signOut(); });
+        id.getCustomer().then(function (c) {
+            var el = document.getElementById('sf-doeh-points');
+            if (el) el.textContent = (c && c.state === 'ok' && c.pointsBalance != null)
+                ? Number(c.pointsBalance).toLocaleString() : '—';
+        });
+    }
+    document.addEventListener('doeh:identity', draw);
+    if (window.DoehIdentity) draw();
+})();
+</script>
+@endif

@@ -11,4 +11,5 @@
     @include('theme.storefront.sections.categories')
     @include('theme.storefront.sections.featured-products')
     @include('theme.storefront.sections.promotions')
+    @include('theme.storefront.sections.loyalty')
 @stop
