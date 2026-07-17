@@ -194,6 +194,73 @@ Route::middleware('web')->group(function () {
     })->where('id', '[A-Za-z0-9_]+')->name('doeh-storefront.order');
 });
 
+// ── Merchant operations: the admin Orders dashboard (Activation v1, Phase 1) ──
+// Read-only consumption of the EXISTING Orders API through the connector —
+// list (bounded window), search by id, detail. No new platform surface.
+Route::middleware('admins')->prefix('bp-admin')->group(function () {
+
+    Route::get('doeh-orders', function (Request $request) {
+        $connector = function_exists('doeh_commerce') ? doeh_commerce() : null;
+
+        // Search-by-id short-circuits to the detail page. Validate here so a
+        // malformed id gets a message, not a 404 from the route constraint.
+        $q = trim((string) $request->query('q'));
+        if ($q !== '') {
+            if (! preg_match('/^[A-Za-z0-9_]+$/', $q)) {
+                return redirect(url('bp-admin/doeh-orders'))
+                    ->withErrors('Not a valid order id — ids look like ord_1234.');
+            }
+
+            return redirect(url('bp-admin/doeh-orders/view/'.$q));
+        }
+
+        // The API requires a BOUNDED window. Two date inputs become the
+        // half-open range [from 00:00Z, to+1day 00:00Z) so the "to" date is
+        // fully included; default = the last 7 days.
+        $dateOk = fn ($d) => is_string($d) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $d);
+        $fromDate = $request->query('from');
+        $toDate   = $request->query('to');
+        $fromDate = $dateOk($fromDate) ? $fromDate : now('UTC')->subDays(7)->format('Y-m-d');
+        $toDate   = $dateOk($toDate) ? $toDate : now('UTC')->format('Y-m-d');
+
+        $limit = max(1, min(200, (int) $request->query('limit', 50)));
+        $status = trim((string) $request->query('status'));
+        $branch = (int) $request->query('branch_id');
+
+        $query = [
+            'from'  => $fromDate.'T00:00:00Z',
+            'to'    => gmdate('Y-m-d', strtotime($toDate.' +1 day UTC')).'T00:00:00Z',
+            'limit' => $limit,
+        ];
+        if ($status !== '') {
+            $query['status'] = $status;
+        }
+        if ($branch > 0) {
+            $query['branch_id'] = $branch;
+        }
+
+        return view('doeh-commerce-storefront::admin.orders', [
+            'configured' => $connector !== null,
+            'result'     => $connector?->listOrders($query),
+            'from'       => $fromDate,
+            'to'         => $toDate,
+            'limit'      => $limit,
+            'status'     => $status,
+            'branch'     => $branch > 0 ? $branch : '',
+        ]);
+    });
+
+    Route::get('doeh-orders/view/{id}', function (string $id) {
+        $connector = function_exists('doeh_commerce') ? doeh_commerce() : null;
+
+        return view('doeh-commerce-storefront::admin.order', [
+            'configured' => $connector !== null,
+            'result'     => $connector?->getOrder($id),
+            'id'         => $id,
+        ]);
+    })->where('id', '[A-Za-z0-9_]+');
+});
+
 if (! function_exists('doeh_storefront_message')) {
     /** Friendly copy for the connector's stable error codes (theme-replaceable). */
     function doeh_storefront_message(string $code): string
@@ -206,6 +273,7 @@ if (! function_exists('doeh_storefront_message')) {
             'EDGE_INVALID_FULFILLMENT'       => 'That fulfilment choice is not offered by this store.',
             'EDGE_EMPTY_ORDER'               => 'Your cart is empty.',
             'EDGE_ORDER_NOT_FOUND'           => 'That order could not be found.',
+            'EDGE_RESULT_TOO_LARGE'          => 'Too many orders for one page — narrow the date window or raise the limit.',
             'API_KEY_INVALID'                => 'The store is not connected to DOEH correctly.',
             'API_KEY_ENV_MISMATCH'           => 'The store’s DOEH key is for the wrong environment.',
         ][$code] ?? 'Sorry — something went wrong placing your order. Please try again.';

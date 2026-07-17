@@ -105,6 +105,22 @@ if (! function_exists('doeh_storefront_fulfillment_label')) {
     }
 }
 
+if (! function_exists('doeh_storefront_format_money')) {
+    /**
+     * Minor units → display, currency-aware. MMK (and other zero-decimal
+     * currencies) are stored as whole units — dividing by 100 would show
+     * 1,500 MMK as "15"; only 2-decimal currencies get the /100.
+     */
+    function doeh_storefront_format_money($minor, string $currency): string
+    {
+        $zeroDecimal = ['MMK', 'JPY', 'KRW', 'VND', 'IDR', 'LAK', 'KHR'];
+        $exp = in_array(strtoupper($currency), $zeroDecimal, true) ? 0 : 2;
+        $n = number_format($exp === 0 ? (int) $minor : $minor / (10 ** $exp), $exp);
+
+        return $currency === '' ? $n : $n.' '.$currency;
+    }
+}
+
 if (! function_exists('doeh_commerce_view')) {
     /**
      * Render a commerce-flow page, letting the ACTIVE THEME own the presentation.

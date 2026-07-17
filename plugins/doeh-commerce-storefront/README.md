@@ -59,6 +59,23 @@ logistics status; the Orders API stays the authority on which types it accepts.
 until the platform's delivery slice lands — don't declare it yet; enabling it
 later is a theme-manifest flip, not a code change.
 
+## Admin: the Orders dashboard (v0.3.0, Merchant Activation v1 Phase 1)
+
+**Admin → DOEH Orders** (`/bp-admin/doeh-orders`, `admins` middleware) — the
+merchant's read-only operations view over the same connector:
+
+- **List**: the bounded window report (`GET /v1/orders`), defaulting to the last
+  7 days, with date/status/branch/limit filters. Report rows carry money as
+  `total.amount_minor` with an authoritative `scale` — the page formats with it.
+  An over-large result surfaces `EDGE_RESULT_TOO_LARGE` with a "narrow the
+  window" hint (the API refuses rather than truncates).
+- **Search by id** → the detail page; a malformed id gets a message, not a 404.
+- **Detail** (`GET /v1/orders/{id}`): lines, currency-aware totals, status,
+  customer contact when present, fulfilment when the API reports it, and a
+  collapsible raw payload for debugging.
+
+No new platform surface — it only consumes the two existing read endpoints.
+
 ## Theme override contract
 
 | View | Receives |
