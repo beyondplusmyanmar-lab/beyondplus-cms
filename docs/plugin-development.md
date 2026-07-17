@@ -61,6 +61,23 @@ plugins/my-plugin/
 > စာမျက်နှာတွင် plugin ဖော်ပြချက်ကို မြန်မာလို ပြသပါမည် (code ပြင်ရန် မလို)။
 > `name` ကဲ့သို့ ကျန် identity field များကို ဘာသာမပြန်ဘဲ ထားပါ။
 
+### DOEH bridge manifest keys
+
+DOEH bridge နှင့် ချိတ်ဆက်သော package များအတွက် ထပ်ဆောင်း manifest key များ ရှိသည်
+(အပြည့်အစုံ = [DOEH-BRIDGE-EXTENSION-CONTRACT.md](./DOEH-BRIDGE-EXTENSION-CONTRACT.md))။
+
+| Key | မည်သည့် manifest | ရည်ရွယ်ချက် |
+|---|---|---|
+| `capabilities` | `plugin.json` | အခြား package များ require လုပ်နိုင်သော provides-token များ (ဥပမာ `orders.create`၊ `identity.signin`) |
+| `requires.plugins` | `plugin.json` (theme တွင် flat `"requires": [...]` array) | active ဖြစ်နေရမည့် plugin id များ — မပြည့်မီပါက activation ကို **ပိတ်ပင်** သည်၊ dependent ရှိနေချိန် deactivation ကို ငြင်းသည် |
+| `fulfillment_types` | **`theme.json`** (storefront ≥ 0.2.0 က ဖတ်သည်) | storefront checkout တွင် ကမ်းလှမ်းမည့် fulfilment ရွေးချယ်စရာများ — `pickup` / `delivery` / `dine_in` ၏ subset။ `[]` = လုံးဝ မကမ်းလှမ်း (service/appointment vertical)၊ **မကြေညာပါက** = `["pickup"]` (selector မပြ၊ ယခင်အတိုင်း)။ ၂ မျိုးနှင့်အထက် ကြေညာမှသာ cart တွင် radio selector ပေါ်သည် |
+
+> ⚠ `delivery` ကို ယခု **မကြေညာပါနှင့်** — Orders API သည် platform ၏ delivery
+> slice မရောက်မီ `EDGE_FULFILLMENT_NOT_AVAILABLE` ဖြင့် ငြင်းပယ်နေသည်။
+> ရောက်သောအခါ manifest တစ်ကြောင်း ပြောင်းရုံသာ ဖြစ်သည် (code ပြင်ရန် မလို)။
+> Cart/order view ရေးသားပုံ (radio group + confirmation guard pattern) ကို
+> [THEME-DESIGN-GUIDE.md](./THEME-DESIGN-GUIDE.md) §3 တွင် ကြည့်ပါ။
+
 ## Settings (ပလပ်အင် configuration စာမျက်နှာ)
 
 plugin သည် ၎င်း၏ config field များကို `plugin.json` တွင် ကြေညာသည် — CMS က ၎င်းအတွက်
