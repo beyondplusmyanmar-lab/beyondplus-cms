@@ -1,0 +1,24 @@
+{
+    "id": "doeh-setup",
+    "type": "plugin",
+    "category": "Commerce",
+    "name": "DOEH Setup Wizard",
+    "description": "The merchant setup wizard for a DOEH storefront: activate the bridge plugins, choose a vertical theme, configure branding, connect and live-validate the merchant secret key against the Orders API, optionally configure customer sign-in (DOEH Identity), and open the storefront. Keys are collected and validated only — issuance stays with the DOEH developer portal.",
+    "description_mm": "DOEH storefront အတွက် merchant setup wizard — bridge plugin များ activate လုပ်ခြင်း၊ vertical theme ရွေးခြင်း၊ branding ချိန်ညှိခြင်း၊ merchant secret key ကို Orders API နှင့် တိုက်ရိုက် စစ်ဆေးချိတ်ဆက်ခြင်း၊ customer sign-in (DOEH Identity) ကို ရွေးချယ်စိတ်ကြိုက် ချိန်ညှိခြင်းနှင့် storefront ဖွင့်ခြင်း။ key များကို လက်ခံ/စစ်ဆေးရုံသာ — ထုတ်ပေးခြင်းသည် DOEH developer portal ၏ တာဝန်ဖြစ်သည်။",
+    "version": "0.1.0",
+    "author": "Beyond Plus",
+    "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": {
+        "php": "8.1"
+    },
+    "permissions": ["http"],
+    "main": "doeh-setup.php",
+    "admin_menu": {
+        "title": "DOEH Setup",
+        "link": "doeh-setup",
+        "icon": "fa fa-magic",
+        "parent": 8
+    }
+}
