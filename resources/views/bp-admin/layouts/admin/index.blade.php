@@ -24,11 +24,14 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset("bower_components/vali-admin/docs/css/main.css") }}">
+    <!-- Bootstrap 5 (loaded after the Vali/BS4 base so its components win; the theme layer below wins last) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Fonts + Beyond Plus admin theme (overrides the base) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/bp-admin-theme.css') }}?v=4">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bp-admin-theme.css') }}?v=5">
     <script src="{{ asset ("/bower_components/adminlte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
     <script type="text/javascript">
         $.ajaxSetup({
@@ -64,8 +67,26 @@
     </main>
     <!-- Essential javascripts for application to work-->
     <script src="{{ asset("bower_components/vali-admin/docs/js/jquery-3.2.1.min.js") }}"></script>
-    <script src="{{ asset("bower_components/vali-admin/docs/js/popper.min.js") }}"></script>
-    <script src="{{ asset("bower_components/vali-admin/docs/js/bootstrap.min.js") }}"></script>
+    <!-- Bootstrap 5 bundle (Popper included) replaces the BS4 popper + bootstrap.min.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Bridge legacy jQuery Bootstrap-plugin calls (tooltip/popover/modal/…) to Bootstrap 5,
+         so kept jQuery scripts (incl. Vali main.js) keep working under BS5. -->
+    <script>
+    (function ($) {
+        if (!$ || !window.bootstrap) return;
+        ['Tooltip','Popover','Modal','Dropdown','Collapse','Tab','Toast','Offcanvas'].forEach(function (name) {
+            var key = name.charAt(0).toLowerCase() + name.slice(1);
+            if ($.fn[key]) return;
+            $.fn[key] = function (opt) {
+                return this.each(function () {
+                    var inst = window.bootstrap[name].getOrCreateInstance(this, typeof opt === 'object' ? opt : {});
+                    if (typeof opt === 'string' && typeof inst[opt] === 'function') inst[opt]();
+                });
+            };
+        });
+    })(window.jQuery);
+    </script>
     <script src="{{ asset("bower_components/vali-admin/docs/js/main.js") }}"></script>
     <!-- The javascript plugin to display page loading on top-->
     <script src="{{ asset("bower_components/vali-admin/docs/js/plugins/pace.min.js") }}"></script>

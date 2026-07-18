@@ -39,7 +39,7 @@
                     <li><a href="{{ url('/register') }}" style="color:gold;text-shadow:2px 2px black;font-weight:bold">Register</a></li> -->
                 @else
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
 

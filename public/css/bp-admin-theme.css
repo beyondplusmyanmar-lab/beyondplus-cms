@@ -113,24 +113,109 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
 }
 .btn-outline-info { color: var(--bp-brand); border-color: var(--bp-brand); }
 .btn-outline-info:hover { background: var(--bp-brand); border-color: var(--bp-brand); color:#fff; }
-a { color: var(--bp-brand); }
+/* BS5 underlines links by default; the admin shell (sidebar, header, breadcrumb,
+   table links) reads better without it — affordance comes from colour/hover. */
+a { color: var(--bp-brand); text-decoration: none; }
 a:hover { color: var(--bp-brand-dark); }
+.app-menu__item, .app-menu__item:hover, .treeview-item, .treeview-item:hover,
+.app-header__logo, .app-nav__item, .breadcrumb a, .pagination .page-link { text-decoration: none !important; }
+/* keep an underline affordance only for inline links inside content prose */
+.tile a.tile-link:hover, .box-body p a:hover { text-decoration: underline; }
 
-/* ---- Forms ---------------------------------------------------------------- */
-.form-control {
-    border-radius: 8px;
+/* ---- BS4 → BS5 compatibility shims ---------------------------------------
+   Bootstrap 5 dropped/renamed classes the views still use. Re-provide them so
+   the ~90 unedited admin views keep rendering correctly under BS5. */
+.form-group { margin-bottom: 1.15rem; }
+.text-right { text-align: right !important; }
+.text-left  { text-align: left  !important; }
+.pull-right { float: right !important; }
+.pull-left  { float: left  !important; }
+.btn-block  { display: block; width: 100%; }
+.btn-xs     { padding: .2rem .55rem; font-size: .75rem; line-height: 1.45; border-radius: 7px; }
+.form-row   { display: flex; flex-wrap: wrap; margin-right: -.5rem; margin-left: -.5rem; }
+.form-row > [class*="col"] { padding-right: .5rem; padding-left: .5rem; }
+.input-group-append, .input-group-prepend { display: flex; }
+.ml-1{margin-left:.25rem!important}.ml-2{margin-left:.5rem!important}.ml-3{margin-left:1rem!important}
+.mr-1{margin-right:.25rem!important}.mr-2{margin-right:.5rem!important}.mr-3{margin-right:1rem!important}
+.badge-primary{background:var(--bp-brand)!important;color:#fff}
+.badge-secondary{background:#64748b!important;color:#fff}
+.badge-success{background:#16a34a!important;color:#fff}
+.badge-danger{background:#dc2626!important;color:#fff}
+.badge-warning{background:#f59e0b!important;color:#3a2a00}
+.badge-info{background:#0ea5e9!important;color:#fff}
+.badge-light{background:#f1f5f9!important;color:#1e293b}
+.badge-dark{background:#1e293b!important;color:#fff}
+.close { border:0; background:transparent; font-size:1.4rem; line-height:1; color:inherit; opacity:.55; cursor:pointer; padding:.25rem .5rem; }
+.close:hover { opacity:1; }
+
+/* ---- Forms (redesigned) --------------------------------------------------- */
+.form-control, .form-select {
+    border-radius: 9px;
     border: 1px solid var(--bp-border);
+    padding: .55rem .8rem;
+    font-size: .9rem;
+    color: var(--bp-ink);
+    background-color: #fff;
     transition: border-color .15s ease, box-shadow .15s ease;
 }
-.form-control:focus {
+.form-control:focus, .form-select:focus {
     border-color: var(--bp-accent);
-    box-shadow: 0 0 0 3px rgba(129,140,248,.35);
+    box-shadow: 0 0 0 3px rgba(129,140,248,.30);
 }
-.control-label, label { color: var(--bp-ink); font-weight: 500; }
+.form-control::placeholder { color: #94a3b8; }
+/* selects authored as BS4 .form-control get the BS5 chevron affordance */
+select.form-control {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    padding-right: 2.3rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat; background-position: right .75rem center; background-size: 14px 14px;
+}
+textarea.form-control { min-height: 120px; }
+label, .control-label { color: var(--bp-ink); font-weight: 600; font-size: .82rem; margin-bottom: .35rem; display: inline-block; }
+.form-text, small.text-muted, .help-block { color: var(--bp-muted); font-size: .8rem; }
+.input-group-text { background: #f8fafc; border-color: var(--bp-border); color: var(--bp-muted); }
+.form-check-input { border-color: #cbd5e1; }
+.form-check-input:checked { background-color: var(--bp-brand); border-color: var(--bp-brand); }
+.form-check-input:focus { border-color: var(--bp-accent); box-shadow: 0 0 0 3px rgba(129,140,248,.30); }
+.form-control.is-invalid, .was-validated .form-control:invalid { border-color: #dc2626; }
+.form-control.is-valid, .was-validated .form-control:valid { border-color: #16a34a; }
+input[type="file"].form-control { padding: .42rem .6rem; }
 
-/* ---- Tables --------------------------------------------------------------- */
-.table thead th { color: var(--bp-muted); border-bottom: 2px solid var(--bp-border); font-weight:600; }
+/* ---- Tables (redesigned) -------------------------------------------------- */
+.table { margin-bottom: 0; color: var(--bp-ink); vertical-align: middle; }
+.table > :not(caption) > * > * { padding: .8rem 1rem; background: transparent; }
+.table thead th {
+    color: var(--bp-muted); font-size: .72rem; font-weight: 700;
+    letter-spacing: .04em; text-transform: uppercase;
+    background: #f8fafc !important; border-top: 0; border-bottom: 1px solid var(--bp-border);
+    white-space: nowrap;
+}
+.table tbody td { border-bottom: 1px solid #eef2f7; }
+.table tbody tr:last-child td { border-bottom: 0; }
 .table-hover tbody tr:hover { background: #f8fafc; }
+/* Flatten heavy BS bordered tables into a clean, row-separated list; the .tile
+   card already frames it, so drop the outer + vertical rules. */
+.table-bordered { border: 0; }
+.table-bordered > :not(caption) > * > * { border-width: 0 0 1px; border-color: #eef2f7; }
+.table-bordered thead th { border-bottom: 1px solid var(--bp-border); }
+.table td .btn, .table th .btn { margin: 2px 4px 2px 0; }
+.table-responsive { border-radius: 10px; }
+
+/* ---- Pagination ----------------------------------------------------------- */
+.pagination { gap: 4px; flex-wrap: wrap; }
+.pagination .page-link { color: var(--bp-brand); border: 1px solid var(--bp-border); border-radius: 8px; padding: .4rem .7rem; }
+.pagination .page-link:hover { background: #eef2ff; }
+.pagination .page-item.active .page-link { background: var(--bp-brand); border-color: var(--bp-brand); color: #fff; }
+.pagination .page-item.disabled .page-link { color: #cbd5e1; }
+
+/* ---- BS5 reboot reconciliation -------------------------------------------- */
+body { font-size: .9rem; color: var(--bp-ink); }
+.dropdown-menu { border: 1px solid var(--bp-border); border-radius: 10px; box-shadow: var(--bp-shadow); font-size: .9rem; padding: .35rem; }
+.dropdown-item { border-radius: 7px; padding: .5rem .7rem; }
+.dropdown-item:active, .dropdown-item.active { background: var(--bp-brand); }
+.alert { border-radius: 10px; border: 1px solid transparent; }
+.modal-content { border: 0; border-radius: 14px; box-shadow: 0 20px 60px -20px rgba(15,23,42,.4); }
+.modal-header, .modal-footer { border-color: var(--bp-border); }
 
 /* Myanmar text a touch larger for legibility */
 :lang(my), .app-menu__label:lang(my) { font-family: 'Noto Sans Myanmar', 'Inter', sans-serif; }
