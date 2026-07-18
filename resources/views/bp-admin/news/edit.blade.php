@@ -152,7 +152,7 @@
                         @if($post->featured_img)
                             <img src="{{bp_upload_url($post->featured_img)}}" class="img-responsive">
                         @else 
-                            <img src="{{bp_upload_url('default.jpg')}}" class="img-responsive">
+                            <img src="{{bp_upload_url('default-cover.jpg')}}" class="img-responsive">
                             
                         @endif
                     </div>  

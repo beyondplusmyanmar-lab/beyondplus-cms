@@ -393,7 +393,7 @@ function bp_upload_url($value) {
  */
 function bp_delete_upload($value) {
     $value = (string) $value;
-    if ($value === '' || $value === 'default.jpg' || $value === 'la.jpg') {
+    if ($value === '' || $value === 'default-cover.jpg' || $value === 'default.jpg' || $value === 'la.jpg') {
         return;
     }
     if (bp_apply_filters('delete_upload', false, $value)) {

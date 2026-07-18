@@ -28,7 +28,7 @@ class PostTableSeeder extends Seeder
         ];
         foreach ($posts as [$id, $title, $body, $link, $daysAgo]) {
             Bp_post::insert([
-                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default.jpg',
+                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default-cover.jpg',
                 'post_link' => $link, 'post_type' => 'post', 'post_template' => 'default',
                 'post_active' => 'yes', 'translate_id' => 0, 'lang' => 1, 'staff_id' => 1,
                 'created_at' => now()->subDays($daysAgo), 'updated_at' => now()->subDays($daysAgo),
@@ -44,7 +44,7 @@ class PostTableSeeder extends Seeder
         ];
         foreach ($pages as [$id, $title, $body, $link, $template]) {
             Bp_post::insert([
-                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default.jpg',
+                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default-cover.jpg',
                 'post_link' => $link, 'post_type' => 'page', 'post_template' => $template,
                 'post_active' => 'yes', 'translate_id' => 0, 'lang' => 1, 'staff_id' => 1,
                 'created_at' => now(), 'updated_at' => now(),
@@ -66,7 +66,7 @@ class PostTableSeeder extends Seeder
         ];
         foreach ($news as [$id, $title, $body, $link, $type, $eventAt]) {
             Bp_post::insert([
-                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default.jpg',
+                'id' => $id, 'title' => $title, 'body' => $body, 'featured_img' => 'default-cover.jpg',
                 'post_link' => $link, 'post_type' => $type, 'event_at' => $eventAt, 'post_template' => 'default',
                 'post_active' => 'yes', 'translate_id' => 0, 'lang' => 1, 'staff_id' => 1,
                 'created_at' => now(), 'updated_at' => now(),

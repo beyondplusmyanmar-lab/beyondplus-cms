@@ -39,7 +39,7 @@ return new class extends Migration
                 'post_active'   => 'yes',
                 'lang'          => 1,
                 'staff_id'      => 1,
-                'featured_img'  => 'default.jpg',
+                'featured_img'  => 'default-cover.jpg',
                 'created_at'    => now(),
                 'updated_at'    => now(),
             ]);

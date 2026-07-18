@@ -138,7 +138,7 @@
             <div class="box">
                 <div class="box-body">
                     <div class="col-md-12">
-                            <img src="{{bp_upload_url('default.jpg')}}" class="img-responsive">
+                            <img src="{{bp_upload_url('default-cover.jpg')}}" class="img-responsive">
                     </div>  
                 </div>
             </div>

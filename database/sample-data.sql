@@ -208,7 +208,7 @@ CREATE TABLE `bp_posts` (
   `title` varchar(255) NOT NULL,
   `body` text NOT NULL,
   `featured` int(11) NOT NULL DEFAULT 0,
-  `featured_img` varchar(100) NOT NULL DEFAULT 'default.jpg',
+  `featured_img` varchar(100) NOT NULL DEFAULT 'default-cover.jpg',
   `post_link` text NOT NULL,
   `post_type` varchar(255) NOT NULL,
   `post_template` varchar(255) NOT NULL DEFAULT 'default',
@@ -624,23 +624,23 @@ VALUES (1,'Demo','Customer','customer@example.com','09000000000','$2y$10$3nwR6lI
 
 -- Demo posts (neutral sample content, so the front-end renders out of the box)
 INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
-(3,'Welcome to Beyond Plus CMS','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This sample post is here so you can see how the front-end theme renders content out of the box.</p><p>Log in to the admin panel to create, edit, and organise your own pages and posts.</p>','default.jpg','welcome-to-beyond-plus-cms','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 1 DAY),DATE_SUB(NOW(), INTERVAL 1 DAY)),
-(2,'Getting Started with the Admin Panel','<p>The admin panel lives at <code>/bp-admin</code>. From there you can manage posts, pages, menus, media, sliders and site settings.</p><p>Use the demo administrator account to explore the dashboard and try creating your first post.</p>','default.jpg','getting-started-admin-panel','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 3 DAY),DATE_SUB(NOW(), INTERVAL 3 DAY)),
-(1,'Building Multilingual Content','<p>Every post and menu item can have a translation. Switch the site locale and the matching translated content is served automatically.</p><p>This makes Beyond Plus CMS a good fit for sites that need to reach audiences in more than one language.</p>','default.jpg','building-multilingual-content','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 5 DAY),DATE_SUB(NOW(), INTERVAL 5 DAY));
+(3,'Welcome to Beyond Plus CMS','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This sample post is here so you can see how the front-end theme renders content out of the box.</p><p>Log in to the admin panel to create, edit, and organise your own pages and posts.</p>','default-cover.jpg','welcome-to-beyond-plus-cms','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 1 DAY),DATE_SUB(NOW(), INTERVAL 1 DAY)),
+(2,'Getting Started with the Admin Panel','<p>The admin panel lives at <code>/bp-admin</code>. From there you can manage posts, pages, menus, media, sliders and site settings.</p><p>Use the demo administrator account to explore the dashboard and try creating your first post.</p>','default-cover.jpg','getting-started-admin-panel','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 3 DAY),DATE_SUB(NOW(), INTERVAL 3 DAY)),
+(1,'Building Multilingual Content','<p>Every post and menu item can have a translation. Switch the site locale and the matching translated content is served automatically.</p><p>This makes Beyond Plus CMS a good fit for sites that need to reach audiences in more than one language.</p>','default-cover.jpg','building-multilingual-content','post','yes',0,1,1,DATE_SUB(NOW(), INTERVAL 5 DAY),DATE_SUB(NOW(), INTERVAL 5 DAY));
 
 INSERT INTO `bp_relationships` (`tax_id`,`post_id`,`type`) VALUES (1,3,'cat'),(1,2,'cat'),(1,1,'cat'),(2,3,'cat'),(3,2,'cat'),(3,1,'cat');
 
 -- Demo pages (post_type='page') demonstrating page-template usage
 INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`post_template`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
-(4,'About Us','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This About page uses the <strong>default</strong> page template (with sidebar).</p>[block]1[/block]','default.jpg','about-us','page','default','yes',0,1,1,NOW(),NOW()),
-(5,'Our Services','<p>This page uses the <strong>full-width</strong> template (no sidebar), selected via the page template option in the admin.</p>','default.jpg','services','page','fullwidth','yes',0,1,1,NOW(),NOW()),
-(6,'Contact','<p>Reach out using the details on the right. This page uses the <strong>contact</strong> template.</p>','default.jpg','contact','page','contact','yes',0,1,1,NOW(),NOW());
+(4,'About Us','<p>Beyond Plus CMS is a lightweight, multi-language content management system built on Laravel. This About page uses the <strong>default</strong> page template (with sidebar).</p>[block]1[/block]','default-cover.jpg','about-us','page','default','yes',0,1,1,NOW(),NOW()),
+(5,'Our Services','<p>This page uses the <strong>full-width</strong> template (no sidebar), selected via the page template option in the admin.</p>','default-cover.jpg','services','page','fullwidth','yes',0,1,1,NOW(),NOW()),
+(6,'Contact','<p>Reach out using the details on the right. This page uses the <strong>contact</strong> template.</p>','default-cover.jpg','contact','page','contact','yes',0,1,1,NOW(),NOW());
 
 -- Demo news & events (consumed by /api/m/news and the SPA example)
 INSERT INTO `bp_posts` (`id`,`title`,`body`,`featured_img`,`post_link`,`post_type`,`event_at`,`post_template`,`post_active`,`translate_id`,`lang`,`staff_id`,`created_at`,`updated_at`) VALUES
-(7,'Beyond Plus CMS v2 released','<p>The latest release brings a rebuilt admin, a JSON API for the mobile app, and a themes manager.</p>','default.jpg','beyond-plus-cms-v2-released','news',NULL,'default','yes',0,1,1,NOW(),NOW()),
-(8,'Scheduled maintenance this weekend','<p>The service will be briefly unavailable on Sunday morning for planned upgrades.</p>','default.jpg','scheduled-maintenance','news',NULL,'default','yes',0,1,1,NOW(),NOW()),
-(9,'Community meetup','<p>Join our online community meetup to learn about building sites with Beyond Plus CMS.</p>','default.jpg','community-meetup','event','2026-08-15 18:00:00','default','yes',0,1,1,NOW(),NOW());
+(7,'Beyond Plus CMS v2 released','<p>The latest release brings a rebuilt admin, a JSON API for the mobile app, and a themes manager.</p>','default-cover.jpg','beyond-plus-cms-v2-released','news',NULL,'default','yes',0,1,1,NOW(),NOW()),
+(8,'Scheduled maintenance this weekend','<p>The service will be briefly unavailable on Sunday morning for planned upgrades.</p>','default-cover.jpg','scheduled-maintenance','news',NULL,'default','yes',0,1,1,NOW(),NOW()),
+(9,'Community meetup','<p>Join our online community meetup to learn about building sites with Beyond Plus CMS.</p>','default-cover.jpg','community-meetup','event','2026-08-15 18:00:00','default','yes',0,1,1,NOW(),NOW());
 
 -- Demo navigation menu: a "Company" dropdown (About Us, Our Services) + a top-level Contact link
 INSERT INTO `bp_menus` (`menu_id`,`menu_name`,`menu_link`,`post_id`,`menu_weight`,`menu_icon`,`parent_id`,`menu_type`,`staff_id`,`lang`,`translate_id`,`created_at`) VALUES

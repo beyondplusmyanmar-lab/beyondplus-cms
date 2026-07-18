@@ -17,7 +17,7 @@ class CreateBpPostTable extends Migration
             $table->string('title');
             $table->text('body');
             $table->integer('featured')->default(0);
-            $table->string('featured_img', 100)->default('default.jpg');
+            $table->string('featured_img', 100)->default('default-cover.jpg');
             $table->string('post_link');
             $table->string('post_type');
             $table->date('event_at')->nullable();
