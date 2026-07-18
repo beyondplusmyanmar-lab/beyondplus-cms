@@ -17,6 +17,8 @@
     --bp-ink:        #1e293b;
     --bp-muted:      #64748b;
     --bp-border:     #e2e8f0;
+    --bp-table-tint: #eef1f8;   /* soft slate-blue — table header band */
+    --bp-table-line: #d7deec;   /* soft slate-blue — table borders/separators */
     --bp-radius:     10px;
     --bp-shadow:     0 1px 2px rgba(15,23,42,.06), 0 4px 16px rgba(15,23,42,.06);
     /* one consistent spacing scale used across cards, gaps, forms and tables */
@@ -202,22 +204,22 @@ label, .control-label { color: var(--bp-ink); font-weight: 600; font-size: .82re
 input[type="file"].form-control { padding: .42rem .6rem; }
 
 /* ---- Tables (redesigned) -------------------------------------------------- */
-.table { margin-bottom: 0; color: var(--bp-ink); vertical-align: middle; }
+.table { margin: 1rem 0 0; color: var(--bp-ink); vertical-align: middle; }
 .table > :not(caption) > * > * { padding: var(--bp-cell-pad) 1rem; background: transparent; }
 .table thead th {
     color: var(--bp-muted); font-size: .72rem; font-weight: 700;
     letter-spacing: .04em; text-transform: uppercase;
-    background: #f8fafc !important; border-top: 0; border-bottom: 1px solid var(--bp-border);
+    background: var(--bp-table-tint) !important; border-top: 0; border-bottom: 1px solid var(--bp-table-line);
     white-space: nowrap;
 }
-.table tbody td { border-bottom: 1px solid #eef2f7; }
+.table tbody td { border-bottom: 1px solid var(--bp-table-line); }
 .table tbody tr:last-child td { border-bottom: 0; }
-.table-hover tbody tr:hover { background: #f8fafc; }
-/* Flatten heavy BS bordered tables into a clean, row-separated list; the .tile
-   card already frames it, so drop the outer + vertical rules. */
+.table-hover tbody tr:hover { background: var(--bp-table-tint); }
+/* Flatten heavy BS bordered tables into a clean, row-separated list in a soft
+   slate-blue; the .tile card already frames it, so drop the outer + vertical rules. */
 .table-bordered { border: 0; }
-.table-bordered > :not(caption) > * > * { border-width: 0 0 1px; border-color: #eef2f7; }
-.table-bordered thead th { border-bottom: 1px solid var(--bp-border); }
+.table-bordered > :not(caption) > * > * { border-width: 0 0 1px; border-color: var(--bp-table-line); }
+.table-bordered thead th { border-bottom: 1px solid var(--bp-table-line); }
 .table td .btn, .table th .btn { margin: 2px 4px 2px 0; }
 .table-responsive { border-radius: 10px; }
 
