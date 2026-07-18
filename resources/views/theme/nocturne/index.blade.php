@@ -22,7 +22,8 @@
     $sliders  = bp_slider();
 
     // Unique real categories from the loaded posts — powers the topic chips.
-    $topics = collect($posts)
+    // bp_post() returns a paginator, so take its items() before collecting.
+    $topics = collect($posts->items())
         ->flatMap(fn ($p) => $p->categories)
         ->filter(fn ($c) => $c->tax_link !== 'uncategorized')
         ->unique('tax_link')->take(6)->values();
