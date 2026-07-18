@@ -1,0 +1,11 @@
+{
+    "id": "meridian",
+    "type": "theme",
+    "name": "Meridian",
+    "description": "An editorial, magazine-style theme: a double-rule masthead, a Fraunces serif type system, a lead-story split and a drop-cap article layout. Ideal for publications, news sites and blogs.",
+    "version": "2.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://developers.beyondplus.com/themes/meridian",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0"
+}

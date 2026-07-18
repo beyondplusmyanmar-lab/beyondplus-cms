@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- **Renamed the four editorial themes to their proper slugs** — `bptheme1` →
+  `meridian`, `bptheme2` → `nocturne`, `bptheme3` → `terra`, `bptheme4` →
+  `pulse` — so every shipped theme now has a descriptive folder name. Installs
+  with one of the old slugs active must re-select the theme (or update the
+  `theme` option) after upgrading.
+
+### Fixed
+- **Burmese typography across all four themes** — Latin letter-spacing and
+  all-caps on kickers, eyebrows, nav, badges and pills were pulling apart
+  Myanmar glyph clusters (and Meridian's drop-cap grabbed a partial cluster).
+  A `html[lang="mm"]` block now neutralises tracking/case transforms and gives
+  stacked diacritics room; English rendering is unchanged.
+
+### Polished
+- Font smoothing, smooth-scroll (reduced-motion-guarded) and lazy-loaded list
+  images across Meridian, Nocturne, Terra and Pulse.
+
 ## 2.6.0
 
 A backward-compatible feature release: the **DOEH bridge** — the CMS becomes a

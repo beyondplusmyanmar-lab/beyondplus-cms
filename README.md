@@ -114,8 +114,8 @@ production တွင် ပုန်းကွယ်နေပါသည် (အခ
 ရှေ့ဆုံး ပုံစံများကို `resources/views/theme/<name>/` တွင် ထားရှိပါသည်။ အသုံးပြုနေသော
 ပုံစံကို `bp_options` table (`option_name = 'theme'`) တွင် သိမ်းဆည်းထားပြီး၊ မူလ
 တန်ဖိုးမှာ `default` ဖြစ်ပါသည်။ ကွဲပြားသော ပုံစံ ၁၁ မျိုး ပါဝင်ပါသည် — `default`
-(Aurora), `bptheme1` (Meridian), `bptheme2` (Nocturne), `bptheme3` (Terra),
-`bptheme4` (Pulse), `business` (Business), `storefront` (Storefront) နှင့်
+(Aurora), `meridian` (Meridian), `nocturne` (Nocturne), `terra` (Terra),
+`pulse` (Pulse), `business` (Business), `storefront` (Storefront) နှင့်
 DOEH POS နှင့် ချိတ်ဆက်ထားသော လုပ်ငန်းအမျိုးအစားအလိုက် ပုံစံ ၄ မျိုး —
 `doeh-restaurant`, `doeh-retail`, `doeh-service`, `doeh-business`
 (အောက်ပါ **DOEH POS ချိတ်ဆက်မှု (DOEH bridge)** အပိုင်းကို ကြည့်ပါ)။ ၎င်းတို့အနက်
@@ -129,11 +129,11 @@ DOEH POS နှင့် ချိတ်ဆက်ထားသော လုပ်
 [bp-cms.doehpos.com](https://bp-cms.doehpos.com) demo portal တွင် တိုက်ရိုက်
 ကြည့်ရှုနိုင်ပါသည်)
 
-| Aurora · clean teal (`default`) | Meridian · editorial (`bptheme1`) | Nocturne · dark glass (`bptheme2`) |
+| Aurora · clean teal (`default`) | Meridian · editorial (`meridian`) | Nocturne · dark glass (`nocturne`) |
 |:---:|:---:|:---:|
-| ![Aurora](public/theme-previews/default.png) | ![Meridian](public/theme-previews/bptheme1.png) | ![Nocturne](public/theme-previews/bptheme2.png) |
-| **Terra · minimal** (`bptheme3`) | **Pulse · bold gradient** (`bptheme4`) | **Business · general-purpose** (`business`) |
-| ![Terra](public/theme-previews/bptheme3.png) | ![Pulse](public/theme-previews/bptheme4.png) | ![Business](public/theme-previews/business.png) |
+| ![Aurora](public/theme-previews/default.png) | ![Meridian](public/theme-previews/meridian.png) | ![Nocturne](public/theme-previews/nocturne.png) |
+| **Terra · minimal** (`terra`) | **Pulse · bold gradient** (`pulse`) | **Business · general-purpose** (`business`) |
+| ![Terra](public/theme-previews/terra.png) | ![Pulse](public/theme-previews/pulse.png) | ![Business](public/theme-previews/business.png) |
 | **Storefront · online shop** (`storefront`) | | |
 | ![Storefront](public/theme-previews/storefront.png) | | |
 

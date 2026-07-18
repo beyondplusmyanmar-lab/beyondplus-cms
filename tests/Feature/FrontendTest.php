@@ -93,11 +93,11 @@ class FrontendTest extends TestCase
     public static function themes(): array
     {
         return [
-            'default (Aurora)'    => ['default'],
-            'bptheme1 (Meridian)' => ['bptheme1'],
-            'bptheme2 (Nocturne)' => ['bptheme2'],
-            'bptheme3 (Terra)'    => ['bptheme3'],
-            'bptheme4 (Pulse)'    => ['bptheme4'],
+            'default (Aurora)' => ['default'],
+            'meridian'         => ['meridian'],
+            'nocturne'         => ['nocturne'],
+            'terra'            => ['terra'],
+            'pulse'            => ['pulse'],
         ];
     }
 }
