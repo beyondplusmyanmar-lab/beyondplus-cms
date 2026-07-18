@@ -89,6 +89,44 @@
         footer.sf-footer a:hover { color: var(--sf-primary); }
         .sf-social a { width: 36px; height: 36px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background: var(--sf-bg); color: var(--sf-primary); }
 
+        /* ── Shopee-style flash sale ── */
+        .sf-flash { background:#fff; border-radius:4px; overflow:hidden; }
+        .sf-flash-bar { display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+            padding:.85rem 1.1rem; border-bottom:1px solid var(--sf-border); }
+        .sf-flash-logo { font-weight:800; font-style:italic; letter-spacing:.01em; color:var(--sf-primary);
+            font-size:1.35rem; text-transform:uppercase; display:inline-flex; align-items:center; gap:.4rem; }
+        .sf-countdown { display:inline-flex; align-items:center; gap:.28rem; }
+        .sf-countdown .u { background:#2b2b2b; color:#fff; font-weight:700; border-radius:3px;
+            padding:.14rem .38rem; min-width:1.75rem; text-align:center; font-variant-numeric:tabular-nums; font-size:.95rem; }
+        .sf-countdown .sep { color:#2b2b2b; font-weight:800; }
+        .sf-flash-link { margin-left:auto; font-size:.85rem; font-weight:600; color:var(--sf-primary); }
+
+        /* ── Trending keywords under the search bar ── */
+        .sf-trend { display:flex; flex-wrap:wrap; gap:.15rem .95rem; }
+        .sf-trend a { color:#fff; opacity:.82; font-size:.76rem; font-weight:400; }
+        .sf-trend a:hover { opacity:1; text-decoration:underline; }
+
+        /* ── Circular category tiles (Shopee look) ── */
+        .sf-cat i { width:3rem; height:3rem; border-radius:50%;
+            background: color-mix(in srgb, var(--sf-primary) 12%, #fff); display:flex; align-items:center; justify-content:center; }
+        .sf-cat { border:0; }
+        .sf-cat:hover i { background: color-mix(in srgb, var(--sf-primary) 20%, #fff); }
+
+        /* ── Service / guarantee strip ── */
+        .sf-services { display:grid; grid-template-columns:repeat(2,1fr); gap:.75rem; }
+        @media (min-width:768px){ .sf-services { grid-template-columns:repeat(4,1fr); } }
+        .sf-service { display:flex; align-items:center; gap:.6rem; color:var(--sf-text); font-size:.85rem; }
+        .sf-service i { color:var(--sf-primary); font-size:1.35rem; }
+
+        /* ── Shopee-tight product cards (plugin emits .bz-card) ── */
+        .bz-card, .sf-card { border-radius:2px; }
+        .bz-card:hover, .sf-card:hover { border-color:var(--sf-primary); box-shadow:0 .25rem .9rem rgba(238,77,45,.16); }
+        .bz-card h6, .sf-card h6 { font-size:.82rem; line-height:1.3; font-weight:400;
+            display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.1rem; }
+        .bz-card .fw-bold, .sf-price { font-size:1.05rem; }
+        .sf-onsale { position:absolute; top:0; right:0; background:var(--sf-accent); color:#7a4a00;
+            font-size:.66rem; font-weight:800; padding:.12rem .35rem; border-bottom-left-radius:4px; }
+
         @media (prefers-reduced-motion: reduce) { .bz-card, .sf-card { transition: none; } }
         :focus-visible { outline: 3px solid color-mix(in srgb, var(--sf-primary) 45%, transparent); outline-offset: 2px; }
     </style>

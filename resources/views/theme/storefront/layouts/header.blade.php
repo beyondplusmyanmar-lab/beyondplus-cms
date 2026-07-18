@@ -47,6 +47,20 @@
                 @endif
             </div>
 
+            {{-- Trending searches (Shopee-style) --}}
+            @php
+                $sfCats = json_decode(bp_option('sf_categories_json', ''), true);
+                $trend = is_array($sfCats) ? array_values(array_filter(array_map(fn($c) => ((array) $c)['name'] ?? '', $sfCats))) : [];
+                $trend = array_slice($trend, 0, 6);
+                if (!$trend) { $trend = $mm ? ['ဖုန်း', 'အဝတ်အထည်', 'အိမ်သုံး', 'အလှကုန်', 'လက်ဆောင်'] : ['Phones', 'Fashion', 'Home & Living', 'Beauty', 'Gifts']; }
+            @endphp
+            <div class="sf-trend d-none d-md-flex pb-2">
+                <span style="opacity:.6;font-size:.76rem;">{{ $mm ? 'လူကြိုက်များ' : 'Trending' }}:</span>
+                @foreach($trend as $kw)
+                    <a href="{{ url('/shop?q='.urlencode($kw)) }}">{{ $kw }}</a>
+                @endforeach
+            </div>
+
             {{-- Mobile search --}}
             <form class="sf-search d-md-none pb-2" role="search" action="{{ url('/shop') }}" method="GET">
                 <div class="input-group">
