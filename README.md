@@ -1,5 +1,10 @@
 # Beyond Plus CMS
 
+<a href="https://doehpos.com"><img src="https://doehpos.com/doeh-pos-logo.png" alt="DOEH POS" width="140"></a>
+
+Sponsored by **[DOEH POS](https://doehpos.com)** — ဤ project ကို DOEH POS မှ
+ပံ့ပိုးထားပါသည်။
+
 **Laravel 13** (PHP 8.3+) ပေါ်တွင် တည်ဆောက်ထားသော ဘာသာစကားမျိုးစုံသုံး
 အကြောင်းအရာ စီမံခန့်ခွဲမှုစနစ် (content-management system) တစ်ခုဖြစ်ပါသည်။
 စီမံခန့်ခွဲသူ panel (`/bp-admin`)၊ ဘာသာစကားအလိုက် ခွဲထားသော အများသုံးစာမျက်နှာများ၊
