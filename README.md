@@ -1,6 +1,6 @@
 # Beyond Plus CMS
 
-<a href="https://doehpos.com"><img src="https://doehpos.com/doeh-pos-logo.png" alt="DOEH POS" width="140"></a>
+<a href="https://doehpos.com"><img src="docs/doeh-pos-logo.png" alt="DOEH POS" width="140"></a>
 
 Sponsored by **[DOEH POS](https://doehpos.com)** — ဤ project ကို DOEH POS မှ
 ပံ့ပိုးထားပါသည်။
