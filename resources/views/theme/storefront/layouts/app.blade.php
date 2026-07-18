@@ -89,6 +89,21 @@
         footer.sf-footer a:hover { color: var(--sf-primary); }
         .sf-social a { width: 36px; height: 36px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background: var(--sf-bg); color: var(--sf-primary); }
 
+        /* ── Shopee-style hero: carousel + side promo tiles ── */
+        .sf-hero-main { border-radius:6px; overflow:hidden; }
+        .sf-hero-slide { min-height:340px; padding:2rem; color:#fff; display:flex; align-items:center;
+            background:linear-gradient(120deg, var(--sf-primary), var(--sf-accent)); }
+        .sf-hero-slide.has-img { background-size:cover; background-position:center; }
+        .sf-hero-title { font-size:clamp(1.6rem,3.4vw,2.6rem); font-weight:800; line-height:1.1; }
+        .sf-hero-side { display:flex; flex-direction:column; gap:.75rem; height:100%; }
+        .sf-hero-tile { flex:1; border-radius:6px; padding:1.1rem 1.25rem; color:#fff; display:flex;
+            flex-direction:column; justify-content:center; min-height:110px; transition:filter .15s ease; }
+        .sf-hero-tile:hover { filter:brightness(1.05); color:#fff; }
+        .sf-hero-tile .t { font-weight:800; font-size:1.05rem; }
+        .sf-hero-tile i { font-size:1.4rem; }
+        .sf-hero-main .carousel-indicators [data-bs-target] { width:8px; height:8px; border-radius:50%; border:0; }
+        .sf-hero-main .carousel-control-prev, .sf-hero-main .carousel-control-next { width:6%; }
+
         /* ── Shopee-style flash sale ── */
         .sf-flash { background:#fff; border-radius:4px; overflow:hidden; }
         .sf-flash-bar { display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
