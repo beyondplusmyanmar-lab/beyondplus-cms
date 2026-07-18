@@ -40,6 +40,18 @@ vertical theme active, its own sandbox `sk_test_` (shop 1, `orders:read` +
   during a sales call. Credentials: root-only on the host
   (`/etc/doeh-pos/demo-cms/admin-creds`).
 
+## Demo identities & content (2026-07-18 content pass)
+
+Each instance presents a **vertical example identity**, not a fake customer:
+DOEH Coffee House (restaurant) · DOEH Market (retail) · DOEH Care Services
+(service) · DOEH Business Solutions (business). Identity = `blogname` /
+`blogdescription` options; menus = the storefront plugin's `products_json`
+option. Every menu item is a **real sandbox-catalog SKU** with its catalog
+name and MMK price — the confirmation page re-resolves server-side, so
+fixture names must match the catalog or the demo unmasks itself. All four
+menus were proven orderable end-to-end when configured. This content is
+baked into the reset snapshots.
+
 ## Nightly reset
 
 `demo-cms-reset.timer` (03:15 UTC) restores each instance's sqlite DB from the
@@ -48,6 +60,13 @@ caches/sessions. Visitors' demo orders and any admin-side edits vanish daily.
 
 To make an intentional config change permanent: change it on the instance,
 then re-copy `database/database.sqlite` over the snapshot.
+
+**The CMS reset and the sandbox Orders API have separate lifecycles.** The
+reset restores the CMS database only; orders already accepted by the sandbox
+platform stay visible on the admin Orders dashboard (it reads the live API).
+For a clean dashboard during a demo or recording: filter to a today-only
+window (`?from=YYYY-MM-DD&to=YYYY-MM-DD`), place one fresh order, show that
+order.
 
 ## After a sandbox reset (known coupling)
 
