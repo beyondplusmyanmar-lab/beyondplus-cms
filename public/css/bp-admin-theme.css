@@ -123,6 +123,10 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
 }
 .btn-outline-info { color: var(--bp-brand); border-color: var(--bp-brand); }
 .btn-outline-info:hover { background: var(--bp-brand); border-color: var(--bp-brand); color:#fff; }
+/* Edit/action buttons use .btn-info — recolour the teal to indigo (a shade
+   lighter than primary create buttons so Edit stays distinct). */
+.btn-info { background: var(--bp-brand-600) !important; border-color: var(--bp-brand-600) !important; color:#fff !important; }
+.btn-info:hover, .btn-info:focus { background: var(--bp-brand) !important; border-color: var(--bp-brand) !important; color:#fff !important; }
 /* BS5 underlines links by default; the admin shell (sidebar, header, breadcrumb,
    table links) reads better without it — affordance comes from colour/hover. */
 a { color: var(--bp-brand); text-decoration: none; }
