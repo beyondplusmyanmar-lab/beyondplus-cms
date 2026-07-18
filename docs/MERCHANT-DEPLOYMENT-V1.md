@@ -121,6 +121,16 @@ With the merchant watching (ideally driving):
 The "missing features" list is the **only** input that opens Commerce v2
 work — a feature is built when a real merchant hits its absence, not before.
 
+The first merchant is not a demo — they are the **first production acceptance
+customer**. Classify every request they raise before acting on it:
+
+| Request type | Action |
+|---|---|
+| Bug in a frozen contract | Fix (freeze allows correctness bugfixes) |
+| Missing merchant workflow inside the existing scope | Consider a v1.x minor |
+| New business domain (payments, booking, catalog, delivery) | New API contract first — never folded into the frozen flow |
+| Merchant-specific look/behaviour | Theme / plugin layer, not core |
+
 ## Preflight smoke checklist (rehearsed 2026-07-17, 19/19 on a staged instance)
 
 The whole §3–§4 path is drivable end-to-end before any merchant is present,
