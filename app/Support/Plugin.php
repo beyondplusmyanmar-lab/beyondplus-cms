@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\DB;
 class Plugin
 {
     /** CMS version plugins declare compatibility against (minCmsVersion). */
-    public const CMS_VERSION = '2.5.0';
+    public const CMS_VERSION = '2.6.0';
 
     protected static array $actions = [];
     protected static array $filters = [];

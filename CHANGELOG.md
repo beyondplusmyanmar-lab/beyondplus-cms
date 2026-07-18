@@ -1,5 +1,47 @@
 # Changelog
 
+## 2.6.0
+
+A backward-compatible feature release: the **DOEH bridge** — the CMS becomes a
+storefront and identity front-end for the DOEH POS platform — plus four vertical
+reference themes and merchant-activation tooling.
+
+### Added
+- **DOEH Identity plugin** (`doeh-identity`, 0.2.0) — hosted OAuth 2.1 + PKCE
+  customer sign-in against the DOEH Identity Platform with a read-only loyalty
+  dashboard; themes consume it through a header account slot and loyalty section.
+- **DOEH Commerce plugin** (`doeh-commerce`, 0.1.0) — server-side connector to
+  the DOEH Orders API; the CMS server holds the API key, the browser never sees
+  it.
+- **DOEH Commerce Storefront plugin** (`doeh-commerce-storefront`, 0.3.0) —
+  reference checkout over the connector: catalogue → cart → a real DOEH order
+  with confirmation, a fulfilment-preference selector (0.2.0), and a merchant
+  **Orders dashboard** (0.3.0).
+- **DOEH Setup plugin** (`doeh-setup`, 0.1.0) — a merchant setup wizard walking
+  activation end-to-end (credentials, connection check, theme, first order).
+- **Four DOEH vertical themes** — `doeh-restaurant`, `doeh-retail`,
+  `doeh-service` and `doeh-business` — each wiring both DOEH plugins, with
+  merchant-editable settings (identity, hours, delivery note, socials) across
+  all four.
+- **Plugin capability declarations and dependency enforcement** — plugins
+  declare capabilities; plugins *and themes* can require them and refuse to
+  activate when a dependency is missing. Commerce views are theme-overridable.
+- **Live demo portal** — [bp-cms.doehpos.com](https://bp-cms.doehpos.com), one
+  sandbox-backed demo per vertical theme, reset nightly.
+- Docs: the **DOEH bridge extension contract** (v1, frozen), a theme design
+  guide, a merchant pack (onboarding checklist + first-order acceptance
+  walkthrough), merchant-deployment and demo-portal runbooks, and three working
+  developer examples.
+
+### Changed
+- Bumped `Plugin::CMS_VERSION` to `2.6.0`.
+
+### Fixed
+- The order confirmation page is session-bound (IDOR fix; storefront 0.1.2).
+- Currency-aware money display in the default order template (0.1.1) and an MMK
+  money-display fix in themes.
+- Storefront header/footer padding.
+
 ## 2.5.0
 
 A backward-compatible feature release focused on commerce and localization.
