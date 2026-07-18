@@ -108,16 +108,21 @@ production တွင် ပုန်းကွယ်နေပါသည် (အခ
 
 ရှေ့ဆုံး ပုံစံများကို `resources/views/theme/<name>/` တွင် ထားရှိပါသည်။ အသုံးပြုနေသော
 ပုံစံကို `bp_options` table (`option_name = 'theme'`) တွင် သိမ်းဆည်းထားပြီး၊ မူလ
-တန်ဖိုးမှာ `default` ဖြစ်ပါသည်။ ကွဲပြားသော ပုံစံ ၇ မျိုး ပါဝင်ပါသည် — `default`
+တန်ဖိုးမှာ `default` ဖြစ်ပါသည်။ ကွဲပြားသော ပုံစံ ၁၁ မျိုး ပါဝင်ပါသည် — `default`
 (Aurora), `bptheme1` (Meridian), `bptheme2` (Nocturne), `bptheme3` (Terra),
-`bptheme4` (Pulse), `business` (Business), `storefront` (Storefront)။ ၎င်းတို့အနက်
+`bptheme4` (Pulse), `business` (Business), `storefront` (Storefront) နှင့်
+DOEH POS နှင့် ချိတ်ဆက်ထားသော လုပ်ငန်းအမျိုးအစားအလိုက် ပုံစံ ၄ မျိုး —
+`doeh-restaurant`, `doeh-retail`, `doeh-service`, `doeh-business`
+(အောက်ပါ **DOEH POS ချိတ်ဆက်မှု (DOEH bridge)** အပိုင်းကို ကြည့်ပါ)။ ၎င်းတို့အနက်
 `business` သည် လုပ်ငန်းများအတွက် အထွေထွေသုံး ပုံစံဖြစ်ပြီး၊ admin ၏
 **Themes → Customize** မှ အကြောင်းအရာ (hero, ဝန်ဆောင်မှု, အရောင် စသဖြင့်) ကို code
 မထိဘဲ ပြင်နိုင်ပါသည်။ `storefront` သည် တစ်ဆိုင်တည်း အွန်လိုင်းဈေးဆိုင် (Shopee-စတိုင်)
 အတွက် ကုန်ပစ္စည်း-ဦးစားပေး ပုံစံဖြစ်ပြီး၊ **Storefront** နှင့် **Commerce**
 ပလပ်အင်များနှင့် တွဲသုံးပါသည်။
 
-**ပါဝင်သော ပုံစံ ၇ မျိုး၏ ရှေ့ဆုံးမြင်ကွင်း —**
+**မူလ ပုံစံ ၇ မျိုး၏ ရှေ့ဆုံးမြင်ကွင်း —** (DOEH ပုံစံ ၄ မျိုးကို
+[bp-cms.doehpos.com](https://bp-cms.doehpos.com) demo portal တွင် တိုက်ရိုက်
+ကြည့်ရှုနိုင်ပါသည်)
 
 | Aurora · clean teal (`default`) | Meridian · editorial (`bptheme1`) | Nocturne · dark glass (`bptheme2`) |
 |:---:|:---:|:---:|
@@ -130,6 +135,31 @@ production တွင် ပုန်းကွယ်နေပါသည် (အခ
 ပုံစံအသစ် ရေးသားရန်၊ လိုအပ်သော view များ နှင့် asset (CSS / JS / ပုံ) များ
 ထားရှိပုံ လမ်းညွှန်ကို [docs/theme-development.md](docs/theme-development.md) တွင်
 ကြည့်ရှုနိုင်ပါသည်။
+
+## DOEH POS ချိတ်ဆက်မှု (DOEH bridge)
+
+ဤ CMS ကို [DOEH POS](https://developers.doehpos.com) platform ၏ storefront /
+identity ရှေ့ဆုံးအလွှာအဖြစ် အသုံးပြုနိုင်ပါသည် — merchant ၏ ဆိုင်သည် DOEH POS ကို
+အသုံးပြုနေပါက ဤ CMS မှတစ်ဆင့် အွန်လိုင်း order လက်ခံခြင်း၊ ဖောက်သည် sign-in နှင့်
+loyalty ကို ချိတ်ဆက်ပေးနိုင်ပါသည်။ ပလပ်အင် ၄ ခု ပါဝင်သည် —
+
+| ပလပ်အင် | ဖော်ပြချက် |
+|---|---|
+| `doeh-identity` | ဖောက်သည် sign-in (hosted OAuth 2.1 + PKCE) နှင့် loyalty dashboard |
+| `doeh-commerce` | DOEH Orders API သို့ server-side ချိတ်ဆက်မှု — API key သည် server ဘက်တွင်သာ ရှိပြီး browser သို့ ဘယ်တော့မှ မရောက်ပါ |
+| `doeh-commerce-storefront` | ကုန်ပစ္စည်းစာရင်း → cart → တကယ့် DOEH order၊ fulfilment ရွေးချယ်မှု၊ merchant အတွက် Orders dashboard |
+| `doeh-setup` | merchant တပ်ဆင်မှု wizard — credentials၊ ချိတ်ဆက်မှု စစ်ဆေးခြင်း၊ ပုံစံ၊ ပထမဆုံး order |
+
+**တိုက်ရိုက် ကြည့်ရှုရန် (live demo)** — [bp-cms.doehpos.com](https://bp-cms.doehpos.com)
+တွင် လုပ်ငန်းအမျိုးအစားအလိုက် demo ၄ ခု (restaurant / retail / service / business)
+ကို sandbox ဖြင့် ချိတ်ဆက်ထားပြီး နေ့စဉ်ည reset ပြုလုပ်ပါသည်။
+
+နောက်ထပ် ဖတ်ရှုရန် —
+
+- Extension contract (v1, frozen) — [docs/DOEH-BRIDGE-EXTENSION-CONTRACT.md](docs/DOEH-BRIDGE-EXTENSION-CONTRACT.md)
+- Merchant onboarding — [docs/merchant-pack/](docs/merchant-pack/)
+- Theme design guide — [docs/THEME-DESIGN-GUIDE.md](docs/THEME-DESIGN-GUIDE.md)
+- Developer examples — [docs/examples/](docs/examples/)
 
 ## Mobile SPA အတွက် API
 
