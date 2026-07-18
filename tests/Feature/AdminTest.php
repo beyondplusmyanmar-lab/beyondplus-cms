@@ -67,13 +67,15 @@ class AdminTest extends TestCase
         // Disable the update check so the page renders without a network call.
         \App\Models\Bp_options::updateOrCreate(['option_name' => 'update_check'], ['option_value' => 'no', 'autoload' => 'yes']);
         $this->actingAs($this->admin(), 'admins')->get('/bp-admin/configuration/system')
-            ->assertStatus(200)->assertSee('2.4.0');
+            ->assertStatus(200)->assertSee(\App\Support\Plugin::CMS_VERSION);
     }
 
     public function test_system_flow_page_loads(): void
     {
+        // The page title is localized (mm by default, "System flow" in en).
+        $title = app()->getLocale() === 'mm' ? 'စနစ် ဆက်စပ်ပုံ' : 'System flow';
         $this->actingAs($this->admin(), 'admins')->get('/bp-admin/configuration/flow')
-            ->assertStatus(200)->assertSee('System flow');
+            ->assertStatus(200)->assertSee($title);
     }
 
     public function test_activity_log_page_loads(): void
