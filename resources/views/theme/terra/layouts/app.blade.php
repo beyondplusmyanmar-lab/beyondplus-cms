@@ -64,6 +64,14 @@
         .tr-row-title { font-size:clamp(1.25rem,2.4vw,1.7rem); font-weight:600; line-height:1.2; }
         .tr-thumb { width:100%; aspect-ratio:16/10; object-fit:cover; border-radius:4px; }
 
+        /* Lead feature — one promoted post above the hairline index */
+        .tr-feature { border-top:2px solid var(--tr-ink); border-bottom:1px solid var(--tr-line); }
+        .tr-feature-title { font-size:clamp(1.9rem,3.6vw,2.9rem); font-weight:600; line-height:1.08; letter-spacing:-.02em; }
+        .tr-lead-img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:6px; }
+        /* Quiet topic links under the hero */
+        .tr-topic { font-family:"Sora",sans-serif; font-size:.85rem; color:var(--tr-muted); }
+        .tr-topic:hover { color:var(--tr-sage-dk); }
+
         .tr-cat { font-family:"Sora",sans-serif; font-size:.72rem; font-weight:600; letter-spacing:.06em;
             text-transform:uppercase; color:var(--tr-sage-dk); }
 
