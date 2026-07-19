@@ -231,6 +231,9 @@ input[type="file"].form-control { padding: .42rem .6rem; }
 /* Flatten heavy BS bordered tables into a clean, row-separated list in a soft
    slate-blue; the .tile card already frames it, so drop the outer + vertical rules. */
 .table-bordered { border: 0; }
+/* BS5 gives .table-bordered ROWS a currentColor (dark) top+bottom border — zero
+   it, or a dark line shows above the header. Cell borders below do the separators. */
+.table-bordered > :not(caption) > * { border-width: 0; }
 .table-bordered > :not(caption) > * > * { border-width: 0 0 1px; border-color: var(--bp-table-line); }
 .table-bordered thead th { border-bottom: 1px solid var(--bp-table-line); }
 .table td .btn, .table th .btn { margin: 2px 4px 2px 0; }
