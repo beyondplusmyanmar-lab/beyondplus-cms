@@ -23,7 +23,19 @@
                         <div class="form-group">
                             <label class="control-label">{{ $field['label'] ?? $field['name'] }}</label>
 
-                            @if($type === 'textarea')
+                            @if($type === 'repeater')
+                                <div class="bz-repeater" data-name="{{ $field['name'] }}">
+                                    <div class="bz-rep-rows">
+                                        @foreach(($val ?: []) as $i => $row)
+                                            @include('bp-admin.theme._repeater_row', ['name' => $field['name'], 'fields' => $field['fields'] ?? [], 'index' => $i, 'row' => (array) $row])
+                                        @endforeach
+                                    </div>
+                                    <template class="bz-rep-tpl">
+                                        @include('bp-admin.theme._repeater_row', ['name' => $field['name'], 'fields' => $field['fields'] ?? [], 'index' => '__INDEX__', 'row' => []])
+                                    </template>
+                                    <button type="button" class="btn btn-sm btn-outline-primary bz-rep-add"><i class="fa fa-plus"></i> {{ $field['add_label'] ?? 'Add item' }}</button>
+                                </div>
+                            @elseif($type === 'textarea')
                                 <textarea class="form-control" name="{{ $field['name'] }}" rows="3" placeholder="{{ $field['placeholder'] ?? '' }}">{{ $val }}</textarea>
                             @elseif($type === 'select')
                                 <select class="form-control" name="{{ $field['name'] }}">
@@ -70,3 +82,21 @@
     </div>
 </div>
 @stop
+
+@push('scripts')
+<script>
+    $(function () {
+        // Repeater rows: add / remove. New rows get a unique index so their
+        // field names don't collide with existing ones.
+        var seq = Date.now();
+        $('.bz-repeater').on('click', '.bz-rep-add', function () {
+            var box = $(this).closest('.bz-repeater');
+            var html = box.find('.bz-rep-tpl').html().split('__INDEX__').join('n' + (seq++));
+            box.find('.bz-rep-rows').append(html);
+        });
+        $('.bz-repeater').on('click', '.bz-rep-del', function () {
+            $(this).closest('.bz-rep-row').remove();
+        });
+    });
+</script>
+@endpush

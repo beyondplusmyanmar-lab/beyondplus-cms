@@ -76,7 +76,14 @@ class PluginController extends Controller
 
         $values = [];
         foreach ($schema as $field) {
-            $values[$field['name']] = bp_option(Plugin::settingKey($slug, $field['name']), $field['default'] ?? '');
+            $name = $field['name'];
+            $key  = Plugin::settingKey($slug, $name);
+            if (($field['type'] ?? 'text') === 'repeater') {
+                $decoded = json_decode(bp_option($key, ''), true);
+                $values[$name] = is_array($decoded) ? $decoded : (array) ($field['default'] ?? []);
+            } else {
+                $values[$name] = bp_option($key, $field['default'] ?? '');
+            }
         }
 
         return view('bp-admin.plugin.settings', [
@@ -95,9 +102,25 @@ class PluginController extends Controller
         abort_if(empty($schema), 404);
 
         foreach ($schema as $field) {
+            $name = $field['name'];
+            if (($field['type'] ?? 'text') === 'repeater') {
+                $sub  = array_map(fn ($f) => $f['name'], $field['fields'] ?? []);
+                $rows = [];
+                foreach ((array) $request->input($name, []) as $row) {
+                    $row   = is_array($row) ? $row : [];
+                    $clean = [];
+                    foreach ($sub as $k) { $clean[$k] = (string) ($row[$k] ?? ''); }
+                    // Drop rows the owner left completely blank.
+                    if (implode('', $clean) !== '') { $rows[] = $clean; }
+                }
+                $value = json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            } else {
+                $value = (string) $request->input($name, '');
+            }
+
             \App\Models\Bp_options::updateOrCreate(
-                ['option_name' => Plugin::settingKey($slug, $field['name'])],
-                ['option_value' => (string) $request->input($field['name'], ''), 'autoload' => 'yes']
+                ['option_name' => Plugin::settingKey($slug, $name)],
+                ['option_value' => $value, 'autoload' => 'yes']
             );
         }
 
