@@ -1,24 +1,55 @@
 # Changelog
 
-## Unreleased
+## 2.7.0 — 2026-07-19
+
+A front-end and dashboard refresh: the editorial themes get proper names and
+richer homepages, a new Shopee-style storefront hero, theme-aware cover images,
+and a rebuilt Bootstrap 5 admin dashboard — plus an XSS scan rule and a plugin
+settings fix.
+
+### Added
+- **Theme-aware default cover** — the shared post placeholder now resolves per
+  active theme (`public/theme-covers/<slug>.jpg`, light covers for the light
+  themes, the dark aurora for Nocturne, a neutral fallback for the rest) so it
+  never clashes with the theme. Resolved centrally in `bp_upload_url()`.
+- **Security scan: reflected-XSS detection** — `PackageGuard::scan` now blocks
+  activation of plugins/themes that echo raw request/superglobal data or emit it
+  through unescaped Blade `{!! !!}`, and warns on any unescaped output. All
+  shipped packages pass (0 criticals).
 
 ### Changed
-- **Renamed the four editorial themes to their proper slugs** — `bptheme1` →
-  `meridian`, `bptheme2` → `nocturne`, `bptheme3` → `terra`, `bptheme4` →
-  `pulse` — so every shipped theme now has a descriptive folder name. Installs
-  with one of the old slugs active must re-select the theme (or update the
-  `theme` option) after upgrading.
+- **Renamed the four editorial themes** — `bptheme1..4` →
+  `meridian`/`nocturne`/`terra`/`pulse` (descriptive folder names). Installs
+  with an old slug active must re-select the theme after upgrading.
+- **Nocturne & Terra homepages rebuilt** — a lead-post spotlight hero with
+  taxonomy chips + a closing CTA (Nocturne) and a calm lead feature over the
+  hairline index (Terra), so both actually showcase the theme.
+- **Storefront → Shopee look** — flash-sale bar with a live countdown, a hero
+  carousel + promo tiles, trending search keywords, circular category tiles and
+  a service/guarantee strip, all in the orange palette.
+- **New dashboard experience** — upgraded the admin from Bootstrap 4-beta (Vali)
+  to **Bootstrap 5.3.3** with a compat layer (so the ~90 views render
+  unchanged), then redesigned forms and tables on the indigo theme: slate-blue
+  tables, indigo Edit / soft-red Delete, soft theme-matched badges, enhanced
+  multi-select checkbox lists, and a consistent spacing scale. Debranded the
+  vendored `adminlte` folders to `bptheme` and trimmed `bower_components`
+  (21 MB → 2.3 MB) by dropping dead layout variants + unused vendor assets.
+- Renamed the default cover file `default.jpg` → `default-cover.jpg` (fresh URL,
+  cache-safe) and repointed the seeds, schema default and admin previews.
 
 ### Fixed
-- **Burmese typography across all four themes** — Latin letter-spacing and
-  all-caps on kickers, eyebrows, nav, badges and pills were pulling apart
-  Myanmar glyph clusters (and Meridian's drop-cap grabbed a partial cluster).
-  A `html[lang="mm"]` block now neutralises tracking/case transforms and gives
-  stacked diacritics room; English rendering is unchanged.
+- **Burmese typography across the editorial themes** — Latin letter-spacing and
+  all-caps were pulling apart Myanmar glyph clusters; a `html[lang="mm"]` block
+  neutralises tracking/case transforms (English rendering unchanged).
+- **Plugin settings 500 on repeater fields** — the settings page/save now handle
+  `type: repeater` (e.g. doeh-commerce-storefront's product list) instead of
+  crashing on the array value.
+- Admin tables: removed a stray dark line above the header (BS5 row border) and
+  restored `.card-body` padding lost in the BS5 upgrade.
 
 ### Polished
 - Font smoothing, smooth-scroll (reduced-motion-guarded) and lazy-loaded list
-  images across Meridian, Nocturne, Terra and Pulse.
+  images across the editorial themes; regenerated all theme preview images.
 
 ## 2.6.0
 
