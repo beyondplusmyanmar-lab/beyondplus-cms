@@ -19,6 +19,8 @@
     --bp-border:     #e2e8f0;
     --bp-table-tint: #eef1f8;   /* soft slate-blue — table header band */
     --bp-table-line: #d7deec;   /* soft slate-blue — table borders/separators */
+    --bp-danger:     #ef5350;   /* softer red — Delete buttons */
+    --bp-danger-dark:#e53935;
     --bp-radius:     10px;
     --bp-shadow:     0 1px 2px rgba(15,23,42,.06), 0 4px 16px rgba(15,23,42,.06);
     /* one consistent spacing scale used across cards, gaps, forms and tables */
@@ -127,6 +129,9 @@ body, .app-menu__label, .breadcrumb, .tile, .app-title h1 {
    lighter than primary create buttons so Edit stays distinct). */
 .btn-info { background: var(--bp-brand-600) !important; border-color: var(--bp-brand-600) !important; color:#fff !important; }
 .btn-info:hover, .btn-info:focus { background: var(--bp-brand) !important; border-color: var(--bp-brand) !important; color:#fff !important; }
+/* Delete buttons (.btn-danger) use a softer red than the default. */
+.btn-danger { background: var(--bp-danger) !important; border-color: var(--bp-danger) !important; color:#fff !important; }
+.btn-danger:hover, .btn-danger:focus { background: var(--bp-danger-dark) !important; border-color: var(--bp-danger-dark) !important; color:#fff !important; }
 /* BS5 underlines links by default; the admin shell (sidebar, header, breadcrumb,
    table links) reads better without it — affordance comes from colour/hover. */
 a { color: var(--bp-brand); text-decoration: none; }
