@@ -26,10 +26,7 @@
     .menu-item-actions .lang-link { font-size: .78rem; }
     .menu-item-actions .btn { padding: .15rem .45rem; line-height: 1.2; }
     .menu-empty { border: 1px dashed #d1d5db; border-radius: 8px; }
-    .insert-list .form-check { padding: .35rem .5rem; border-bottom: 1px solid #f1f3f5; border-radius: 4px; }
-    .insert-list .form-check:last-child { border-bottom: 0; }
-    .insert-list .form-check:hover { background: #f8fafc; }
-    .insert-list .form-check-label { cursor: pointer; }
+    /* .insert-list checkbox rows are styled by the shared checklist rules in bp-admin-theme.css */
 </style>
 <div class="row">
     <div class="col-md-8 tile">

@@ -69,18 +69,13 @@
             <div class="box box-danger">
                 <div class="box-body">
                     {{ Form::label('Categories') }}<br />
-                    <div class="col-md-12 form-group scrollbar">
-                        
-                        <div class="row">
-                            @foreach($taxes as $tax)
-                            <div class="col-md-2">
-                                {{ Form::checkbox('taxes[]' , $tax->tax_id ) }}
+                    <div class="col-md-12 form-group scrollbar bp-checklist">
+                        @foreach($taxes as $tax)
+                            <div class="form-check">
+                                {{ Form::checkbox('taxes[]', $tax->tax_id, false, ['class' => 'form-check-input', 'id' => 'tax-'.$tax->tax_id]) }}
+                                <label class="form-check-label" for="tax-{{ $tax->tax_id }}">{{ $tax->tax_name }}</label>
                             </div>
-                            <div class="col-md-10">
-                                <label for="{{$tax->tax_name}}">{{$tax->tax_name}}</label>
-                            </div>
-                            @endforeach
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

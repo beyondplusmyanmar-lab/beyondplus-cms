@@ -212,6 +212,26 @@ label, .control-label { color: var(--bp-ink); font-weight: 600; font-size: .82re
 .form-check-input { border-color: #cbd5e1; }
 .form-check-input:checked { background-color: var(--bp-brand); border-color: var(--bp-brand); }
 .form-check-input:focus { border-color: var(--bp-accent); box-shadow: 0 0 0 3px rgba(129,140,248,.30); }
+
+/* ---- Multi-select checkbox lists (categories, menu pages/posts) ----------
+   Full-width selectable rows: hover highlight, and a soft indigo tint on the
+   checked rows so the current selection stands out. */
+.bp-checklist { border: 1px solid var(--bp-border); border-radius: 10px; padding: .3rem; max-height: 260px; overflow-y: auto; }
+.bp-checklist .form-check, .insert-list .form-check {
+    display: flex; align-items: center; gap: .65rem; margin: 0; min-height: 0;
+    padding: .58rem .7rem; border-radius: 8px; cursor: pointer; transition: background .12s ease;
+}
+.bp-checklist .form-check + .form-check, .insert-list .form-check + .form-check { border-top: 1px solid var(--bp-table-line); }
+.bp-checklist .form-check:hover, .insert-list .form-check:hover { background: var(--bp-table-tint); }
+.bp-checklist .form-check-input, .insert-list .form-check-input {
+    position: static;   /* Vali's BS4 main.css absolutely-positions it, overlapping the label */
+    width: 1.15rem; height: 1.15rem; margin: 0; float: none; flex: 0 0 auto; cursor: pointer;
+}
+.bp-checklist .form-check-label, .insert-list .form-check-label { cursor: pointer; font-weight: 500; margin: 0; }
+.bp-checklist .form-check:has(.form-check-input:checked),
+.insert-list .form-check:has(.form-check-input:checked) { background: #eef1ff; }
+.bp-checklist .form-check:has(.form-check-input:checked) .form-check-label,
+.insert-list .form-check:has(.form-check-input:checked) .form-check-label { color: var(--bp-brand-hover); font-weight: 600; }
 .form-control.is-invalid, .was-validated .form-control:invalid { border-color: #dc2626; }
 .form-control.is-valid, .was-validated .form-control:valid { border-color: #16a34a; }
 input[type="file"].form-control { padding: .42rem .6rem; }
