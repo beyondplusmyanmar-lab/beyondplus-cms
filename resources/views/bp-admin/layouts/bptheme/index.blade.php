@@ -10,22 +10,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title> @if (trim($__env->yieldContent('title'))) @yield('title') - Beyond Plus Dashboard @endif Beyond Plus Dashboard </title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
-    <link href="{{ asset("/bower_components/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/bptheme/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
     <!-- Font Awesome Icons -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
-    <link href="{{ asset("/bower_components/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset("/bower_components/adminlte/dist/css/main.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/bptheme/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/bptheme/dist/css/main.css")}}" rel="stylesheet" type="text/css" />
 
-    <link href="{{ asset("/bower_components/adminlte/bootstrap/css/style.css")}}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset("/bower_components/adminlte/dist/css/asset.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/bptheme/bootstrap/css/style.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/bptheme/dist/css/asset.css")}}" rel="stylesheet" type="text/css" />
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
     -->
-    <link href="{{ asset("/bower_components/adminlte/dist/css/skins/skin-blue-dark.min.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/bptheme/dist/css/skins/skin-blue-dark.min.css")}}" rel="stylesheet" type="text/css" />
 
     <link rel="icon" href="{{ asset('/img/avatar.png') }}" type="image/jpg">
 
@@ -35,7 +35,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    <script src="{{ asset ("/bower_components/adminlte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
+    <script src="{{ asset ("/bower_components/bptheme/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
@@ -83,9 +83,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 <!-- Bootstrap 3.3.2 JS -->
-<script src="{{ asset ("/bower_components/adminlte/bootstrap/js/bootstrap.min.js") }}" type="text/javascript"></script>
+<script src="{{ asset ("/bower_components/bptheme/bootstrap/js/bootstrap.min.js") }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ("/bower_components/adminlte/dist/js/app.min.js") }}" type="text/javascript"></script>
+<script src="{{ asset ("/bower_components/bptheme/dist/js/app.min.js") }}" type="text/javascript"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the

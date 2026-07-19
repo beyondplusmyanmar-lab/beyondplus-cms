@@ -32,7 +32,7 @@
     <!-- Fonts + Beyond Plus admin theme (overrides the base) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bp-admin-theme.css') }}?v=5">
-    <script src="{{ asset ("/bower_components/adminlte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
+    <script src="{{ asset ("/bower_components/bptheme/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
