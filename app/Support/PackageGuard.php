@@ -34,6 +34,12 @@ class PackageGuard
             // able to remove core or other plugins' files.
             '/\b(unlink|rmdir)\s*\(/i'                                    => 'file / directory deletion',
             '/\b(File|Storage)::(delete|deleteDirectory|deleteDirectories|cleanDirectory)\s*\(/' => 'file / directory deletion',
+            // Reflected XSS — request/user input written into the page unescaped.
+            // (Client <script> is stripped before scanning, so this targets the
+            // server-side output side: raw echo and Blade {!! !!}.)
+            '/(?:echo|print|print_r|<\?=)\s*\(?\s*\$_(GET|POST|REQUEST|COOKIE)\b/i' => 'outputs a raw request value — reflected XSS',
+            '/\{!!\s*[^}]*\$_(GET|POST|REQUEST|COOKIE)\b/i'               => 'raw request value in unescaped {!! !!} output — XSS',
+            '/\{!!\s*[^}]*(\brequest\s*\(|->input\s*\(|\bInput::(get|all|old)|Request::(input|get|query))/i' => 'raw request input in unescaped {!! !!} output — XSS',
         ];
         $warning = [
             '/\bbase64_decode\s*\(/i'                    => 'base64_decode — can hide payloads',
@@ -41,6 +47,9 @@ class PackageGuard
             '/\bcurl_exec\s*\(/i'                        => 'raw cURL request',
             '/\bmove_uploaded_file\s*\(/i'               => 'handles uploaded files',
             '/\b(putenv|ini_set)\s*\(/i'                 => 'changes the runtime environment',
+            // XSS review signals.
+            '/\{!!.*?!!\}/s'                             => 'unescaped Blade output {!! !!} — verify it never renders user input (XSS)',
+            '/\bhtml_entity_decode\s*\(/i'               => 'html_entity_decode — can re-introduce XSS after escaping',
         ];
 
         $hit = ['critical' => [], 'warning' => []];
