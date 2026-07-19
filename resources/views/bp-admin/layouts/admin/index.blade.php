@@ -32,7 +32,7 @@
     <!-- Fonts + Beyond Plus admin theme (overrides the base) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bp-admin-theme.css') }}?v=5">
-    <script src="{{ asset ("/bower_components/bptheme/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
+    <script src="{{ asset("bower_components/vali-admin/docs/js/jquery-3.2.1.min.js") }}"></script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
@@ -65,8 +65,7 @@
             {{-- <div class="tile-body">Create a beautiful dashboard</div> --}}
 
     </main>
-    <!-- Essential javascripts for application to work-->
-    <script src="{{ asset("bower_components/vali-admin/docs/js/jquery-3.2.1.min.js") }}"></script>
+    <!-- Essential javascripts for application to work (jQuery already loaded in <head>) -->
     <!-- Bootstrap 5 bundle (Popper included) replaces the BS4 popper + bootstrap.min.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
