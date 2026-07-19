@@ -16,12 +16,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Ionicons -->
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
-    <link href="{{ asset("/bower_components/bptheme/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/bower_components/bptheme/dist/css/bptheme.min.css")}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset("/bower_components/bptheme/dist/css/main.css")}}" rel="stylesheet" type="text/css" />
 
     <link href="{{ asset("/bower_components/bptheme/bootstrap/css/style.css")}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset("/bower_components/bptheme/dist/css/asset.css")}}" rel="stylesheet" type="text/css" />
-    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+    <!-- Beyond Plus skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
     -->
@@ -84,7 +84,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- Bootstrap 3.3.2 JS -->
 <script src="{{ asset ("/bower_components/bptheme/bootstrap/js/bootstrap.min.js") }}" type="text/javascript"></script>
-<!-- AdminLTE App -->
+<!-- Beyond Plus App -->
 <script src="{{ asset ("/bower_components/bptheme/dist/js/app.min.js") }}" type="text/javascript"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
