@@ -380,6 +380,20 @@ function bp_upload_url($value) {
     if ($value === null || $value === '') {
         return '';
     }
+    // Theme-aware default cover: the shared placeholder is swapped for one that
+    // matches the active theme's palette (a light cover for light themes, the
+    // dark aurora for Nocturne), so it never clashes with the theme.
+    if ($value === 'default-cover.jpg') {
+        static $themedCover = null;
+        if ($themedCover === null) {
+            $theme = basename((string) bp_option('theme', 'default'));
+            foreach (["theme-covers/{$theme}.jpg", 'theme-covers/_default.jpg', 'uploads/default-cover.jpg'] as $rel) {
+                if (is_file(public_path($rel))) { $themedCover = $rel; break; }
+            }
+            $themedCover = $themedCover ?: 'uploads/default-cover.jpg';
+        }
+        return asset($themedCover);
+    }
     if (preg_match('#^(https?:)?//#i', (string) $value)) {
         return $value;
     }
