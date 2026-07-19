@@ -8,7 +8,7 @@
 <style>
     .menu-body { padding: 1rem 1.25rem 1.25rem; min-height: 460px; }
     .box-header { padding-bottom: .75rem; }
-    .insert-list { padding: .5rem 1rem .75rem; }
+    .insert-list { padding: .5rem 0 .75rem; }   /* no side padding: align the checklist box with the header */
     .box-header h5 { font-weight: 600; }
     .menu-item-row {
         display: flex; align-items: center; gap: .5rem;
@@ -66,7 +66,7 @@
                 <button type="submit" class="btn btn-primary btn-sm">{{ $mm ? 'ထည့်ရန်' : 'Insert' }}</button>
             </div>
             <div class="box-body insert-list" id="scrollbar1">
-                <div class="scrollbar">
+                <div class="scrollbar bp-checklist">
                     @forelse($pages as $page)
                         <div class="form-check">
                             {{ Form::checkbox('pages[]', $page->id, false, ['class' => 'form-check-input', 'id' => 'page-'.$page->id]) }}
@@ -87,7 +87,7 @@
                 <button type="submit" class="btn btn-primary btn-sm">{{ $mm ? 'ထည့်ရန်' : 'Insert' }}</button>
             </div>
             <div class="box-body insert-list" id="scrollbar2">
-                <div class="scrollbar">
+                <div class="scrollbar bp-checklist">
                     @forelse($posts as $post)
                         <div class="form-check">
                             {{ Form::checkbox('posts[]', $post->id, false, ['class' => 'form-check-input', 'id' => 'post-'.$post->id]) }}
