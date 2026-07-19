@@ -131,24 +131,67 @@ customer**. Classify every request they raise before acting on it:
 | New business domain (payments, booking, catalog, delivery) | New API contract first — never folded into the frozen flow |
 | Merchant-specific look/behaviour | Theme / plugin layer, not core |
 
-## Preflight smoke checklist (rehearsed 2026-07-17, 19/19 on a staged instance)
+## Preflight smoke checklist (re-run 2026-07-19, 20/20 on a staged instance @ v2.7.0)
 
 The whole §3–§4 path is drivable end-to-end before any merchant is present,
 using a **sandbox** `sk_test_` (mint → walk → revoke). A staged rehearsal must
 show, in order:
 
-- [ ] admin login works; password changed
+- [ ] admin login works **and is authorized inside the admin area**; password changed
 - [ ] Plugins page activates **doeh-setup** (security scan passes)
 - [ ] wizard opens at step 1 on a fresh install
 - [ ] step 1 activates identity → commerce → storefront in dependency order
 - [ ] step 2 offers all four DOEH themes with fulfilment badges
+- [ ] step 2 activates the chosen vertical theme
+- [ ] step 3 saves branding
 - [ ] step 4 refuses a malformed key AND a well-formed fake key (live proof), storing neither
 - [ ] step 4 accepts a real key only after the live Orders-API probe answers
 - [ ] step 5 skip works (commerce-only merchant is valid)
 - [ ] wizard re-opens at the done checklist; storefront `/` renders the chosen
       vertical; `/store` serves
+- [ ] admin Orders dashboard loads against the live API
 - [ ] rehearsal key revoked; instance reset (`php artisan migrate:fresh --seed`)
       before the merchant's real walk
+
+### Result — 2026-07-19, `/opt/merchant-cms-1` at **v2.7.0**
+
+**20/20 green**, driven over real HTTP against the live sandbox on a pristine
+install. Beyond the checklist, a guest checkout produced a real order —
+
+    ord_2250 · "Preflight Teahouse" · Coffee (Hot) × 1 · 1,500 MMK
+
+— which is the stronger evidence: the checklist proves individual screens, the
+order proves the whole merchant story (fresh install → wizard → theme →
+branding → merchant credential → storefront → guest checkout → POS order →
+merchant sees it). Package security scan re-run first against 2.7.0's added
+XSS rules: **0 criticals** across the four DOEH plugins, four DOEH themes and
+the `docs/examples/` packages.
+
+Cleanup after the run: rehearsal key revoked, instance reset to pristine,
+working tree clean.
+
+### Preflight gotchas (cost real time — read before re-running)
+
+- **Use unprefixed `/bp-admin/*` URLs.** `/en/bp-admin/*` returns 401 for a
+  logged-in admin: `AdminAuth` keys its access check off
+  `$request->segment(2)`, which the locale prefix shifts by one. Pre-existing
+  core behaviour, low severity, no customer-facing impact — revisit only if a
+  merchant needs localized admin URLs.
+- **A negative check must prove the rejection, not the absence of a value.**
+  Assert the expected status *and* the expected error code (e.g.
+  `API_KEY_INVALID`) *and* that state is unchanged. "`secret_key` is empty"
+  passes trivially when the request never reached the guard — during the first
+  run the admin area was 401ing throughout and the three key-gauntlet
+  negatives still reported green.
+- `Theme::active()` reads the `theme` option, **not** `active_theme`.
+- `bp-admin/plugins/scan` is **GET** with `?slug=`, not POST.
+- The `/store` add-to-cart form carries no `qty` field — each POST adds one
+  unit, by design.
+
+An executable form of this checklist exists as an **unowned operational
+artifact** outside the repo (deliberately not committed, to avoid creating a
+maintenance obligation before merchant deployments repeat). Promote it into an
+ops repo or a test suite only if that demand appears.
 
 ## Failure / rollback notes
 
