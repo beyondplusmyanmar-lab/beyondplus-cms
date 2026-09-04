@@ -3,6 +3,7 @@
 @section('title', 'Request received')
 
 @section('content')
+<div class="sv-wrap" style="padding-top:42px;">
     @php $mm = app()->getLocale() === 'mm'; @endphp
     @if ($ok && $order)
         @php
@@ -55,5 +56,6 @@
         <div class="sv-notice err" style="max-width:540px; margin:16px auto 0;">{{ $error ?? ($mm ? 'တောင်းဆိုမှုကို ရှာမတွေ့ပါ။' : 'That request could not be found.') }}</div>
     @endif
 
-    <p style="margin-top:22px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? '← ဝန်ဆောင်မှုများသို့ ပြန်ရန်' : '← Back to services' }}</a></p>
+    <p style="margin-top:22px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? 'ဝန်ဆောင်မှုများသို့ ပြန်ရန်' : 'Back to services' }}</a></p>
+</div>
 @endsection

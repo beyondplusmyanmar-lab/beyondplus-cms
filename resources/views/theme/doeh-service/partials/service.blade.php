@@ -4,10 +4,14 @@
         <div class="s-name">{{ $p['name'] }}</div>
         <div class="s-note">
             <span class="sv-chip">{{ $mm ? 'ချိန်းဆို၍' : 'By appointment' }}</span>
-            <span style="margin-left:8px;">{{ $mm ? 'ကုဒ်' : 'Ref' }} {{ $p['sku'] }}</span>
+            <span>{{ $mm ? 'ကုဒ်' : 'Ref' }} {{ $p['sku'] }}</span>
         </div>
     </div>
-    @if ($p['price_hint'])<span class="sv-price s-price">{{ $p['price_hint'] }}</span>@endif
+    @if ($p['price_hint'])
+        <span class="sv-price s-price">{{ $p['price_hint'] }}</span>
+    @else
+        <span class="sv-muted sv-small" style="white-space:nowrap;">{{ $mm ? 'ဈေးနှုန်း ချိန်းဆိုချိန်တွင်' : 'Priced at booking' }}</span>
+    @endif
     <form method="POST" action="{{ url('/store/cart/add') }}">
         @csrf
         <input type="hidden" name="sku" value="{{ $p['sku'] }}">

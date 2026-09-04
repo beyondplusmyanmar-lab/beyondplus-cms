@@ -3,13 +3,14 @@
 @section('title', 'Order received')
 
 @section('content')
+<div class="r-wrap" style="padding-top:42px;">
     @php $mm = app()->getLocale() === 'mm'; @endphp
     @if ($ok && $order)
         @php
             $totals = $order['totals'] ?? [];
             $grandMinor = $totals['grand_total_minor'] ?? null;
             $currency = $totals['currency'] ?? '';
-            // Minor units → display, currency-aware: MMK (and other zero-decimal
+            // Minor units display, currency-aware: MMK (and other zero-decimal
             // currencies) are stored as whole units, so dividing by 100 would show
             // 1,500 MMK as "15". Only 2-decimal currencies get the /100.
             $zeroDecimal = ['MMK', 'JPY', 'KRW', 'VND', 'IDR', 'LAK', 'KHR'];
@@ -65,5 +66,6 @@
         <div class="r-notice err" style="max-width:520px; margin:18px auto 0;">{{ $error ?? ($mm ? 'အော်ဒါကို ရှာမတွေ့ပါ။' : 'That order could not be found.') }}</div>
     @endif
 
-    <p style="margin-top:22px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? '← မီနူးသို့ ပြန်ရန်' : '← Back to the menu' }}</a></p>
+    <p style="margin-top:22px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? 'မီနူးသို့ ပြန်ရန်' : 'Back to the menu' }}</a></p>
+</div>
 @endsection

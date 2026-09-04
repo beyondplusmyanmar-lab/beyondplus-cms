@@ -4,6 +4,8 @@
 
 @section('content')
     @php $mm = app()->getLocale() === 'mm'; @endphp
+
+    <div class="rt-wrap" style="padding-top:44px;">
     @if ($ok && $order)
         @php
             $totals = $order['totals'] ?? [];
@@ -17,43 +19,57 @@
             $grand = $grandMinor === null ? null : $fmt($grandMinor);
         @endphp
 
-        <section style="max-width:560px; margin:0 auto;">
-            <div style="text-align:center; margin-bottom:20px;">
-                <div class="rt-chip stock" style="font-size:13px;">✓ {{ $mm ? 'အော်ဒါ လက်ခံပြီး' : 'Order confirmed' }}</div>
-                <h1 style="font-size:30px; margin-top:12px;">{{ $mm ? 'ကျေးဇူးတင်ပါသည်' : 'Thanks for your order' }}</h1>
-                <p class="rt-muted" style="margin:6px 0 0;">{{ $mm ? 'အော်ဒါကို DOEH တွင် မှတ်တမ်းတင်ပြီးပါပြီ။' : 'Your order is placed with DOEH.' }}</p>
+        <section style="max-width:600px; margin:0 auto;">
+            <div style="text-align:center; margin-bottom:26px;">
+                <span class="rt-mark is-stock" style="justify-content:center; color:var(--money);"><span class="dot"></span>{{ $mm ? 'အော်ဒါ လက်ခံပြီး' : 'Order confirmed' }}</span>
+                <h1 class="rt-h2" style="margin-top:10px;">{{ $mm ? 'ကျေးဇူးတင်ပါသည်' : 'Thanks for your order' }}</h1>
+                <p class="rt-muted rt-small" style="margin:8px auto 0; max-width:40ch;">{{ $mm ? 'ဆိုင်တွင် ပြင်ဆင်ပြီးလျှင် အကြောင်းကြားပါမည်။' : 'The shop has it. You will hear from them when it is ready to collect.' }}</p>
             </div>
 
-            <div class="rt-card" style="padding:22px 24px;">
-                <div style="display:flex; justify-content:space-between; align-items:baseline;">
-                    <span class="rt-muted" style="font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;">{{ $mm ? 'အော်ဒါ' : 'Order' }}</span>
-                    <span class="rt-display" style="font-size:18px;">{{ $order['id'] ?? '—' }}</span>
+            {{-- The receipt. Ruled rows, tabular figures, total set apart by a heavy rule. --}}
+            <div class="rt-panel" style="padding:24px 26px;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px;">
+                    <span class="rt-muted rt-small">{{ $mm ? 'အော်ဒါ နံပါတ်' : 'Order number' }}</span>
+                    <span class="rt-money" style="font-size:17px;">{{ $order['id'] ?? '—' }}</span>
                 </div>
-                <div class="rt-muted" style="font-size:14px; margin-top:4px;">{{ $order['status'] ?? 'received' }} · {{ $order['payment_status'] ?? 'unpaid' }}</div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:8px;">
+                    <span class="rt-muted rt-small">{{ $mm ? 'အခြေအနေ' : 'Status' }}</span>
+                    <span class="rt-small" style="font-weight:600;">{{ $order['status'] ?? 'received' }}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:8px;">
+                    <span class="rt-muted rt-small">{{ $mm ? 'ငွေပေးချေမှု' : 'Payment' }}</span>
+                    <span class="rt-small" style="font-weight:600;">{{ $order['payment_status'] ?? 'unpaid' }}</span>
+                </div>
 
                 @if (! empty($order['lines']))
-                    <div style="border-top:1px solid var(--line); margin-top:16px; padding-top:8px;">
+                    <div style="border-top:1px solid var(--rule-soft); margin-top:18px; padding-top:6px;">
                         @foreach ($order['lines'] as $line)
-                            <div style="display:flex; justify-content:space-between; gap:12px; padding:7px 0;">
-                                <span>{{ $line['name'] ?? $line['sku'] }} <span class="rt-muted">× {{ $line['qty'] }}</span></span>
-                                <span class="rt-price">{{ $fmt($line['line_total_minor'] ?? 0) }}</span>
+                            <div style="display:flex; justify-content:space-between; gap:14px; padding:9px 0; align-items:baseline;">
+                                <span>{{ $line['name'] ?? $line['sku'] }}
+                                    <span class="rt-muted" style="font-variant-numeric:tabular-nums;">&times;{{ $line['qty'] }}</span>
+                                </span>
+                                <span class="rt-money">{{ $fmt($line['line_total_minor'] ?? 0) }}</span>
                             </div>
                         @endforeach
                     </div>
                 @endif
 
                 @if ($grand !== null)
-                    <div style="display:flex; justify-content:space-between; align-items:baseline; border-top:2px solid var(--ink); margin-top:12px; padding-top:14px;">
-                        <span style="font-weight:600; font-family:'Space Grotesk',system-ui,sans-serif;">{{ $mm ? 'စုစုပေါင်း' : 'Total' }}</span>
-                        <span class="rt-price" style="font-size:26px; color:var(--money);">{{ $grand }} {{ $currency }}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;
+                                border-top:2px solid var(--ink); margin-top:14px; padding-top:16px;">
+                        <span style="font-weight:700;">{{ $mm ? 'စုစုပေါင်း' : 'Total' }}</span>
+                        <span class="rt-money" style="font-size:27px;">{{ $grand }} <span class="rt-muted" style="font-size:16px; font-weight:600;">{{ $currency }}</span></span>
                     </div>
                 @endif
             </div>
         </section>
     @else
-        <h1 style="font-size:28px; text-align:center;">{{ $mm ? 'အော်ဒါ' : 'Order' }}</h1>
-        <div class="rt-notice err" style="max-width:560px; margin:16px auto 0;">{{ $error ?? ($mm ? 'အော်ဒါကို ရှာမတွေ့ပါ။' : 'That order could not be found.') }}</div>
+        <section style="max-width:600px; margin:0 auto;">
+            <h1 class="rt-h2" style="text-align:center;">{{ $mm ? 'အော်ဒါ' : 'Order' }}</h1>
+            <div class="rt-notice err" style="margin-top:18px;">{{ $error ?? ($mm ? 'အော်ဒါကို ရှာမတွေ့ပါ။' : 'That order could not be found.') }}</div>
+        </section>
     @endif
 
-    <p style="margin-top:22px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? '← ဈေးဆိုင်သို့ ပြန်ရန်' : '← Back to the shop' }}</a></p>
+        <p style="margin-top:26px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? 'ဈေးဆိုင်သို့ ပြန်ရန်' : 'Back to the shop' }}</a></p>
+    </div>
 @endsection

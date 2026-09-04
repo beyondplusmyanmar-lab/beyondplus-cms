@@ -16,7 +16,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
     <style>
         :root {
             --pl-ink: #1c1130;
@@ -33,7 +33,7 @@
         }
         html { scroll-behavior: smooth; }
         body { background:#fff; color:var(--pl-ink);
-            font-family:"Inter", system-ui, -apple-system, "Noto Sans Myanmar", sans-serif; line-height:1.6;
+            font-family:"DM Sans", system-ui, -apple-system, "Noto Sans Myanmar", sans-serif; line-height:1.6;
             -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
         h1,h2,h3,h4,h5,.pl-display { font-family:"Poppins","Noto Sans Myanmar",sans-serif; font-weight:700; letter-spacing:-.02em; }
         a { text-decoration:none; color:var(--pl-indigo); }
@@ -96,7 +96,12 @@
         footer.pl-footer a { color:#e7e2f7; } footer.pl-footer a:hover { color:var(--pl-orange); }
 
         :focus-visible { outline:2px solid var(--pl-indigo); outline-offset:2px; }
-        @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } .pl-card:hover,.btn-pl:hover { transform:none; } }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+            /* a hover transform with transitions off still jumps, so neutralise it too */
+            .pl-card:hover, .btn-pl:hover { transform: none !important; }
+        }
 
         /* ── Burmese typography fixes ──
            Tracking/all-caps on the eyebrow and pills, plus the tight negative

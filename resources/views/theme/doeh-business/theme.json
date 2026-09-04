@@ -4,7 +4,7 @@
     "name": "DOEH Business",
     "description": "A clean single-shop storefront wired to the DOEH platform: sign-in and a loyalty balance in the header (DOEH Identity), and a shop → cart → checkout → order flow that produces real DOEH orders (DOEH Commerce). The theme owns all presentation; the plugins own auth, tokens and the Orders API. Requires the DOEH Identity and DOEH Commerce plugins.",
     "description_mm": "DOEH platform နှင့် ချိတ်ဆက်ထားသော single-shop storefront: header တွင် sign-in နှင့် loyalty balance (DOEH Identity)၊ shop → cart → checkout → order flow က DOEH order အစစ်များ ဖန်တီးသည် (DOEH Commerce)။ theme က presentation အားလုံးကို ပိုင်ပြီး plugin များက auth, token နှင့် Orders API ကို ပိုင်သည်။ DOEH Identity နှင့် DOEH Commerce plugin လိုအပ်သည်။",
-    "version": "0.2.0",
+    "version": "1.0.0",
     "author": "Beyond Plus",
     "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
     "license": "MIT",
@@ -19,6 +19,14 @@
         { "group": "Brand", "name": "biz_logo", "label": "Logo", "type": "image", "default": "", "help": "Shown in the header instead of the name. Uploads path or full URL; ~36px tall works best." },
         { "group": "Brand", "name": "biz_favicon", "label": "Favicon", "type": "image", "default": "", "help": "Browser-tab icon. Uploads path or full URL (PNG/SVG/ICO)." },
         { "group": "Sections", "name": "biz_show_hero", "label": "Show the hero section", "type": "checkbox", "default": "yes" },
-        { "group": "Sections", "name": "biz_show_loyalty", "label": "Show the rewards section", "type": "checkbox", "default": "yes", "help": "Only appears when DOEH Identity is active anyway; this hides it entirely." }
+        { "group": "Sections", "name": "biz_show_loyalty", "label": "Show the rewards section", "type": "checkbox", "default": "yes", "help": "Only appears when DOEH Identity is active anyway; this hides it entirely." },
+        { "group": "Home", "name": "biz_ready_time", "label": "How soon orders are ready", "type": "text", "default": "", "placeholder": "Usually within the hour" },
+        { "group": "Home", "name": "biz_payment_note", "label": "Payment note", "type": "text", "default": "", "placeholder": "Pay when you collect" },
+        { "group": "Home", "name": "biz_collect_note", "label": "Where to collect", "type": "text", "default": "", "placeholder": "Give your name at the counter" },
+        { "group": "Sections", "name": "biz_show_steps", "label": "Show the ordering steps", "type": "checkbox", "default": "yes" },
+        { "group": "Sections", "name": "biz_show_visit", "label": "Show the shop details", "type": "checkbox", "default": "yes", "help": "Only appears once you fill in at least one Find us field." },
+        { "group": "Find us", "name": "biz_addr", "label": "Address", "type": "text", "default": "" },
+        { "group": "Find us", "name": "biz_hours", "label": "Opening hours", "type": "text", "default": "", "placeholder": "Mon to Sat, 9am to 7pm" },
+        { "group": "Find us", "name": "biz_phone", "label": "Phone", "type": "text", "default": "" }
     ]
 }

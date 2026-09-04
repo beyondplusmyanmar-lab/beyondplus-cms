@@ -3,6 +3,7 @@
 @section('title', 'Menu')
 
 @section('content')
+<div class="r-wrap" style="padding-top:42px;">
     @php
         $mm = app()->getLocale() === 'mm';
         $note = trim((string) bp_option('r_menu_note')) ?: ($mm ? 'စျေးနှုန်းများကို checkout တွင် အတည်ပြုသည်။' : 'Prices are confirmed at checkout.');
@@ -38,6 +39,7 @@
                 </div>
             @endforeach
         </div>
-        <p style="margin-top:22px; text-align:center;"><a href="{{ url('/store/cart') }}">{{ $mm ? 'အော်ဒါ ကြည့်ရန် →' : 'View your order →' }}</a></p>
+        <p style="margin-top:22px; text-align:center;"><a href="{{ url('/store/cart') }}">{{ $mm ? 'အော်ဒါ ကြည့်ရန်' : 'View your order' }}</a></p>
     @endif
+</div>
 @endsection

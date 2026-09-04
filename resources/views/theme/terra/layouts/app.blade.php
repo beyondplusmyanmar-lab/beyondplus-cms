@@ -16,7 +16,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Karla:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
     <style>
         :root {
             --tr-paper: #f6f6f1;        /* cool stone, not cream */
@@ -30,7 +30,7 @@
         }
         html { scroll-behavior: smooth; }
         body { background: var(--tr-paper); color: var(--tr-ink);
-            font-family: "Inter", system-ui, -apple-system, "Noto Sans Myanmar", sans-serif;
+            font-family: "Karla", system-ui, -apple-system, "Noto Sans Myanmar", sans-serif;
             line-height: 1.65;
             -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
         h1,h2,h3,h4,h5,.tr-display { font-family:"Sora","Noto Sans Myanmar",sans-serif; letter-spacing:-.02em; font-weight:600; }
@@ -94,7 +94,12 @@
         footer.tr-footer a { color:var(--tr-ink); } footer.tr-footer a:hover { color:var(--tr-sage-dk); }
 
         :focus-visible { outline:2px solid var(--tr-sage); outline-offset:3px; }
-        @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } .tr-row a.tr-row-link:hover { padding-left:0; } }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+            /* a hover transform with transitions off still jumps, so neutralise it too */
+            .tr-row a.tr-row-link:hover { transform: none !important; }
+        }
 
         /* ── Burmese typography fixes ──
            Neutralise tracking/case transforms and the tight negative heading

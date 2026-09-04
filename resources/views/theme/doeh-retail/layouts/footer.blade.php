@@ -40,8 +40,8 @@
             '<span class="drop">' +
                 '<button type="button" class="link" id="rt-acct-btn">' + t.account + ' ▾</button>' +
                 '<span class="menu" id="rt-acct-menu">' +
-                    '<div class="line rt-muted" style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;">' + t.rewards + '</div>' +
-                    '<div class="line"><span class="rt-price" id="rt-points" style="font-size:24px;color:var(--money);">' + t.loading + '</span> <span class="rt-muted">' + t.points + '</span></div>' +
+                    '<div class="line rt-muted" style="font-size:13px;">' + t.rewards + '</div>' +
+                    '<div class="line"><span class="rt-money" id="rt-points" style="font-size:26px;line-height:1.1;color:var(--money);">' + t.loading + '</span> <span class="rt-muted">' + t.points + '</span></div>' +
                     '<a href="#" id="rt-signout">' + t.signOut + '</a>' +
                 '</span>' +
             '</span>';

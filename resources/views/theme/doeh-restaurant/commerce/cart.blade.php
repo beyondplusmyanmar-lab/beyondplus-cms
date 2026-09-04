@@ -3,6 +3,7 @@
 @section('title', 'Your order')
 
 @section('content')
+<div class="r-wrap" style="padding-top:42px;">
     @php $mm = app()->getLocale() === 'mm'; @endphp
     <header style="text-align:center; margin-bottom:24px;">
         <div class="r-eyebrow" style="margin-bottom:10px;">{{ $mm ? 'သင့်အော်ဒါ' : 'Your order' }}</div>
@@ -12,7 +13,7 @@
     @if (empty($lines))
         <div class="r-card r-muted" style="padding:24px; text-align:center;">
             {{ $mm ? 'အော်ဒါ ဗလာဖြစ်နေသည်။' : 'Your order is empty.' }}
-            <a href="{{ url('/store') }}">{{ $mm ? 'မီနူးသို့ →' : 'Browse the menu →' }}</a>
+            <a href="{{ url('/store') }}">{{ $mm ? 'မီနူးသို့' : 'Browse the menu' }}</a>
         </div>
     @else
         {{-- The check: dish · qty on the left, price hint on the right --}}
@@ -62,6 +63,7 @@
             <button class="r-btn block" type="submit" @unless($ready) disabled @endunless>{{ $mm ? 'အော်ဒါ တင်ရန်' : 'Place order' }}</button>
             @unless ($ready)<p class="r-muted" style="font-size:13px; margin:12px 0 0; text-align:center;">{{ $mm ? 'DOEH Commerce ချိန်ညှိပြီးမှ အော်ဒါတင်နိုင်သည်။' : 'Ordering opens once DOEH Commerce is configured.' }}</p>@endunless
         </form>
-        <p style="margin-top:16px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? '← မီနူးသို့ ပြန်ရန်' : '← Back to the menu' }}</a></p>
+        <p style="margin-top:16px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? 'မီနူးသို့ ပြန်ရန်' : 'Back to the menu' }}</a></p>
     @endif
+</div>
 @endsection

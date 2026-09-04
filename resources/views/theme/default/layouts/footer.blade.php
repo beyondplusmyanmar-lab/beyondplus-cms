@@ -9,14 +9,14 @@
                 </p>
             </div>
             <div class="col-md-3">
-                <h6 class="text-white">Links</h6>
+                <h6 class="text-white">{{ app()->getLocale() === 'mm' ? 'လင့်ခ်များ' : 'Links' }}</h6>
                 <ul class="list-unstyled mb-0">
-                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li><a href="{{ url('/') }}">{{ app()->getLocale() === 'mm' ? 'ပင်မ' : 'Home' }}</a></li>
                     <li><a href="{{ url('/bp-admin') }}">Admin</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
-                <h6 class="text-white">Follow</h6>
+                <h6 class="text-white">{{ app()->getLocale() === 'mm' ? 'လိုက်ကြည့်ရန်' : 'Follow' }}</h6>
                 <div class="d-flex gap-3 fs-5">
                     <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
                     <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>

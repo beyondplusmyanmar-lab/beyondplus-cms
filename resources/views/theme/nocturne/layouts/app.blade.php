@@ -17,7 +17,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap">
     <style>
         :root {
             --nc-bg: #0a0711;           /* near-black violet */
@@ -36,7 +36,7 @@
         html { scroll-behavior: smooth; }
         body {
             background: var(--nc-bg); color: var(--nc-text);
-            font-family: "Inter", system-ui, -apple-system, "Noto Sans Myanmar", sans-serif;
+            font-family: "IBM Plex Sans", system-ui, -apple-system, "Noto Sans Myanmar", sans-serif;
             position: relative; overflow-x: hidden;
             -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
         }
@@ -128,8 +128,12 @@
         footer.nc-footer a { color:#d7cfe9; } footer.nc-footer a:hover { color:var(--nc-cyan); }
 
         :focus-visible { outline:2px solid var(--nc-cyan); outline-offset:2px; }
-        @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } .nc-card { transition:none; }
-            body::before, body::after { animation:none; } }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+            /* a hover transform with transitions off still jumps, so neutralise it too */
+            .nc-card:hover { transform: none !important; }
+        }
 
         /* ── Burmese typography fixes ──
            Wide tracking + all-caps break Myanmar glyph clusters (visible on the

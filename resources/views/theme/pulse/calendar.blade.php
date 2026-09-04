@@ -12,7 +12,7 @@
     .pl-cal td.out { background:var(--pl-soft); } .pl-cal td.out .daynum { color:#c3bcda; }
     .pl-cal td.today { border-color:var(--pl-indigo); box-shadow:0 0 0 2px rgba(109,94,252,.25); }
     .pl-cal td.today .daynum { color:#fff; background:var(--pl-grad); border-radius:999px; padding:.05rem .5rem; }
-    .pl-cal .ev { display:block; font-family:"Inter",sans-serif; font-size:.7rem; line-height:1.3; padding:2px 7px; border-radius:999px; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff; background:var(--pl-grad); background-size:180% 100%; }
+    .pl-cal .ev { display:block; font-family:"DM Sans",sans-serif; font-size:.7rem; line-height:1.3; padding:2px 7px; border-radius:999px; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff; background:var(--pl-grad); background-size:180% 100%; }
     .pl-cal .ev:hover { color:#fff; background-position:100% 0; }
     .pl-cal .ev .t { opacity:.9; font-weight:600; margin-right:3px; }
     @media (max-width:640px){ .pl-cal td { height:78px; } .pl-cal .ev { font-size:.6rem; } }

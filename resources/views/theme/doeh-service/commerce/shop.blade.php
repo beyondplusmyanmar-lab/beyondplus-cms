@@ -3,6 +3,7 @@
 @section('title', 'Services')
 
 @section('content')
+<div class="sv-wrap" style="padding-top:42px;">
     @php
         $mm = app()->getLocale() === 'mm';
         $note = trim((string) bp_option('sv_note')) ?: ($mm ? 'စျေးနှုန်းများကို ချိန်းဆိုချိန်တွင် အတည်ပြုသည်။' : 'Prices are confirmed at booking.');
@@ -26,6 +27,7 @@
                 @include('theme.doeh-service.partials.service', ['p' => $p, 'ready' => $ready, 'mm' => $mm])
             @endforeach
         </div>
-        <p style="margin-top:24px; text-align:center;"><a href="{{ url('/store/cart') }}">{{ $mm ? 'တောင်းဆိုမှုများ ကြည့်ရန် →' : 'Review your requests →' }}</a></p>
+        <p style="margin-top:24px; text-align:center;"><a href="{{ url('/store/cart') }}">{{ $mm ? 'တောင်းဆိုမှုများ ကြည့်ရန်' : 'Review your requests' }}</a></p>
     @endif
+</div>
 @endsection

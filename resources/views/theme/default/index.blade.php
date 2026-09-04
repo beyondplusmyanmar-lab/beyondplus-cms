@@ -39,14 +39,14 @@
         </div>
     </section>
 @else
-    <section class="bp-hero text-center">
+    <section class="bp-hero">
         <div class="container">
-            <h1 class="display-4 mb-3">{{ $siteName }}</h1>
-            <p class="lead mb-4 opacity-75">
-                {{ optional(site_information('blogdescription'))->option_value ?: 'Publish and manage your content with a modern CMS.' }}
+            <h1 class="display-4 mb-3" style="max-width:16ch;">{{ $siteName }}</h1>
+            <p class="lead mb-4" style="max-width:52ch;">
+                {{ optional(site_information('blogdescription'))->option_value ?: (app()->getLocale() === 'mm' ? 'သတင်းများနှင့် အကြောင်းအရာများ ဤနေရာတွင် ဖတ်ရှုပါ။' : 'News, updates and everything else worth reading.') }}
             </p>
-            <a href="#featured" class="btn btn-light btn-lg px-4">
-                Explore posts <i class="bi bi-arrow-down"></i>
+            <a href="#featured" class="btn btn-primary btn-lg px-4">
+                {{ app()->getLocale() === 'mm' ? 'ပို့စ်များ ဖတ်ရန်' : 'Read the latest' }}
             </a>
         </div>
     </section>
@@ -54,10 +54,11 @@
 
 <section id="featured" class="py-5">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="bp-section-title">Featured Posts</h2>
-            <p class="text-muted mb-0">Latest updates and articles</p>
+        <div class="bp-sec-head">
+            <h2 class="bp-section-title">{{ app()->getLocale() === 'mm' ? 'နောက်ဆုံး ပို့စ်များ' : 'Latest posts' }}</h2>
+            <a href="{{ url('/blog') }}">{{ app()->getLocale() === 'mm' ? 'အားလုံး ဖတ်ရန်' : 'Browse all posts' }}</a>
         </div>
+        <hr class="bp-rule">
 
         <div class="row g-4">
             @forelse (bp_post(8) as $post)
@@ -74,7 +75,7 @@
                                 <img src="{{ bp_upload_url($post->featured_img) }}" class="card-img-top" alt="{{ $post->title }}">
                             </a>
                             @if($postCategory->tax_name)
-                                <a href="{{ url('/cat/'.$postCategory->tax_link) }}" class="badge text-white position-absolute text-decoration-none" style="top:.6rem; left:.6rem; background:var(--bp-accent); z-index:2;">{{ $postCategory->tax_name }}</a>
+                                <a href="{{ url('/cat/'.$postCategory->tax_link) }}" class="badge bp-cat-badge position-absolute text-decoration-none" style="top:.6rem; left:.6rem; z-index:2;">{{ $postCategory->tax_name }}</a>
                             @endif
                         </div>
                         <div class="card-body">
@@ -86,15 +87,15 @@
                             </p>
                         </div>
                         <div class="card-footer bg-white border-0 text-muted small">
-                            <i class="bi bi-person"></i> {{ optional($post->creator)->name ?? 'Admin' }}
-                            &middot; {{ $post->created_at->diffForHumans() }}
+                            <span>{{ optional($post->creator)->name ?? 'Admin' }}</span>
+                            <span class="ms-2">{{ $post->created_at->diffForHumans() }}</span>
                         </div>
                     </article>
                 </div>
             @empty
                 <div class="col-12 text-center text-muted py-5">
                     <i class="bi bi-journal-text fs-1"></i>
-                    <p class="mt-3 mb-0">No posts yet. Sign in to the <a href="{{ url('/bp-admin') }}">admin panel</a> to create one.</p>
+                    <p class="mt-3 mb-0">{{ app()->getLocale() === 'mm' ? 'ပို့စ် မရှိသေးပါ။' : 'Nothing published yet.' }} <a href="{{ url('/bp-admin') }}">{{ app()->getLocale() === 'mm' ? 'ပထမဆုံး ပို့စ် ရေးရန်' : 'Write the first post' }}</a></p>
                 </div>
             @endforelse
         </div>

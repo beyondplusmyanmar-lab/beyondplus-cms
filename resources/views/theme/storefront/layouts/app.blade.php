@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap">
 
     <style>
         :root {
@@ -38,6 +38,8 @@
             --sf-text:         #222;
             --sf-muted:        #757575;
             --sf-border:       #ececec;
+            --sf-lift-1: 0 1px 2px rgba(20,20,20,.05), 0 2px 8px -2px rgba(20,20,20,.07);
+            --sf-lift-2: 0 2px 6px rgba(238,77,45,.10), 0 10px 26px -12px rgba(238,77,45,.28);
             --bs-primary: var(--sf-primary);
             --bs-link-color: var(--sf-primary);
             --bs-link-hover-color: var(--sf-primary-dark);
@@ -48,7 +50,7 @@
             --bz-muted:   var(--sf-muted);
             --bz-border:  var(--sf-border);
         }
-        body { font-family: 'Inter', 'Noto Sans Myanmar', system-ui, sans-serif; color: var(--sf-text); background: var(--sf-bg); }
+        body { font-family: 'Manrope', 'Noto Sans Myanmar', system-ui, sans-serif; line-height: 1.6; color: var(--sf-text); background: var(--sf-bg); }
         a { text-decoration: none; }
         .sf-muted { color: var(--sf-muted) !important; }
         .text-primary { color: var(--sf-primary) !important; }
@@ -69,14 +71,22 @@
         .sf-navlink:hover { color: #fff; opacity: 1; text-decoration: underline; }
 
         /* Product cards (commerce cards can reuse .bz-card; storefront styles both) */
-        .bz-card, .sf-card { background: #fff; border: 1px solid var(--sf-border); border-radius: 4px; overflow: hidden; transition: box-shadow .12s ease, transform .12s ease; height: 100%; }
-        .bz-card:hover, .sf-card:hover { box-shadow: 0 .35rem 1rem rgba(0,0,0,.12); transform: translateY(-2px); border-color: var(--sf-primary); }
-        .bz-card .fw-bold, .sf-price { color: var(--sf-primary) !important; }
+        /* One card rule. A dense product grid should not lift on hover — the real
+           shopping UIs this follows respond with border and shadow, and nothing moves. */
+        .bz-card, .sf-card { background: #fff; border: 1px solid var(--sf-border); border-radius: 2px;
+                             overflow: hidden; height: 100%; box-shadow: none;
+                             transition: box-shadow .14s ease, border-color .14s ease; }
+        .bz-card:hover, .sf-card:hover { border-color: var(--sf-primary); box-shadow: var(--sf-lift-2); }
+        .bz-card:focus-within, .sf-card:focus-within { border-color: var(--sf-primary); box-shadow: var(--sf-lift-2); }
+        /* Prices sit in a grid, so they must line up. */
+        .bz-card .fw-bold, .sf-price { color: var(--sf-primary) !important;
+                             font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
 
         .sf-section { padding: 1.5rem 0; }
-        .sf-panel { background: #fff; border-radius: 4px; padding: 1rem 1.1rem; }
+        .sf-panel { background: #fff; border-radius: 4px; padding: 1rem 1.1rem; box-shadow: var(--sf-lift-1); }
         .sf-panel-title { font-size: .95rem; text-transform: uppercase; letter-spacing: .04em; color: var(--sf-muted); font-weight: 700; margin: 0; }
-        .sf-cat { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: 1rem .5rem; background: #fff; border: 1px solid var(--sf-border); border-radius: 6px; color: var(--sf-text); text-align: center; height: 100%; }
+        .sf-cat { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: 1rem .5rem;
+                  background: #fff; border: 0; border-radius: 6px; color: var(--sf-text); text-align: center; height: 100%; }
         .sf-cat:hover { border-color: var(--sf-primary); color: var(--sf-primary); }
         .sf-cat i { font-size: 1.6rem; color: var(--sf-primary); }
         .sf-cat span { font-size: .8rem; }
@@ -90,7 +100,7 @@
         .sf-social a { width: 36px; height: 36px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background: var(--sf-bg); color: var(--sf-primary); }
 
         /* ── Shopee-style hero: carousel + side promo tiles ── */
-        .sf-hero-main { border-radius:6px; overflow:hidden; }
+        .sf-hero-main { border-radius:6px; overflow:hidden; box-shadow: var(--sf-lift-1); }
         .sf-hero-slide { min-height:340px; padding:2rem; color:#fff; display:flex; align-items:center;
             background:linear-gradient(120deg, var(--sf-primary), var(--sf-accent)); }
         .sf-hero-slide.has-img { background-size:cover; background-position:center; }
@@ -105,7 +115,7 @@
         .sf-hero-main .carousel-control-prev, .sf-hero-main .carousel-control-next { width:6%; }
 
         /* ── Shopee-style flash sale ── */
-        .sf-flash { background:#fff; border-radius:4px; overflow:hidden; }
+        .sf-flash { background:#fff; border-radius:4px; overflow:hidden; box-shadow: var(--sf-lift-1); }
         .sf-flash-bar { display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
             padding:.85rem 1.1rem; border-bottom:1px solid var(--sf-border); }
         .sf-flash-logo { font-weight:800; font-style:italic; letter-spacing:.01em; color:var(--sf-primary);
@@ -124,7 +134,6 @@
         /* ── Circular category tiles (Shopee look) ── */
         .sf-cat i { width:3rem; height:3rem; border-radius:50%;
             background: color-mix(in srgb, var(--sf-primary) 12%, #fff); display:flex; align-items:center; justify-content:center; }
-        .sf-cat { border:0; }
         .sf-cat:hover i { background: color-mix(in srgb, var(--sf-primary) 20%, #fff); }
 
         /* ── Service / guarantee strip ── */
@@ -133,17 +142,17 @@
         .sf-service { display:flex; align-items:center; gap:.6rem; color:var(--sf-text); font-size:.85rem; }
         .sf-service i { color:var(--sf-primary); font-size:1.35rem; }
 
-        /* ── Shopee-tight product cards (plugin emits .bz-card) ── */
-        .bz-card, .sf-card { border-radius:2px; }
-        .bz-card:hover, .sf-card:hover { border-color:var(--sf-primary); box-shadow:0 .25rem .9rem rgba(238,77,45,.16); }
+        /* ── Tight product cards (plugin emits .bz-card) ── */
         .bz-card h6, .sf-card h6 { font-size:.82rem; line-height:1.3; font-weight:400;
             display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.1rem; }
         .bz-card .fw-bold, .sf-price { font-size:1.05rem; }
         .sf-onsale { position:absolute; top:0; right:0; background:var(--sf-accent); color:#7a4a00;
             font-size:.66rem; font-weight:800; padding:.12rem .35rem; border-bottom-left-radius:4px; }
 
-        @media (prefers-reduced-motion: reduce) { .bz-card, .sf-card { transition: none; } }
-        :focus-visible { outline: 3px solid color-mix(in srgb, var(--sf-primary) 45%, transparent); outline-offset: 2px; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+        }
+        :focus-visible { outline: 2.5px solid var(--sf-primary); outline-offset: 2px; border-radius: 3px; }
     </style>
     @stack('styles')
 </head>

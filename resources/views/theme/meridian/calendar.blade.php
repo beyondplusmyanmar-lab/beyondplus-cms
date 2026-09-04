@@ -6,12 +6,12 @@
 @php $mm = app()->getLocale() === 'mm'; @endphp
 <style>
     .md-cal { width:100%; border-collapse:collapse; table-layout:fixed; }
-    .md-cal th { padding:.5rem; text-align:center; font-family:"Inter",sans-serif; font-size:.7rem; text-transform:uppercase; letter-spacing:.14em; color:var(--md-muted); border-bottom:2px solid var(--md-ink); }
+    .md-cal th { padding:.5rem; text-align:center; font-family:"Libre Franklin",sans-serif; font-size:.7rem; text-transform:uppercase; letter-spacing:.14em; color:var(--md-muted); border-bottom:2px solid var(--md-ink); }
     .md-cal td { border:1px solid var(--md-rule); vertical-align:top; height:112px; padding:.35rem; overflow:hidden; }
     .md-cal .daynum { font-family:"Fraunces",serif; font-size:.95rem; color:var(--md-ink); font-weight:600; }
     .md-cal td.out { background:#f4efe6; } .md-cal td.out .daynum { color:#c7bdad; }
     .md-cal td.today .daynum { display:inline-flex; align-items:center; justify-content:center; min-width:1.5rem; height:1.5rem; background:var(--md-burgundy); color:#fff; border-radius:50%; }
-    .md-cal .ev { display:block; background:var(--md-burgundy); color:#fff; font-family:"Inter",sans-serif; font-size:.7rem; line-height:1.3; padding:2px 6px; border-radius:2px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .md-cal .ev { display:block; background:var(--md-burgundy); color:#fff; font-family:"Libre Franklin",sans-serif; font-size:.7rem; line-height:1.3; padding:2px 6px; border-radius:2px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .md-cal .ev:hover { background:var(--md-burgundy-dk); color:#fff; }
     .md-cal .ev .t { opacity:.85; font-weight:600; margin-right:3px; }
     @media (max-width:640px){ .md-cal td { height:76px; } .md-cal .ev { font-size:.6rem; } }

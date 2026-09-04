@@ -3,6 +3,7 @@
 @section('title', 'Your requests')
 
 @section('content')
+<div class="sv-wrap" style="padding-top:42px;">
     @php $mm = app()->getLocale() === 'mm'; @endphp
     <header style="text-align:center; margin-bottom:24px;">
         <div class="sv-eyebrow" style="margin-bottom:10px;">{{ $mm ? 'တောင်းဆိုမှု' : 'Your requests' }}</div>
@@ -12,7 +13,7 @@
     @if (empty($lines))
         <div class="sv-card sv-muted" style="padding:24px; text-align:center;">
             {{ $mm ? 'တောင်းဆိုမှု မရှိသေးပါ။' : 'No services selected yet.' }}
-            <a href="{{ url('/store') }}">{{ $mm ? 'ဝန်ဆောင်မှုများသို့ →' : 'Browse services →' }}</a>
+            <a href="{{ url('/store') }}">{{ $mm ? 'ဝန်ဆောင်မှုများသို့' : 'Browse services' }}</a>
         </div>
     @else
         <div class="sv-card" style="padding:6px 28px; margin-bottom:18px;">
@@ -41,6 +42,7 @@
             <button class="sv-btn block" type="submit" @unless($ready) disabled @endunless>{{ $mm ? 'တောင်းဆိုမှု တင်ရန်' : 'Send request' }}</button>
             @unless ($ready)<p class="sv-muted" style="font-size:13px; margin:12px 0 0; text-align:center;">{{ $mm ? 'DOEH Commerce ချိန်ညှိပြီးမှ တောင်းဆိုနိုင်သည်။' : 'Requests open once DOEH Commerce is configured.' }}</p>@endunless
         </form>
-        <p style="margin-top:16px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? '← ဝန်ဆောင်မှုများသို့' : '← Back to services' }}</a></p>
+        <p style="margin-top:16px; text-align:center;"><a href="{{ url('/store') }}">{{ $mm ? 'ဝန်ဆောင်မှုများသို့' : 'Back to services' }}</a></p>
     @endif
+</div>
 @endsection

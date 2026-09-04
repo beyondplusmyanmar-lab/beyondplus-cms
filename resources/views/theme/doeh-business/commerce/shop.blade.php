@@ -6,32 +6,29 @@
 
 @section('content')
     @php $mm = app()->getLocale() === 'mm'; @endphp
-    <h1 style="font-size:26px; margin:0 0 6px;">{{ $mm ? 'ဈေးဆိုင်' : 'Shop' }}</h1>
-    <p class="muted" style="margin:0 0 22px;">{{ $mm ? 'ခြင်းထဲထည့်ပြီး မှာယူပါ — DOEH က စျေးနှုန်းတွက်ပေးသည်။' : 'Add to your cart and check out — DOEH prices every order.' }}</p>
-
-    @unless ($ready)
-        <div class="notice err">{{ $mm ? 'DOEH Commerce မချိန်ညှိရသေးပါ။' : 'DOEH Commerce is not configured yet.' }}</div>
-    @endunless
-
-    @if (empty($products))
-        <div class="card muted" style="padding:20px;">{{ $mm ? 'ကုန်ပစ္စည်း မရှိသေးပါ။' : 'No products configured yet.' }}</div>
-    @else
-        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px;">
-            @foreach ($products as $p)
-                <div class="card" style="padding:18px; display:flex; flex-direction:column; gap:10px;">
-                    <div>
-                        <div class="serif" style="font-size:18px; font-weight:700;">{{ $p['name'] }}</div>
-                        <div class="muted" style="font-size:13px;">{{ $mm ? 'ကုဒ်' : 'SKU' }} {{ $p['sku'] }}</div>
-                    </div>
-                    @if ($p['price_hint'])<div class="jade" style="font-weight:700;">{{ $p['price_hint'] }}</div>@endif
-                    <form method="POST" action="{{ url('/store/cart/add') }}" style="margin-top:auto;">
-                        @csrf
-                        <input type="hidden" name="sku" value="{{ $p['sku'] }}">
-                        <button class="btn" type="submit" style="width:100%;">{{ $mm ? 'ခြင်းထဲ ထည့်ရန်' : 'Add to cart' }}</button>
-                    </form>
-                </div>
-            @endforeach
+    <div class="wrap" style="padding-top:42px;">
+        <div class="head-row">
+            <h1 class="h2">{{ $mm ? 'ဈေးဆိုင်' : 'Shop' }}</h1>
+            <span class="muted small">{{ count($products) }} {{ $mm ? 'ပစ္စည်း' : 'items' }}</span>
         </div>
-        <p style="margin-top:20px;"><a href="{{ url('/store/cart') }}">{{ $mm ? 'ခြင်းကြည့်ရန် →' : 'View cart →' }}</a></p>
-    @endif
+        <hr class="rule">
+
+        @unless ($ready)
+            <div class="notice err">{{ $mm ? 'DOEH Commerce မချိန်ညှိရသေးပါ — မှာယူမှု ခဏ ပိတ်ထားသည်။' : 'DOEH Commerce is not configured, so ordering is paused.' }}</div>
+        @endunless
+
+        @if (empty($products))
+            <div class="card" style="padding:40px 24px; text-align:center;">
+                <p class="h3 serif" style="margin:0 0 6px;">{{ $mm ? 'ကုန်ပစ္စည်း မရှိသေးပါ' : 'Nothing listed yet' }}</p>
+                <p class="muted small" style="margin:0 auto; max-width:36ch;">{{ $mm ? 'ပစ္စည်းများ ထည့်ပြီးသည်နှင့် ဤနေရာတွင် ပေါ်လာပါမည်။' : 'Products appear here as soon as they are added in DOEH.' }}</p>
+            </div>
+        @else
+            <div class="grid">
+                @foreach ($products as $p)
+                    @include('theme.doeh-business.partials.card', ['p' => $p, 'ready' => $ready, 'mm' => $mm])
+                @endforeach
+            </div>
+            <p style="margin-top:26px;"><a href="{{ url('/store/cart') }}">{{ $mm ? 'ခြင်း ကြည့်ရန်' : 'View your cart' }}</a></p>
+        @endif
+    </div>
 @endsection

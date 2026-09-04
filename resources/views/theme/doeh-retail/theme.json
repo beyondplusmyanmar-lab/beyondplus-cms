@@ -4,7 +4,7 @@
     "name": "DOEH Retail",
     "description": "A crisp, product-first retail storefront wired to the DOEH platform. A confident product grid, sign-in and a live rewards balance in the header (DOEH Identity), and a shop → cart → checkout → order flow that produces real DOEH orders (DOEH Commerce). The theme owns all presentation; the plugins own auth, tokens and the Orders API. Requires the DOEH Identity, Commerce and Commerce Storefront plugins.",
     "description_mm": "DOEH platform နှင့် ချိတ်ဆက်ထားသော product-first retail storefront။ product grid၊ header တွင် sign-in နှင့် rewards balance (DOEH Identity)၊ shop → cart → checkout → order flow က DOEH order အစစ်များ ဖန်တီးသည် (DOEH Commerce)။ theme က presentation အားလုံးကို ပိုင်ပြီး plugin များက auth, token နှင့် Orders API ကို ပိုင်သည်။ DOEH Identity, Commerce နှင့် Commerce Storefront plugin လိုအပ်သည်။",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "author": "Beyond Plus",
     "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
     "license": "MIT",
@@ -22,6 +22,14 @@
         { "group": "Brand", "name": "rt_favicon", "label": "Favicon", "type": "image", "default": "", "help": "Browser-tab icon. Uploads path or full URL (PNG/SVG/ICO)." },
         { "group": "Sections", "name": "rt_show_hero", "label": "Show the hero section", "type": "checkbox", "default": "yes" },
         { "group": "Sections", "name": "rt_show_loyalty", "label": "Show the rewards section", "type": "checkbox", "default": "yes", "help": "Only appears when DOEH Identity is active anyway; this hides it entirely." },
-        { "group": "Home", "name": "rt_grid", "label": "Product grid density", "type": "select", "options": { "comfortable": "Comfortable", "compact": "Compact" }, "default": "comfortable", "help": "Compact fits more products per row (home and /store)." }
+        { "group": "Home", "name": "rt_grid", "label": "Product grid density", "type": "select", "options": { "comfortable": "Comfortable", "compact": "Compact" }, "default": "comfortable", "help": "Compact fits more products per row (home and /store)." },
+        { "group": "Home", "name": "rt_pickup_time", "label": "Pickup ready time", "type": "text", "default": "", "placeholder": "Usually within the hour" },
+        { "group": "Home", "name": "rt_payment_note", "label": "Payment note", "type": "text", "default": "", "placeholder": "Pay at the counter" },
+        { "group": "Home", "name": "rt_pickup_where", "label": "Where to collect", "type": "text", "default": "", "placeholder": "Give your name at the counter" },
+        { "group": "Sections", "name": "rt_show_steps", "label": "Show the pickup steps", "type": "checkbox", "default": "yes", "help": "The three-step explainer on the homepage. Needs pickup badges on." },
+        { "group": "Sections", "name": "rt_show_visit", "label": "Show the shop details", "type": "checkbox", "default": "yes", "help": "Only appears once you fill in at least one Visit field." },
+        { "group": "Visit", "name": "rt_addr", "label": "Address", "type": "text", "default": "", "placeholder": "No. 12, Bogyoke Road, Yangon" },
+        { "group": "Visit", "name": "rt_hours", "label": "Opening hours", "type": "text", "default": "", "placeholder": "Mon to Sat, 9am to 7pm" },
+        { "group": "Visit", "name": "rt_phone", "label": "Phone", "type": "text", "default": "", "placeholder": "+95 9 123 456 78" }
     ]
 }
