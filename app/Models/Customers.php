@@ -28,6 +28,24 @@ class Customers extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * Display name for the front end. The table stores the parts separately.
+     */
+    public function getNameAttribute(): string
+    {
+        $name = trim(($this->first_name ?? '').' '.($this->last_name ?? ''));
+
+        return $name !== '' ? $name : ($this->email ?: $this->phone ?: 'Customer');
+    }
+
+    /**
+     * Alias for the stored profile image, matching the themes' $author->avatar.
+     */
+    public function getAvatarAttribute(): ?string
+    {
+        return $this->profile_photo;
+    }
+
     public function customerType()
     {
         return $this->hasOne(CustomerTypes::class, 'id', 'customer_types_id');

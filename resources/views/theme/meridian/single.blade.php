@@ -58,7 +58,7 @@
                 </div>
                 @if($post->comment)
                     @foreach($post->comment as $c)
-                        @php $author = $c->users()->find($c->user_id); @endphp
+                        @php $author = $c->author; @endphp
                         @if($author)
                             <div class="d-flex gap-2 mb-3">
                                 <img src="{{ $author->avatar ?: asset('/img/blank_profile_pic_60x60.jpg') }}" class="rounded-circle" width="38" height="38" alt="{{ $author->name }}">

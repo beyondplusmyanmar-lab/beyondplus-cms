@@ -89,6 +89,32 @@ class CommentTest extends TestCase
         $this->assertNotEquals(999, $comment->id, 'client must not choose the primary key');
     }
 
+    public function test_author_relation_resolves_to_a_customer(): void
+    {
+        // user_id holds a customers.id, because the "web" guard resolves
+        // through the customers provider.
+        $this->assertInstanceOf(Customers::class, (new Bp_comment)->author()->getRelated());
+    }
+
+    public function test_comment_and_its_author_render_on_the_post_page(): void
+    {
+        $customer = $this->customer();
+        $post = $this->seededPost();
+
+        Bp_comment::create([
+            'post_id' => $post->id,
+            'user_id' => $customer->id,
+            'body' => 'a visible comment body',
+        ]);
+
+        // The comment block sits inside @auth, so view it as a signed-in customer.
+        $this->actingAs($customer)
+            ->get('/'.$post->post_link)
+            ->assertStatus(200)
+            ->assertSee('a visible comment body')
+            ->assertSee('Demo Customer');
+    }
+
     public function test_body_and_post_id_are_validated(): void
     {
         $customer = $this->customer();

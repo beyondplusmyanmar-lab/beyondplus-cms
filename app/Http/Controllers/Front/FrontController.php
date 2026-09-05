@@ -207,7 +207,7 @@ class FrontController extends Controller
         // dd($name);
         $name = urldecode($name);
         // dd($name);
-        $bp_post = Bp_post::with('comment')->with('translate')->where('post_link', $name)->first();
+        $bp_post = Bp_post::with('comment.author')->with('translate')->where('post_link', $name)->first();
 
         $view = $this->template($bp_post, 'single');
 
@@ -400,7 +400,7 @@ class FrontController extends Controller
 
         if ($path) {
             $name = urlencode($path);
-            $bp_post = Bp_post::with('comment')->with('translate')->where('post_link', $name)->first();
+            $bp_post = Bp_post::with('comment.author')->with('translate')->where('post_link', $name)->first();
 
             // $lang = App::getLocale();
 

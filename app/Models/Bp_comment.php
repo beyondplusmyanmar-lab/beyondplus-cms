@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Bp_comment extends Model
@@ -15,8 +14,14 @@ class Bp_comment extends Model
         'post_id', 'user_id', 'body',
     ];
 
-    public function users()
+    /**
+     * The customer who wrote the comment.
+     *
+     * user_id holds a customers.id: the "web" guard resolves through the
+     * customers provider, so Auth::id() at write time is a Customers key.
+     */
+    public function author()
     {
-        return $this->hasMany(User::class, 'id', 'user_id');
+        return $this->belongsTo(Customers::class, 'user_id', 'id');
     }
 }
