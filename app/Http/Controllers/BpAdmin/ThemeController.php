@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\BpAdmin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Bp_options;
 use App\Support\Theme;
+use Illuminate\Http\Request;
 
 class ThemeController extends Controller
 {
@@ -50,7 +51,9 @@ class ThemeController extends Controller
         $values = [];
         foreach ($schema as $field) {
             $name = $field['name'] ?? null;
-            if (! $name) { continue; }
+            if (! $name) {
+                continue;
+            }
             if (($field['type'] ?? 'text') === 'repeater') {
                 $decoded = json_decode(bp_option($name, ''), true);
                 $values[$name] = is_array($decoded) ? $decoded : (array) ($field['default'] ?? []);
@@ -60,8 +63,8 @@ class ThemeController extends Controller
         }
 
         return view('bp-admin.theme.customize', [
-            'slug'   => $slug,
-            'meta'   => Theme::meta($slug),
+            'slug' => $slug,
+            'meta' => Theme::meta($slug),
             'schema' => $schema,
             'values' => $values,
         ]);
@@ -76,7 +79,9 @@ class ThemeController extends Controller
 
         foreach ($schema as $field) {
             $name = $field['name'] ?? null;
-            if (! $name) { continue; }
+            if (! $name) {
+                continue;
+            }
             $type = $field['type'] ?? 'text';
 
             if ($type === 'repeater') {
@@ -85,16 +90,20 @@ class ThemeController extends Controller
                 foreach ((array) $request->input($name, []) as $row) {
                     $row = is_array($row) ? $row : [];
                     $clean = [];
-                    foreach ($sub as $k) { $clean[$k] = (string) ($row[$k] ?? ''); }
+                    foreach ($sub as $k) {
+                        $clean[$k] = (string) ($row[$k] ?? '');
+                    }
                     // Drop rows the owner left completely blank.
-                    if (implode('', $clean) !== '') { $rows[] = $clean; }
+                    if (implode('', $clean) !== '') {
+                        $rows[] = $clean;
+                    }
                 }
                 $value = json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             } else {
                 $value = (string) $request->input($name, '');
             }
 
-            \App\Models\Bp_options::updateOrCreate(
+            Bp_options::updateOrCreate(
                 ['option_name' => $name],
                 ['option_value' => $value, 'autoload' => 'yes']
             );

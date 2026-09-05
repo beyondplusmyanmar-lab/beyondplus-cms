@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 // use Spatie\Activitylog\Traits\LogsActivity;
 
 class CustomerTypes extends Model
@@ -11,7 +12,7 @@ class CustomerTypes extends Model
 
     protected static $logAttributes = ['name'];
 
-    protected static $recordEventes = ['created','updated','deleted'];
+    protected static $recordEventes = ['created', 'updated', 'deleted'];
 
     protected static $logName = 'customer type';
 

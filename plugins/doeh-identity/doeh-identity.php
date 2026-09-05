@@ -13,9 +13,6 @@
  *
  * This file registers hooks only; it is loaded solely while the plugin is active.
  */
-
-use Illuminate\Support\Facades\Route;
-
 if (! function_exists('doeh_identity_config')) {
     /**
      * Public, non-secret configuration handed to the browser. Every value here
@@ -30,11 +27,11 @@ if (! function_exists('doeh_identity_config')) {
 
         $planes = [
             'sandbox' => [
-                'issuer'  => 'https://auth-sandbox.doehpos.com',
+                'issuer' => 'https://auth-sandbox.doehpos.com',
                 'apiBase' => 'https://sandbox-api.doehpos.com/v1',
             ],
             'production' => [
-                'issuer'  => 'https://auth.doehpos.com',
+                'issuer' => 'https://auth.doehpos.com',
                 'apiBase' => 'https://api.doehpos.com/v1',
             ],
         ];
@@ -45,14 +42,14 @@ if (! function_exists('doeh_identity_config')) {
         $redirectUri = rtrim(request()->getSchemeAndHttpHost(), '/').'/doeh/callback';
 
         return [
-            'environment'    => $env,
-            'issuer'         => $plane['issuer'],
-            'apiBase'        => $plane['apiBase'],
-            'clientId'       => (string) bp_plugin_option('doeh-identity', 'client_id'),
+            'environment' => $env,
+            'issuer' => $plane['issuer'],
+            'apiBase' => $plane['apiBase'],
+            'clientId' => (string) bp_plugin_option('doeh-identity', 'client_id'),
             'publishableKey' => (string) bp_plugin_option('doeh-identity', 'publishable_key'),
-            'redirectUri'    => $redirectUri,
-            'scope'          => 'loyalty:read',
-            'version'        => '0.2.0',
+            'redirectUri' => $redirectUri,
+            'scope' => 'loyalty:read',
+            'version' => '0.2.0',
         ];
     }
 }

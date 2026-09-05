@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api\V1\Customer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Models\Bp_menu;
 use App\Models\Bp_post;
 use App\Models\Bp_slider;
-use App\Models\Bp_menu;
 use App\Models\Bp_tax;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use OpenApi\Attributes as OA;
 
 /**
@@ -56,9 +56,9 @@ class CMSController extends Controller
     {
         return [
             'current_page' => $paginator->currentPage(),
-            'last_page'    => $paginator->lastPage(),
-            'per_page'     => $paginator->perPage(),
-            'total'        => $paginator->total(),
+            'last_page' => $paginator->lastPage(),
+            'per_page' => $paginator->perPage(),
+            'total' => $paginator->total(),
         ];
     }
 
@@ -73,26 +73,27 @@ class CMSController extends Controller
         $category = $post->categories->firstWhere('tax_link', '!=', 'uncategorized') ?? $post->categories->first();
 
         return [
-            'id'       => $post->id,
-            'title'    => $t->title,
-            'slug'     => $post->post_link,
-            'excerpt'  => Str::limit(trim(strip_tags(preg_replace('/\[block\].*?\[\/block\]/is', '', (string) $t->body))), 160),
-            'image'    => $this->image($post->featured_img),
+            'id' => $post->id,
+            'title' => $t->title,
+            'slug' => $post->post_link,
+            'excerpt' => Str::limit(trim(strip_tags(preg_replace('/\[block\].*?\[\/block\]/is', '', (string) $t->body))), 160),
+            'image' => $this->image($post->featured_img),
             'category' => $category ? ['name' => $category->tax_name, 'slug' => $category->tax_link] : null,
-            'date'     => optional($post->created_at)->toDateString(),
+            'date' => optional($post->created_at)->toDateString(),
         ];
     }
 
     private function postDetail($post, string $lang): array
     {
         $t = $this->loc($post, $lang);
+
         return [
-            'id'         => $post->id,
-            'title'      => $t->title,
-            'slug'       => $post->post_link,
-            'body'       => bbParse($t->body),
-            'image'      => $this->image($post->featured_img),
-            'date'       => optional($post->created_at)->toDateString(),
+            'id' => $post->id,
+            'title' => $t->title,
+            'slug' => $post->post_link,
+            'body' => bbParse($t->body),
+            'image' => $this->image($post->featured_img),
+            'date' => optional($post->created_at)->toDateString(),
             'categories' => $post->categories->map(fn ($c) => ['name' => $c->tax_name, 'slug' => $c->tax_link])->values(),
         ];
     }
@@ -100,12 +101,13 @@ class CMSController extends Controller
     private function menuNode($m, string $lang): array
     {
         $t = $this->loc($m, $lang);
+
         return [
-            'title'    => $t->menu_name,
-            'url'      => $m->menu_type === 'default' ? '/'.ltrim((string) $m->menu_link, '/') : $m->menu_link,
-            'type'     => $m->menu_type,
+            'title' => $t->menu_name,
+            'url' => $m->menu_type === 'default' ? '/'.ltrim((string) $m->menu_link, '/') : $m->menu_link,
+            'type' => $m->menu_type,
             'children' => collect($m->children ?? [])->where('lang', 1)
-                            ->map(fn ($c) => $this->menuNode($c, $lang))->values(),
+                ->map(fn ($c) => $this->menuNode($c, $lang))->values(),
         ];
     }
 
@@ -136,16 +138,17 @@ class CMSController extends Controller
         $card = $this->postCard($post, $lang);
         $card['type'] = $post->post_type;      // "news" or "event"
         $card['event_at'] = $post->event_at;   // set for events
+
         return $card;
     }
 
     private function sliderList()
     {
         return Bp_slider::orderBy('slider_weight')->get()->map(fn ($s) => [
-            'id'          => $s->slider_id,
-            'title'       => $s->slider_name,
+            'id' => $s->slider_id,
+            'title' => $s->slider_name,
             'description' => $s->slider_description,
-            'image'       => $this->image($s->slider_link),
+            'image' => $this->image($s->slider_link),
         ]);
     }
 
@@ -159,12 +162,12 @@ class CMSController extends Controller
 
         return $this->respond([
             'site' => [
-                'name'        => optional(site_information('blogname'))->option_value,
+                'name' => optional(site_information('blogname'))->option_value,
                 'description' => optional(site_information('blogdescription'))->option_value,
             ],
-            'sliders'      => $this->sliderList(),
+            'sliders' => $this->sliderList(),
             'latest_posts' => $this->publishedPosts('post')->limit(6)->get()->map(fn ($p) => $this->postCard($p, $lang)),
-            'news'         => $this->publishedNews()->limit(5)->get()->map(fn ($p) => $this->newsCard($p, $lang)),
+            'news' => $this->publishedNews()->limit(5)->get()->map(fn ($p) => $this->newsCard($p, $lang)),
         ]);
     }
 
@@ -297,7 +300,7 @@ class CMSController extends Controller
             ->where('translate_id', 0)
             ->where(function ($query) use ($q) {
                 $query->where('title', 'like', '%'.$q.'%')
-                      ->orWhere('body', 'like', '%'.$q.'%');
+                    ->orWhere('body', 'like', '%'.$q.'%');
             })
             ->with('translate')
             ->orderBy('id', 'desc')
@@ -307,6 +310,7 @@ class CMSController extends Controller
             collect($page->items())->map(function ($p) use ($lang) {
                 $card = $this->postCard($p, $lang);
                 $card['type'] = $p->post_type;   // "post" or "page"
+
                 return $card;
             }),
             200,

@@ -1,58 +1,61 @@
 <?php
+
 /**
  * Created by Beyond Plus <bplusmyanmar@hotmail.com>
  * User: Beyond Plus
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Admin;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Validator;
 
 class AccountController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('admins');
+        $this->middleware('admins');
     }
 
-     public function index(Request $request){
+    public function index(Request $request)
+    {
 
         $query = Admin::orderBy('id', 'DESC');
 
         if ($request->name != null && $request->name != '0') {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%'.$request->name.'%')
-                  ->orWhere('email', 'like', '%'.$request->name.'%');
+                    ->orWhere('email', 'like', '%'.$request->name.'%');
             });
         }
 
         $adminaccounts = $query->paginate(10);
 
-        return view('bp-admin.account.index', array('adminaccounts' => $adminaccounts));
+        return view('bp-admin.account.index', ['adminaccounts' => $adminaccounts]);
     }
 
-    public function create(){
+    public function create()
+    {
 
-
-
-        //$brand= Brand::lists('brand_name','id');
-        //return view('dashboard.create')->with('category',$categories);
+        // $brand= Brand::lists('brand_name','id');
+        // return view('dashboard.create')->with('category',$categories);
         $adminaccounts = Admin::get();
+
         return view('bp-admin.account.add')->with(compact('adminaccounts'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'role' => 'required',
-            'email'=> 'required|email',
-            'password'=> 'required|min:8'
+            'email' => 'required|email',
+            'password' => 'required|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -61,12 +64,13 @@ class AccountController extends Controller
 
         // Explicit allow-list — never mass-assign from $request->all().
         Admin::create([
-            'name'      => $request->input('name'),
-            'email'     => $request->input('email'),
-            'role'      => $request->input('role'),
-            'password'  => bcrypt($request->input('password')),
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => $request->input('role'),
+            'password' => bcrypt($request->input('password')),
             'api_token' => bcrypt(time()),
         ]);
+
         return redirect()->to('bp-admin/account');
     }
 
@@ -74,21 +78,20 @@ class AccountController extends Controller
     {
         try {
             $adminaccounts = Admin::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Product Not Found';
         }
-       // $categories= User::lists('name','email');
+        // $categories= User::lists('name','email');
 
         return view('bp-admin.account.edit')->with(compact('adminaccounts'));
     }
-
 
     public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'role' => 'required',
-            'email'=> 'required|email'
+            'email' => 'required|email',
         ]);
 
         if ($validator->fails()) {
@@ -97,16 +100,17 @@ class AccountController extends Controller
 
         // Explicit allow-list — never mass-assign from $request->all().
         $inputs = [
-            'name'  => $request->input('name'),
+            'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'role'  => $request->input('role'),
+            'role' => $request->input('role'),
         ];
-        if ($request->input('password') != "") {
+        if ($request->input('password') != '') {
             $inputs['password'] = bcrypt($request->input('password'));
         }
 
         Admin::findOrFail($id)->update($inputs);
-        return redirect()->to('bp-admin/account');//return view
+
+        return redirect()->to('bp-admin/account'); // return view
     }
 
     public function destroy($id)
@@ -115,7 +119,4 @@ class AccountController extends Controller
 
         return redirect()->back();
     }
-
-
-
 }

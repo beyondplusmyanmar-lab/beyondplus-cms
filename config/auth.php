@@ -1,5 +1,10 @@
 <?php
 
+use App\Admin;
+use App\Models\Apikeytable;
+use App\Models\Customers;
+use App\User;
+
 return [
 
     /*
@@ -76,19 +81,19 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => User::class,
         ],
         'customers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Customers::class,
+            'model' => Customers::class,
         ],
         'admins' => [
-             'driver' => 'eloquent',
-             'model' => App\Admin::class,
-         ],
+            'driver' => 'eloquent',
+            'model' => Admin::class,
+        ],
         'apikeytable' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Apikeytable::class,
+            'model' => Apikeytable::class,
         ],
 
         // 'users' => [

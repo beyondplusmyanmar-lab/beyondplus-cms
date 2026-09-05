@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
-use Illuminate\Http\Request;
-
-
 use App\Http\Controllers\Controller;
-use DB;
-// use Session;
 use App\User;
+// use Session;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function __invoke() {
+    public function __invoke()
+    {
         return bp_post(10);
     }
 
-    public function index($limit){
+    public function index($limit)
+    {
         // $this->tokenValidate($token);
         return bp_post($limit);
     }
 
-    //http://localhost.local/api/v1/note/1?api_token=r27bHi9jwClte3W8MypKXXqpMCvIRZErVOttKsz9SNf14xKwtK6J1rjWE9Zc
+    // http://localhost.local/api/v1/note/1?api_token=r27bHi9jwClte3W8MypKXXqpMCvIRZErVOttKsz9SNf14xKwtK6J1rjWE9Zc
     // public function index(){
     //     return response()->json(
     //         User::where('id', Auth::guard('api')->id())
@@ -29,35 +28,28 @@ class PostController extends Controller
     //     );
     // }
 
-    public function create(){
+    public function create() {}
 
-    }
-
-    public function store(Request $request){
-      if (Auth::guard('api')->user()){
+    public function store(Request $request)
+    {
+        if (Auth::guard('api')->user()) {
             // $song_id = $request->input('song_id');
             // return Request_record::create([
             //     'song_id' => $song_id
             //    // 'user_id' => Auth::guard('api')->id()
             // ]);
-        }       
+        }
     }
 
-    public function edit($id){
+    public function edit($id) {}
 
-    }
+    public function update($id) {}
 
-    public function update($id){
+    public function destroy($id) {}
 
-    }
-
-    public function destroy($id){
-        
-    }
-
-    private function tokenValidate($token) {
-        if (Session::token() != $token)
-        {
+    private function tokenValidate($token)
+    {
+        if (Session::token() != $token) {
             abort(404);
         }
     }

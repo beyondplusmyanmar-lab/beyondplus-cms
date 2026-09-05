@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Models\Customers;
+use Closure;
 
 /**
  * Authenticates a customer for the protected /api/m/account/* endpoints using

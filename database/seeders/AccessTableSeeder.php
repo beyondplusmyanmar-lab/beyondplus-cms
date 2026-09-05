@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Bp_access;
 use App\Models\Bp_module;
+use Illuminate\Database\Seeder;
 
 class AccessTableSeeder extends Seeder
 {
@@ -25,16 +25,16 @@ class AccessTableSeeder extends Seeder
             foreach ([1, 2, 3, 4] as $role) {
                 $canShow = match (true) {
                     $role === 4 => 1,                                       // superadmin: everything
-                    $role >= 2  => in_array($moduleId, $restricted, true) ? 0 : 1,
-                    default     => 0,                                       // plain user: no admin modules
+                    $role >= 2 => in_array($moduleId, $restricted, true) ? 0 : 1,
+                    default => 0,                                       // plain user: no admin modules
                 };
 
                 Bp_access::insert([
                     'module_id' => $moduleId,
-                    'usertype'  => $role,
-                    'canshow'   => $canShow,
+                    'usertype' => $role,
+                    'canshow' => $canShow,
                     'cancreate' => $role >= 2 ? 1 : 0,
-                    'canedit'   => $role >= 2 ? 1 : 0,
+                    'canedit' => $role >= 2 ? 1 : 0,
                     'candelete' => $role >= 2 ? 1 : 0,
                 ]);
             }

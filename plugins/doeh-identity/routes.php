@@ -30,7 +30,7 @@ Route::middleware('web')->group(function () {
         abort_unless(is_file($path), 404);
 
         return response(file_get_contents($path), 200, [
-            'Content-Type'  => 'application/javascript; charset=utf-8',
+            'Content-Type' => 'application/javascript; charset=utf-8',
             'Cache-Control' => 'public, max-age=3600',
         ]);
     })->name('doeh-identity.widget');

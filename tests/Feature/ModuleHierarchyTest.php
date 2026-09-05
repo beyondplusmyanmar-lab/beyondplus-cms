@@ -26,17 +26,17 @@ class ModuleHierarchyTest extends TestCase
 
         // child module_link => expected parent module_link
         $expected = [
-            'configuration'           => 'settings',
-            'themes'                  => 'settings',
-            'plugins'                 => 'settings',
-            'permission'              => 'settings',
-            'general'                 => 'settings',
-            'account'                 => 'settings',
-            'post/create'             => 'post',
-            'category'                => 'post',
-            'block'                   => 'post',
-            'news'                    => 'post',
-            'activity'                => 'reports',
+            'configuration' => 'settings',
+            'themes' => 'settings',
+            'plugins' => 'settings',
+            'permission' => 'settings',
+            'general' => 'settings',
+            'account' => 'settings',
+            'post/create' => 'post',
+            'category' => 'post',
+            'block' => 'post',
+            'news' => 'post',
+            'activity' => 'reports',
             'reports/customer-report' => 'reports',
         ];
 

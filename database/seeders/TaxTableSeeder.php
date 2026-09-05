@@ -1,9 +1,9 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Database\Seeder;
-use ILLuminate\Database\Eloquent\Model;
+
 use App\Models\Bp_tax;
+use Illuminate\Database\Seeder;
 
 class TaxTableSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class TaxTableSeeder extends Seeder
      */
     public function run()
     {
-     	Bp_tax::truncate();
+        Bp_tax::truncate();
 
         // Ids 1..3 (auto-increment resets on truncate) — referenced by post relationships.
         $categories = [
@@ -24,13 +24,13 @@ class TaxTableSeeder extends Seeder
         ];
         foreach ($categories as [$name, $link, $icon]) {
             Bp_tax::create([
-                'tax_name'   => $name,
-                'parent_id'  => '0',
-                'tax_link'   => $link,
-                'tax_icon'   => $icon,
+                'tax_name' => $name,
+                'parent_id' => '0',
+                'tax_link' => $link,
+                'tax_icon' => $icon,
                 'tax_active' => 'yes',
-                'tax_type'   => 'cat',
-                'lang'       => 1,
+                'tax_type' => 'cat',
+                'lang' => 1,
                 'created_at' => now(),
             ]);
         }

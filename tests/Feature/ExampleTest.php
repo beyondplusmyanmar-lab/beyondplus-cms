@@ -11,7 +11,7 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testAdminLoginPageLoads()
+    public function test_admin_login_page_loads()
     {
         $response = $this->get('/bp-admin/login');
 

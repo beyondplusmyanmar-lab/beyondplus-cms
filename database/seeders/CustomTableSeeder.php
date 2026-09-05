@@ -1,9 +1,9 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
+
 use App\Models\Bp_custom;
+use Illuminate\Database\Seeder;
 
 class CustomTableSeeder extends Seeder
 {
@@ -15,13 +15,13 @@ class CustomTableSeeder extends Seeder
     public function run()
     {
         Bp_custom::truncate();
-     	Bp_custom::create([
-     		'custom_name' => 'Test',
+        Bp_custom::create([
+            'custom_name' => 'Test',
             'custom_link' => 'test',
             'custom_blade' => 'test',
             'custom_weight' => '0',
-            'staff_id'      => 1,
-     		'created_at'    => '2016-06-3 00:36:29'
-     		]);
+            'staff_id' => 1,
+            'created_at' => '2016-06-3 00:36:29',
+        ]);
     }
 }

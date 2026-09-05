@@ -8,10 +8,11 @@
  * (doeh_setup_state), so the wizard is re-entrant; ?step=N revisits any step.
  */
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use App\Support\Plugin;
 use App\Support\Theme;
+use Doeh\Commerce\DoehCommerceClient;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('admins')->prefix('bp-admin')->group(function () {
 
@@ -43,8 +44,8 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
         }
 
         return view('doeh-setup::wizard', [
-            'step'   => $step,
-            'state'  => $state,
+            'step' => $step,
+            'state' => $state,
             'themes' => doeh_setup_themes(),
         ]);
     });
@@ -77,6 +78,7 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
         $r = Theme::activate($slug);
         if (! empty($r['blocked'])) {
             $why = implode('; ', (array) ($r['requirements'] ?? [])) ?: ($r['error'] ?? 'blocked');
+
             return redirect(url('bp-admin/doeh-setup?step=2'))->withErrors("Theme activation blocked: {$why}");
         }
 
@@ -122,22 +124,23 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
 
         // The connector class ships with the doeh-commerce plugin — step 1
         // activates it; guard against jumping straight here.
-        if (! class_exists(\Doeh\Commerce\DoehCommerceClient::class)) {
+        if (! class_exists(DoehCommerceClient::class)) {
             return redirect(url('bp-admin/doeh-setup?step=1'))->withErrors('Activate the DOEH plugins first (step 1).');
         }
 
         // Live proof: a tiny bounded window — success proves auth + scope + host
         // regardless of how many orders exist.
-        $client = new \Doeh\Commerce\DoehCommerceClient($key, $env);
+        $client = new DoehCommerceClient($key, $env);
         $now = time();
         $probe = $client->listOrders([
-            'from'  => gmdate('Y-m-d\TH:i:s\Z', $now - 60),
-            'to'    => gmdate('Y-m-d\TH:i:s\Z', $now),
+            'from' => gmdate('Y-m-d\TH:i:s\Z', $now - 60),
+            'to' => gmdate('Y-m-d\TH:i:s\Z', $now),
             'limit' => 50,
         ]);
         if (! ($probe['ok'] ?? false)) {
             $code = $probe['code'] ?? 'EDGE_TRANSPORT';
             $friendly = function_exists('doeh_storefront_message') ? doeh_storefront_message($code) : 'The key could not be verified.';
+
             return redirect(url('bp-admin/doeh-setup?step=4'))
                 ->withErrors($friendly." [{$code}]");
         }

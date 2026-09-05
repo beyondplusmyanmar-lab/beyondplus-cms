@@ -15,11 +15,12 @@ use Illuminate\Support\Facades\Log;
 /** Resolve Mailgun config: plugin settings first, then the legacy options. */
 $bp_mailgun_config = function () {
     $domain = bp_plugin_option('mailgun', 'domain') ?: bp_option('mailgun_domain', '');
+
     return [
         'domain' => $domain,
         'secret' => bp_plugin_option('mailgun', 'secret') ?: bp_option('mailgun_secret', ''),
-        'base'   => rtrim(bp_plugin_option('mailgun', 'api_base') ?: 'https://api.mailgun.net/v3', '/'),
-        'from'   => bp_plugin_option('mailgun', 'from_email') ?: (bp_option('mail_from') ?: "no-reply@{$domain}"),
+        'base' => rtrim(bp_plugin_option('mailgun', 'api_base') ?: 'https://api.mailgun.net/v3', '/'),
+        'from' => bp_plugin_option('mailgun', 'from_email') ?: (bp_option('mail_from') ?: "no-reply@{$domain}"),
     ];
 };
 
@@ -37,15 +38,16 @@ bp_add_filter('send_mail', function ($sent, $to, $subject, $body) use ($bp_mailg
             ->withBasicAuth('api', $c['secret'])
             ->timeout(10)
             ->post("{$c['base']}/{$c['domain']}/messages", [
-                'from'    => $c['from'],
-                'to'      => $to,
+                'from' => $c['from'],
+                'to' => $to,
                 'subject' => $subject,
-                'text'    => $body,
+                'text' => $body,
             ]);
 
         return $response->successful();
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         Log::warning('Mailgun send failed: '.$e->getMessage());
+
         return false;
     }
 });
@@ -70,8 +72,9 @@ bp_add_filter('send_mail_mime', function ($sent, array $recipients, string $mime
             ]);
 
         return $response->successful();
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         Log::warning('Mailgun MIME send failed: '.$e->getMessage());
+
         return false;
     }
 });

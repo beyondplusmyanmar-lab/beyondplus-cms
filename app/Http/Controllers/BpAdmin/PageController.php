@@ -6,39 +6,42 @@
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Bp_post;
-use App\Models\User;
-use App\Models\Bp_tax;
 use App\Models\Bp_relationship;
+use App\Models\Bp_tax;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('admins');
+        $this->middleware('admins');
     }
 
-    public function index(){
+    public function index()
+    {
 
-        $page = Bp_post::where('post_type','page')->orderBy('updated_at','desc')->where('translate_id',0)->paginate(13);
-        return view('bp-admin.page.index', array('page' => $page));
+        $page = Bp_post::where('post_type', 'page')->orderBy('updated_at', 'desc')->where('translate_id', 0)->paginate(13);
+
+        return view('bp-admin.page.index', ['page' => $page]);
     }
 
+    public function create()
+    {
+        $categories = Bp_tax::all();
 
-    public function create(){
-            $categories= Bp_tax::all();
-        //$categories= Bp_tax::lists('category_name','category_id');
-        return view('bp-admin.page.add', array('categories' => $categories));
+        // $categories= Bp_tax::lists('category_name','category_id');
+        return view('bp-admin.page.add', ['categories' => $categories]);
 
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         bp_validate_images($request, ['category_icon', 'pictures']);
         // $this->validate($request, [
         // 'title' => 'required',
@@ -53,8 +56,8 @@ class PageController extends Controller
             $inputs['category_icon'] = $__up;
         }
 
-
         Bp_post::create($inputs);
+
         return redirect()->to('bp-admin/page');
     }
 
@@ -62,11 +65,12 @@ class PageController extends Controller
     {
         try {
             $page = Bp_post::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Category Not Found';
         }
-        $categories= Bp_tax::get()->pluck('category_name','category_id');
-        return view('bp-admin.page.edit', array('page' => $page, 'categories' => $categories));
+        $categories = Bp_tax::get()->pluck('category_name', 'category_id');
+
+        return view('bp-admin.page.edit', ['page' => $page, 'categories' => $categories]);
 
     }
 
@@ -74,7 +78,7 @@ class PageController extends Controller
     {
         bp_validate_images($request, ['category_icon', 'pictures']);
         $inputs = $request->all();
-     //   $inputs = $request->except('_token', '_method');
+        //   $inputs = $request->except('_token', '_method');
         $inputs['post_type'] = 'page';
 
         $inputs['post_link'] = formatUrl($request->input('title'));
@@ -83,24 +87,26 @@ class PageController extends Controller
         }
 
         Bp_post::findOrFail($id)->update($inputs);
+
         return redirect()->to('bp-admin/page');
     }
 
     public function destroy($id)
     {
         Bp_post::find($id)->delete();
+
         return redirect()->back();
     }
 
-    
-    public function translate($id) {
+    public function translate($id)
+    {
         try {
             $page = Bp_post::findOrFail($id);
-            $tax_type = Bp_relationship::where('post_id',$id)->where('type','page')->pluck('tax_id')->toArray();
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            $tax_type = Bp_relationship::where('post_id', $id)->where('type', 'page')->pluck('tax_id')->toArray();
+        } catch (ModelNotFoundException $e) {
             return 'Post Not Found';
         }
-        return view('bp-admin.page.translate', array('page' => $page,  'tax_type' => $tax_type,'translate_id' => $id));
-    }
 
+        return view('bp-admin.page.translate', ['page' => $page,  'tax_type' => $tax_type, 'translate_id' => $id]);
+    }
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Bp_module;
+use Illuminate\Database\Seeder;
 
 class ModuleTableSeeder extends Seeder
 {
@@ -56,15 +56,15 @@ class ModuleTableSeeder extends Seeder
 
         foreach ($modules as [$name, $mm, $link, $weight, $icon, $parent, $section]) {
             Bp_module::insert([
-                'module_name'    => $name,
+                'module_name' => $name,
                 'module_name_mm' => $mm,
-                'module_link'    => $link,
-                'module_weight'  => $weight,
-                'module_icon'    => $icon,
-                'parent_id'      => $parent ? Bp_module::where('module_link', $parent)->value('module_id') : 0,
-                'staff_id'       => 1,
-                'section'        => $section,
-                'created_at'     => '2016-06-3 00:36:29',
+                'module_link' => $link,
+                'module_weight' => $weight,
+                'module_icon' => $icon,
+                'parent_id' => $parent ? Bp_module::where('module_link', $parent)->value('module_id') : 0,
+                'staff_id' => 1,
+                'section' => $section,
+                'created_at' => '2016-06-3 00:36:29',
             ]);
         }
     }

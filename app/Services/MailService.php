@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Support\Plugin;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -16,13 +17,14 @@ class MailService
     {
         $domain = bp_plugin_option('mailgun', 'domain') ?: bp_option('mailgun_domain', '');
         $secret = bp_plugin_option('mailgun', 'secret') ?: bp_option('mailgun_secret', '');
+
         return $domain !== '' && $secret !== '';
     }
 
     /** Turned on AND configured — used by the live flows. */
     public function enabled(): bool
     {
-        return in_array('mailgun', \App\Support\Plugin::active(), true) && $this->configured();
+        return in_array('mailgun', Plugin::active(), true) && $this->configured();
     }
 
     public function send(string $to, string $subject, string $body): bool
@@ -35,6 +37,7 @@ class MailService
             return $this->dispatch($to, $subject, $body);
         } catch (\Throwable $e) {
             Log::warning('Mail send failed: '.$e->getMessage());
+
             return false;
         }
     }
@@ -52,6 +55,7 @@ class MailService
 
         try {
             $ok = $this->dispatch($to, 'Test email from '.config('app.name'), 'This is a test email from your CMS configuration.');
+
             return ['ok' => $ok, 'message' => $ok ? 'Email accepted by Mailgun.' : 'Mailgun rejected the request.'];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];

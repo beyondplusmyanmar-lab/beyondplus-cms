@@ -3,9 +3,11 @@
 namespace App\Support;
 
 use App\Models\Bp_options;
-use App\Support\PackageGuard;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /**
  * A small hook-based plugin system (actions & filters).
@@ -24,6 +26,7 @@ class Plugin
     public const CMS_VERSION = '2.7.0';
 
     protected static array $actions = [];
+
     protected static array $filters = [];
 
     // ---- hooks -----------------------------------------------------------
@@ -50,12 +53,14 @@ class Plugin
         foreach (self::sorted(self::$filters[$hook] ?? []) as $h) {
             $value = ($h['cb'])($value, ...$args);
         }
+
         return $value;
     }
 
     protected static function sorted(array $hooks): array
     {
         usort($hooks, fn ($a, $b) => $a['priority'] <=> $b['priority']);
+
         return $hooks;
     }
 
@@ -81,36 +86,37 @@ class Plugin
             }
 
             $isActive = in_array($slug, $active, true);
-            $version   = $meta['version'] ?? '1.0.0';
+            $version = $meta['version'] ?? '1.0.0';
             $installed = self::installedVersion($slug);
             $updateAvailable = $isActive && $installed && version_compare($version, $installed, '>');
             $plugins[$slug] = [
-                'slug'         => $slug,
-                'id'           => $meta['id'] ?? $slug,
-                'type'         => $meta['type'] ?? 'plugin',
-                'name'         => $meta['name'] ?? ucfirst($slug),
-                'category'     => $meta['category'] ?? 'General',
-                'description'  => ($mm && ! empty($meta['description_mm']))
+                'slug' => $slug,
+                'id' => $meta['id'] ?? $slug,
+                'type' => $meta['type'] ?? 'plugin',
+                'name' => $meta['name'] ?? ucfirst($slug),
+                'category' => $meta['category'] ?? 'General',
+                'description' => ($mm && ! empty($meta['description_mm']))
                     ? $meta['description_mm']
                     : ($meta['description'] ?? 'No description provided.'),
-                'version'          => $version,
-                'installed_version'=> $installed,
+                'version' => $version,
+                'installed_version' => $installed,
                 'update_available' => $updateAvailable,
-                'author'       => $meta['author'] ?? '',
-                'homepage'     => $meta['homepage'] ?? '',
-                'license'      => $meta['license'] ?? '',
-                'minCmsVersion'=> $meta['minCmsVersion'] ?? '',
-                'main'         => $meta['main'] ?? $slug.'.php',
-                'active'       => $isActive,
-                'migrations'   => is_dir($dir.'/migrations'),
+                'author' => $meta['author'] ?? '',
+                'homepage' => $meta['homepage'] ?? '',
+                'license' => $meta['license'] ?? '',
+                'minCmsVersion' => $meta['minCmsVersion'] ?? '',
+                'main' => $meta['main'] ?? $slug.'.php',
+                'active' => $isActive,
+                'migrations' => is_dir($dir.'/migrations'),
                 // A version bump legitimately changes files, so show "update"
                 // rather than "modified" in that case.
-                'tampered'     => $isActive && ! $updateAvailable && self::isTampered($slug),
-                'settings'     => ! empty($meta['settings']),
+                'tampered' => $isActive && ! $updateAvailable && self::isTampered($slug),
+                'settings' => ! empty($meta['settings']),
             ];
         }
 
         ksort($plugins);
+
         return $plugins;
     }
 
@@ -118,6 +124,7 @@ class Plugin
     public static function meta(string $slug): array
     {
         $file = self::path().'/'.basename($slug).'/plugin.json';
+
         return is_file($file) ? (json_decode(file_get_contents($file), true) ?: []) : [];
     }
 
@@ -125,6 +132,7 @@ class Plugin
     public static function settingsSchema(string $slug): array
     {
         $settings = self::meta($slug)['settings'] ?? [];
+
         return is_array($settings) ? $settings : [];
     }
 
@@ -139,6 +147,7 @@ class Plugin
     {
         try {
             $list = json_decode(bp_option('active_plugins', '[]'), true);
+
             return is_array($list) ? $list : [];
         } catch (\Throwable $e) {
             return [];
@@ -183,7 +192,8 @@ class Plugin
         // constructs (arbitrary code execution, shell access, obfuscation, …).
         $scan = self::scan($slug);
         if (! empty($scan['critical'])) {
-            \Illuminate\Support\Facades\Log::warning("Plugin activation BLOCKED by security scan: {$slug}", $scan['critical']);
+            Log::warning("Plugin activation BLOCKED by security scan: {$slug}", $scan['critical']);
+
             return ['blocked' => true, 'scan' => $scan];
         }
 
@@ -205,6 +215,7 @@ class Plugin
         self::clearFailure($slug);
 
         self::audit('activated', $slug);
+
         return ['activated' => true, 'scan' => $scan];
     }
 
@@ -224,7 +235,7 @@ class Plugin
     protected static function audit(string $action, string $slug): void
     {
         $who = optional(auth('admins')->user())->email ?? 'system';
-        \Illuminate\Support\Facades\Log::info("Plugin {$action}: {$slug} (by {$who})");
+        Log::info("Plugin {$action}: {$slug} (by {$who})");
 
         // Also record on the dashboard activity feed (best-effort).
         try {
@@ -269,7 +280,7 @@ class Plugin
      * `requires.plugins: [...]` (alongside php/extensions) or a flat top-level
      * `requires: [...]` array (the shape themes use), so both manifest styles work.
      *
-     * @param array<string,mixed>|null $meta Pass a theme's meta to reuse this for themes.
+     * @param  array<string,mixed>|null  $meta  Pass a theme's meta to reuse this for themes.
      * @return array<int,string>
      */
     public static function requiredPlugins(string $slug, ?array $meta = null): array
@@ -290,7 +301,7 @@ class Plugin
      * Required plugin ids that are NOT currently active — the unmet dependencies
      * that must block activation (and boot). Empty = all satisfied.
      *
-     * @param array<string,mixed>|null $meta
+     * @param  array<string,mixed>|null  $meta
      * @return array<int,string>
      */
     public static function missingDependencies(string $slug, ?array $meta = null): array
@@ -358,6 +369,7 @@ class Plugin
     public static function isTampered(string $slug): bool
     {
         $map = json_decode(bp_option('plugin_hashes', '{}'), true) ?: [];
+
         return isset($map[$slug]) && $map[$slug] !== self::fingerprint($slug);
     }
 
@@ -374,7 +386,7 @@ class Plugin
             ['option_name' => 'plugin_failures'],
             ['option_value' => json_encode($failures), 'autoload' => 'yes']
         );
-        \Illuminate\Support\Facades\Log::error("Plugin auto-disabled after boot failure: {$slug} — {$reason}");
+        Log::error("Plugin auto-disabled after boot failure: {$slug} — {$reason}");
     }
 
     /** Slug => reason for plugins auto-disabled by recovery mode. */
@@ -427,15 +439,15 @@ class Plugin
         }
 
         $moduleId = DB::table('bp_modules')->insertGetId([
-            'module_name'    => $menu['title'] ?? ucfirst($slug),
+            'module_name' => $menu['title'] ?? ucfirst($slug),
             'module_name_mm' => $menu['title'] ?? ucfirst($slug),
-            'module_link'    => $link,
-            'module_weight'  => $menu['weight'] ?? 99,
-            'module_icon'    => $menu['icon'] ?? 'fa fa-plug',
-            'parent_id'      => $menu['parent'] ?? 8,
-            'section'        => 1,
-            'created_at'     => now(),
-            'updated_at'     => now(),
+            'module_link' => $link,
+            'module_weight' => $menu['weight'] ?? 99,
+            'module_icon' => $menu['icon'] ?? 'fa fa-plug',
+            'parent_id' => $menu['parent'] ?? 8,
+            'section' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         // Copy the Plugins page's access grants so the same roles can reach it.
@@ -444,10 +456,10 @@ class Plugin
             foreach (DB::table('bp_access')->where('module_id', $ref->module_id)->get() as $a) {
                 DB::table('bp_access')->insert([
                     'module_id' => $moduleId,
-                    'usertype'  => $a->usertype,
-                    'canshow'   => $a->canshow,
+                    'usertype' => $a->usertype,
+                    'canshow' => $a->canshow,
                     'cancreate' => $a->cancreate,
-                    'canedit'   => $a->canedit,
+                    'canedit' => $a->canedit,
                     'candelete' => $a->candelete,
                 ]);
             }
@@ -490,6 +502,7 @@ class Plugin
     public static function installedVersion(string $slug): ?string
     {
         $map = json_decode(bp_option('plugin_versions', '{}'), true) ?: [];
+
         return $map[basename($slug)] ?? null;
     }
 
@@ -542,7 +555,7 @@ class Plugin
             $scan = self::scan($slug);
             if (! empty($scan['critical'])) {
                 self::audit('uninstall.php skipped — failed security re-scan', $slug);
-                \Illuminate\Support\Facades\Log::warning("Plugin uninstall.php SKIPPED by security scan: {$slug}", $scan['critical']);
+                Log::warning("Plugin uninstall.php SKIPPED by security scan: {$slug}", $scan['critical']);
             } else {
                 require $script;
             }
@@ -578,7 +591,7 @@ class Plugin
                 $dir = self::path().'/'.$plugin['slug'];
 
                 if (is_dir($dir.'/views')) {
-                    \Illuminate\Support\Facades\View::addNamespace($plugin['slug'], $dir.'/views');
+                    View::addNamespace($plugin['slug'], $dir.'/views');
                 }
 
                 $main = $dir.'/'.basename($plugin['main']);
@@ -604,7 +617,7 @@ class Plugin
             foreach (self::active() as $slug) {
                 $routeFile = self::path().'/'.basename($slug).'/routes.php';
                 if (is_file($routeFile)) {
-                    \Illuminate\Support\Facades\Route::namespace('App\Http\Controllers')
+                    Route::namespace('App\Http\Controllers')
                         ->group($routeFile);
                 }
             }

@@ -22,15 +22,15 @@ class ActivityLogSeeder extends Seeder
 
         foreach ($rows as [$description, $event, $subjectId, $hoursAgo]) {
             DB::table('activity_log')->insert([
-                'log_name'     => 'content',
-                'description'  => $description,
+                'log_name' => 'content',
+                'description' => $description,
                 'subject_type' => 'App\\Models\\Bp_post',
-                'event'        => $event,
-                'subject_id'   => $subjectId,
-                'causer_type'  => 'App\\Admin',
-                'causer_id'    => 1,
-                'created_at'   => now()->subHours($hoursAgo),
-                'updated_at'   => now()->subHours($hoursAgo),
+                'event' => $event,
+                'subject_id' => $subjectId,
+                'causer_type' => 'App\\Admin',
+                'causer_id' => 1,
+                'created_at' => now()->subHours($hoursAgo),
+                'updated_at' => now()->subHours($hoursAgo),
             ]);
         }
     }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Bp_menu;
+use Illuminate\Database\Seeder;
 
 class MenuTableSeeder extends Seeder
 {
@@ -36,18 +36,18 @@ class MenuTableSeeder extends Seeder
 
         foreach ($menus as [$id, $name, $link, $postId, $weight, $parent, $type, $lang, $translateId]) {
             Bp_menu::insert([
-                'menu_id'      => $id,
-                'menu_name'    => $name,
-                'menu_link'    => $link,
-                'post_id'      => $postId,
-                'menu_weight'  => $weight,
-                'menu_icon'    => '',
-                'parent_id'    => $parent,
-                'menu_type'    => $type,
-                'staff_id'     => 1,
-                'lang'         => $lang,
+                'menu_id' => $id,
+                'menu_name' => $name,
+                'menu_link' => $link,
+                'post_id' => $postId,
+                'menu_weight' => $weight,
+                'menu_icon' => '',
+                'parent_id' => $parent,
+                'menu_type' => $type,
+                'staff_id' => 1,
+                'lang' => $lang,
                 'translate_id' => $translateId,
-                'created_at'   => now(),
+                'created_at' => now(),
             ]);
         }
     }

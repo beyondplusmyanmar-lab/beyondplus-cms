@@ -33,6 +33,5 @@ return [
     'ictrc' => 'Information and Communication Technology Research Center',
 
     'nsaqd' => 'National Standards and Quality <br /> Department',
-  
 
 ];

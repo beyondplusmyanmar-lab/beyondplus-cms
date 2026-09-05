@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Bp_post;
 use App\Models\Bp_relationship;
+use Illuminate\Database\Seeder;
 
 class PostTableSeeder extends Seeder
 {

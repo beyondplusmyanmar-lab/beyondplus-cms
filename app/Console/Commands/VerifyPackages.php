@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Support\Plugin;
 use App\Support\Theme;
+use Illuminate\Console\Command;
 
 /**
  * Security-verify every installed plugin and theme in one pass — static scan,
@@ -42,6 +42,7 @@ class VerifyPackages extends Command
 
         if ($this->option('json')) {
             $this->line(json_encode(['packages' => array_values($rows), 'failed' => count($failed)], JSON_PRETTY_PRINT));
+
             return $failed ? self::FAILURE : self::SUCCESS;
         }
 
@@ -74,10 +75,12 @@ class VerifyPackages extends Command
 
         if ($failed) {
             $this->error(count($failed).' package(s) failed verification.');
+
             return self::FAILURE;
         }
 
         $this->info('All '.count($rows).' package(s) verified — no critical issues.');
+
         return self::SUCCESS;
     }
 

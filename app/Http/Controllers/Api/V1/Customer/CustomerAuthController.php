@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\V1\Customer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Customers;
 use App\Repositories\CustomersRepo;
 use App\Services\OtpNotifier;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use OpenApi\Attributes as OA;
 
 /**
@@ -22,12 +22,13 @@ use OpenApi\Attributes as OA;
 class CustomerAuthController extends Controller
 {
     protected $customersRepo;
+
     protected $otpNotifier;
 
     public function __construct(CustomersRepo $customersRepo, OtpNotifier $otpNotifier)
     {
         $this->customersRepo = $customersRepo;
-        $this->otpNotifier   = $otpNotifier;
+        $this->otpNotifier = $otpNotifier;
     }
 
     // ---- helpers ---------------------------------------------------------
@@ -43,6 +44,7 @@ class CustomerAuthController extends Controller
         if ($errors) {
             $data['errors'] = $errors;
         }
+
         return $this->respond($data, $status);
     }
 
@@ -51,17 +53,18 @@ class CustomerAuthController extends Controller
         $plain = Str::random(64);
         $customer->api_token = hash('sha256', $plain);
         $customer->save();
+
         return $plain;
     }
 
     private function customerPayload(Customers $c): array
     {
         return [
-            'id'            => $c->id,
-            'first_name'    => $c->first_name,
-            'last_name'     => $c->last_name,
-            'phone'         => $c->phone,
-            'email'         => $c->email,
+            'id' => $c->id,
+            'first_name' => $c->first_name,
+            'last_name' => $c->last_name,
+            'phone' => $c->phone,
+            'email' => $c->email,
             'reward_points' => $c->total_reward_points,
         ];
     }
@@ -71,6 +74,7 @@ class CustomerAuthController extends Controller
         if (! $identifier) {
             return null;
         }
+
         return Customers::where('phone', $identifier)->orWhere('email', $identifier)->first();
     }
 
@@ -134,7 +138,7 @@ class CustomerAuthController extends Controller
         $identifier = ($regType === 'email') ? $request->email : $request->phone;
 
         return $this->respond([
-            'message'    => 'Account created. Enter the OTP sent to you to verify.',
+            'message' => 'Account created. Enter the OTP sent to you to verify.',
             'identifier' => $identifier,
         ]);
     }
@@ -274,8 +278,8 @@ class CustomerAuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'identifier' => 'required',
-            'code'       => 'required',
-            'password'   => 'required|confirmed|min:8',
+            'code' => 'required',
+            'password' => 'required|confirmed|min:8',
         ]);
         if ($validator->fails()) {
             return $this->fail('Validation failed.', 422, $validator->errors());

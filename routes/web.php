@@ -19,18 +19,12 @@ use Illuminate\Support\Facades\Route;
 
 // Auth::routes();
 
-
-
 // Main GET routes with locale
 // Route::prefix('{lang?}')->middleware('locale')->group(function() {
 
 //     Route::get('/home', 'HomeController@index')->name('home');
-    
+
 // });
-
-
-
-
 
 // SPA example demo. Served from resources/ (not public/) and gated by the
 // api_enabled toggle, so it returns 503 when the API is disabled — matching the

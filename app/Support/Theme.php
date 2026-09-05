@@ -23,6 +23,7 @@ class Theme
     public static function meta(string $slug): array
     {
         $file = self::path().'/'.basename($slug).'/theme.json';
+
         return is_file($file) ? (json_decode(file_get_contents($file), true) ?: []) : [];
     }
 
@@ -43,25 +44,26 @@ class Theme
             $isActive = $slug === $active;
 
             $themes[$slug] = [
-                'slug'          => $slug,
-                'id'            => $meta['id'] ?? $slug,
-                'type'          => $meta['type'] ?? 'theme',
-                'name'          => $meta['name'] ?? ucfirst($slug),
-                'description'   => $meta['description'] ?? 'No description provided.',
-                'version'       => $meta['version'] ?? '1.0.0',
-                'author'        => $meta['author'] ?? '',
-                'homepage'      => $meta['homepage'] ?? '',
-                'license'       => $meta['license'] ?? '',
+                'slug' => $slug,
+                'id' => $meta['id'] ?? $slug,
+                'type' => $meta['type'] ?? 'theme',
+                'name' => $meta['name'] ?? ucfirst($slug),
+                'description' => $meta['description'] ?? 'No description provided.',
+                'version' => $meta['version'] ?? '1.0.0',
+                'author' => $meta['author'] ?? '',
+                'homepage' => $meta['homepage'] ?? '',
+                'license' => $meta['license'] ?? '',
                 'minCmsVersion' => $meta['minCmsVersion'] ?? '',
-                'active'        => $isActive,
-                'hasSettings'   => ! empty($meta['settings']),
-                'tampered'      => $isActive && self::isTampered($slug),
-                'preview'       => file_exists(public_path('theme-previews/'.$slug.'.png'))
+                'active' => $isActive,
+                'hasSettings' => ! empty($meta['settings']),
+                'tampered' => $isActive && self::isTampered($slug),
+                'preview' => file_exists(public_path('theme-previews/'.$slug.'.png'))
                     ? 'theme-previews/'.$slug.'.png' : null,
             ];
         }
 
         ksort($themes);
+
         return $themes;
     }
 
@@ -87,6 +89,7 @@ class Theme
     public static function settingsSchema(string $slug): array
     {
         $settings = self::meta($slug)['settings'] ?? [];
+
         return is_array($settings) ? $settings : [];
     }
 
@@ -94,6 +97,7 @@ class Theme
     protected static function defaultValue(array $field): string
     {
         $default = $field['default'] ?? '';
+
         // Repeater / any array default is stored as JSON (matches the theme's json_decode()).
         return is_array($default) ? json_encode($default, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : (string) $default;
     }
@@ -106,7 +110,9 @@ class Theme
     public static function seedDefaults(string $slug): void
     {
         foreach (self::settingsSchema($slug) as $field) {
-            if (empty($field['name'])) { continue; }
+            if (empty($field['name'])) {
+                continue;
+            }
             Bp_options::firstOrCreate(
                 ['option_name' => $field['name']],
                 ['option_value' => self::defaultValue($field), 'autoload' => 'yes']
@@ -118,6 +124,7 @@ class Theme
     {
         $map = json_decode(bp_option('theme_hashes', '{}'), true) ?: [];
         $slug = basename($slug);
+
         return isset($map[$slug]) && $map[$slug] !== PackageGuard::fingerprint(self::path().'/'.$slug);
     }
 
@@ -156,6 +163,7 @@ class Theme
         $scan = self::scan($slug);
         if (! empty($scan['critical'])) {
             Log::warning("Theme activation BLOCKED by security scan: {$slug}", $scan['critical']);
+
             return ['blocked' => true, 'scan' => $scan];
         }
 

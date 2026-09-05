@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
+use App\Support\Plugin;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -20,11 +20,11 @@ class SmsService
     /** The SMSPoh provider plugin is active AND configured — used by the OTP flow. */
     public function enabled(): bool
     {
-        return in_array('smspoh', \App\Support\Plugin::active(), true) && $this->configured();
+        return in_array('smspoh', Plugin::active(), true) && $this->configured();
     }
 
     /**
-     * @return bool  true if the message was accepted by the gateway
+     * @return bool true if the message was accepted by the gateway
      */
     public function send(string $to, string $message): bool
     {
@@ -36,6 +36,7 @@ class SmsService
             return $this->dispatch($to, $message);
         } catch (\Throwable $e) {
             Log::warning('SMS send failed: '.$e->getMessage());
+
             return false;
         }
     }
@@ -54,6 +55,7 @@ class SmsService
 
         try {
             $ok = $this->dispatch($to, 'Test message from '.config('app.name').'.');
+
             return ['ok' => $ok, 'message' => $ok ? 'SMS accepted by the gateway.' : 'The gateway rejected the request.'];
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => $e->getMessage()];

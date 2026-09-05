@@ -3,7 +3,11 @@
 namespace Tests\Feature;
 
 use App\Admin;
+use App\Models\Bp_options;
+use App\Support\Plugin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Models\Activity;
 use Tests\TestCase;
 
 class AdminTest extends TestCase
@@ -14,7 +18,7 @@ class AdminTest extends TestCase
     {
         parent::setUp();
         $this->seed();
-        \Illuminate\Support\Facades\Cache::flush(); // reset the login rate limiter
+        Cache::flush(); // reset the login rate limiter
     }
 
     private function admin(): Admin
@@ -52,7 +56,7 @@ class AdminTest extends TestCase
 
     public function test_hardened_login_makes_default_path_a_decoy(): void
     {
-        \App\Models\Bp_options::updateOrCreate(
+        Bp_options::updateOrCreate(
             ['option_name' => 'admin_login_path'],
             ['option_value' => 'secretdoor', 'autoload' => 'yes']
         );
@@ -65,9 +69,9 @@ class AdminTest extends TestCase
     public function test_system_page_loads(): void
     {
         // Disable the update check so the page renders without a network call.
-        \App\Models\Bp_options::updateOrCreate(['option_name' => 'update_check'], ['option_value' => 'no', 'autoload' => 'yes']);
+        Bp_options::updateOrCreate(['option_name' => 'update_check'], ['option_value' => 'no', 'autoload' => 'yes']);
         $this->actingAs($this->admin(), 'admins')->get('/bp-admin/configuration/system')
-            ->assertStatus(200)->assertSee(\App\Support\Plugin::CMS_VERSION);
+            ->assertStatus(200)->assertSee(Plugin::CMS_VERSION);
     }
 
     public function test_system_flow_page_loads(): void
@@ -99,7 +103,7 @@ class AdminTest extends TestCase
     {
         $this->post('/bp-admin/login', ['email' => 'x@example.com', 'password' => 'wrong-password']);
         $this->assertTrue(
-            \Spatie\Activitylog\Models\Activity::where('description', 'like', 'failed sign-in%')->exists()
+            Activity::where('description', 'like', 'failed sign-in%')->exists()
         );
     }
 

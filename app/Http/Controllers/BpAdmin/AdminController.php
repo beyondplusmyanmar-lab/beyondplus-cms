@@ -1,26 +1,25 @@
 <?php
+
 /**
  * Created by Beyond Plus <bplusmyanmar@hotmail.com>
  * User: Beyond Plus
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Bp_post;
 use App\Models\Bp_media;
-use App\Admin;
-use App\User;
+use App\Models\Bp_post;
 use App\Models\Customers;
+use Spatie\Activitylog\Models\Activity;
 
 class AdminController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('admins');
+        $this->middleware('admins');
     }
 
     public function index()
@@ -31,13 +30,10 @@ class AdminController extends Controller
         $totalMedia = Bp_media::count();
         $allUser = Customers::count();
 
-        $latestUsers= Customers::orderBy('created_at','DESC')->paginate(12);
+        $latestUsers = Customers::orderBy('created_at', 'DESC')->paginate(12);
 
-        $activities = \Spatie\Activitylog\Models\Activity::with('causer')->latest()->limit(8)->get();
+        $activities = Activity::with('causer')->latest()->limit(8)->get();
 
-        return view('bp-admin.home', array('post' => $post , 'allUser' => $allUser, 'latestUsers' => $latestUsers ,'totalPost' => $totalPost, 'totalPage' => $totalPage, 'totalMedia' => $totalMedia, 'activities' => $activities));
+        return view('bp-admin.home', ['post' => $post, 'allUser' => $allUser, 'latestUsers' => $latestUsers, 'totalPost' => $totalPost, 'totalPage' => $totalPage, 'totalMedia' => $totalMedia, 'activities' => $activities]);
     }
-
-
-
 }

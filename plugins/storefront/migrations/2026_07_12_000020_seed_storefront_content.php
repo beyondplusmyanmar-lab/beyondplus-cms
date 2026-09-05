@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Theme;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,8 @@ return new class extends Migration
     /** Read the seed spec the active Storefront theme declares. */
     private function seed(): array
     {
-        $seed = \App\Support\Theme::meta('storefront')['seed'] ?? [];
+        $seed = Theme::meta('storefront')['seed'] ?? [];
+
         return is_array($seed) ? $seed : [];
     }
 
@@ -31,24 +33,24 @@ return new class extends Migration
                 continue;
             }
             DB::table('bp_posts')->insert([
-                'title'         => $page['title'] ?? ucfirst($slug),
-                'body'          => $page['body'] ?? '',
-                'post_link'     => $slug,
-                'post_type'     => 'page',
+                'title' => $page['title'] ?? ucfirst($slug),
+                'body' => $page['body'] ?? '',
+                'post_link' => $slug,
+                'post_type' => 'page',
                 'post_template' => $page['template'] ?? 'default',
-                'post_active'   => 'yes',
-                'lang'          => 1,
-                'staff_id'      => 1,
-                'featured_img'  => 'default-cover.jpg',
-                'created_at'    => now(),
-                'updated_at'    => now(),
+                'post_active' => 'yes',
+                'lang' => 1,
+                'staff_id' => 1,
+                'featured_img' => 'default-cover.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
 
         $weight = (int) (DB::table('bp_menus')->max('menu_weight') ?? 0);
         foreach ($seed['menu'] ?? [] as $item) {
             $label = trim($item['label'] ?? '');
-            $link  = $item['link'] ?? '';
+            $link = $item['link'] ?? '';
             if ($label === '') {
                 continue;
             }
@@ -60,17 +62,17 @@ return new class extends Migration
             // front controller (menu() → Bp_post by post_id) resolves it.
             $pageId = (int) (DB::table('bp_posts')->where('post_link', $link)->where('post_type', 'page')->value('id') ?? 0);
             DB::table('bp_menus')->insert([
-                'menu_name'    => $label,
-                'menu_link'    => $link,
-                'post_id'      => $pageId,
-                'menu_type'    => $item['type'] ?? 'default',
-                'menu_weight'  => ++$weight,
-                'parent_id'    => 0,
-                'lang'         => 1,
-                'staff_id'     => 1,
+                'menu_name' => $label,
+                'menu_link' => $link,
+                'post_id' => $pageId,
+                'menu_type' => $item['type'] ?? 'default',
+                'menu_weight' => ++$weight,
+                'parent_id' => 0,
+                'lang' => 1,
+                'staff_id' => 1,
                 'translate_id' => '0',
-                'created_at'   => now(),
-                'updated_at'   => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

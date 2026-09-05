@@ -3,17 +3,17 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
 class Locale
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
      * @return mixed
      */
-    public function handle( $request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, $guard = null)
     {
 
         if ($request->method() === 'GET') {
@@ -23,12 +23,9 @@ class Locale
 
                 app()->setLocale($request->segment(1));
 
-            } 
-
+            }
 
         }
-
-
 
         return $next($request);
     }

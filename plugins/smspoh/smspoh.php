@@ -18,8 +18,8 @@ bp_add_filter('send_sms', function ($sent, $to, $message) {
     }
 
     // Read from this plugin's own settings, falling back to the legacy config.
-    $token  = bp_plugin_option('smspoh', 'api_token') ?: bp_option('sms_api_token', '');
-    $url    = bp_plugin_option('smspoh', 'api_url') ?: 'https://api.smspoh.com/v1/messages/send';
+    $token = bp_plugin_option('smspoh', 'api_token') ?: bp_option('sms_api_token', '');
+    $url = bp_plugin_option('smspoh', 'api_url') ?: 'https://api.smspoh.com/v1/messages/send';
     $sender = bp_plugin_option('smspoh', 'sender') ?: (bp_option('sms_sender') ?: 'CMS');
 
     if ($token === '') {
@@ -31,14 +31,15 @@ bp_add_filter('send_sms', function ($sent, $to, $message) {
             ->acceptJson()
             ->timeout(10)
             ->post($url, [
-                'to'      => $to,
-                'from'    => $sender,
+                'to' => $to,
+                'from' => $sender,
                 'content' => $message,
             ]);
 
         return $response->successful();
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         Log::warning('SMSPoh send failed: '.$e->getMessage());
+
         return false;
     }
 });

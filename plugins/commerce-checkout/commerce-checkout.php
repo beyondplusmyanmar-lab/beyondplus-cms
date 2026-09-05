@@ -16,7 +16,7 @@ bp_add_filter('commerce_product_actions', function ($html, $product) {
     }
     try {
         return $html.view('commerce-checkout::partials.add-to-cart', ['p' => $product])->render();
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         return $html;
     }
 }, 10);

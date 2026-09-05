@@ -22,9 +22,9 @@ class CustomerTest extends TestCase
         $phone = '09112223344';
 
         $this->post('/customer/sign-up', [
-            'firstname'             => 'Test',
-            'phone'                 => $phone,
-            'password'              => 'password123',
+            'firstname' => 'Test',
+            'phone' => $phone,
+            'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
 
@@ -46,9 +46,9 @@ class CustomerTest extends TestCase
 
         $this->get('/customer/sign-up')->assertRedirect();
         $this->post('/customer/sign-up', [
-            'firstname'             => 'X',
-            'phone'                 => '09998887766',
-            'password'              => 'password123',
+            'firstname' => 'X',
+            'phone' => '09998887766',
+            'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
 

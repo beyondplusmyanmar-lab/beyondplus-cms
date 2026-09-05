@@ -15,7 +15,6 @@
  * When this plugin (or identity) is off, the filter returns the default ('')
  * and the theme shows nothing — graceful degradation for free.
  */
-
 bp_add_filter('example_points_progress', function ($default) {
     if (! function_exists('doeh_identity_enabled') || ! doeh_identity_enabled()) {
         return $default; // identity off → render nothing

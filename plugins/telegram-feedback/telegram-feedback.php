@@ -19,7 +19,7 @@ if (! function_exists('bp_telegram_send')) {
     function bp_telegram_send(string $text): bool
     {
         $token = bp_plugin_option('telegram-feedback', 'bot_token');
-        $chat  = bp_plugin_option('telegram-feedback', 'chat_id');
+        $chat = bp_plugin_option('telegram-feedback', 'chat_id');
 
         if (! $token || ! $chat) {
             return false;                       // not configured yet
@@ -29,14 +29,15 @@ if (! function_exists('bp_telegram_send')) {
             $response = Http::acceptJson()
                 ->timeout(10)
                 ->post("https://api.telegram.org/bot{$token}/sendMessage", [
-                    'chat_id'    => $chat,
-                    'text'       => $text,
+                    'chat_id' => $chat,
+                    'text' => $text,
                     'parse_mode' => 'HTML',
                 ]);
 
             return $response->successful();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::warning('Telegram send failed: '.$e->getMessage());
+
             return false;
         }
     }
@@ -45,9 +46,9 @@ if (! function_exists('bp_telegram_send')) {
 // Notify Telegram whenever the contact / feedback form is submitted.
 bp_add_action('feedback_received', function ($feedback) {
     $text = "📩 <b>New feedback</b>\n"
-        . 'From: '.e($feedback->name ?? 'Anonymous').' ('.e($feedback->email ?: 'no email').")\n"
-        . ($feedback->subject ? 'Subject: '.e($feedback->subject)."\n" : '')
-        . "\n".e((string) ($feedback->message ?? ''));
+        .'From: '.e($feedback->name ?? 'Anonymous').' ('.e($feedback->email ?: 'no email').")\n"
+        .($feedback->subject ? 'Subject: '.e($feedback->subject)."\n" : '')
+        ."\n".e((string) ($feedback->message ?? ''));
 
     bp_telegram_send($text);
 });

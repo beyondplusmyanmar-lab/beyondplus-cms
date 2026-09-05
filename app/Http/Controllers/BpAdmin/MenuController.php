@@ -6,44 +6,46 @@
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Bp_post;
 use App\Models\Bp_menu;
+use App\Models\Bp_post;
 use App\Models\User;
 use Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    var $categories;
+    public $categories;
+
     public function __construct()
     {
-       $this->middleware('admins');
-       $this->menu = Bp_menu::with('children')->where('lang',1)->where('parent_id',0)->orderBy('menu_weight', 'asc')->get();
-       $this->pages=  Bp_post::where('post_type', 'page')->where('lang',1)->orderBy('id', 'desc')->get();
-       // $this->pages=  Bp_post::whereNotIn('post_type',['post','event','news','page','user-guide'])->where('lang',1)->orderBy('id', 'desc')->get();
-       $this->posts=  Bp_post::where('post_type', 'post')->where('lang',1)->orderBy('id', 'desc')->get();
+        $this->middleware('admins');
+        $this->menu = Bp_menu::with('children')->where('lang', 1)->where('parent_id', 0)->orderBy('menu_weight', 'asc')->get();
+        $this->pages = Bp_post::where('post_type', 'page')->where('lang', 1)->orderBy('id', 'desc')->get();
+        // $this->pages=  Bp_post::whereNotIn('post_type',['post','event','news','page','user-guide'])->where('lang',1)->orderBy('id', 'desc')->get();
+        $this->posts = Bp_post::where('post_type', 'post')->where('lang', 1)->orderBy('id', 'desc')->get();
     }
 
+    public function index()
+    {
 
-    public function index(){
-
-        return view('bp-admin.menu.index', array('menu' => $this->menu, 'pages' => $this->pages, 'posts' => $this->posts));
+        return view('bp-admin.menu.index', ['menu' => $this->menu, 'pages' => $this->pages, 'posts' => $this->posts]);
     }
 
-
-    public function create(){
-        //$categories= Bp_menu::get()->pluck('category_name','category_id');
+    public function create()
+    {
+        // $categories= Bp_menu::get()->pluck('category_name','category_id');
         return view('bp-admin.menu.add');
 
     }
 
     // for div link
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         bp_validate_images($request, ['category_icon', 'menu_icon']);
         // $this->validate($request, [
         // 'title' => 'required',
@@ -57,12 +59,13 @@ class MenuController extends Controller
         return redirect()->to('bp-admin/menu');
     }
 
-    public function pageStore(Request $request){
-        $pages  = $request->get('pages');
-        if($pages) {
-            for( $i=0; $i<count($pages); $i++){
+    public function pageStore(Request $request)
+    {
+        $pages = $request->get('pages');
+        if ($pages) {
+            for ($i = 0; $i < count($pages); $i++) {
                 $page['post_id'] = $pages[$i];
-                $getpages = Bp_post::where('id' ,$pages[$i])->first();
+                $getpages = Bp_post::where('id', $pages[$i])->first();
                 $page_name = $getpages->title;
                 $page['menu_name'] = $page_name;
                 $page['menu_link'] = formatUrl($page_name);
@@ -74,13 +77,14 @@ class MenuController extends Controller
         return redirect()->back();
     }
 
-    public function postStore(Request $request){
-        $posts  = $request->get('posts');
-        //print_r($posts_name);
-        if($posts) {
-            for( $i=0; $i<sizeof($posts); $i++){
+    public function postStore(Request $request)
+    {
+        $posts = $request->get('posts');
+        // print_r($posts_name);
+        if ($posts) {
+            for ($i = 0; $i < count($posts); $i++) {
                 $post['post_id'] = $posts[$i];
-                $getposts = Bp_post::where('id' , $posts[$i])->first();
+                $getposts = Bp_post::where('id', $posts[$i])->first();
                 $post_name = $getposts->title;
                 $post['menu_name'] = $post_name;
                 $post['menu_link'] = formatUrl($post_name);
@@ -92,17 +96,15 @@ class MenuController extends Controller
         return redirect()->back();
     }
 
-
-    
-
     public function edit($id)
     {
         try {
             $menu = Bp_menu::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Category Not Found';
         }
-        return view('bp-admin.menu.edit', array('menu' => $menu));
+
+        return view('bp-admin.menu.edit', ['menu' => $menu]);
 
     }
 
@@ -111,15 +113,12 @@ class MenuController extends Controller
         bp_validate_images($request, ['category_icon', 'menu_icon']);
         // $inputs = $request->all();
         // $inputs['menu_link'] = str_replace(' ', '-', strtolower($request->input('menu_name')));
-    //    print_r($inputs);
+        //    print_r($inputs);
         $inputs = $request->all();
 
-        
-        if($inputs['menu_type'] == "default") {
-            $inputs['menu_link'] =  formatUrl($request->input('menu_name')) ;
+        if ($inputs['menu_type'] == 'default') {
+            $inputs['menu_link'] = formatUrl($request->input('menu_name'));
         }
-        
-
 
         // if ($request->file('menu_icon') && $request->file('category_icon')->isValid()) {
         //     $destinationPath = uploadPath();
@@ -130,24 +129,25 @@ class MenuController extends Controller
         // }
 
         Bp_menu::findOrFail($id)->update($inputs);
+
         return redirect()->to('bp-admin/menu');
     }
 
     public function destroy($id)
     {
         Bp_menu::find($id)->delete();
+
         return redirect()->back();
     }
 
-
-    public function translate($id) {
+    public function translate($id)
+    {
         try {
             $menu = Bp_menu::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Menu Not Found';
         }
 
-        return view('bp-admin.menu.translate', array('menu' => $menu,'translate_id' => $id));
+        return view('bp-admin.menu.translate', ['menu' => $menu, 'translate_id' => $id]);
     }
-
 }

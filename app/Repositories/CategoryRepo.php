@@ -2,28 +2,22 @@
 
 namespace App\Repositories;
 
-use DB;
-use Auth;
-use Hash;
-use Session;
-
-use App\Models\Product;
 use App\Models\Category;
-
-use App\Repositories\GeneralSettingRepo;
+use App\Models\Product;
 
 class CategoryRepo
 {
     protected $generalSettingRepo;
 
-    public function __construct(GeneralSettingRepo $generalSettingRepo) {
-        $this->generalSettingRepo   = $generalSettingRepo;
+    public function __construct(GeneralSettingRepo $generalSettingRepo)
+    {
+        $this->generalSettingRepo = $generalSettingRepo;
     }
 
+    public function save_category($input)
+    {
 
-    public function  save_category($input) {
-
-        return Category::insert($input);;
+        return Category::insert($input);
         // $category = new Category;
 
         // $category->fill($input);
@@ -31,41 +25,35 @@ class CategoryRepo
 
     }
 
-     // // item check coupon_code
-     //    // product table sku and size etc that not include product name
-     //    $product = Product::with(['languageProducts', 'languageProducts.product','productsCurrency', 'productsCategories' ])->findOrFail($id);
+    // // item check coupon_code
+    //    // product table sku and size etc that not include product name
+    //    $product = Product::with(['languageProducts', 'languageProducts.product','productsCurrency', 'productsCategories' ])->findOrFail($id);
 
-     //    if(!$product) {
-     //        abort(404);
-     //    } 
+    //    if(!$product) {
+    //        abort(404);
+    //    }
 
-        
+    //    // if not current currency price , english price add
+    //    // if not used and filtering enable  regular_price and sales_price at dashboard in the future , it can remove
+    //    if(isset($product['productsCurrency'][getDefaultCurrenyArrayPos()])) {
+    //        $productsCurrency = $product['productsCurrency'][getDefaultCurrenyArrayPos()];
+    //    } else {
+    //        $productsCurrency = $product['productsCurrency'][0];
+    //    }
 
-     //    // if not current currency price , english price add 
-     //    // if not used and filtering enable  regular_price and sales_price at dashboard in the future , it can remove 
-     //    if(isset($product['productsCurrency'][getDefaultCurrenyArrayPos()])) {
-     //        $productsCurrency = $product['productsCurrency'][getDefaultCurrenyArrayPos()];
-     //    } else {
-     //        $productsCurrency = $product['productsCurrency'][0];
-     //    }
+    //    $product_id             = $product['languageProducts'][getDefaultCurrenyArrayPos()]['product_id'];
+    //    $product_name           = $product['languageProducts'][getDefaultCurrenyArrayPos()]['name'];
+    //    $product_price          = $productsCurrency['regular_price'];
+    //    $sales_price            = isset($productsCurrency['sales_price']) ? $productsCurrency['sales_price'] : 0;
+    //    $products_categories    = $product['productsCategories']->toArray();
 
+    //    $sku                    = $product->sku;
+    //    // hide for shop_product
+    //    $exchange_reward_points = 0;
+    //    // $exchange_reward_points = isset($product->exchange_reward_points) ? $product->exchange_reward_points : 0;
 
-     //    $product_id             = $product['languageProducts'][getDefaultCurrenyArrayPos()]['product_id'];
-     //    $product_name           = $product['languageProducts'][getDefaultCurrenyArrayPos()]['name'];
-     //    $product_price          = $productsCurrency['regular_price'];
-     //    $sales_price            = isset($productsCurrency['sales_price']) ? $productsCurrency['sales_price'] : 0;
-     //    $products_categories    = $product['productsCategories']->toArray();
+    //    $default_setting = getDefaultSetting();
 
-
-
-     //    $sku                    = $product->sku;
-     //    // hide for shop_product
-     //    $exchange_reward_points = 0;
-     //    // $exchange_reward_points = isset($product->exchange_reward_points) ? $product->exchange_reward_points : 0;
-
-
-     //    $default_setting = getDefaultSetting();
-
-     //    $currency_code = $default_setting['currency']['code'];
-     //    $currency_symbol = $default_setting['currency']['symbol']; 
+    //    $currency_code = $default_setting['currency']['code'];
+    //    $currency_symbol = $default_setting['currency']['symbol'];
 }

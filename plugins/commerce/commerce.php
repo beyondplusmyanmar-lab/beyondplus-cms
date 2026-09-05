@@ -38,7 +38,7 @@ bp_add_filter('business_featured_products', function ($html) {
             'products' => $products,
             'currency' => bp_plugin_option('commerce', 'currency', 'MMK'),
         ])->render();
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         return $html;
     }
 });
@@ -64,7 +64,7 @@ bp_add_filter('business_promotions', function ($html) {
         }
 
         return $html.view('commerce::partials.promotions', ['promos' => $promos])->render();
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         return $html;
     }
 });
@@ -87,7 +87,7 @@ bp_add_filter('business_store_locations', function ($html) {
         }
 
         return $html.view('commerce::partials.locations', ['branches' => $branches])->render();
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         return $html;
     }
 });
@@ -106,10 +106,12 @@ bp_add_filter('business_hero_actions', function ($html) {
     try {
         if (DB::table('commerce_products')->where('is_active', 1)->exists()) {
             $label = app()->getLocale() === 'mm' ? 'ဈေးဝယ်ရန်' : 'Shop Now';
+
             return $html.'<a href="'.e(url('/shop')).'" class="btn btn-light btn-lg">'.e($label).'</a>';
         }
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         // fall through
     }
+
     return $html;
 });

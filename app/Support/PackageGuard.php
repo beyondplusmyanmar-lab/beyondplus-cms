@@ -22,34 +22,34 @@ class PackageGuard
     public static function scan(string $dir, array $exts = ['php']): array
     {
         $critical = [
-            '/\beval\s*\(/i'                                              => 'eval() — executes arbitrary code',
+            '/\beval\s*\(/i' => 'eval() — executes arbitrary code',
             '/\b(exec|shell_exec|system|passthru|proc_open|popen)\s*\(/i' => 'shell / process execution',
-            '/`[^`\n]*`/'                                                 => 'backtick shell execution',
-            '/\bassert\s*\(\s*[\'"]/i'                                    => 'assert() on a string — executes code',
-            '/\bcreate_function\s*\(/i'                                   => 'create_function() — executes code',
-            '/preg_replace\s*\(\s*([\'"]).*\1\s*[.,]?\s*[\'"][^\'"]*e/i'  => 'preg_replace /e — executes code',
+            '/`[^`\n]*`/' => 'backtick shell execution',
+            '/\bassert\s*\(\s*[\'"]/i' => 'assert() on a string — executes code',
+            '/\bcreate_function\s*\(/i' => 'create_function() — executes code',
+            '/preg_replace\s*\(\s*([\'"]).*\1\s*[.,]?\s*[\'"][^\'"]*e/i' => 'preg_replace /e — executes code',
             '/(eval|assert)\s*\(\s*(base64_decode|gzinflate|gzuncompress|str_rot13)/i' => 'obfuscated code execution',
-            '/(include|require)(_once)?\s*\(?\s*[\'"]https?:\/\//i'       => 'remote code inclusion',
+            '/(include|require)(_once)?\s*\(?\s*[\'"]https?:\/\//i' => 'remote code inclusion',
             // Deleting files/directories is blocked outright — a plugin must not be
             // able to remove core or other plugins' files.
-            '/\b(unlink|rmdir)\s*\(/i'                                    => 'file / directory deletion',
+            '/\b(unlink|rmdir)\s*\(/i' => 'file / directory deletion',
             '/\b(File|Storage)::(delete|deleteDirectory|deleteDirectories|cleanDirectory)\s*\(/' => 'file / directory deletion',
             // Reflected XSS — request/user input written into the page unescaped.
             // (Client <script> is stripped before scanning, so this targets the
             // server-side output side: raw echo and Blade {!! !!}.)
             '/(?:echo|print|print_r|<\?=)\s*\(?\s*\$_(GET|POST|REQUEST|COOKIE)\b/i' => 'outputs a raw request value — reflected XSS',
-            '/\{!!\s*[^}]*\$_(GET|POST|REQUEST|COOKIE)\b/i'               => 'raw request value in unescaped {!! !!} output — XSS',
+            '/\{!!\s*[^}]*\$_(GET|POST|REQUEST|COOKIE)\b/i' => 'raw request value in unescaped {!! !!} output — XSS',
             '/\{!!\s*[^}]*(\brequest\s*\(|->input\s*\(|\bInput::(get|all|old)|Request::(input|get|query))/i' => 'raw request input in unescaped {!! !!} output — XSS',
         ];
         $warning = [
-            '/\bbase64_decode\s*\(/i'                    => 'base64_decode — can hide payloads',
+            '/\bbase64_decode\s*\(/i' => 'base64_decode — can hide payloads',
             '/\b(file_put_contents|fwrite|fopen)\s*\(/i' => 'writes to the filesystem',
-            '/\bcurl_exec\s*\(/i'                        => 'raw cURL request',
-            '/\bmove_uploaded_file\s*\(/i'               => 'handles uploaded files',
-            '/\b(putenv|ini_set)\s*\(/i'                 => 'changes the runtime environment',
+            '/\bcurl_exec\s*\(/i' => 'raw cURL request',
+            '/\bmove_uploaded_file\s*\(/i' => 'handles uploaded files',
+            '/\b(putenv|ini_set)\s*\(/i' => 'changes the runtime environment',
             // XSS review signals.
-            '/\{!!.*?!!\}/s'                             => 'unescaped Blade output {!! !!} — verify it never renders user input (XSS)',
-            '/\bhtml_entity_decode\s*\(/i'               => 'html_entity_decode — can re-introduce XSS after escaping',
+            '/\{!!.*?!!\}/s' => 'unescaped Blade output {!! !!} — verify it never renders user input (XSS)',
+            '/\bhtml_entity_decode\s*\(/i' => 'html_entity_decode — can re-introduce XSS after escaping',
         ];
 
         $hit = ['critical' => [], 'warning' => []];
@@ -71,6 +71,7 @@ class PackageGuard
                 }
             }
         }
+
         return $hit;
     }
 
@@ -87,6 +88,7 @@ class PackageGuard
             }
         }
         ksort($parts);
+
         return hash('sha256', json_encode($parts));
     }
 
@@ -112,6 +114,7 @@ class PackageGuard
                 }
             }
         }
+
         return $out;
     }
 
@@ -131,12 +134,14 @@ class PackageGuard
                 $problems[] = "needs PHP extension: {$ext}";
             }
         }
+
         return $problems;
     }
 
     protected static function isMarkup(string $file): bool
     {
         $f = strtolower($file);
+
         return str_ends_with($f, '.blade.php') || str_ends_with($f, '.html') || str_ends_with($f, '.htm');
     }
 
@@ -152,6 +157,7 @@ class PackageGuard
             $code = preg_replace('#<script\b[^>]*>.*?</script>#is', '', $code);
             $code = preg_replace('#<!--.*?-->#s', '', $code);
             $code = preg_replace('#\{\{--.*?--\}\}#s', '', $code);
+
             return $code;
         }
 
@@ -168,6 +174,7 @@ class PackageGuard
                     $out .= $t;
                 }
             }
+
             return $out;
         } catch (\Throwable $e) {
             return $code; // parse error — scan raw (safer to over-flag)

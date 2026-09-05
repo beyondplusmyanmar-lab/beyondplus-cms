@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateBpCustomTable extends Migration
 {
@@ -20,10 +20,11 @@ class CreateBpCustomTable extends Migration
             $table->integer('custom_weight')->default(1);
             $table->string('custom_icon')->default('fa fa-edit');
             $table->integer('parent_id')->default(0);
-            $table->integer('staff_id')->default(1);;
+            $table->integer('staff_id')->default(1);
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      *

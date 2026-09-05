@@ -1,39 +1,45 @@
 <?php
+
 /**
  * Created by Beyond Plus <bplusmyanmar@hotmail.com>
  * User: Beyond Plus
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
-use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use Illuminate\Routing\Controller;
 use App\Models\Bp_tax;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class TaxController extends Controller
 {
     public function __construct()
     {
-        $this->tax_name = "tax" ;
+        $this->tax_name = 'tax';
         $this->middleware('admins');
     }
 
-    public function index(){
+    public function index()
+    {
 
-      $tax = Bp_tax::with('translate')->orderBy('tax_name')->where('tax_type','tax')->where('lang',1)->paginate(13);
-      return view('bp-admin.tax.index', array('tax' => $tax));
-      
+        $tax = Bp_tax::with('translate')->orderBy('tax_name')->where('tax_type', 'tax')->where('lang', 1)->paginate(13);
+
+        return view('bp-admin.tax.index', ['tax' => $tax]);
+
     }
 
-    public function create(){
-        $taxes = Bp_tax::where('tax_type','tax')->get()->pluck('tax_name','tax_id');
-        return view('bp-admin.tax.add', array('taxes' => $taxes));
+    public function create()
+    {
+        $taxes = Bp_tax::where('tax_type', 'tax')->get()->pluck('tax_name', 'tax_id');
+
+        return view('bp-admin.tax.add', ['taxes' => $taxes]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         bp_validate_images($request, ['pictures', 'tax_icon']);
         // $this->validate($request, [
         // 'title' => 'required',
@@ -41,15 +47,15 @@ class TaxController extends Controller
         // ]);
         $inputs = $request->all();
         $inputs['tax_link'] = formatUrl($request->input('tax_name'));
-        $inputs['tax_type'] = $this->tax_name ;
+        $inputs['tax_type'] = $this->tax_name;
         if ($__up = bp_store_image($request->file('tax_icon'), 'tax_')) {
             $inputs['tax_icon'] = $__up;
         } else {
-                $inputs['tax_icon'] = 'fa fa-list';
-            }
-
+            $inputs['tax_icon'] = 'fa fa-list';
+        }
 
         Bp_tax::create($inputs);
+
         return redirect()->to('bp-admin/tax');
     }
 
@@ -57,43 +63,45 @@ class TaxController extends Controller
     {
         try {
             $tax = Bp_tax::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Category Not Found';
         }
-        $taxes= Bp_tax::where('tax_type','tax')->get()->pluck('tax_name','tax_id');
-        return view('bp-admin.tax.edit', array('tax' => $tax, 'taxes' => $taxes));
-    }
+        $taxes = Bp_tax::where('tax_type', 'tax')->get()->pluck('tax_name', 'tax_id');
 
+        return view('bp-admin.tax.edit', ['tax' => $tax, 'taxes' => $taxes]);
+    }
 
     public function update($id, Request $request)
     {
         bp_validate_images($request, ['pictures', 'tax_icon']);
         $inputs = $request->all();
-        $inputs['tax_type'] = $this->tax_name ;
-     //   $inputs = $request->except('_token', '_method');
+        $inputs['tax_type'] = $this->tax_name;
+        //   $inputs = $request->except('_token', '_method');
         $inputs['tax_link'] = formatUrl($request->input('tax_name'));
         if ($__up = bp_store_image($request->file('tax_icon'), 'tax_')) {
             $inputs['tax_icon'] = $__up;
         }
 
         Bp_tax::findOrFail($id)->update($inputs);
+
         return redirect()->to('bp-admin/tax');
     }
 
     public function destroy($id)
     {
         Bp_tax::find($id)->delete();
+
         return redirect()->back();
     }
 
-    public function translate($id) {
+    public function translate($id)
+    {
         try {
             $tax = Bp_tax::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Tax Not Found';
         }
 
-        return view('bp-admin.tax.translate', array('tax' => $tax,'translate_id' => $id));
+        return view('bp-admin.tax.translate', ['tax' => $tax, 'translate_id' => $id]);
     }
-
 }

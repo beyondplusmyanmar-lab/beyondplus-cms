@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Bp_block;
+use Illuminate\Database\Seeder;
 
 class BlockTableSeeder extends Seeder
 {
@@ -18,17 +18,17 @@ class BlockTableSeeder extends Seeder
         Bp_block::truncate();
 
         Bp_block::insert([
-            'id'           => 1,
-            'title'        => 'Why choose Beyond Plus CMS',
-            'body'         => 'Fast, multi-language, and easy to manage — everything you need to publish content, right out of the box.',
-            'block_url'    => 'why-choose',
-            'block_type'   => 'content',
+            'id' => 1,
+            'title' => 'Why choose Beyond Plus CMS',
+            'body' => 'Fast, multi-language, and easy to manage — everything you need to publish content, right out of the box.',
+            'block_url' => 'why-choose',
+            'block_type' => 'content',
             'block_active' => 'yes',
             'translate_id' => 0,
-            'lang'         => 1,
-            'staff_id'     => 1,
-            'created_at'   => now(),
-            'updated_at'   => now(),
+            'lang' => 1,
+            'staff_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

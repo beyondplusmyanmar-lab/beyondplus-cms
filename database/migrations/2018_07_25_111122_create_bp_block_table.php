@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBpBlockTable extends Migration
 {
@@ -19,7 +19,7 @@ class CreateBpBlockTable extends Migration
             $table->text('body');
             $table->string('block_url')->nullable();
             $table->string('block_type')->nullable();
-            $table->string('block_active',3)->default('yes');
+            $table->string('block_active', 3)->default('yes');
             $table->integer('translate_id')->default(0);
             $table->integer('lang')->default(1);
             $table->integer('staff_id')->default(1);

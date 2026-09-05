@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateBpPostTable extends Migration
 {
@@ -24,13 +24,14 @@ class CreateBpPostTable extends Migration
             $table->string('post_template')->default('default');
             $table->integer('post_weight')->default(0);
             $table->integer('post_view')->default(0);
-            $table->string('post_active',3)->default('yes');
+            $table->string('post_active', 3)->default('yes');
             $table->integer('translate_id')->default(0);
             $table->integer('lang')->default(1);
             $table->integer('staff_id')->default(1);
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      *

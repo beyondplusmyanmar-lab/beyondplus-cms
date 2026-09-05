@@ -3,21 +3,23 @@
 namespace App\Exports;
 
 use App\Models\Coupon;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class CouponsExport implements FromCollection , WithMapping , WithHeadings
+class CouponsExport implements FromCollection, WithHeadings, WithMapping
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return Collection
+     */
     public function collection()
     {
         return Coupon::get();
     }
 
-    public function map($coupon) : array {
+    public function map($coupon): array
+    {
         return [
             $coupon->coupon_code,
             $coupon->coupon_description,
@@ -35,9 +37,8 @@ class CouponsExport implements FromCollection , WithMapping , WithHeadings
             $coupon->individual_use_only,
             $coupon->used_coupon,
             $coupon->status,
-        ] ;
- 
- 
+        ];
+
     }
 
     public function headings(): array

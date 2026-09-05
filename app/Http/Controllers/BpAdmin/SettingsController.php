@@ -1,42 +1,45 @@
 <?php
+
 /**
  * Created by Beyond Plus <bplusmyanmar@hotmail.com>
  * User: Beyond Plus
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
-use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use Illuminate\Routing\Controller;
 use App\Models\Bp_options;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class SettingsController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('admins');
+        $this->middleware('admins');
     }
 
-    public function index(){
+    public function index()
+    {
 
         $options = Bp_options::pluck('option_value', 'option_name');
-        return view('bp-admin.settings.general', array('options' => $options));
+
+        return view('bp-admin.settings.general', ['options' => $options]);
     }
 
-	public function edit($id)
+    public function edit($id)
     {
         try {
             $category = Bp_category::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Category Not Found';
         }
-        $categories= Bp_category::lists('category_name','category_id');
-        return view('bp-admin.settings.edit', array('category' => $category, 'categories' => $categories));
-    }
+        $categories = Bp_category::lists('category_name', 'category_id');
 
+        return view('bp-admin.settings.edit', ['category' => $category, 'categories' => $categories]);
+    }
 
     public function generaledit(Request $request)
     {
@@ -51,6 +54,4 @@ class SettingsController extends Controller
 
         return redirect()->back()->withSuccess('Successfully edited');
     }
-
-
 }

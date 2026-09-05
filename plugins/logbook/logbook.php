@@ -15,11 +15,11 @@ bp_add_action('theme_footer', function () {
     if (Schema::hasTable('bp_logbook')) {
         try {
             DB::table('bp_logbook')->insert([
-                'event'      => 'page_view',
+                'event' => 'page_view',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // never let a plugin break the page
         }
     }

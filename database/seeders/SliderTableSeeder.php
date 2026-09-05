@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Bp_slider;
+use Illuminate\Database\Seeder;
 
 class SliderTableSeeder extends Seeder
 {
@@ -24,14 +24,14 @@ class SliderTableSeeder extends Seeder
 
         foreach ($sliders as [$name, $link, $weight, $desc]) {
             Bp_slider::insert([
-                'slider_name'        => $name,
-                'slider_link'        => $link,
-                'slider_type'        => 'slider',
-                'slider_weight'      => $weight,
+                'slider_name' => $name,
+                'slider_link' => $link,
+                'slider_type' => 'slider',
+                'slider_weight' => $weight,
                 'slider_description' => $desc,
-                'staff_id'           => 1,
-                'created_at'         => now(),
-                'updated_at'         => now(),
+                'staff_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

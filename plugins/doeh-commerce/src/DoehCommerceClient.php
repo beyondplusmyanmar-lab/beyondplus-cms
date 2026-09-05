@@ -30,7 +30,7 @@ use Illuminate\Support\Str;
 final class DoehCommerceClient
 {
     private const HOSTS = [
-        'sandbox'    => 'https://sandbox-api.doehpos.com',
+        'sandbox' => 'https://sandbox-api.doehpos.com',
         'production' => 'https://api.doehpos.com',
     ];
 
@@ -57,9 +57,9 @@ final class DoehCommerceClient
      * @param array{lines: array<int, array{sku:string, qty:int, modifier_ids?:array<int,string>}>,
      *              customer?: array{phone?:string},
      *              fulfillment?: array{type?:string}} $submission
-     * @param string|null $idempotencyKey Reuse across retries to make the create
-     *        safe to repeat; auto-generated per call when omitted. To dedupe a
-     *        real basket, pass a key derived from the cart, not a fresh one.
+     * @param  string|null  $idempotencyKey  Reuse across retries to make the create
+     *                                       safe to repeat; auto-generated per call when omitted. To dedupe a
+     *                                       real basket, pass a key derived from the cart, not a fresh one.
      */
     public function createOrder(array $submission, ?string $idempotencyKey = null): array
     {
@@ -70,7 +70,7 @@ final class DoehCommerceClient
         }
 
         return $this->send('POST', '/v1/orders', [
-            'json'           => $body,
+            'json' => $body,
             'idempotencyKey' => $idempotencyKey ?: $this->newIdempotencyKey(),
         ]);
     }
@@ -90,8 +90,8 @@ final class DoehCommerceClient
      * Orders API requires a [from, to) window and refuses (rather than truncates)
      * a result larger than the limit, so callers get a whole answer or an error.
      *
-     * @param array{from:string, to:string, limit?:int, branch_id?:int, status?:string} $query
-     *        from/to are ISO-8601/RFC-3339 timestamps and are REQUIRED.
+     * @param  array{from:string, to:string, limit?:int, branch_id?:int, status?:string}  $query
+     *                                                                                            from/to are ISO-8601/RFC-3339 timestamps and are REQUIRED.
      */
     public function listOrders(array $query): array
     {
@@ -100,11 +100,11 @@ final class DoehCommerceClient
         }
 
         $params = array_filter([
-            'from'      => (string) $query['from'],
-            'to'        => (string) $query['to'],
-            'limit'     => isset($query['limit']) ? (int) $query['limit'] : null,
+            'from' => (string) $query['from'],
+            'to' => (string) $query['to'],
+            'limit' => isset($query['limit']) ? (int) $query['limit'] : null,
             'branch_id' => isset($query['branch_id']) ? (int) $query['branch_id'] : null,
-            'status'    => isset($query['status']) ? (string) $query['status'] : null,
+            'status' => isset($query['status']) ? (string) $query['status'] : null,
         ], fn ($v) => $v !== null && $v !== '');
 
         return $this->send('GET', '/v1/orders', ['query' => $params]);
@@ -117,7 +117,7 @@ final class DoehCommerceClient
      * API does not accept. Prices, currency and totals are intentionally NOT
      * mappable — the server is the sole source of truth for money.
      *
-     * @param array<string,mixed> $in
+     * @param  array<string,mixed>  $in
      * @return array<string,mixed>
      */
     private function mapSubmission(array $in): array
@@ -154,7 +154,7 @@ final class DoehCommerceClient
     // ── transport + error normalization ─────────────────────────────────────────
 
     /**
-     * @param array{json?:array<string,mixed>, query?:array<string,mixed>, idempotencyKey?:string} $opts
+     * @param  array{json?:array<string,mixed>, query?:array<string,mixed>, idempotencyKey?:string}  $opts
      * @return array<string,mixed>
      */
     private function send(string $method, string $path, array $opts = []): array
@@ -180,28 +180,29 @@ final class DoehCommerceClient
         } catch (\Throwable $e) {
             // Never leak the key or full URL into logs.
             Log::warning('[doeh-commerce] transport error: '.$e->getMessage());
+
             return ['ok' => false, 'status' => 0, 'code' => 'EDGE_TRANSPORT', 'step' => 'transport'];
         }
 
         $status = $response->status();
-        $data   = $response->json();
+        $data = $response->json();
 
         if ($response->successful()) {
             return [
-                'ok'         => true,
-                'status'     => $status,
+                'ok' => true,
+                'status' => $status,
                 'idempotent' => (bool) ($data['idempotent'] ?? false),  // 200 replay vs 201 first write
-                'order'      => $data['order'] ?? $data,
-                'orders'     => $data['orders'] ?? null,                 // present on the list report
+                'order' => $data['order'] ?? $data,
+                'orders' => $data['orders'] ?? null,                 // present on the list report
             ];
         }
 
         // Non-2xx: surface the stable UPPER_SNAKE code the API returned, unparsed.
         return [
-            'ok'     => false,
+            'ok' => false,
             'status' => $status,
-            'code'   => is_array($data) && isset($data['code']) ? (string) $data['code'] : 'HTTP_'.$status,
-            'step'   => is_array($data) ? ($data['step'] ?? null) : null,
+            'code' => is_array($data) && isset($data['code']) ? (string) $data['code'] : 'HTTP_'.$status,
+            'step' => is_array($data) ? ($data['step'] ?? null) : null,
         ];
     }
 

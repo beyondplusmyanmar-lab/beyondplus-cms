@@ -1,5 +1,8 @@
 <?php
 
+use App\Support\Plugin;
+use App\Support\Theme;
+
 /**
  * DOEH Commerce Storefront — the storefront flow over the DOEH Commerce connector.
  *
@@ -15,7 +18,6 @@
  *
  * This file registers the fixture + view helpers; the flow is in routes.php.
  */
-
 if (! function_exists('doeh_storefront_products')) {
     /**
      * The product fixture (manifest `products_json`), normalized to
@@ -32,7 +34,7 @@ if (! function_exists('doeh_storefront_products')) {
         // the manifest's declared default (one source of truth) rather than show
         // an empty shop.
         if (! is_array($rows) || $rows === []) {
-            foreach (\App\Support\Plugin::settingsSchema('doeh-commerce-storefront') as $field) {
+            foreach (Plugin::settingsSchema('doeh-commerce-storefront') as $field) {
                 if (($field['name'] ?? '') === 'products_json') {
                     $rows = $field['default'] ?? [];
                     break;
@@ -50,8 +52,8 @@ if (! function_exists('doeh_storefront_products')) {
                 continue;
             }
             $out[$sku] = [
-                'sku'        => $sku,
-                'name'       => trim((string) ($r['name'] ?? $sku)) ?: $sku,
+                'sku' => $sku,
+                'name' => trim((string) ($r['name'] ?? $sku)) ?: $sku,
                 'price_hint' => trim((string) ($r['price_hint'] ?? '')),
             ];
         }
@@ -77,7 +79,7 @@ if (! function_exists('doeh_storefront_fulfillment_types')) {
      */
     function doeh_storefront_fulfillment_types(): array
     {
-        $meta = \App\Support\Theme::meta(\App\Support\Theme::active());
+        $meta = Theme::meta(Theme::active());
         $declared = $meta['fulfillment_types'] ?? null;
         if (! is_array($declared)) {
             return ['pickup'];
@@ -98,9 +100,9 @@ if (! function_exists('doeh_storefront_fulfillment_label')) {
     function doeh_storefront_fulfillment_label(string $type): array
     {
         return [
-            'pickup'   => ['Pickup', 'Collect from the store'],
+            'pickup' => ['Pickup', 'Collect from the store'],
             'delivery' => ['Delivery', 'Delivered to your address'],
-            'dine_in'  => ['Dine in', 'Enjoy at the store'],
+            'dine_in' => ['Dine in', 'Enjoy at the store'],
         ][$type] ?? [ucfirst($type), ''];
     }
 }
@@ -131,11 +133,11 @@ if (! function_exists('doeh_commerce_view')) {
      * the WooCommerce template-override model: the plugin owns the flow + default
      * templates, the theme owns the look.
      *
-     * @param array<string,mixed> $data
+     * @param  array<string,mixed>  $data
      */
     function doeh_commerce_view(string $name, array $data)
     {
-        $themeView = 'theme.'.\App\Support\Theme::active().'.commerce.'.$name;
+        $themeView = 'theme.'.Theme::active().'.commerce.'.$name;
         $view = view()->exists($themeView) ? $themeView : 'doeh-commerce-storefront::'.$name;
 
         return response()->view($view, $data);

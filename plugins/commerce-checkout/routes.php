@@ -11,11 +11,11 @@
  * front routes are throttled. No payment data is handled.
  */
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 
 $cartEnabled = fn () => bp_plugin_option('commerce-checkout', 'checkout_enabled', 'yes') === 'yes';
 
@@ -40,6 +40,7 @@ $buildCart = function () {
             $items->push((object) ['id' => (int) $id, 'name' => $p->name, 'price' => (float) $p->price, 'qty' => $qty, 'line' => $line, 'image' => $p->image]);
         }
     }
+
     return [$items, $subtotal, $count];
 };
 
@@ -56,12 +57,14 @@ Route::middleware('web')->group(function () use ($cartEnabled, $buildCart) {
         $cart = session('commerce_cart', []);
         $cart[$id] = min(($cart[$id] ?? 0) + 1, 99);
         session(['commerce_cart' => $cart]);
+
         return redirect(url('/cart'))->with('success', 'Added to your cart.');
     })->middleware('throttle:30,1');
 
     Route::get('cart', function () use ($cartEnabled, $buildCart) {
         abort_unless($cartEnabled(), 404);
         [$items, $subtotal, $count] = $buildCart();
+
         return view('commerce-checkout::cart', [
             'items' => $items, 'subtotal' => $subtotal, 'count' => $count,
             'currency' => bp_plugin_option('commerce', 'currency', 'MMK'),
@@ -80,6 +83,7 @@ Route::middleware('web')->group(function () use ($cartEnabled, $buildCart) {
             }
         }
         session(['commerce_cart' => $cart]);
+
         return redirect(url('/cart'))->with('success', 'Cart updated.');
     })->middleware('throttle:30,1');
 
@@ -88,6 +92,7 @@ Route::middleware('web')->group(function () use ($cartEnabled, $buildCart) {
         $cart = session('commerce_cart', []);
         unset($cart[(int) $request->input('product_id')]);
         session(['commerce_cart' => $cart]);
+
         return redirect(url('/cart'))->with('success', 'Item removed.');
     })->middleware('throttle:30,1');
 
@@ -100,11 +105,11 @@ Route::middleware('web')->group(function () use ($cartEnabled, $buildCart) {
         }
 
         $data = $request->validate([
-            'customer_name'  => 'required|string|max:120',
+            'customer_name' => 'required|string|max:120',
             'customer_phone' => 'required|string|max:40',
             'customer_email' => 'nullable|email|max:120',
-            'address'        => 'required|string|max:500',
-            'note'           => 'nullable|string|max:1000',
+            'address' => 'required|string|max:500',
+            'note' => 'nullable|string|max:1000',
         ]);
 
         [$items, $subtotal, $count] = $buildCart();
@@ -116,26 +121,26 @@ Route::middleware('web')->group(function () use ($cartEnabled, $buildCart) {
         $number = $prefix.'-'.now()->format('ymd').'-'.strtoupper(Str::random(4));
 
         $orderId = DB::table('commerce_orders')->insertGetId([
-            'order_number'   => $number,
-            'customer_name'  => $data['customer_name'],
+            'order_number' => $number,
+            'customer_name' => $data['customer_name'],
             'customer_phone' => $data['customer_phone'],
             'customer_email' => $data['customer_email'] ?? null,
-            'address'        => $data['address'],
-            'note'           => $data['note'] ?? null,
-            'status'         => 'new',
-            'subtotal'       => $subtotal,
-            'item_count'     => $count,
-            'created_at'     => now(),
-            'updated_at'     => now(),
+            'address' => $data['address'],
+            'note' => $data['note'] ?? null,
+            'status' => 'new',
+            'subtotal' => $subtotal,
+            'item_count' => $count,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         foreach ($items as $it) {
             DB::table('commerce_order_items')->insert([
-                'order_id'   => $orderId,
+                'order_id' => $orderId,
                 'product_id' => $it->id,
-                'name'       => $it->name,
-                'price'      => $it->price,
-                'qty'        => $it->qty,
+                'name' => $it->name,
+                'price' => $it->price,
+                'qty' => $it->qty,
                 'line_total' => $it->line,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -143,6 +148,7 @@ Route::middleware('web')->group(function () use ($cartEnabled, $buildCart) {
         }
 
         session()->forget('commerce_cart');
+
         return redirect(url('/cart/thank-you/'.$number));
     })->middleware('throttle:10,1');
 
@@ -150,6 +156,7 @@ Route::middleware('web')->group(function () use ($cartEnabled, $buildCart) {
         abort_unless($cartEnabled(), 404);
         $order = DB::table('commerce_orders')->where('order_number', $number)->first();
         $items = $order ? DB::table('commerce_order_items')->where('order_id', $order->id)->get() : collect();
+
         return view('commerce-checkout::thankyou', [
             'order' => $order, 'items' => $items,
             'message' => bp_plugin_option('commerce-checkout', 'thankyou_message', 'Thank you for your order.'),
@@ -166,6 +173,7 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
         $orders = Schema::hasTable('commerce_orders')
             ? DB::table('commerce_orders')->orderByDesc('id')->paginate(30)
             : collect();
+
         return view('commerce-checkout::admin.index', [
             'orders' => $orders,
             'currency' => bp_plugin_option('commerce', 'currency', 'MMK'),
@@ -176,6 +184,7 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
         $order = DB::table('commerce_orders')->find($id);
         abort_unless($order, 404);
         $items = DB::table('commerce_order_items')->where('order_id', $id)->get();
+
         return view('commerce-checkout::admin.show', [
             'order' => $order, 'items' => $items,
             'currency' => bp_plugin_option('commerce', 'currency', 'MMK'),
@@ -185,6 +194,7 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
     Route::post('orders/{id}/status', function (Request $request, $id) {
         $data = $request->validate(['status' => 'required|in:new,confirmed,completed,cancelled']);
         DB::table('commerce_orders')->where('id', $id)->update(['status' => $data['status'], 'updated_at' => now()]);
+
         return redirect(url('bp-admin/orders/'.$id))->with('success', 'Order status updated.');
     })->whereNumber('id');
 });

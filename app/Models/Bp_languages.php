@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 // use Spatie\Activitylog\Traits\LogsActivity;
 
 class Bp_languages extends Model
 {
-//    use LogsActivity;
+    //    use LogsActivity;
 
-    protected static $logAttributes = ['language_iso','language_value'];
+    protected static $logAttributes = ['language_iso', 'language_value'];
 
-    protected static $recordEventes = ['created','updated','deleted'];
+    protected static $recordEventes = ['created', 'updated', 'deleted'];
 
     protected static $logName = 'language';
 
@@ -27,7 +28,7 @@ class Bp_languages extends Model
      *
      * @var string
      */
-    
+
     // public function getDescriptionForEvent($eventName)
     // {
     //     return "  has been {$eventName} language.";
@@ -40,5 +41,5 @@ class Bp_languages extends Model
      *
      * @var array
      */
-    protected $fillable = ['id','language_iso', 'language_value'];
+    protected $fillable = ['id', 'language_iso', 'language_value'];
 }

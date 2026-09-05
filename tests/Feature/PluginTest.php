@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Admin;
+use App\Models\Bp_options;
+use App\Support\PackageGuard;
 use App\Support\Plugin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -45,10 +47,10 @@ class PluginTest extends TestCase
     public function test_plugin_settings_are_saved(): void
     {
         $this->actingAs($this->admin(), 'admins')->post('/bp-admin/plugins/settings', [
-            'slug'      => 'smspoh',
-            'api_url'   => 'https://api.smspoh.com/v1/messages/send',
+            'slug' => 'smspoh',
+            'api_url' => 'https://api.smspoh.com/v1/messages/send',
             'api_token' => 'SECRET_TOKEN',
-            'sender'    => 'CMS',
+            'sender' => 'CMS',
         ]);
 
         $this->assertSame('SECRET_TOKEN', bp_plugin_option('smspoh', 'api_token'));
@@ -60,7 +62,7 @@ class PluginTest extends TestCase
         $this->assertFalse(Plugin::all()['logbook']['update_available']);
 
         // Simulate a plugin that was installed at an older version.
-        \App\Models\Bp_options::updateOrCreate(
+        Bp_options::updateOrCreate(
             ['option_name' => 'plugin_versions'],
             ['option_value' => json_encode(['logbook' => '0.9.0']), 'autoload' => 'yes']
         );
@@ -78,7 +80,7 @@ class PluginTest extends TestCase
         file_put_contents($tmp.'/evil.php', "<?php system(\$_GET['c']);");
         file_put_contents($tmp.'/clean.php', "<?php echo 'hi';");
 
-        $scan = \App\Support\PackageGuard::scan($tmp);
+        $scan = PackageGuard::scan($tmp);
         $this->assertNotEmpty($scan['critical']);
 
         array_map('unlink', glob($tmp.'/*'));
@@ -89,11 +91,11 @@ class PluginTest extends TestCase
     {
         $tmp = sys_get_temp_dir().'/scandel'.uniqid();
         mkdir($tmp);
-        file_put_contents($tmp.'/a.php', "<?php unlink(\$file);");
-        file_put_contents($tmp.'/b.php', "<?php \\Illuminate\\Support\\Facades\\File::deleteDirectory(\$dir);");
+        file_put_contents($tmp.'/a.php', '<?php unlink($file);');
+        file_put_contents($tmp.'/b.php', '<?php \\Illuminate\\Support\\Facades\\File::deleteDirectory($dir);');
 
         // Deleting files/dirs is a critical (blocking) finding, not just a warning.
-        $scan = \App\Support\PackageGuard::scan($tmp);
+        $scan = PackageGuard::scan($tmp);
         $this->assertNotEmpty($scan['critical']);
 
         array_map('unlink', glob($tmp.'/*'));

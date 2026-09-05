@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateBpRelationshipTable extends Migration
 {
@@ -19,6 +19,7 @@ class CreateBpRelationshipTable extends Migration
             $table->string('type');
         });
     }
+
     /**
      * Reverse the migrations.
      *

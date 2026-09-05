@@ -57,9 +57,9 @@ if (! function_exists('doeh_commerce')) {
         }
 
         return new DoehCommerceClient(
-            secretKey:           (string) bp_plugin_option('doeh-commerce', 'secret_key'),
-            environment:         bp_plugin_option('doeh-commerce', 'environment') ?: 'sandbox',
-            defaultFulfillment:  (string) bp_plugin_option('doeh-commerce', 'default_fulfillment'),
+            secretKey: (string) bp_plugin_option('doeh-commerce', 'secret_key'),
+            environment: bp_plugin_option('doeh-commerce', 'environment') ?: 'sandbox',
+            defaultFulfillment: (string) bp_plugin_option('doeh-commerce', 'default_fulfillment'),
         );
     }
 }

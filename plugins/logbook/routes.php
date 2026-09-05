@@ -5,8 +5,8 @@
  * Adds an admin page at /bp-admin/logbook that renders the plugin's own view.
  */
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
 Route::middleware('admins')->prefix('bp-admin')->group(function () {

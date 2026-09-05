@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-//use App\CouponMail;
+// use App\CouponMail;
 use Illuminate\Database\Eloquent\Model;
+
 // use Spatie\Activitylog\Traits\LogsActivity;
 
 class Currency extends Model
 {
     // use LogsActivity;
 
-    protected static $logAttributes = ['name','code'];
+    protected static $logAttributes = ['name', 'code'];
 
-    protected static $recordEventes = ['created','updated','deleted'];
+    protected static $recordEventes = ['created', 'updated', 'deleted'];
 
     protected static $logName = 'currency';
 

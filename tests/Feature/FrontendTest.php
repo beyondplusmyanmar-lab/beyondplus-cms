@@ -94,10 +94,10 @@ class FrontendTest extends TestCase
     {
         return [
             'default (Aurora)' => ['default'],
-            'meridian'         => ['meridian'],
-            'nocturne'         => ['nocturne'],
-            'terra'            => ['terra'],
-            'pulse'            => ['pulse'],
+            'meridian' => ['meridian'],
+            'nocturne' => ['nocturne'],
+            'terra' => ['terra'],
+            'pulse' => ['pulse'],
         ];
     }
 }

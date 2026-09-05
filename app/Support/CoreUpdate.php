@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Http;
 class CoreUpdate
 {
     private const CACHE_KEY = 'bp_core_update';
+
     private const DEFAULT_REPO = 'beyondplusmyanmar-lab/beyondplus-cms';
 
     /** The version currently running. */
@@ -62,13 +63,13 @@ class CoreUpdate
         }
 
         return [
-            'configured'       => true,
-            'current'          => $current,
-            'latest'           => $data['version'],
+            'configured' => true,
+            'current' => $current,
+            'latest' => $data['version'],
             'update_available' => version_compare($data['version'], $current, '>'),
-            'notes'            => $data['notes'] ?? null,
-            'url'              => $data['url'] ?? null,
-            'published_at'     => $data['published_at'] ?? null,
+            'notes' => $data['notes'] ?? null,
+            'url' => $data['url'] ?? null,
+            'published_at' => $data['published_at'] ?? null,
         ];
     }
 
@@ -91,9 +92,9 @@ class CoreUpdate
             $json = $response->json();
 
             return [
-                'version'      => ltrim((string) ($json['tag_name'] ?? ''), 'vV'),
-                'notes'        => $json['body'] ?? null,
-                'url'          => $json['html_url'] ?? null,
+                'version' => ltrim((string) ($json['tag_name'] ?? ''), 'vV'),
+                'notes' => $json['body'] ?? null,
+                'url' => $json['html_url'] ?? null,
                 'published_at' => $json['published_at'] ?? null,
             ];
         } catch (\Throwable $e) {

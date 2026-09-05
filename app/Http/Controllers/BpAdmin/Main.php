@@ -1,24 +1,26 @@
 <?php
+
 /**
  * Created by Beyond Plus <bplusmyanmar@hotmail.com>
  * User: Beyond Plus
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
-use Validator;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
-use Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+use Validator;
 
 class Main extends Controller
 {
-
     public function login(Request $request)
     {
         auth()->guard('admins')->logout();
+
         // Post back to whatever URL this form was reached at (default or secret path).
         return view('auth/adminlogin', ['loginAction' => $request->url()]);
     }
@@ -31,8 +33,9 @@ class Main extends Controller
         $throttleKey = 'admin-login:'.$request->ip();
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
+
             return view('auth/adminlogin', [
-                'match'       => "Too many login attempts. Try again in {$seconds} seconds.",
+                'match' => "Too many login attempts. Try again in {$seconds} seconds.",
                 'loginAction' => $request->url(),
             ]);
         }
@@ -44,6 +47,7 @@ class Main extends Controller
 
         if ($validator->fails()) {
             RateLimiter::hit($throttleKey, 60);
+
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -60,6 +64,7 @@ class Main extends Controller
             $admin->attempt($credentials);
             $admin->logout();
             RateLimiter::hit($throttleKey, 60);
+
             return view('auth/adminlogin', ['match' => $error, 'loginAction' => $request->url()]);
         }
 
@@ -67,7 +72,9 @@ class Main extends Controller
             RateLimiter::clear($throttleKey);
             try {
                 activity('auth')->causedBy($admin->user())->log('signed in');
-            } catch (\Throwable $e) { /* activity_log unavailable */ }
+            } catch (\Throwable $e) { /* activity_log unavailable */
+            }
+
             return redirect()->intended('bp-admin');
         }
 
@@ -75,17 +82,19 @@ class Main extends Controller
         try {
             activity('auth')->log(sprintf(
                 'failed sign-in for %s from %s',
-                \Illuminate\Support\Str::limit((string) $request->input('email'), 60),
+                Str::limit((string) $request->input('email'), 60),
                 $request->ip()
             ));
-        } catch (\Throwable $e) { /* activity_log unavailable */ }
+        } catch (\Throwable $e) { /* activity_log unavailable */
+        }
+
         return view('auth/adminlogin', ['match' => $error, 'loginAction' => $request->url()]);
     }
 
     public function logout()
     {
         auth()->guard('admins')->logout();
+
         return redirect('/');
     }
-
 }

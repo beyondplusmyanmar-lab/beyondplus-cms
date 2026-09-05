@@ -21,15 +21,15 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->integer('role')->default(1);
             $table->string('api_token', 60)->unique();
-            $table->string('phone_no',30)->nullable();
-            $table->string('activation_key',6)->default(0);
+            $table->string('phone_no', 30)->nullable();
+            $table->string('activation_key', 6)->default(0);
             $table->integer('status')->default(0);
-            $table->string('avatar',100)->default('');
+            $table->string('avatar', 100)->default('');
             $table->boolean('verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
-        
+
         // Schema::create('users', function (Blueprint $table) {
         //     $table->id();
         //     $table->string('name');

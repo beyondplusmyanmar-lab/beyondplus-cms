@@ -1,9 +1,26 @@
 <?php
 
+use App\Http\Middleware\AdminAuth;
+use App\Http\Middleware\ApiEnabled;
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CheckApiToken;
+use App\Http\Middleware\CustomerApiToken;
+use App\Http\Middleware\FrontendMode;
+use App\Http\Middleware\Language;
+use App\Http\Middleware\Locale;
+use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Support\Plugin;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -26,7 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // a single-segment catch-all "/{name}", and first-registered wins, so
             // plugin pages would otherwise be shadowed by it. Plugins declare
             // distinct paths, so they don't collide with the specific CMS routes.
-            \App\Support\Plugin::bootRoutes();
+            Plugin::bootRoutes();
 
             // Locale-prefixed CMS routes. "mm" is the un-prefixed default and
             // must be registered LAST, otherwise its catch-all "/{name}" route
@@ -51,44 +68,44 @@ return Application::configure(basePath: dirname(__DIR__))
         if ($proxies !== null && $proxies !== '') {
             $middleware->trustProxies(
                 at: $proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)),
-                headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR
-                    | \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST
-                    | \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT
-                    | \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO
-                    | \Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB
+                headers: Request::HEADER_X_FORWARDED_FOR
+                    | Request::HEADER_X_FORWARDED_HOST
+                    | Request::HEADER_X_FORWARDED_PORT
+                    | Request::HEADER_X_FORWARDED_PROTO
+                    | Request::HEADER_X_FORWARDED_AWS_ELB
             );
         }
 
         // Append locale detection to the default web stack.
         $middleware->web(append: [
-            \App\Http\Middleware\Locale::class,
+            Locale::class,
         ]);
 
         // Admin area: full web stack plus admin auth + language.
         $middleware->group('admins', [
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\AdminAuth::class,
-            \App\Http\Middleware\Language::class,
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            ShareErrorsFromSession::class,
+            ValidateCsrfToken::class,
+            SubstituteBindings::class,
+            AdminAuth::class,
+            Language::class,
         ]);
 
         // API: throttled and token-checked.
         $middleware->group('api', [
             'throttle:60,1',
-            \App\Http\Middleware\CheckApiToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            CheckApiToken::class,
+            SubstituteBindings::class,
         ]);
 
         $middleware->alias([
-            'auth' => \App\Http\Middleware\Authenticate::class,
-            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-            'customer.token' => \App\Http\Middleware\CustomerApiToken::class,
-            'frontend.mode' => \App\Http\Middleware\FrontendMode::class,
-            'api.enabled' => \App\Http\Middleware\ApiEnabled::class,
+            'auth' => Authenticate::class,
+            'guest' => RedirectIfAuthenticated::class,
+            'customer.token' => CustomerApiToken::class,
+            'frontend.mode' => FrontendMode::class,
+            'api.enabled' => ApiEnabled::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

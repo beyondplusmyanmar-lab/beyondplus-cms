@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -18,7 +17,7 @@ class Apikeytable extends Authenticatable
     protected $table = 'bp_apikeytable';
 
     protected $fillable = [
-         'name', 'email', 'avatar', 'role', 'password','api_token', 'verified','created_at'
+        'name', 'email', 'avatar', 'role', 'password', 'api_token', 'verified', 'created_at',
     ];
 
     /**
@@ -35,7 +34,6 @@ class Apikeytable extends Authenticatable
         return $this->hasOne('App\VerifyUser');
     }
 
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -44,5 +42,4 @@ class Apikeytable extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
 }

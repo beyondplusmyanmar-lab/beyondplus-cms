@@ -48,7 +48,7 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
         }
 
         return view('example-commerce-extension::page', [
-            'error'   => $error,
+            'error' => $error,
             'summary' => $summary,
         ]);
     });

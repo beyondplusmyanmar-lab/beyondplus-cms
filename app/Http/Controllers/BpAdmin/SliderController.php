@@ -6,37 +6,39 @@
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Bp_slider;
-use App\Models\User;
 use Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class SliderController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('admins');
+        $this->middleware('admins');
     }
 
-    public function index(){
+    public function index()
+    {
 
-        $slider = Bp_slider::where('slider_type','slider')->orderBy('updated_at','desc')->paginate(13);
-        return view('bp-admin.slider.index', array('slider' => $slider));
+        $slider = Bp_slider::where('slider_type', 'slider')->orderBy('updated_at', 'desc')->paginate(13);
+
+        return view('bp-admin.slider.index', ['slider' => $slider]);
     }
 
-
-    public function create(){
+    public function create()
+    {
 
         return view('bp-admin.slider.add');
 
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         // Only allow real images (blocks e.g. an uploaded .php from being executed).
         $request->validate([
             'slider_name' => 'required',
@@ -48,11 +50,10 @@ class SliderController extends Controller
             $inputs['slider_link'] = $__up;
         }
 
-
-
         $inputs['slider_type'] = 'slider';
         $inputs['user_id'] = Auth::guard('admins')->user()->id;
         Bp_slider::create($inputs);
+
         return redirect()->to('bp-admin/slider');
     }
 
@@ -60,10 +61,11 @@ class SliderController extends Controller
     {
         try {
             $slider = Bp_slider::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Category Not Found';
         }
-        return view('bp-admin.slider.edit', array('slider' => $slider));
+
+        return view('bp-admin.slider.edit', ['slider' => $slider]);
 
     }
 
@@ -82,6 +84,7 @@ class SliderController extends Controller
         $inputs['slider_type'] = 'slider';
         $inputs['user_id'] = Auth::guard('admins')->user()->id;
         Bp_slider::findOrFail($id)->update($inputs);
+
         return redirect()->to('bp-admin/slider');
     }
 
@@ -92,7 +95,7 @@ class SliderController extends Controller
             bp_delete_upload($slider->slider_link);
             $slider->delete();
         }
+
         return redirect()->back();
     }
-
 }

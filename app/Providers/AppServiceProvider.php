@@ -3,9 +3,21 @@
 namespace App\Providers;
 
 use App\Mail\Transport\ConfigMailgunTransport;
+use App\Models\Bp_block;
+use App\Models\Bp_custom;
+use App\Models\Bp_menu;
+use App\Models\Bp_messages;
+use App\Models\Bp_module;
+use App\Models\Bp_options;
+use App\Models\Bp_post;
+use App\Models\Bp_relationship;
+use App\Models\Bp_slider;
+use App\Models\Bp_tax;
+use App\Support\Plugin;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Activitylog\CauserResolver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,16 +27,16 @@ class AppServiceProvider extends ServiceProvider
      * @var array<string, class-string>
      */
     protected array $modelAliases = [
-        'bp_post' => \App\Models\Bp_post::class,
-        'bp_tax' => \App\Models\Bp_tax::class,
-        'bp_menu' => \App\Models\Bp_menu::class,
-        'bp_relationship' => \App\Models\Bp_relationship::class,
-        'bp_slider' => \App\Models\Bp_slider::class,
-        'bp_module' => \App\Models\Bp_module::class,
-        'bp_custom' => \App\Models\Bp_custom::class,
-        'bp_messages' => \App\Models\Bp_messages::class,
-        'bp_options' => \App\Models\Bp_options::class,
-        'bp_block' => \App\Models\Bp_block::class,
+        'bp_post' => Bp_post::class,
+        'bp_tax' => Bp_tax::class,
+        'bp_menu' => Bp_menu::class,
+        'bp_relationship' => Bp_relationship::class,
+        'bp_slider' => Bp_slider::class,
+        'bp_module' => Bp_module::class,
+        'bp_custom' => Bp_custom::class,
+        'bp_messages' => Bp_messages::class,
+        'bp_options' => Bp_options::class,
+        'bp_block' => Bp_block::class,
     ];
 
     /**
@@ -49,24 +61,24 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load active plugins so they can register their action/filter hooks.
-        \App\Support\Plugin::boot();
+        Plugin::boot();
 
         // Attribute activity-log entries to the signed-in admin (custom guard).
-        $this->app->make(\Spatie\Activitylog\CauserResolver::class)->resolveUsing(
+        $this->app->make(CauserResolver::class)->resolveUsing(
             fn () => auth()->guard('admins')->user() ?? auth()->user()
         );
 
         // Custom transport that delivers via the Mailgun credentials in bp_options.
-        Mail::extend('bp_mailgun', fn () => new ConfigMailgunTransport());
+        Mail::extend('bp_mailgun', fn () => new ConfigMailgunTransport);
 
         // When mail is enabled in the admin Configuration, route all app mail
         // through it. Wrapped in try/catch so a not-yet-migrated DB is harmless.
         try {
             if (bp_option('mail_enabled', 'no') === 'yes') {
                 config([
-                    'mail.default'      => 'bp_mailgun',
+                    'mail.default' => 'bp_mailgun',
                     'mail.from.address' => bp_option('mail_from') ?: config('mail.from.address'),
-                    'mail.from.name'    => optional(site_information('blogname'))->option_value ?: config('app.name'),
+                    'mail.from.name' => optional(site_information('blogname'))->option_value ?: config('app.name'),
                 ]);
             }
         } catch (\Throwable $e) {

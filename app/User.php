@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -16,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-         'name', 'email', 'avatar', 'role','password','api_token', 'verified','created_at'
+        'name', 'email', 'avatar', 'role', 'password', 'api_token', 'verified', 'created_at',
     ];
 
     /**
@@ -33,7 +32,6 @@ class User extends Authenticatable
         return $this->hasOne('App\VerifyUser');
     }
 
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -42,5 +40,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
 }

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class StorageTest extends TestCase

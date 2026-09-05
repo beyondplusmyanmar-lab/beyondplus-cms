@@ -1,9 +1,9 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
+
 use App\Models\Bp_options;
+use Illuminate\Database\Seeder;
 
 class OptionsTableSeeder extends Seeder
 {
@@ -15,18 +15,18 @@ class OptionsTableSeeder extends Seeder
     public function run()
     {
         Bp_options::truncate();
-        $option_name  = array('siteurl', 'home', 'blogname', 'blogdescription', 'theme', 'admin_email', 'version',
+        $option_name = ['siteurl', 'home', 'blogname', 'blogdescription', 'theme', 'admin_email', 'version',
             'registration_enabled', 'registration_type', 'faq_enabled', 'feedback_enabled', 'api_enabled', 'sms_enabled', 'sms_provider', 'sms_sender', 'sms_api_token',
-            'mail_enabled', 'mail_provider', 'mailgun_domain', 'mailgun_secret', 'mail_from', 'spa_url', 'cors_origins', 'frontend_mode', 'admin_login_path', 'developer_ips', 'update_check', 'update_repo', 'otp_channel', 'active_plugins', 'plugin_versions');
-        $option_value = array('http://localhost', 'http://localhost', 'Beyond Plus CMS', 'A Beyond Plus CMS sample site', 'default', 'admin@example.com', '2.7.0',
+            'mail_enabled', 'mail_provider', 'mailgun_domain', 'mailgun_secret', 'mail_from', 'spa_url', 'cors_origins', 'frontend_mode', 'admin_login_path', 'developer_ips', 'update_check', 'update_repo', 'otp_channel', 'active_plugins', 'plugin_versions'];
+        $option_value = ['http://localhost', 'http://localhost', 'Beyond Plus CMS', 'A Beyond Plus CMS sample site', 'default', 'admin@example.com', '2.7.0',
             'yes', 'phone', 'yes', 'yes', 'yes', 'no', 'smspoh', '', '',
-            'no', 'mailgun', '', '', '', '', '', 'theme', '', '', 'yes', '', 'auto', '["smspoh","mailgun"]', '{"smspoh":"1.0.0","mailgun":"1.0.0"}');
+            'no', 'mailgun', '', '', '', '', '', 'theme', '', '', 'yes', '', 'auto', '["smspoh","mailgun"]', '{"smspoh":"1.0.0","mailgun":"1.0.0"}'];
         for ($i = 0; $i < count($option_name); $i++) {
             Bp_options::insert([
-                'option_name'  => $option_name[$i],
+                'option_name' => $option_name[$i],
                 'option_value' => $option_value[$i],
-                'autoload'     => 'yes',
-                'created_at'   => now(),
+                'autoload' => 'yes',
+                'created_at' => now(),
             ]);
         }
     }

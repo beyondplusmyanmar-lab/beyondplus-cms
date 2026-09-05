@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\BpAdmin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Bp_options;
+use App\Support\Plugin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use App\Support\Plugin;
 
 class PluginController extends Controller
 {
@@ -34,7 +35,7 @@ class PluginController extends Controller
     public function index()
     {
         return view('bp-admin.plugin.index', [
-            'grouped'  => collect(Plugin::all())->groupBy('category')->sortKeys(),
+            'grouped' => collect(Plugin::all())->groupBy('category')->sortKeys(),
             'failures' => Plugin::failures(),
         ]);
     }
@@ -47,11 +48,11 @@ class PluginController extends Controller
         abort_unless(isset($all[$slug]), 404, 'Plugin not found.');
 
         return view('bp-admin.plugin.view', [
-            'plugin'       => $all[$slug],
-            'meta'         => Plugin::meta($slug),
-            'scan'         => Plugin::scan($slug),
+            'plugin' => $all[$slug],
+            'meta' => Plugin::meta($slug),
+            'scan' => Plugin::scan($slug),
             'requirements' => Plugin::checkRequirements($slug),
-            'failure'      => Plugin::failures()[$slug] ?? null,
+            'failure' => Plugin::failures()[$slug] ?? null,
         ]);
     }
 
@@ -77,7 +78,7 @@ class PluginController extends Controller
         $values = [];
         foreach ($schema as $field) {
             $name = $field['name'];
-            $key  = Plugin::settingKey($slug, $name);
+            $key = Plugin::settingKey($slug, $name);
             if (($field['type'] ?? 'text') === 'repeater') {
                 $decoded = json_decode(bp_option($key, ''), true);
                 $values[$name] = is_array($decoded) ? $decoded : (array) ($field['default'] ?? []);
@@ -87,8 +88,8 @@ class PluginController extends Controller
         }
 
         return view('bp-admin.plugin.settings', [
-            'slug'   => $slug,
-            'meta'   => Plugin::meta($slug),
+            'slug' => $slug,
+            'meta' => Plugin::meta($slug),
             'schema' => $schema,
             'values' => $values,
         ]);
@@ -104,21 +105,25 @@ class PluginController extends Controller
         foreach ($schema as $field) {
             $name = $field['name'];
             if (($field['type'] ?? 'text') === 'repeater') {
-                $sub  = array_map(fn ($f) => $f['name'], $field['fields'] ?? []);
+                $sub = array_map(fn ($f) => $f['name'], $field['fields'] ?? []);
                 $rows = [];
                 foreach ((array) $request->input($name, []) as $row) {
-                    $row   = is_array($row) ? $row : [];
+                    $row = is_array($row) ? $row : [];
                     $clean = [];
-                    foreach ($sub as $k) { $clean[$k] = (string) ($row[$k] ?? ''); }
+                    foreach ($sub as $k) {
+                        $clean[$k] = (string) ($row[$k] ?? '');
+                    }
                     // Drop rows the owner left completely blank.
-                    if (implode('', $clean) !== '') { $rows[] = $clean; }
+                    if (implode('', $clean) !== '') {
+                        $rows[] = $clean;
+                    }
                 }
                 $value = json_encode(array_values($rows), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             } else {
                 $value = (string) $request->input($name, '');
             }
 
-            \App\Models\Bp_options::updateOrCreate(
+            Bp_options::updateOrCreate(
                 ['option_name' => Plugin::settingKey($slug, $name)],
                 ['option_value' => $value, 'autoload' => 'yes']
             );

@@ -15,8 +15,8 @@
  * the merchant key inside the connector — never anything from this request.
  */
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 Route::middleware('web')->group(function () {
@@ -38,8 +38,8 @@ Route::middleware('web')->group(function () {
     Route::get('/store', function () {
         return doeh_commerce_view('shop', [
             'products' => doeh_storefront_products(),
-            'cart'     => session('doeh_store_cart', []),
-            'ready'    => function_exists('doeh_commerce') && doeh_commerce() !== null,
+            'cart' => session('doeh_store_cart', []),
+            'ready' => function_exists('doeh_commerce') && doeh_commerce() !== null,
         ]);
     })->name('doeh-storefront.shop');
 
@@ -78,8 +78,8 @@ Route::middleware('web')->group(function () {
         }
 
         return doeh_commerce_view('cart', [
-            'lines'             => $lines,
-            'ready'             => function_exists('doeh_commerce') && doeh_commerce() !== null,
+            'lines' => $lines,
+            'ready' => function_exists('doeh_commerce') && doeh_commerce() !== null,
             // The selector renders only when there is an actual CHOICE (≥2 types);
             // a pickup-only store keeps today's cart untouched.
             'fulfillment_types' => doeh_storefront_fulfillment_types(),
@@ -174,10 +174,10 @@ Route::middleware('web')->group(function () {
 
         if (! $owned) {
             return doeh_commerce_view('order', [
-                'ok'          => false,
-                'order'       => null,
+                'ok' => false,
+                'order' => null,
                 // Neutral, existence-agnostic copy — never "not found".
-                'error'       => 'Order received. Open the confirmation from your checkout to see the details.',
+                'error' => 'Order received. Open the confirmation from your checkout to see the details.',
                 'fulfillment' => null,
             ]);
         }
@@ -186,9 +186,9 @@ Route::middleware('web')->group(function () {
         $result = $connector ? $connector->getOrder($id) : ['ok' => false, 'code' => 'EDGE_TRANSPORT'];
 
         return doeh_commerce_view('order', [
-            'ok'          => $result['ok'] ?? false,
-            'order'       => $result['order'] ?? null,
-            'error'       => $result['ok'] ?? false ? null : doeh_storefront_message($result['code'] ?? 'EDGE_TRANSPORT'),
+            'ok' => $result['ok'] ?? false,
+            'order' => $result['order'] ?? null,
+            'error' => $result['ok'] ?? false ? null : doeh_storefront_message($result['code'] ?? 'EDGE_TRANSPORT'),
             'fulfillment' => $entry['fulfillment'] ?? null,
         ]);
     })->where('id', '[A-Za-z0-9_]+')->name('doeh-storefront.order');
@@ -219,17 +219,17 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
         // fully included; default = the last 7 days.
         $dateOk = fn ($d) => is_string($d) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $d);
         $fromDate = $request->query('from');
-        $toDate   = $request->query('to');
+        $toDate = $request->query('to');
         $fromDate = $dateOk($fromDate) ? $fromDate : now('UTC')->subDays(7)->format('Y-m-d');
-        $toDate   = $dateOk($toDate) ? $toDate : now('UTC')->format('Y-m-d');
+        $toDate = $dateOk($toDate) ? $toDate : now('UTC')->format('Y-m-d');
 
         $limit = max(1, min(200, (int) $request->query('limit', 50)));
         $status = trim((string) $request->query('status'));
         $branch = (int) $request->query('branch_id');
 
         $query = [
-            'from'  => $fromDate.'T00:00:00Z',
-            'to'    => gmdate('Y-m-d', strtotime($toDate.' +1 day UTC')).'T00:00:00Z',
+            'from' => $fromDate.'T00:00:00Z',
+            'to' => gmdate('Y-m-d', strtotime($toDate.' +1 day UTC')).'T00:00:00Z',
             'limit' => $limit,
         ];
         if ($status !== '') {
@@ -241,12 +241,12 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
 
         return view('doeh-commerce-storefront::admin.orders', [
             'configured' => $connector !== null,
-            'result'     => $connector?->listOrders($query),
-            'from'       => $fromDate,
-            'to'         => $toDate,
-            'limit'      => $limit,
-            'status'     => $status,
-            'branch'     => $branch > 0 ? $branch : '',
+            'result' => $connector?->listOrders($query),
+            'from' => $fromDate,
+            'to' => $toDate,
+            'limit' => $limit,
+            'status' => $status,
+            'branch' => $branch > 0 ? $branch : '',
         ]);
     });
 
@@ -255,8 +255,8 @@ Route::middleware('admins')->prefix('bp-admin')->group(function () {
 
         return view('doeh-commerce-storefront::admin.order', [
             'configured' => $connector !== null,
-            'result'     => $connector?->getOrder($id),
-            'id'         => $id,
+            'result' => $connector?->getOrder($id),
+            'id' => $id,
         ]);
     })->where('id', '[A-Za-z0-9_]+');
 });
@@ -266,16 +266,16 @@ if (! function_exists('doeh_storefront_message')) {
     function doeh_storefront_message(string $code): string
     {
         return [
-            'EDGE_UNKNOWN_SKU'               => 'One of these products is no longer available.',
-            'EDGE_UNPRICED_SKU'              => 'One of these products has no price set.',
-            'EDGE_INSUFFICIENT_STOCK'        => 'Sorry — not enough stock for your order.',
+            'EDGE_UNKNOWN_SKU' => 'One of these products is no longer available.',
+            'EDGE_UNPRICED_SKU' => 'One of these products has no price set.',
+            'EDGE_INSUFFICIENT_STOCK' => 'Sorry — not enough stock for your order.',
             'EDGE_FULFILLMENT_NOT_AVAILABLE' => 'That fulfilment option is not available right now.',
-            'EDGE_INVALID_FULFILLMENT'       => 'That fulfilment choice is not offered by this store.',
-            'EDGE_EMPTY_ORDER'               => 'Your cart is empty.',
-            'EDGE_ORDER_NOT_FOUND'           => 'That order could not be found.',
-            'EDGE_RESULT_TOO_LARGE'          => 'Too many orders for one page — narrow the date window or raise the limit.',
-            'API_KEY_INVALID'                => 'The store is not connected to DOEH correctly.',
-            'API_KEY_ENV_MISMATCH'           => 'The store’s DOEH key is for the wrong environment.',
+            'EDGE_INVALID_FULFILLMENT' => 'That fulfilment choice is not offered by this store.',
+            'EDGE_EMPTY_ORDER' => 'Your cart is empty.',
+            'EDGE_ORDER_NOT_FOUND' => 'That order could not be found.',
+            'EDGE_RESULT_TOO_LARGE' => 'Too many orders for one page — narrow the date window or raise the limit.',
+            'API_KEY_INVALID' => 'The store is not connected to DOEH correctly.',
+            'API_KEY_ENV_MISMATCH' => 'The store’s DOEH key is for the wrong environment.',
         ][$code] ?? 'Sorry — something went wrong placing your order. Please try again.';
     }
 }

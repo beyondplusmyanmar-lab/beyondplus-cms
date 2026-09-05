@@ -2,19 +2,18 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Bp_module;
 use App\Models\Bp_access;
-
+use App\Models\Bp_module;
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminAuth
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = 'admins')
@@ -29,36 +28,32 @@ class AdminAuth
         }
 
         if ($request->method() === 'GET') {
-            
-            
 
-            if($request->segment(2)) {
+            if ($request->segment(2)) {
                 $segment = $request->segment(2);
 
-                if($segment == "logout") {
-                     return $next($request);
-                }
-
-
-                if($segment == "myprofile") {
+                if ($segment == 'logout') {
                     return $next($request);
                 }
 
-                if($segment == "lang") {
+                if ($segment == 'myprofile') {
                     return $next($request);
                 }
-                
+
+                if ($segment == 'lang') {
+                    return $next($request);
+                }
+
                 // dd($segment);
 
                 // return bp_module::where('parent_id',0)->where('section',1)->with('child')->get();
-                $modules = Bp_module::get()->pluck('module_link','module_id')->toArray();
-                //module check
+                $modules = Bp_module::get()->pluck('module_link', 'module_id')->toArray();
+                // module check
 
                 // dd($modules);
                 // return array_values($modules);
-                $role = Auth::guard("admins")->user()->role;
+                $role = Auth::guard('admins')->user()->role;
 
-                
                 // dd(role_type($role));
 
                 if (in_array($segment, array_values($modules))) {
@@ -66,9 +61,9 @@ class AdminAuth
                     $module_id = array_search($segment, $modules);
                     // $role_type = role_type($role);
 
-                    $access = Bp_access::where('module_id', $module_id )->where('usertype', $role  )->first();
+                    $access = Bp_access::where('module_id', $module_id)->where('usertype', $role)->first();
 
-                    if($access->canshow == 0) {
+                    if ($access->canshow == 0) {
                         return response('Unauthorized.', 401);
                     }
 
@@ -80,11 +75,9 @@ class AdminAuth
 
             }
 
-            
-
         }
 
         return $next($request);
-        
+
     }
 }

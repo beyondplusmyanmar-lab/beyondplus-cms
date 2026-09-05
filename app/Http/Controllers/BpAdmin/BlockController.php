@@ -6,42 +6,42 @@
  * Date: D/M/Y
  * Time: MM:HH PM
  */
+
 namespace App\Http\Controllers\BpAdmin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Bp_block;
-use Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class BlockController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('admins');
+        $this->middleware('admins');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
         $block = Bp_block::orderBy('id', 'desc')->where('translate_id', 0);
 
-        if ($request->name != null && $request->name != "0") {
+        if ($request->name != null && $request->name != '0') {
             $block = $block->where('title', 'like', '%'.$request->name.'%');
         }
 
         $block = $block->paginate(13);
 
-        return view('bp-admin.block.index', array('block' => $block));
+        return view('bp-admin.block.index', ['block' => $block]);
     }
 
-
-    public function create(){
+    public function create()
+    {
         return view('bp-admin.block.add');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         // $this->validate($request, [
         // 'title' => 'required',
         // 'description' => 'required'
@@ -51,6 +51,7 @@ class BlockController extends Controller
         $inputs['block_url'] = formatUrl($request->input('title'));
 
         Bp_block::create($inputs);
+
         return redirect()->to('bp-admin/block');
     }
 
@@ -58,10 +59,11 @@ class BlockController extends Controller
     {
         try {
             $block = Bp_block::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Category Not Found';
         }
-        return view('bp-admin.block.edit', array('block' => $block));
+
+        return view('bp-admin.block.edit', ['block' => $block]);
 
     }
 
@@ -71,23 +73,25 @@ class BlockController extends Controller
         $inputs['block_url'] = formatUrl($request->input('title'));
 
         Bp_block::findOrFail($id)->update($inputs);
+
         return redirect()->to('bp-admin/block');
     }
 
     public function destroy($id)
     {
         Bp_block::find($id)->delete();
+
         return redirect()->back();
     }
 
-    
-    public function translate($id) {
+    public function translate($id)
+    {
         try {
             $block = Bp_block::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return 'Post Not Found';
         }
-        return view('bp-admin.block.translate', array('block' => $block, 'translate_id' => $id));
-    }
 
+        return view('bp-admin.block.translate', ['block' => $block, 'translate_id' => $id]);
+    }
 }
