@@ -14,16 +14,6 @@ class Bp_tax extends Model
         'tax_id', 'parent_id', 'tax_name', 'tax_link', 'tax_icon', 'tax_lan', 'tax_type', 'translate_id', 'lang', 'tax_active', 'tax_created',
     ];
 
-    public function parent()
-    {
-        return $this->belongsTo('App\Category', 'parent_id');
-    }
-
-    public function children()
-    {
-        return $this->hasMany('App\Category', 'parent_id');
-    }
-
     public function post()
     {
         return $this->belongsTo(Bp_post::class, 'post_id', 'id');

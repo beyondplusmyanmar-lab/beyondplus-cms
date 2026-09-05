@@ -47,6 +47,6 @@ class SiteSettings extends Model
 
     public function currency()
     {
-        return $this->hasOne('App\Currency', 'id', 'default_currency');
+        return $this->hasOne(Currency::class, 'id', 'default_currency');
     }
 }
