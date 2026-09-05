@@ -40,7 +40,7 @@ class Customers extends Authenticatable
 
     public function customerType()
     {
-        return $this->hasOne('App\Models\CustomerTypes', 'id', 'customer_types_id');
+        return $this->hasOne(CustomerTypes::class, 'id', 'customer_types_id');
     }
 
     // public function events()

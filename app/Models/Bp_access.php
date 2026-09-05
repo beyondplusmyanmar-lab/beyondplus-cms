@@ -18,6 +18,6 @@ class Bp_access extends Model
 
     public function module()
     {
-        return $this->belongsTo('App\Models\Bp_module', 'module_id');
+        return $this->belongsTo(Bp_module::class, 'module_id');
     }
 }

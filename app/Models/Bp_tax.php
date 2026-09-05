@@ -26,16 +26,16 @@ class Bp_tax extends Model
 
     public function post()
     {
-        return $this->belongsTo('App\Models\Bp_post', 'post_id', 'id');
+        return $this->belongsTo(Bp_post::class, 'post_id', 'id');
     }
 
     public function posts()
     {
-        return $this->belongsToMany('App\Models\Bp_post', 'bp_relationships', 'tax_id', 'post_id');
+        return $this->belongsToMany(Bp_post::class, 'bp_relationships', 'tax_id', 'post_id');
     }
 
     public function translate()
     {
-        return $this->belongsTo('App\Models\Bp_tax', 'tax_id', 'translate_id');
+        return $this->belongsTo(Bp_tax::class, 'tax_id', 'translate_id');
     }
 }

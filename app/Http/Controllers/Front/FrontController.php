@@ -18,7 +18,6 @@ use App\Models\Bp_post;
 use App\Models\Bp_tax;
 use App\Models\Faq;
 use App\Models\Feedback;
-use App\Models\User;
 use Carbon\Carbon;
 use Google;
 use Illuminate\Http\Request;

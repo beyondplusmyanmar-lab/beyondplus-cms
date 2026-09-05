@@ -18,6 +18,6 @@ class Bp_relationship extends Model
 
     public function post()
     {
-        return $this->belongsTo('App\Models\Bp_post');
+        return $this->belongsTo(Bp_post::class);
     }
 }

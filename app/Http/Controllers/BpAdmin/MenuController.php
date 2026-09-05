@@ -12,7 +12,6 @@ namespace App\Http\Controllers\BpAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Bp_menu;
 use App\Models\Bp_post;
-use App\Models\User;
 use Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;

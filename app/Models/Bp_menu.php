@@ -38,26 +38,26 @@ class Bp_menu extends Model
 
     public function Parent()
     {
-        return $this->belongsTo('App\Models\Bp_menu', 'parent_id', 'menu_id');
+        return $this->belongsTo(Bp_menu::class, 'parent_id', 'menu_id');
     }
 
     public function Children()
     {
-        return $this->hasMany('App\Models\Bp_menu', 'parent_id', 'menu_id')->orderBy('menu_weight', 'asc');
+        return $this->hasMany(Bp_menu::class, 'parent_id', 'menu_id')->orderBy('menu_weight', 'asc');
     }
 
     public function Childrenfindid()
     {
-        return $this->hasMany('App\Models\Bp_menu', 'parent_id', 'menu_id')->orderBy('menu_weight', 'desc');
+        return $this->hasMany(Bp_menu::class, 'parent_id', 'menu_id')->orderBy('menu_weight', 'desc');
     }
 
     public function Post()
     {
-        return $this->belongsTo('App\Models\Bp_post', 'post_id', 'id');
+        return $this->belongsTo(Bp_post::class, 'post_id', 'id');
     }
 
     public function translate()
     {
-        return $this->belongsTo('App\Models\Bp_menu', 'menu_id', 'translate_id');
+        return $this->belongsTo(Bp_menu::class, 'menu_id', 'translate_id');
     }
 }

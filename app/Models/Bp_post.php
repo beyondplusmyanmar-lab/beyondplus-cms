@@ -43,21 +43,21 @@ class Bp_post extends Model
 
     public function category()
     {
-        return $this->belongsTo('App\Models\Bp_tax');
+        return $this->belongsTo(Bp_tax::class);
     }
 
     public function categories()
     {
-        return $this->belongsToMany('App\Models\Bp_tax', 'bp_relationships', 'post_id', 'tax_id');
+        return $this->belongsToMany(Bp_tax::class, 'bp_relationships', 'post_id', 'tax_id');
     }
 
     public function translate()
     {
-        return $this->belongsTo('App\Models\Bp_post', 'id', 'translate_id');
+        return $this->belongsTo(Bp_post::class, 'id', 'translate_id');
     }
 
     public function comment()
     {
-        return $this->hasMany('App\Models\Bp_comment', 'post_id', 'id');
+        return $this->hasMany(Bp_comment::class, 'post_id', 'id');
     }
 }

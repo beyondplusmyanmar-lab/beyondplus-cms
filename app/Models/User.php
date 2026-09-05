@@ -11,16 +11,16 @@ class User extends Model
     protected $table = 'users';
 
     protected $fillable = [
-        'id', 'name', 'email', 'avatar', 'password', 'api_token', 'role',  'created_at',
+        'name', 'email', 'avatar', 'password', 'api_token', 'role', 'created_at',
     ];
 
-    public function parent()
-    {
-        return $this->belongsTo('App\user', 'parent_id');
-    }
-
-    public function children()
-    {
-        return $this->hasMany('App\user', 'parent_id');
-    }
+    /**
+     * Hidden when the model is serialised. This class maps to the same `users`
+     * table as App\User, which already hides these; keep the two in step.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token', 'api_token',
+    ];
 }

@@ -16,11 +16,11 @@ class Bp_module extends Model
 
     public function access()
     {
-        return $this->hasMany('App\Models\Bp_access', 'module_id', 'module_id');
+        return $this->hasMany(Bp_access::class, 'module_id', 'module_id');
     }
 
     public function child()
     {
-        return $this->hasMany('App\Models\Bp_module', 'parent_id');
+        return $this->hasMany(Bp_module::class, 'parent_id');
     }
 }

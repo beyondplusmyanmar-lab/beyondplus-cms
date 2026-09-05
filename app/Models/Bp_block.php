@@ -23,6 +23,6 @@ class Bp_block extends Model
 
     public function translate()
     {
-        return $this->belongsTo('App\Models\Bp_block', 'id', 'translate_id');
+        return $this->belongsTo(Bp_block::class, 'id', 'translate_id');
     }
 }

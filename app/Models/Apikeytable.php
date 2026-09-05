@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\VerifyUser;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -31,7 +32,7 @@ class Apikeytable extends Authenticatable
 
     public function verifyUser()
     {
-        return $this->hasOne('App\VerifyUser');
+        return $this->hasOne(VerifyUser::class);
     }
 
     /**

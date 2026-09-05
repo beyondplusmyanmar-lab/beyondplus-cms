@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Bp_comment extends Model
@@ -16,6 +17,6 @@ class Bp_comment extends Model
 
     public function users()
     {
-        return $this->hasMany('App\User', 'id', 'user_id');
+        return $this->hasMany(User::class, 'id', 'user_id');
     }
 }
