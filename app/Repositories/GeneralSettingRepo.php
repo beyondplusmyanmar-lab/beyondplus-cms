@@ -209,7 +209,7 @@ class GeneralSettingRepo
     public function get_individual_value($option_name)
     {
         $option_value = '';
-        $result = Bp_options::where('option_name',$option_name)->first();
+        $result = Bp_options::where('option_name', $option_name)->first();
 
         if ($result) {
             $option_value = $result->option_value;
