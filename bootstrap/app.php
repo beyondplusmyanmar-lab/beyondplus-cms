@@ -27,6 +27,14 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         using: function () {
+            // LOAD-BEARING: every route file below uses the string action form,
+            // 'PostController@index'. Laravel dropped the implicit controller
+            // namespace in 8.0, so the ->namespace('App\Http\Controllers') calls
+            // here are the only reason those strings resolve to a class at all.
+            // Remove one and that entire group stops routing at once rather than
+            // degrading — convert its route file to [Controller::class, 'method']
+            // arrays first, then drop the namespace() call.
+
             // API routes (stateless, token-guarded).
             Route::prefix('api')
                 ->middleware('api')
