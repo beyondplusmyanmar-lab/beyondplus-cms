@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\VerifyUser;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -29,11 +28,6 @@ class Apikeytable extends Authenticatable
     protected $hidden = [
         'password', 'remember_token', 'api_token',
     ];
-
-    public function verifyUser()
-    {
-        return $this->hasOne(VerifyUser::class);
-    }
 
     /**
      * The attributes that should be cast to native types.

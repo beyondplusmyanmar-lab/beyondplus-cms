@@ -42,11 +42,6 @@ class Bp_post extends Model
         return $this->belongsTo(User::class, 'staff_id');
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Bp_tax::class);
-    }
-
     public function categories()
     {
         return $this->belongsToMany(Bp_tax::class, 'bp_relationships', 'post_id', 'tax_id');
