@@ -21,7 +21,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('post', 'PostController@index');
     Route::get('post/create', 'PostController@create');
     Route::post('post', 'PostController@store');
-    Route::get('post/{id}', 'PostController@show');
     Route::get('post/{id}/edit', 'PostController@edit');
     Route::put('post/{id}', 'PostController@update');
     Route::delete('post/{id}', 'PostController@destroy');
@@ -33,7 +32,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('news/calendar', 'NewsController@calendar');
     Route::get('news/create', 'NewsController@create');
     Route::post('news', 'NewsController@store');
-    Route::get('news/{id}', 'NewsController@show');
     Route::get('news/{id}/edit', 'NewsController@edit');
     Route::put('news/{id}', 'NewsController@update');
     Route::delete('news/{id}', 'NewsController@destroy');
@@ -46,7 +44,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('block', 'BlockController@index');
     Route::get('block/create', 'BlockController@create');
     Route::post('block', 'BlockController@store');
-    Route::get('block/{id}', 'BlockController@show');
     Route::get('block/{id}/edit', 'BlockController@edit');
     Route::put('block/{id}', 'BlockController@update');
     Route::delete('block/{id}', 'BlockController@destroy');
@@ -59,7 +56,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('page', 'PageController@index');
     Route::get('page/create', 'PageController@create');
     Route::post('page', 'PageController@store');
-    Route::get('page/{id}', 'PageController@show');
     Route::get('page/{id}/edit', 'PageController@edit');
     Route::put('page/{id}', 'PageController@update');
     Route::delete('page/{id}', 'PageController@destroy');
@@ -83,7 +79,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('media', 'MediaController@index');
     Route::get('media/create', 'MediaController@create');
     Route::post('media', 'MediaController@store');
-    Route::get('media/{id}', 'MediaController@show');
     Route::get('media/{id}/edit', 'MediaController@edit');
     Route::put('media/{id}', 'MediaController@update');
     Route::delete('media/{id}', 'MediaController@destroy');
@@ -95,7 +90,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('slider', 'SliderController@index');
     Route::get('slider/create', 'SliderController@create');
     Route::post('slider/store', 'SliderController@store');
-    Route::get('slider/{id}', 'SliderController@show');
     Route::get('slider/{id}/edit', 'SliderController@edit');
     Route::put('slider/{id}', 'SliderController@update');
     Route::delete('slider/{id}', 'SliderController@destroy');
@@ -107,7 +101,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('menu', 'MenuController@index');
     Route::get('menu/create', 'MenuController@create');
     Route::post('menu', 'MenuController@store');
-    Route::get('menu/{id}', 'MenuController@show');
     Route::get('menu/{id}/edit', 'MenuController@edit');
     Route::put('menu/{id}', 'MenuController@update');
     Route::delete('menu/{id}', 'MenuController@destroy');
@@ -128,7 +121,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('category', 'CategoryController@index');
     Route::get('category/create', 'CategoryController@create');
     Route::post('category/store', 'CategoryController@store');
-    Route::get('category/{id}', 'CategoryController@show');
     Route::get('category/{id}/edit', 'CategoryController@edit');
     Route::put('category/{id}', 'CategoryController@update');
     Route::delete('category/{id}', 'CategoryController@destroy');
@@ -184,7 +176,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('account', 'AccountController@index');
     Route::get('account/create', 'AccountController@create');
     Route::post('account/store', 'AccountController@store');
-    Route::get('account/{id}', 'AccountController@show');
     Route::get('account/{id}/edit', 'AccountController@edit');
     Route::put('account/{id}', 'AccountController@update');
     Route::delete('account/{id}', 'AccountController@destroy');
@@ -195,7 +186,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('custom', 'CustomController@index');
     Route::get('custom/create', 'CustomController@create');
     Route::post('custom/store', 'CustomController@store');
-    Route::get('custom/{id}', 'CustomController@show');
     Route::get('custom/{id}/edit', 'CustomController@edit');
     Route::put('custom/{id}', 'CustomController@update');
     Route::delete('custom/{id}', 'CustomController@destroy');
@@ -205,7 +195,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
     Route::get('user-guide', 'GuidePageController@index');
     Route::get('user-guide/create', 'GuidePageController@create');
     Route::post('user-guide/store', 'GuidePageController@store');
-    Route::get('user-guide/{id}', 'GuidePageController@show');
     Route::get('user-guide/{id}/edit', 'GuidePageController@edit');
     Route::put('user-guide/{id}', 'GuidePageController@update');
     Route::delete('user-guide/{id}', 'GuidePageController@destroy');
@@ -235,10 +224,6 @@ Route::group(['prefix' => 'bp-admin', 'namespace' => 'BpAdmin', 'middleware' => 
 
     Route::get('reports/customer-import', 'ReportsController@customerImportView');
     Route::post('reports/customer-import', 'ReportsController@customerImport');
-
-    Route::get('reports/sms-report-export', 'ReportsController@smsReportExport');
-    Route::get('reports/sms-report-import', 'ReportsController@smsReportImport');
-    Route::get('reports/sms-report', 'ReportsController@smsReport');
 
     Route::get('myprofile/edit', 'MyprofileController@editPassword');
     Route::post('myprofile/edit', 'MyprofileController@editsavePassword');
@@ -294,8 +279,6 @@ Route::group(['middleware' => ['web', 'frontend.mode']], function () {
     // });
 
     Route::get('logout', 'BpAdmin\Main@logout');
-
-    Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
     Route::get('/', 'Front\FrontController@index');
 
