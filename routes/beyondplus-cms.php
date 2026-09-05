@@ -305,7 +305,7 @@ Route::group(['middleware' => ['web', 'frontend.mode']], function () {
 
     Route::get('/sitemap', 'Front\FrontController@sitemap');
     Route::get('/rss', 'Front\FrontController@rss');
-    Route::post('/comment', 'Front\FrontController@comment');
+    Route::post('/comment', 'Front\FrontController@comment')->middleware('auth');
 
     Route::get('/blog', 'Front\FrontController@blog');
 

@@ -254,12 +254,24 @@ class FrontController extends Controller
 
     public function comment(Request $request)
     {
-        $this->middleware('auth');
-        // Qanda::where('que_id','=', $request->input('que_id'))->increment('comment_count', 1);
-        $inputs = $request->all();
-        $inputs['user_id'] = Auth::user()->id;
-        Bp_comment::create($inputs);
+        // Auth is enforced by the route's "auth" middleware. Calling
+        // $this->middleware() here would be a no-op: the middleware stack has
+        // already been resolved by the time the action runs.
+        $data = $request->validate([
+            'post_id' => ['required', 'integer', 'exists:bp_posts,id'],
+            'body' => ['required', 'string', 'max:2000'],
+        ]);
 
+        // Only these three columns are written. The author comes from the
+        // credential, never from the request, and "active" is left to the
+        // column default so a commenter cannot set their own moderation state.
+        Bp_comment::create([
+            'post_id' => $data['post_id'],
+            'body' => $data['body'],
+            'user_id' => Auth::id(),
+        ]);
+
+        // The themes' AJAX handler reloads the page on a literal 1.
         return 1;
     }
 

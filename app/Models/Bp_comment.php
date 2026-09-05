@@ -12,7 +12,7 @@ class Bp_comment extends Model
     protected $table = 'bp_comment';
 
     protected $fillable = [
-        'id', 'post_id', 'user_id', 'body', 'active', 'created_at', 'updated_at',
+        'post_id', 'user_id', 'body',
     ];
 
     public function users()
