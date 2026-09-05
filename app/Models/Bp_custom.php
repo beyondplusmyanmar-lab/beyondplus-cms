@@ -16,11 +16,11 @@ class Bp_custom extends Model
 
     public function Parent()
     {
-        return $this->belongsTo('BeyondPlus\CmsLibrary\Models\Bp_custom', 'parent_id', 'custom_id');
+        return $this->belongsTo(Bp_custom::class, 'parent_id', 'custom_id');
     }
 
     public function Children()
     {
-        return $this->hasMany('BeyondPlus\CmsLibrary\Models\Bp_custom', 'parent_id', 'custom_id');
+        return $this->hasMany(Bp_custom::class, 'parent_id', 'custom_id');
     }
 }

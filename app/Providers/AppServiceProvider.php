@@ -6,7 +6,6 @@ use App\Mail\Transport\ConfigMailgunTransport;
 use App\Models\Bp_block;
 use App\Models\Bp_custom;
 use App\Models\Bp_menu;
-use App\Models\Bp_messages;
 use App\Models\Bp_module;
 use App\Models\Bp_options;
 use App\Models\Bp_post;
@@ -34,7 +33,6 @@ class AppServiceProvider extends ServiceProvider
         'bp_slider' => Bp_slider::class,
         'bp_module' => Bp_module::class,
         'bp_custom' => Bp_custom::class,
-        'bp_messages' => Bp_messages::class,
         'bp_options' => Bp_options::class,
         'bp_block' => Bp_block::class,
     ];
