@@ -11,7 +11,7 @@ class Bp_tax extends Model
     protected $table = 'bp_taxes';
 
     protected $fillable = [
-        'tax_id', 'parent_id', 'tax_name', 'tax_link', 'tax_icon', 'tax_lan', 'tax_type', 'translate_id', 'lang', 'tax_active', 'tax_created',
+        'parent_id', 'tax_name', 'tax_link', 'tax_icon', 'tax_lan', 'tax_type', 'translate_id', 'lang', 'tax_active', 'tax_created',
     ];
 
     public function posts()

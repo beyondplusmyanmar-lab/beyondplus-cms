@@ -11,8 +11,7 @@ class Bp_module extends Model
     protected $table = 'bp_modules';
 
     protected $fillable = [
-        'module_name', 'module_name_mm', 'module_link', 'module_weight', 'module_icon', 'parent_id', 'staff_id', 'section', 'created_at', 'updated_at',
-    ];
+        'module_name', 'module_name_mm', 'module_link', 'module_weight', 'module_icon', 'parent_id', 'staff_id', 'section', ];
 
     public function access()
     {

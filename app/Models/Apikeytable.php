@@ -17,8 +17,7 @@ class Apikeytable extends Authenticatable
     protected $table = 'bp_apikeytable';
 
     protected $fillable = [
-        'name', 'email', 'avatar', 'role', 'password', 'api_token', 'verified', 'created_at',
-    ];
+        'name', 'email', 'avatar', 'role', 'password', 'api_token', 'verified', ];
 
     /**
      * The attributes excluded from the model's JSON form.

@@ -13,6 +13,6 @@ class Bp_usertype extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'role',
+        'role',
     ];
 }

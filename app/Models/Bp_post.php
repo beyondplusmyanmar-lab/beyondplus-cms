@@ -18,9 +18,7 @@ class Bp_post extends Model
 
     protected $fillable = [
 
-        'title', 'body', 'featured', 'featured_img', 'post_link', 'post_type', 'post_template', 'post_weight', 'post_active', 'translate_id', 'staff_id', 'lang', 'event_color', 'event_at', 'created_at',
-
-    ];
+        'title', 'body', 'featured', 'featured_img', 'post_link', 'post_type', 'post_template', 'post_weight', 'post_active', 'translate_id', 'staff_id', 'lang', 'event_color', 'event_at', ];
 
     public function getActivitylogOptions(): LogOptions
     {

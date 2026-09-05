@@ -11,6 +11,5 @@ class Bp_slider extends Model
     protected $table = 'bp_sliders';
 
     protected $fillable = [
-        'slider_name', 'slider_link', 'slider_type', 'slider_weight', 'slider_description', 'slider_created', 'created_at', 'updated_at',
-    ];
+        'slider_name', 'slider_link', 'slider_type', 'slider_weight', 'slider_description', 'slider_created', ];
 }

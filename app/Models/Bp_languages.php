@@ -41,5 +41,5 @@ class Bp_languages extends Model
      *
      * @var array
      */
-    protected $fillable = ['id', 'language_iso', 'language_value'];
+    protected $fillable = ['language_iso', 'language_value'];
 }
