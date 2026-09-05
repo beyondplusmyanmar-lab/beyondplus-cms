@@ -29,6 +29,26 @@ class FrontendTest extends TestCase
         $this->get('/bp-admin/login')->assertStatus(200)->assertSee('Sign in', false);
     }
 
+    public function test_detail_route_renders_a_post_and_404s_when_unknown(): void
+    {
+        // This route used to point at FrontController@post, a method that does
+        // not exist, so every request returned 500 instead of a page or a 404.
+        $post = Bp_post::where('post_type', 'post')->firstOrFail();
+
+        $this->get('/detail/'.$post->post_link)->assertStatus(200);
+        $this->get('/detail/no-such-post')->assertStatus(404);
+    }
+
+    public function test_unknown_news_event_detail_is_not_found(): void
+    {
+        // news-event/detail/{post} pointed at a missing meetingDetail method
+        // and 500d; the URL should simply not exist.
+        $this->get('/news-event/detail/anything')->assertStatus(404);
+
+        // The sibling route whose method does exist must keep working.
+        $this->get('/news-event/detail/allmeeting')->assertStatus(200);
+    }
+
     public function test_search_finds_matching_content(): void
     {
         $this->get('/search?q=Multilingual')->assertStatus(200)->assertSee('Building Multilingual Content');

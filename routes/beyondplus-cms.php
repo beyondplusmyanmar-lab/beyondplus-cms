@@ -339,7 +339,7 @@ Route::group(['middleware' => ['web', 'frontend.mode']], function () {
     })->where('code', '[0-9]+');
 
     Route::get('/{name}', 'Front\FrontController@menu');
-    Route::get('/detail/{name}', 'Front\FrontController@post');
+    Route::get('/detail/{name}', 'Front\FrontController@detail');
     Route::get('/cat/{name}', 'Front\FrontController@cat');
 
     // Route::auth();
@@ -363,7 +363,6 @@ Route::group(['middleware' => ['web', 'frontend.mode']], function () {
     // });
 
     Route::get('/news-event/detail/allmeeting', 'Front\FrontController@allMeeting');
-    Route::get('/news-event/detail/{post}', 'Front\FrontController@meetingDetail');
 
     Route::get('/news-event/{lang}', 'Front\FrontController@newsEvent');
 
