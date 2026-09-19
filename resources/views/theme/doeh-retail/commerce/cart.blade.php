@@ -88,13 +88,15 @@
                                    placeholder="{{ $mm ? 'လမ်း / အမှတ် / အခန်း' : 'Street, house or unit number' }}"
                                    style="width:100%; padding:12px 14px; border:1px solid var(--rule); border-radius:12px; margin-bottom:8px;
                                           font:inherit; background:var(--paper); color:var(--ink);">
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+                            {{-- minmax(0, 1fr), not 1fr: a plain 1fr column cannot shrink below the input's intrinsic
+                                 width, which pushed the whole page to 520px on a 390px phone. --}}
+                            <div style="display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); gap:8px; margin-bottom:14px;">
                                 <input id="addr_township" name="addr_township" type="text"
                                        placeholder="{{ $mm ? 'မြို့နယ်' : 'Township' }}"
-                                       style="padding:12px 14px; border:1px solid var(--rule); border-radius:12px; font:inherit; background:var(--paper); color:var(--ink);">
+                                       style="min-width:0; width:100%; padding:12px 14px; border:1px solid var(--rule); border-radius:12px; font:inherit; background:var(--paper); color:var(--ink);">
                                 <input id="addr_city" name="addr_city" type="text"
                                        placeholder="{{ $mm ? 'မြို့' : 'City' }}"
-                                       style="padding:12px 14px; border:1px solid var(--rule); border-radius:12px; font:inherit; background:var(--paper); color:var(--ink);">
+                                       style="min-width:0; width:100%; padding:12px 14px; border:1px solid var(--rule); border-radius:12px; font:inherit; background:var(--paper); color:var(--ink);">
                             </div>
                             <p class="rt-muted rt-small" style="margin:-6px 0 14px;">{{ $mm ? 'ပို့ဆောင်ခကို ဆိုင်မှ အတည်ပြုချိန်တွင် သတ်မှတ်ပါမည်။' : 'The shop sets the delivery charge when it confirms your order.' }}</p>
                         </div>
