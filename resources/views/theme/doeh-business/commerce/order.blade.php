@@ -27,7 +27,7 @@
 
             <div class="card" style="padding:22px 26px;">
                 <div class="rows">
-                    <div class="r"><span class="k">{{ $mm ? 'မှာယူမှု နံပါတ်' : 'Order number' }}</span><span class="v money">{{ $order['id'] ?? '—' }}</span></div>
+                    <div class="r"><span class="k">{{ $mm ? 'မှာယူမှု နံပါတ်' : 'Order number' }}</span><span class="v money">{{ $order['order_number'] ?? $order['id'] ?? '—' }}</span></div>
                     <div class="r"><span class="k">{{ $mm ? 'အခြေအနေ' : 'Status' }}</span><span class="v">{{ $order['status'] ?? 'received' }}</span></div>
                     <div class="r"><span class="k">{{ $mm ? 'ငွေပေးချေမှု' : 'Payment' }}</span><span class="v">{{ $order['payment_status'] ?? 'unpaid' }}</span></div>
                 </div>

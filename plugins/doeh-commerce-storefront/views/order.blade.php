@@ -21,7 +21,7 @@
         <div class="card">
             <div class="row">
                 <div class="muted">Order</div>
-                <div class="name">{{ $order['id'] ?? '—' }}</div>
+                <div class="name">{{ $order['order_number'] ?? $order['id'] ?? '—' }}</div>
             </div>
             <div class="row" style="margin-top:8px;">
                 <div class="muted">Status</div>

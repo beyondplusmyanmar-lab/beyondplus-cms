@@ -30,7 +30,7 @@
             <div class="rt-panel" style="padding:24px 26px;">
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px;">
                     <span class="rt-muted rt-small">{{ $mm ? 'အော်ဒါ နံပါတ်' : 'Order number' }}</span>
-                    <span class="rt-money" style="font-size:17px;">{{ $order['id'] ?? '—' }}</span>
+                    <span class="rt-money" style="font-size:17px;">{{ $order['order_number'] ?? $order['id'] ?? '—' }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:8px;">
                     <span class="rt-muted rt-small">{{ $mm ? 'အခြေအနေ' : 'Status' }}</span>

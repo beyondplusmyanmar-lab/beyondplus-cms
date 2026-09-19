@@ -29,7 +29,7 @@
         <div class="r-card" style="padding:24px 26px; max-width:520px; margin:0 auto;">
             <div style="display:flex; justify-content:space-between; align-items:baseline;">
                 <span class="r-eyebrow">{{ $mm ? 'အော်ဒါ' : 'Order' }}</span>
-                <span class="r-serif" style="font-size:20px;">{{ $order['id'] ?? '—' }}</span>
+                <span class="r-serif" style="font-size:20px;">{{ $order['order_number'] ?? $order['id'] ?? '—' }}</span>
             </div>
             <div class="r-muted" style="font-size:14px; margin-top:4px;">{{ $order['status'] ?? 'received' }} · {{ $order['payment_status'] ?? 'unpaid' }}</div>
             @if (! empty($fulfillment))

@@ -28,7 +28,7 @@
             <div class="sv-card" style="padding:24px 26px;">
                 <div style="display:flex; justify-content:space-between; align-items:baseline;">
                     <span class="sv-eyebrow">{{ $mm ? 'တောင်းဆိုမှု' : 'Request' }}</span>
-                    <span class="sv-serif" style="font-size:19px;">{{ $order['id'] ?? '—' }}</span>
+                    <span class="sv-serif" style="font-size:19px;">{{ $order['order_number'] ?? $order['id'] ?? '—' }}</span>
                 </div>
                 <div class="sv-muted" style="font-size:14px; margin-top:4px;">{{ $order['status'] ?? 'received' }} · {{ $order['payment_status'] ?? 'unpaid' }}</div>
 
