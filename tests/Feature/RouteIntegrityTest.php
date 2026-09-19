@@ -71,4 +71,35 @@ class RouteIntegrityTest extends TestCase
 
         $this->assertGreaterThan(300, $controllerRoutes);
     }
+
+    /**
+     * A plugin's routes.php is loaded only while routes are being REGISTERED. Once
+     * `route:cache` has run - as it does on every installed storefront - the file is
+     * never required again, so a function declared in it simply does not exist and
+     * any route that calls it is a 500. Tests register routes the uncached way, so
+     * only a structural check can see this.
+     */
+    public function test_no_plugin_route_file_declares_a_function(): void
+    {
+        $files = glob(base_path('plugins/*/routes.php'));
+        $declared = [];
+
+        foreach ($files as $file) {
+            $tokens = token_get_all(file_get_contents($file));
+
+            foreach ($tokens as $i => $token) {
+                if (! is_array($token) || $token[0] !== T_FUNCTION) {
+                    continue;
+                }
+                $next = $tokens[$i + 1] ?? null;
+                $name = $tokens[$i + 2] ?? null;
+                if (is_array($next) && $next[0] === T_WHITESPACE && is_array($name) && $name[0] === T_STRING) {
+                    $declared[] = str_replace(base_path().'/', '', $file).': '.$name[1].'() on line '.$name[2];
+                }
+            }
+        }
+
+        $this->assertNotEmpty($files, 'no plugin route files were found - the guard inspected nothing');
+        $this->assertSame([], $declared, "Declare these in the plugin's main file instead:\n  ".implode("\n  ", $declared));
+    }
 }

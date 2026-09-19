@@ -143,3 +143,30 @@ if (! function_exists('doeh_commerce_view')) {
         return response()->view($view, $data);
     }
 }
+
+if (! function_exists('doeh_storefront_message')) {
+    /**
+     * Friendly copy for the connector's stable error codes (theme-replaceable).
+     *
+     * Declared here, not in routes.php: under `route:cache` (which every installed
+     * storefront runs) the route files are never loaded, so a helper declared there
+     * does not exist and every refusal that reaches for it is a 500.
+     */
+    function doeh_storefront_message(string $code): string
+    {
+        return [
+            'EDGE_PHONE_REQUIRED' => 'Please give a phone number so the shop can tell you when your order is ready.',
+            'EDGE_ADDRESS_REQUIRED' => 'Please give the address your order should be delivered to.',
+            'EDGE_UNKNOWN_SKU' => 'One of these products is no longer available.',
+            'EDGE_UNPRICED_SKU' => 'One of these products has no price set.',
+            'EDGE_INSUFFICIENT_STOCK' => 'Sorry — not enough stock for your order.',
+            'EDGE_FULFILLMENT_NOT_AVAILABLE' => 'That fulfilment option is not available right now.',
+            'EDGE_INVALID_FULFILLMENT' => 'That fulfilment choice is not offered by this store.',
+            'EDGE_EMPTY_ORDER' => 'Your cart is empty.',
+            'EDGE_ORDER_NOT_FOUND' => 'That order could not be found.',
+            'EDGE_RESULT_TOO_LARGE' => 'Too many orders for one page — narrow the date window or raise the limit.',
+            'API_KEY_INVALID' => 'The store is not connected to DOEH correctly.',
+            'API_KEY_ENV_MISMATCH' => 'The store’s DOEH key is for the wrong environment.',
+        ][$code] ?? 'Sorry — something went wrong placing your order. Please try again.';
+    }
+}
