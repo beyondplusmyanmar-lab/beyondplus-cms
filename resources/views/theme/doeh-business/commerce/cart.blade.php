@@ -42,6 +42,16 @@
 
                 <form method="POST" action="{{ url('/store/checkout') }}" class="card" style="padding:24px;">
                     @csrf
+                    @if ($errors->any())
+                        {{-- Every checkout refusal comes back flashed. Without this the customer is
+                             bounced to the cart with no idea what went wrong. --}}
+                        <div role="alert" style="margin:0 0 16px; padding:12px 14px; border:1px solid #b42318; border-radius:11px; background:rgba(180,35,24,.07); color:#b42318; display:grid; gap:4px;">
+                            @foreach ($errors->all() as $storefrontError)
+                                <p class="small" style="margin:0;">{{ $storefrontError }}</p>
+                            @endforeach
+                        </div>
+                    @endif
+
                     <h2 class="h3 serif" style="margin-bottom:16px;">{{ $mm ? 'အော်ဒါ အတည်ပြုရန်' : 'Review and order' }}</h2>
                     <label for="phone" class="small" style="display:block; font-weight:600; margin-bottom:6px;">{{ $mm ? 'ဖုန်းနံပါတ်' : 'Phone' }}
                         <span class="muted" style="font-weight:400;">{{ $mm ? '(မဖြစ်မနေ)' : '(required)' }}</span>
