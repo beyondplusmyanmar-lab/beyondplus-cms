@@ -27,7 +27,12 @@ class PackageGuard
             '/`[^`\n]*`/' => 'backtick shell execution',
             '/\bassert\s*\(\s*[\'"]/i' => 'assert() on a string — executes code',
             '/\bcreate_function\s*\(/i' => 'create_function() — executes code',
-            '/preg_replace\s*\(\s*([\'"]).*\1\s*[.,]?\s*[\'"][^\'"]*e/i' => 'preg_replace /e — executes code',
+            // The /e modifier sits between the pattern's CLOSING delimiter and the quote that
+            // ends the argument — e.g. preg_replace('/x/e', …). Matching any later quoted text
+            // containing an "e" instead, as this rule once did, flagged every benign call whose
+            // line went on to contain a quoted word: preg_replace('/[^0-9+]/', '', $phone) inside
+            // a tel: link was enough to block a theme outright.
+            '/preg_replace\s*\(\s*([\'"])\s*([#~\/%|!+@])(?:\\\\.|(?!\2).)*\2[a-df-z]*e[a-z]*\1/i' => 'preg_replace /e — executes code',
             '/(eval|assert)\s*\(\s*(base64_decode|gzinflate|gzuncompress|str_rot13)/i' => 'obfuscated code execution',
             '/(include|require)(_once)?\s*\(?\s*[\'"]https?:\/\//i' => 'remote code inclusion',
             // Deleting files/directories is blocked outright — a plugin must not be
