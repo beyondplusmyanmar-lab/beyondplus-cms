@@ -90,7 +90,7 @@ Route::middleware('web')->group(function () {
         $connector = function_exists('doeh_commerce') ? doeh_commerce() : null;
         if (! $connector) {
             // Admin-facing: the connector is off/unconfigured. Never a customer crash.
-            return redirect('/store/cart')->withErrors('DOEH Commerce is not configured.');
+            return redirect('/store/cart')->withErrors(doeh_storefront_message('STOREFRONT_NOT_CONFIGURED'));
         }
 
         $cart = session('doeh_store_cart', []);
@@ -99,7 +99,7 @@ Route::middleware('web')->group(function () {
             $lines[] = ['sku' => (string) $sku, 'qty' => (int) $qty];
         }
         if (! $lines) {
-            return redirect('/store/cart')->withErrors('Your cart is empty.');
+            return redirect('/store/cart')->withErrors(doeh_storefront_message('EDGE_EMPTY_ORDER'));
         }
 
         $phone = trim((string) $request->input('phone'));
@@ -200,7 +200,7 @@ Route::middleware('web')->group(function () {
                 'ok' => false,
                 'order' => null,
                 // Neutral, existence-agnostic copy — never "not found".
-                'error' => 'Order received. Open the confirmation from your checkout to see the details.',
+                'error' => doeh_storefront_message('STOREFRONT_ORDER_ELSEWHERE'),
                 'fulfillment' => null,
             ]);
         }

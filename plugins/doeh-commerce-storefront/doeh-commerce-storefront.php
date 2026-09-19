@@ -195,19 +195,41 @@ if (! function_exists('doeh_storefront_message')) {
      */
     function doeh_storefront_message(string $code): string
     {
-        return [
-            'EDGE_PHONE_REQUIRED' => 'Please give a phone number so the shop can tell you when your order is ready.',
-            'EDGE_ADDRESS_REQUIRED' => 'Please give the address your order should be delivered to.',
-            'EDGE_UNKNOWN_SKU' => 'One of these products is no longer available.',
-            'EDGE_UNPRICED_SKU' => 'One of these products has no price set.',
-            'EDGE_INSUFFICIENT_STOCK' => 'Sorry — not enough stock for your order.',
-            'EDGE_FULFILLMENT_NOT_AVAILABLE' => 'That fulfilment option is not available right now.',
-            'EDGE_INVALID_FULFILLMENT' => 'That fulfilment choice is not offered by this store.',
-            'EDGE_EMPTY_ORDER' => 'Your cart is empty.',
-            'EDGE_ORDER_NOT_FOUND' => 'That order could not be found.',
-            'EDGE_RESULT_TOO_LARGE' => 'Too many orders for one page — narrow the date window or raise the limit.',
-            'API_KEY_INVALID' => 'The store is not connected to DOEH correctly.',
-            'API_KEY_ENV_MISMATCH' => 'The store’s DOEH key is for the wrong environment.',
-        ][$code] ?? 'Sorry — something went wrong placing your order. Please try again.';
+        // [English, Myanmar] — the Myanmar reuses the storefront's own words: ခြင်း for the
+        // cart, ရယူမှု for how the order is received, "DOEH Commerce ချိန်ညှိ…" from the cart.
+        $copy = [
+            'EDGE_PHONE_REQUIRED' => ['Please give a phone number so the shop can tell you when your order is ready.',
+                'အော်ဒါ အဆင်သင့်ဖြစ်လျှင် ဆိုင်မှ အကြောင်းကြားနိုင်ရန် ဖုန်းနံပါတ် ထည့်ပေးပါ။'],
+            'EDGE_ADDRESS_REQUIRED' => ['Please give the address your order should be delivered to.',
+                'အော်ဒါ ပို့ဆောင်ရမည့် လိပ်စာကို ထည့်ပေးပါ။'],
+            'EDGE_UNKNOWN_SKU' => ['One of these products is no longer available.',
+                'ဤပစ္စည်းများထဲမှ တစ်ခုကို မရနိုင်တော့ပါ။'],
+            'EDGE_UNPRICED_SKU' => ['One of these products has no price set.',
+                'ဤပစ္စည်းများထဲမှ တစ်ခုတွင် စျေးနှုန်း မသတ်မှတ်ရသေးပါ။'],
+            'EDGE_INSUFFICIENT_STOCK' => ['Sorry — not enough stock for your order.',
+                'စိတ်မကောင်းပါ — သင့်အော်ဒါအတွက် လက်ကျန် မလုံလောက်ပါ။'],
+            'EDGE_FULFILLMENT_NOT_AVAILABLE' => ['That fulfilment option is not available right now.',
+                'ရွေးချယ်ထားသော ရယူမှုနည်းလမ်းကို ယခု မရနိုင်ပါ။'],
+            'EDGE_INVALID_FULFILLMENT' => ['That fulfilment choice is not offered by this store.',
+                'ဤဆိုင်တွင် ထိုရယူမှုနည်းလမ်း မရှိပါ။'],
+            'EDGE_EMPTY_ORDER' => ['Your cart is empty.',
+                'သင့်ခြင်းထဲတွင် ပစ္စည်း မရှိသေးပါ။'],
+            'EDGE_ORDER_NOT_FOUND' => ['That order could not be found.',
+                'ထိုအော်ဒါကို ရှာမတွေ့ပါ။'],
+            'EDGE_RESULT_TOO_LARGE' => ['Too many orders for one page — narrow the date window or raise the limit.',
+                'တစ်မျက်နှာတွင် အော်ဒါ များလွန်းပါသည် — ရက်စွဲအပိုင်းအခြားကို ကျဉ်းပါ သို့မဟုတ် အရေအတွက် ကန့်သတ်ချက်ကို တိုးပါ။'],
+            'API_KEY_INVALID' => ['The store is not connected to DOEH correctly.',
+                'ဤဆိုင်ကို DOEH နှင့် မှန်ကန်စွာ ချိတ်ဆက်မထားပါ။'],
+            'API_KEY_ENV_MISMATCH' => ['The store’s DOEH key is for the wrong environment.',
+                'ဤဆိုင်၏ DOEH key သည် မှားယွင်းသော ပတ်ဝန်းကျင်အတွက် ဖြစ်နေပါသည်။'],
+            // Not API codes: the storefront's own refusals, worded here so they are translated too.
+            'STOREFRONT_NOT_CONFIGURED' => ['DOEH Commerce is not configured.',
+                'DOEH Commerce ကို မချိန်ညှိရသေးပါ။ ချိန်ညှိပြီးမှ အော်ဒါတင်နိုင်ပါမည်။'],
+            'STOREFRONT_ORDER_ELSEWHERE' => ['Order received. Open the confirmation from your checkout to see the details.',
+                'အော်ဒါ လက်ခံရရှိပြီးပါပြီ။ အသေးစိတ်ကို ကြည့်ရန် အော်ဒါတင်ခဲ့သည့် ဖုန်း သို့မဟုတ် ဘရောက်ဇာမှ ပြန်ဖွင့်ပါ။'],
+        ][$code] ?? ['Sorry — something went wrong placing your order. Please try again.',
+            'စိတ်မကောင်းပါ — အော်ဒါတင်ရာတွင် အမှားတစ်ခု ဖြစ်သွားပါသည်။ ထပ်မံကြိုးစားပေးပါ။'];
+
+        return app()->getLocale() === 'mm' ? $copy[1] : $copy[0];
     }
 }
