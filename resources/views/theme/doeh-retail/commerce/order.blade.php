@@ -34,11 +34,11 @@
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:8px;">
                     <span class="rt-muted rt-small">{{ $mm ? 'အခြေအနေ' : 'Status' }}</span>
-                    <span class="rt-small" style="font-weight:600;">{{ $order['status'] ?? 'received' }}</span>
+                    <span class="rt-small" style="font-weight:600;">{{ doeh_storefront_status_label('status', $order['status'] ?? 'received') }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:8px;">
                     <span class="rt-muted rt-small">{{ $mm ? 'ငွေပေးချေမှု' : 'Payment' }}</span>
-                    <span class="rt-small" style="font-weight:600;">{{ $order['payment_status'] ?? 'unpaid' }}</span>
+                    <span class="rt-small" style="font-weight:600;">{{ doeh_storefront_status_label('payment', $order['payment_status'] ?? 'unpaid') }}</span>
                 </div>
 
                 @if (! empty($order['lines']))

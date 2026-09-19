@@ -107,6 +107,47 @@ if (! function_exists('doeh_storefront_fulfillment_label')) {
     }
 }
 
+if (! function_exists('doeh_storefront_status_label')) {
+    /**
+     * The customer's words for an order's `status` or `payment_status`, in the page's
+     * language. The API sends raw values ("pending", "unpaid"), which read as English
+     * even on a Myanmar storefront. The Myanmar wording reuses the POS's own where it has
+     * it (စောင့်ဆိုင်းဆဲ, အတည်ပြုပြီး, လက်ခံပြီး, ပေးချေပြီး, မပေးရသေး). An
+     * unknown value is shown as it came rather than guessed at.
+     *
+     * @param  'status'|'payment'  $field
+     */
+    function doeh_storefront_status_label(string $field, ?string $value): string
+    {
+        $value = (string) $value;
+        $labels = [
+            'status' => [
+                'received' => ['Received', 'လက်ခံပြီး'],
+                'pending' => ['Waiting for the shop', 'စောင့်ဆိုင်းဆဲ'],
+                'confirmed' => ['Confirmed', 'အတည်ပြုပြီး'],
+                'preparing' => ['Being prepared', 'ပြင်ဆင်နေဆဲ'],
+                'ready' => ['Ready', 'အဆင်သင့်ဖြစ်ပြီ'],
+                'delivering' => ['On its way', 'ပို့ဆောင်နေဆဲ'],
+                'delivered' => ['Delivered', 'ပို့ဆောင်ပြီး'],
+                'cancelled' => ['Cancelled', 'ပယ်ဖျက်ပြီး'],
+            ],
+            'payment' => [
+                'unpaid' => ['Not paid yet', 'မပေးရသေး'],
+                'pending' => ['Awaiting payment', 'စောင့်ဆိုင်းဆဲ'],
+                'paid' => ['Paid', 'ပေးချေပြီး'],
+                'failed' => ['Payment failed', 'မအောင်မြင်ပါ'],
+                'refunded' => ['Refunded', 'ငွေပြန်အမ်းပြီး'],
+            ],
+        ][$field][$value] ?? null;
+
+        if ($labels === null) {
+            return $value;
+        }
+
+        return app()->getLocale() === 'mm' ? $labels[1] : $labels[0];
+    }
+}
+
 if (! function_exists('doeh_storefront_format_money')) {
     /**
      * Minor units → display, currency-aware. MMK (and other zero-decimal

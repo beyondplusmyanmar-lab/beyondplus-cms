@@ -25,7 +25,7 @@
             </div>
             <div class="row" style="margin-top:8px;">
                 <div class="muted">Status</div>
-                <div>{{ $order['status'] ?? 'received' }} · {{ $order['payment_status'] ?? 'unpaid' }}</div>
+                <div>{{ doeh_storefront_status_label('status', $order['status'] ?? 'received') }} · {{ doeh_storefront_status_label('payment', $order['payment_status'] ?? 'unpaid') }}</div>
             </div>
             @if (! empty($fulfillment))
                 <div class="row" style="margin-top:8px;">

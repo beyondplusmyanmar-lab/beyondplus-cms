@@ -30,7 +30,7 @@
                     <span class="sv-eyebrow">{{ $mm ? 'တောင်းဆိုမှု' : 'Request' }}</span>
                     <span class="sv-serif" style="font-size:19px;">{{ $order['order_number'] ?? $order['id'] ?? '—' }}</span>
                 </div>
-                <div class="sv-muted" style="font-size:14px; margin-top:4px;">{{ $order['status'] ?? 'received' }} · {{ $order['payment_status'] ?? 'unpaid' }}</div>
+                <div class="sv-muted" style="font-size:14px; margin-top:4px;">{{ doeh_storefront_status_label('status', $order['status'] ?? 'received') }} · {{ doeh_storefront_status_label('payment', $order['payment_status'] ?? 'unpaid') }}</div>
 
                 @if (! empty($order['lines']))
                     <div style="border-top:1px solid var(--line); margin-top:16px; padding-top:10px;">

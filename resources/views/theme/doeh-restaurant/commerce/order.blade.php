@@ -31,7 +31,7 @@
                 <span class="r-eyebrow">{{ $mm ? 'အော်ဒါ' : 'Order' }}</span>
                 <span class="r-serif" style="font-size:20px;">{{ $order['order_number'] ?? $order['id'] ?? '—' }}</span>
             </div>
-            <div class="r-muted" style="font-size:14px; margin-top:4px;">{{ $order['status'] ?? 'received' }} · {{ $order['payment_status'] ?? 'unpaid' }}</div>
+            <div class="r-muted" style="font-size:14px; margin-top:4px;">{{ doeh_storefront_status_label('status', $order['status'] ?? 'received') }} · {{ doeh_storefront_status_label('payment', $order['payment_status'] ?? 'unpaid') }}</div>
             @if (! empty($fulfillment))
                 @php
                     $ftLabel = [
