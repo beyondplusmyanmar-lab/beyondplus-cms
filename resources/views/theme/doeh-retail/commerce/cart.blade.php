@@ -51,6 +51,52 @@
                     @csrf
                     <h2 class="rt-h3" style="margin-bottom:16px;">{{ $mm ? 'အော်ဒါ အတည်ပြုရန်' : 'Review and order' }}</h2>
 
+                    @php
+                        $ftTypes = $fulfillment_types ?? [];
+                        $ftCopy = [
+                            'pickup'   => [$mm ? 'လာယူမည်' : 'Pickup', $mm ? 'ဆိုင်မှာ လာယူပါ' : 'Collect at the shop'],
+                            'dine_in'  => [$mm ? 'ဆိုင်တွင် သုံးဆောင်မည်' : 'Dine in', $mm ? 'စားပွဲသို့ ပို့ပေးပါမည်' : 'We’ll bring it to your table'],
+                            'delivery' => [$mm ? 'အိမ်အရောက် ပို့မည်' : 'Delivery', $mm ? 'သင့်လိပ်စာသို့ ပို့ပေးပါမည်' : 'Delivered to your address'],
+                        ];
+                        $ftOffersDelivery = in_array('delivery', $ftTypes, true);
+                        $ftDeliveryOnly = $ftOffersDelivery && count($ftTypes) === 1;
+                    @endphp
+
+                    @if (count($ftTypes) > 1)
+                        <div class="rt-small" style="font-weight:600; margin-bottom:8px;">{{ $mm ? 'ဘယ်လို ရယူမလဲ' : 'How would you like it?' }}</div>
+                        <div style="display:grid; gap:6px; margin:0 0 16px;">
+                            @foreach ($ftTypes as $t)
+                                @php [$ftLabel, $ftDesc] = $ftCopy[$t] ?? [ucfirst($t), '']; @endphp
+                                <label style="display:flex; gap:10px; align-items:baseline; padding:9px 12px; border:1px solid var(--rule); border-radius:11px; cursor:pointer; background:var(--paper);">
+                                    <input type="radio" name="fulfillment" value="{{ $t }}" @checked($loop->first)>
+                                    <span><strong>{{ $ftLabel }}</strong> <span class="rt-muted" style="font-size:13px;">— {{ $ftDesc }}</span></span>
+                                </label>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    @if ($ftOffersDelivery)
+                        {{-- Shown only when the customer is actually having it delivered. The
+                             installation refuses a delivery with no address, so this is a
+                             courtesy, not the guard. --}}
+                        <div id="rt-delivery-fields" @unless($ftDeliveryOnly) hidden @endunless>
+                            <label for="addr_street" class="rt-small" style="display:block; font-weight:600; margin-bottom:6px;">{{ $mm ? 'ပို့ဆောင်မည့်လိပ်စာ' : 'Delivery address' }}</label>
+                            <input id="addr_street" name="addr_street" type="text" autocomplete="street-address"
+                                   placeholder="{{ $mm ? 'လမ်း / အမှတ် / အခန်း' : 'Street, house or unit number' }}"
+                                   style="width:100%; padding:12px 14px; border:1px solid var(--rule); border-radius:12px; margin-bottom:8px;
+                                          font:inherit; background:var(--paper); color:var(--ink);">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+                                <input id="addr_township" name="addr_township" type="text"
+                                       placeholder="{{ $mm ? 'မြို့နယ်' : 'Township' }}"
+                                       style="padding:12px 14px; border:1px solid var(--rule); border-radius:12px; font:inherit; background:var(--paper); color:var(--ink);">
+                                <input id="addr_city" name="addr_city" type="text"
+                                       placeholder="{{ $mm ? 'မြို့' : 'City' }}"
+                                       style="padding:12px 14px; border:1px solid var(--rule); border-radius:12px; font:inherit; background:var(--paper); color:var(--ink);">
+                            </div>
+                            <p class="rt-muted rt-small" style="margin:-6px 0 14px;">{{ $mm ? 'ပို့ဆောင်ခကို ဆိုင်မှ အတည်ပြုချိန်တွင် သတ်မှတ်ပါမည်။' : 'The shop sets the delivery charge when it confirms your order.' }}</p>
+                        </div>
+                    @endif
+
                     <label for="phone" class="rt-small" style="display:block; font-weight:600; margin-bottom:6px;">{{ $mm ? 'ဖုန်း' : 'Phone' }}
                         <span class="rt-muted" style="font-weight:400;">{{ $mm ? '(မဖြစ်မနေ)' : '(required)' }}</span>
                     </label>
@@ -69,3 +115,21 @@
         @endif
     </div>
 @endsection
+
+@if (in_array('delivery', $fulfillment_types ?? [], true) && count($fulfillment_types ?? []) > 1)
+    <script>
+        (function () {
+            var box = document.getElementById('rt-delivery-fields');
+            if (!box) { return; }
+            var radios = document.querySelectorAll('input[name="fulfillment"]');
+            function sync() {
+                var picked = document.querySelector('input[name="fulfillment"]:checked');
+                var on = !!picked && picked.value === 'delivery';
+                box.hidden = !on;
+                Array.prototype.forEach.call(box.querySelectorAll('input'), function (i) { i.disabled = !on; });
+            }
+            Array.prototype.forEach.call(radios, function (r) { r.addEventListener('change', sync); });
+            sync();
+        })();
+    </script>
+@endif

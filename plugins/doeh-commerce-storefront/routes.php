@@ -121,6 +121,29 @@ Route::middleware('web')->group(function () {
                 );
             }
             $submission['fulfillment'] = ['type' => $fulfillment];
+
+            // Delivery needs somewhere to go. The three inputs are joined into the single
+            // free-text line every DOEH order channel already uses, so the merchant reads one
+            // address and can correct it on the order before confirming. The installation
+            // refuses a delivery with no address; this only saves the customer the round trip.
+            if ($fulfillment === 'delivery') {
+                $address = implode(', ', array_filter(
+                    [
+                        trim((string) $request->input('addr_street')),
+                        trim((string) $request->input('addr_township')),
+                        trim((string) $request->input('addr_city')),
+                    ],
+                    static fn ($part) => $part !== ''
+                ));
+
+                if ($address === '') {
+                    return redirect('/store/cart')->withErrors(
+                        doeh_storefront_message('EDGE_ADDRESS_REQUIRED')
+                    );
+                }
+
+                $submission['fulfillment']['address'] = $address;
+            }
         }
 
         $result = $connector->createOrder($submission, $idemFor($cart));
@@ -267,6 +290,7 @@ if (! function_exists('doeh_storefront_message')) {
     {
         return [
             'EDGE_PHONE_REQUIRED' => 'Please give a phone number so the shop can tell you when your order is ready.',
+            'EDGE_ADDRESS_REQUIRED' => 'Please give the address your order should be delivered to.',
             'EDGE_UNKNOWN_SKU' => 'One of these products is no longer available.',
             'EDGE_UNPRICED_SKU' => 'One of these products has no price set.',
             'EDGE_INSUFFICIENT_STOCK' => 'Sorry — not enough stock for your order.',

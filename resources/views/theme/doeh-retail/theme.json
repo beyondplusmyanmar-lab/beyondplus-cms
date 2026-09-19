@@ -11,7 +11,7 @@
     "minCmsVersion": "2.0.0",
     "requires": ["doeh-identity", "doeh-commerce", "doeh-commerce-storefront"],
     "commerce_views": ["shop", "cart", "order"],
-    "fulfillment_types": ["pickup"],
+    "fulfillment_types": ["pickup", "delivery"],
     "settings": [
         { "group": "Brand", "name": "rt_name", "label": "Shop name", "type": "text", "default": "", "placeholder": "Defaults to your site name" },
         { "group": "Brand", "name": "rt_brand", "label": "Brand colour", "type": "color", "default": "#2e4ce0" },
