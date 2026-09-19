@@ -23,7 +23,7 @@
             <div style="text-align:center; margin-bottom:26px;">
                 <span class="rt-mark is-stock" style="justify-content:center; color:var(--money);"><span class="dot"></span>{{ $mm ? 'အော်ဒါ လက်ခံပြီး' : 'Order confirmed' }}</span>
                 <h1 class="rt-h2" style="margin-top:10px;">{{ $mm ? 'ကျေးဇူးတင်ပါသည်' : 'Thanks for your order' }}</h1>
-                <p class="rt-muted rt-small" style="margin:8px auto 0; max-width:40ch;">{{ $mm ? 'ဆိုင်တွင် ပြင်ဆင်ပြီးလျှင် အကြောင်းကြားပါမည်။' : 'The shop has it. You will hear from them when it is ready to collect.' }}</p>
+                <p class="rt-muted rt-small" style="margin:8px auto 0; max-width:40ch;">{{ $mm ? 'ဆိုင်တွင် ပြင်ဆင်ပြီးလျှင် အကြောင်းကြားပါမည်။' : (($fulfillment ?? null) === 'delivery' ? 'The shop has it. You will hear from them when it is on its way.' : 'The shop has it. You will hear from them when it is ready to collect.') }}</p>
             </div>
 
             {{-- The receipt. Ruled rows, tabular figures, total set apart by a heavy rule. --}}
@@ -40,6 +40,21 @@
                     <span class="rt-muted rt-small">{{ $mm ? 'ငွေပေးချေမှု' : 'Payment' }}</span>
                     <span class="rt-small" style="font-weight:600;">{{ doeh_storefront_status_label('payment', $order['payment_status'] ?? 'unpaid') }}</span>
                 </div>
+                @if (! empty($fulfillment))
+                    {{-- What THIS session chose at checkout - the API does not echo it back. Same
+                         words as the cart, so the customer recognises their own choice. --}}
+                    @php
+                        $ftLabel = [
+                            'pickup' => $mm ? 'လာယူမည်' : 'Pickup',
+                            'delivery' => $mm ? 'အိမ်အရောက် ပို့မည်' : 'Delivery',
+                            'dine_in' => $mm ? 'ဆိုင်တွင် သုံးဆောင်မည်' : 'Dine in',
+                        ][$fulfillment] ?? ucfirst(str_replace('_', ' ', $fulfillment));
+                    @endphp
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:8px;">
+                        <span class="rt-muted rt-small">{{ $mm ? 'ရယူမည့်ပုံစံ' : 'Fulfilment' }}</span>
+                        <span class="rt-small" style="font-weight:600;">{{ $ftLabel }}</span>
+                    </div>
+                @endif
 
                 @if (! empty($order['lines']))
                     <div style="border-top:1px solid var(--rule-soft); margin-top:18px; padding-top:6px;">
