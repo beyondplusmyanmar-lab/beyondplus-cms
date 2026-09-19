@@ -90,7 +90,10 @@
                         {{-- Shown only when the customer is actually having it delivered. The
                              installation refuses a delivery with no address, so this is a
                              courtesy, not the guard. --}}
-                        <div id="rt-delivery-fields" @unless($ftDeliveryOnly) hidden @endunless>
+                        {{-- Visible by default on purpose: the script below hides it for a collected order.
+                             If the script never runs, the customer sees an extra field they can ignore -
+                             not an address box they can never open. --}}
+                        <div id="rt-delivery-fields">
                             <label for="addr_street" class="rt-small" style="display:block; font-weight:600; margin-bottom:6px;">{{ $mm ? 'ပို့ဆောင်မည့်လိပ်စာ' : 'Delivery address' }}</label>
                             <input id="addr_street" name="addr_street" type="text" autocomplete="street-address"
                                    placeholder="{{ $mm ? 'လမ်း / အမှတ် / အခန်း' : 'Street, house or unit number' }}"
@@ -125,22 +128,21 @@
             <p style="margin-top:22px;"><a href="{{ url('/store') }}">{{ $mm ? 'ဆက်လက် ဝယ်ယူရန်' : 'Keep shopping' }}</a></p>
         @endif
     </div>
+    @if (in_array('delivery', $fulfillment_types ?? [], true) && count($fulfillment_types ?? []) > 1)
+        <script>
+            (function () {
+                var box = document.getElementById('rt-delivery-fields');
+                if (!box) { return; }
+                var radios = document.querySelectorAll('input[name="fulfillment"]');
+                function sync() {
+                    var picked = document.querySelector('input[name="fulfillment"]:checked');
+                    var on = !!picked && picked.value === 'delivery';
+                    box.hidden = !on;
+                    Array.prototype.forEach.call(box.querySelectorAll('input'), function (i) { i.disabled = !on; });
+                }
+                Array.prototype.forEach.call(radios, function (r) { r.addEventListener('change', sync); });
+                sync();
+            })();
+        </script>
+    @endif
 @endsection
-
-@if (in_array('delivery', $fulfillment_types ?? [], true) && count($fulfillment_types ?? []) > 1)
-    <script>
-        (function () {
-            var box = document.getElementById('rt-delivery-fields');
-            if (!box) { return; }
-            var radios = document.querySelectorAll('input[name="fulfillment"]');
-            function sync() {
-                var picked = document.querySelector('input[name="fulfillment"]:checked');
-                var on = !!picked && picked.value === 'delivery';
-                box.hidden = !on;
-                Array.prototype.forEach.call(box.querySelectorAll('input'), function (i) { i.disabled = !on; });
-            }
-            Array.prototype.forEach.call(radios, function (r) { r.addEventListener('change', sync); });
-            sync();
-        })();
-    </script>
-@endif
