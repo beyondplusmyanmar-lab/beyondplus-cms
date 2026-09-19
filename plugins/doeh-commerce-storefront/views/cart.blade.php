@@ -42,8 +42,8 @@
                     @endforeach
                 </fieldset>
             @endif
-            <label class="hint" for="phone">Customer phone (optional)</label>
-            <input id="phone" name="phone" type="tel" placeholder="+95912345678"
+            <label class="hint" for="phone">Customer phone (required)</label>
+            <input id="phone" name="phone" type="tel" required placeholder="+95912345678"
                    style="width:100%; padding:10px; border:1px solid var(--line); border-radius:9px; margin:6px 0 14px; font:inherit;">
             <button class="btn big" type="submit" @unless($ready) disabled @endunless>Place order</button>
             @unless ($ready)

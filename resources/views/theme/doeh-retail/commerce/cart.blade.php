@@ -52,9 +52,9 @@
                     <h2 class="rt-h3" style="margin-bottom:16px;">{{ $mm ? 'အော်ဒါ အတည်ပြုရန်' : 'Review and order' }}</h2>
 
                     <label for="phone" class="rt-small" style="display:block; font-weight:600; margin-bottom:6px;">{{ $mm ? 'ဖုန်း' : 'Phone' }}
-                        <span class="rt-muted" style="font-weight:400;">{{ $mm ? '(မထည့်လည်းရ)' : '(optional)' }}</span>
+                        <span class="rt-muted" style="font-weight:400;">{{ $mm ? '(မဖြစ်မနေ)' : '(required)' }}</span>
                     </label>
-                    <input id="phone" name="phone" type="tel" placeholder="+95 9 123 456 78"
+                    <input id="phone" name="phone" type="tel" required placeholder="+95 9 123 456 78"
                            style="width:100%; padding:12px 14px; border:1px solid var(--rule); border-radius:12px; margin-bottom:14px;
                                   font:inherit; background:var(--paper); color:var(--ink);">
                     <p class="rt-muted rt-small" style="margin:0 0 18px;">{{ $mm ? 'စုစုပေါင်းကို DOEH က checkout တွင် တွက်ပေးသည်။' : 'DOEH works out your total at checkout.' }}</p>

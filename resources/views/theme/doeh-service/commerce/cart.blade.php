@@ -36,7 +36,7 @@
         <form method="POST" action="{{ url('/store/checkout') }}" class="sv-card" style="padding:24px 26px;">
             @csrf
             <label class="sv-eyebrow" for="phone" style="color:var(--muted);">{{ $mm ? 'ဆက်သွယ်ရန် ဖုန်း' : 'Contact phone' }}</label>
-            <input id="phone" name="phone" type="tel" placeholder="+95912345678"
+            <input id="phone" name="phone" type="tel" required placeholder="+95912345678"
                    style="width:100%; padding:12px; border:1px solid var(--line); border-radius:12px; margin:8px 0 8px; font:inherit; background:var(--bg);">
             <p class="sv-muted" style="font-size:13px; margin:0 0 16px;">{{ $mm ? 'သင့်တောင်းဆိုမှုကို လက်ခံပြီး အချိန်ဇယား အတည်ပြုပေးပါမည်။' : "We'll receive your request and confirm a time with you." }}</p>
             <button class="sv-btn block" type="submit" @unless($ready) disabled @endunless>{{ $mm ? 'တောင်းဆိုမှု တင်ရန်' : 'Send request' }}</button>

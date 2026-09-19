@@ -266,6 +266,7 @@ if (! function_exists('doeh_storefront_message')) {
     function doeh_storefront_message(string $code): string
     {
         return [
+            'EDGE_PHONE_REQUIRED' => 'Please give a phone number so the shop can tell you when your order is ready.',
             'EDGE_UNKNOWN_SKU' => 'One of these products is no longer available.',
             'EDGE_UNPRICED_SKU' => 'One of these products has no price set.',
             'EDGE_INSUFFICIENT_STOCK' => 'Sorry — not enough stock for your order.',

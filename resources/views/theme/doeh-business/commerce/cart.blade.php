@@ -44,9 +44,9 @@
                     @csrf
                     <h2 class="h3 serif" style="margin-bottom:16px;">{{ $mm ? 'အော်ဒါ အတည်ပြုရန်' : 'Review and order' }}</h2>
                     <label for="phone" class="small" style="display:block; font-weight:600; margin-bottom:6px;">{{ $mm ? 'ဖုန်းနံပါတ်' : 'Phone' }}
-                        <span class="muted" style="font-weight:400;">{{ $mm ? '(မထည့်လည်းရ)' : '(optional)' }}</span>
+                        <span class="muted" style="font-weight:400;">{{ $mm ? '(မဖြစ်မနေ)' : '(required)' }}</span>
                     </label>
-                    <input id="phone" name="phone" type="tel" placeholder="+95 9 123 456 78"
+                    <input id="phone" name="phone" type="tel" required placeholder="+95 9 123 456 78"
                            style="width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:11px; margin-bottom:14px; font:inherit; background:var(--bg); color:var(--ink);">
                     <p class="muted small" style="margin:0 0 18px;">{{ $mm ? 'စုစုပေါင်းကို DOEH က checkout တွင် တွက်ပေးသည်။' : 'DOEH works out the real total at checkout.' }}</p>
                     <button class="btn big" type="submit" @unless($ready) disabled @endunless>{{ $mm ? 'မှာယူရန်' : 'Place order' }}</button>
