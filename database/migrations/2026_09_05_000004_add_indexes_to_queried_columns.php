@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -46,9 +47,12 @@ return new class extends Migration
             'bp_menus_parent_id_index' => ['parent_id'],
         ],
         // Pivot between posts and taxonomies; had neither foreign key indexed.
+        // tax_id is a TEXT column, so its index needs a prefix length: InnoDB refuses a
+        // key wider than 3072 bytes, and utf8mb4 TEXT is far wider. The values are ids,
+        // so 191 characters indexes them whole.
         'bp_relationships' => [
-            'bp_relationships_post_id_tax_id_index' => ['post_id', 'tax_id'],
-            'bp_relationships_tax_id_index' => ['tax_id'],
+            'bp_relationships_post_id_tax_id_index' => ['post_id', 'tax_id(191)'],
+            'bp_relationships_tax_id_index' => ['tax_id(191)'],
         ],
         'bp_taxes' => [
             'bp_taxes_tax_type_index' => ['tax_type'],
@@ -90,16 +94,32 @@ return new class extends Migration
             }
 
             foreach ($indexes as $name => $columns) {
-                if (! Schema::hasColumns($table, $columns)) {
+                // A column may carry a prefix length, e.g. tax_id(191); the bare name is
+                // what the schema knows.
+                $bare = array_map(fn ($c) => preg_replace('/\(\d+\)$/', '', $c), $columns);
+
+                if (! Schema::hasColumns($table, $bare)) {
                     continue;
                 }
                 if (Schema::hasIndex($table, $name)) {
                     continue;
                 }
 
-                Schema::table($table, function (Blueprint $t) use ($columns, $name) {
-                    $t->index($columns, $name);
-                });
+                if ($bare === $columns) {
+                    Schema::table($table, function (Blueprint $t) use ($columns, $name) {
+                        $t->index($columns, $name);
+                    });
+
+                    continue;
+                }
+
+                // The query builder cannot express a prefix length, so this one index is
+                // raw. Identifiers here are literals from the table above, never input.
+                $cols = implode(', ', array_map(
+                    fn ($c) => preg_match('/^(\w+)\((\d+)\)$/', $c, $m) ? "`{$m[1]}`({$m[2]})" : "`{$c}`",
+                    $columns
+                ));
+                DB::statement("CREATE INDEX `{$name}` ON `{$table}` ({$cols})");
             }
         }
     }

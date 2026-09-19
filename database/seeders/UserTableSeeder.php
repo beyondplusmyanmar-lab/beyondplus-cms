@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Customers;
 use App\User;
-use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -33,12 +32,16 @@ class UserTableSeeder extends Seeder
             'verified' => 1,
         ]);
 
-        // A few sample staff accounts
-        $faker = Factory::create();
-        for ($i = 0; $i < 3; $i++) {
+        // A few sample staff accounts. Fixed rather than generated: this seeder runs on a
+        // real installation, where Faker is not present (it is a dev-only dependency) and
+        // its absence used to abort the whole seed run — this is the FIRST seeder, so the
+        // other eleven never ran and the site came up unusable.
+        foreach ([['Demo Staff One', 'staff1@example.com'],
+                  ['Demo Staff Two', 'staff2@example.com'],
+                  ['Demo Staff Three', 'staff3@example.com']] as [$name, $email]) {
             User::create([
-                'name' => $faker->name(),
-                'email' => $faker->unique()->safeEmail(),
+                'name' => $name,
+                'email' => $email,
                 'password' => Hash::make('password'),
                 'role' => 2,
                 'api_token' => Str::random(60),
