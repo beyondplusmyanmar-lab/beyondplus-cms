@@ -46,10 +46,22 @@ Route::middleware('web')->group(function () {
     Route::post('/store/cart/add', function (Request $request) {
         $sku = trim((string) $request->input('sku'));
         $known = array_column(doeh_storefront_products(), 'sku');
-        if ($sku !== '' && in_array($sku, $known, true)) {
+        $added = $sku !== '' && in_array($sku, $known, true);
+        if ($added) {
             $cart = session('doeh_store_cart', []);
             $cart[$sku] = min(($cart[$sku] ?? 0) + 1, 99);
             session(['doeh_store_cart' => $cart]);
+        }
+
+        // A theme that adds to the cart in the background asks for JSON and stays on the
+        // page; a plain form post (no script) still lands on the cart, as before.
+        if ($request->expectsJson()) {
+            return response()->json([
+                'ok' => $added,
+                'sku' => $sku,
+                'qty' => $added ? (int) session('doeh_store_cart')[$sku] : 0,
+                'count' => array_sum(array_map('intval', (array) session('doeh_store_cart', []))),
+            ], $added ? 200 : 422);
         }
 
         return redirect('/store/cart');

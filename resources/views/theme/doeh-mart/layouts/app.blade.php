@@ -144,8 +144,64 @@
     </main>
     @include('theme.doeh-mart.layouts.footer')
 
+    @php $mmLayout = app()->getLocale() === 'mm'; @endphp
+    {{-- "Added to cart" toast for the in-page add below. --}}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1080;">
+        <div id="mt-cart-toast" class="toast align-items-center border-0 text-white" role="status" aria-live="polite" aria-atomic="true"
+             style="background:var(--mt-text);">
+            <div class="d-flex align-items-center">
+                <div class="toast-body"><i class="bi bi-check-circle-fill me-1" style="color:#5fd39a;"></i> <span data-msg></span></div>
+                <a href="{{ url('/store/cart') }}" class="btn btn-sm btn-light fw-bold me-2">{{ $mmLayout ? 'ခြင်း ကြည့်ရန်' : 'View cart' }}</a>
+                <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="toast" aria-label="{{ $mmLayout ? 'ပိတ်ရန်' : 'Close' }}"></button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+    // Add to cart without leaving the page: the form posts in the background (the storefront
+    // answers JSON when asked), the header badge takes the new count and a toast confirms.
+    // Any failure falls back to the plain form post, which lands on the cart as before.
+    (function () {
+        var added = @json($mmLayout ? 'ခြင်းထဲ ထည့်ပြီး' : 'Added to cart');
+        var toastEl = document.getElementById('mt-cart-toast');
+        function setBadge(count) {
+            var cart = document.querySelector('.mt-cart');
+            if (!cart) return;
+            var badge = cart.querySelector('.badge');
+            if (count > 0) {
+                if (!badge) { badge = document.createElement('span'); badge.className = 'badge'; cart.appendChild(badge); }
+                badge.textContent = count;
+            } else if (badge) { badge.remove(); }
+        }
+        document.addEventListener('submit', function (e) {
+            var form = e.target;
+            if (!form.matches('form[action$="/store/cart/add"]') || !window.fetch || form.dataset.plain) return;
+            e.preventDefault();
+            var btn = form.querySelector('button[type=submit]');
+            if (btn) btn.disabled = true;
+            fetch(form.action, {
+                method: 'POST', body: new FormData(form), credentials: 'same-origin',
+                headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(function (r) {
+                return r.json().then(function (d) { return { ok: r.ok && d && d.ok, d: d }; });
+            }).then(function (res) {
+                if (!res.ok) throw new Error('not added');
+                setBadge(res.d.count);
+                if (toastEl && window.bootstrap) {
+                    var name = (form.closest('.mt-card') || document).querySelector('.pname');
+                    toastEl.querySelector('[data-msg]').textContent = added + (name ? ' — ' + name.textContent.trim() : '');
+                    bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 2600 }).show();
+                }
+                if (btn) btn.disabled = false;
+            }).catch(function () {
+                form.dataset.plain = '1';
+                form.submit();
+            });
+        });
+    })();
+    </script>
     @stack('scripts')
 </body>
 </html>
