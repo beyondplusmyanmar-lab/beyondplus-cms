@@ -1,0 +1,52 @@
+{
+    "id": "doeh-mart",
+    "type": "theme",
+    "name": "DOEH Mart",
+    "description": "A marketplace-style shop for DOEH: orange header with search and cart, a banner, category shortcuts and a product grid, on the same ordering pages as the other DOEH themes (shop, cart, order). Products, prices and orders come from DOEH; nothing here computes a price.",
+    "description_mm": "DOEH အတွက် marketplace ပုံစံ ဈေးဆိုင် — ရှာဖွေရန်နှင့် ခြင်းပါသော လိမ္မော်ရောင် header၊ banner၊ အမျိုးအစား shortcut များနှင့် ကုန်ပစ္စည်း grid။ ကုန်ပစ္စည်း၊ ဈေးနှုန်းနှင့် အော်ဒါများကို DOEH မှ ရယူသည်။",
+    "version": "1.0.0",
+    "author": "Beyond Plus",
+    "homepage": "https://github.com/beyondplusmyanmar-lab/beyondplus-cms",
+    "license": "MIT",
+    "minCmsVersion": "2.0.0",
+    "requires": ["doeh-identity", "doeh-commerce", "doeh-commerce-storefront"],
+    "commerce_views": ["shop", "cart", "order"],
+    "fulfillment_types": ["pickup", "delivery"],
+    "settings": [
+        { "group": "Shop", "name": "mt_name", "label": "Shop name", "type": "text", "default": "", "placeholder": "Defaults to your site name" },
+        { "group": "Shop", "name": "mt_logo", "label": "Logo", "type": "image", "default": "", "help": "Shown in the header instead of the name. Uploads path or full URL; about 36px tall on the orange bar." },
+        { "group": "Shop", "name": "mt_strip_note", "label": "Top strip note", "type": "text", "default": "", "placeholder": "Order online, pick up or get it delivered" },
+        { "group": "Banner", "name": "mt_hero_title", "label": "Banner headline", "type": "text", "default": "", "placeholder": "Defaults to your shop name" },
+        { "group": "Banner", "name": "mt_hero_sub", "label": "Banner subtitle", "type": "textarea", "default": "", "placeholder": "Quality products, ready when you are." },
+        { "group": "Banner", "name": "mt_hero_cta", "label": "Banner button label", "type": "text", "default": "", "placeholder": "Shop now" },
+        {
+            "group": "Categories", "name": "mt_categories_json", "label": "Category shortcuts", "type": "repeater", "add_label": "Add category",
+            "help": "Each tile opens the shop filtered by its search word (matched against product names and SKUs). Icons are Bootstrap Icons names, e.g. bi-cup-hot.",
+            "fields": [
+                { "name": "icon", "label": "Icon", "type": "text", "col": 3, "default": "bi-tag" },
+                { "name": "name", "label": "Name", "type": "text", "col": 5 },
+                { "name": "q", "label": "Search word", "type": "text", "col": 4 }
+            ],
+            "default": [
+                { "icon": "bi-phone", "name": "Electronics", "q": "" },
+                { "icon": "bi-bag", "name": "Fashion", "q": "" },
+                { "icon": "bi-house", "name": "Home", "q": "" },
+                { "icon": "bi-heart", "name": "Beauty", "q": "" },
+                { "icon": "bi-cup-hot", "name": "Grocery", "q": "" },
+                { "icon": "bi-controller", "name": "Toys", "q": "" }
+            ]
+        },
+        { "group": "Sections", "name": "mt_show_categories", "label": "Show the category shortcuts", "type": "checkbox", "default": "yes" },
+        { "group": "Sections", "name": "mt_show_services", "label": "Show the service strip", "type": "checkbox", "default": "yes", "help": "Pickup, delivery (only when the shop offers it), payment and order tracking." },
+        { "group": "Sections", "name": "mt_payment_note", "label": "Payment note", "type": "text", "default": "", "placeholder": "Pay when you collect" },
+        { "group": "Contact", "name": "mt_phone", "label": "Phone", "type": "text", "default": "" },
+        { "group": "Contact", "name": "mt_email", "label": "Email", "type": "text", "default": "" },
+        { "group": "Contact", "name": "mt_address", "label": "Address", "type": "textarea", "default": "" },
+        { "group": "Social links", "name": "mt_social_facebook", "label": "Facebook URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "mt_social_instagram", "label": "Instagram URL", "type": "text", "default": "" },
+        { "group": "Social links", "name": "mt_social_tiktok", "label": "TikTok URL", "type": "text", "default": "" },
+        { "group": "Colours", "name": "mt_color_primary", "label": "Primary", "type": "color", "default": "#ee4d2d" },
+        { "group": "Colours", "name": "mt_color_primary_dark", "label": "Primary (dark)", "type": "color", "default": "#d73211" },
+        { "group": "Colours", "name": "mt_color_hero", "label": "Banner colour", "type": "color", "default": "#0b5a50", "help": "The banner's background; a deep colour keeps the white headline readable." }
+    ]
+}
