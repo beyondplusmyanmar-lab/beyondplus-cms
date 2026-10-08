@@ -75,6 +75,11 @@ if (! function_exists('doeh_storefront_fulfillment_types')) {
      * EDGE_FULFILLMENT_NOT_AVAILABLE until the platform's delivery slice lands —
      * offering it here is a manifest flip, not a code change, when that day comes).
      *
+     * The result passes through the `doeh_storefront_fulfillment_types` filter, so the
+     * connector that knows the shop can narrow it — e.g. drop `delivery` where the shop has
+     * no riders. A filter may only remove choices: anything outside the theme's list or the
+     * known wire values is discarded again afterwards.
+     *
      * @return array<int, string> subset of pickup|delivery|dine_in
      */
     function doeh_storefront_fulfillment_types(): array
@@ -88,10 +93,16 @@ if (! function_exists('doeh_storefront_fulfillment_types')) {
         // Whitelist mirrors the connector's FULFILLMENT constant (the wire values).
         $known = ['pickup', 'delivery', 'dine_in'];
 
-        return array_values(array_unique(array_filter(
+        $types = array_values(array_unique(array_filter(
             array_map('strval', $declared),
             fn (string $t) => in_array($t, $known, true)
         )));
+
+        $filtered = bp_apply_filters('doeh_storefront_fulfillment_types', $types);
+
+        return is_array($filtered)
+            ? array_values(array_intersect($types, array_map('strval', $filtered)))
+            : $types;
     }
 }
 
