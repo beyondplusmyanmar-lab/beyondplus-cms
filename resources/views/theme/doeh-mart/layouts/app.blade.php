@@ -151,7 +151,7 @@
              style="background:var(--mt-text);">
             <div class="d-flex align-items-center">
                 <div class="toast-body"><i class="bi bi-check-circle-fill me-1" style="color:#5fd39a;"></i> <span data-msg></span></div>
-                <a href="{{ url('/store/cart') }}" class="btn btn-sm btn-light fw-bold me-2">{{ $mmLayout ? 'ခြင်း ကြည့်ရန်' : 'View cart' }}</a>
+                <a href="{{ url('/store/cart') }}" class="btn btn-sm btn-light fw-bold me-2 text-nowrap">{{ $mmLayout ? 'ခြင်း ကြည့်ရန်' : 'View cart' }}</a>
                 <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="toast" aria-label="{{ $mmLayout ? 'ပိတ်ရန်' : 'Close' }}"></button>
             </div>
         </div>
