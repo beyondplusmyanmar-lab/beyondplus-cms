@@ -99,6 +99,9 @@
                                                     {{ $scale !== null
                                                         ? number_format($tot['amount_minor'] / (10 ** (int) $scale), (int) $scale).' '.($tot['currency'] ?? '')
                                                         : doeh_storefront_format_money($tot['amount_minor'], (string) ($tot['currency'] ?? '')) }}
+                                                @elseif (isset($o['totals']['grand_total_minor']))
+                                                    {{-- A self-hosted installation reports the order's totals block instead. --}}
+                                                    {{ doeh_storefront_format_money($o['totals']['grand_total_minor'], (string) ($o['totals']['currency'] ?? '')) }}
                                                 @else
                                                     —
                                                 @endif

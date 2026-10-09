@@ -31,6 +31,7 @@
                         $currency = (string) ($totals['currency'] ?? '');
                         $ft = $order['fulfillment']['type'] ?? (is_string($order['fulfillment'] ?? null) ? $order['fulfillment'] : null);
                         $phone = $order['customer']['phone'] ?? null;
+                        $address = $ft === 'delivery' ? ($order['fulfillment']['address'] ?? null) : null;
                     @endphp
 
                     <div class="mb-3">
@@ -46,6 +47,9 @@
                             <span class="text-muted small ms-2"><i class="fa fa-phone"></i> {{ $phone }}</span>
                         @endif
                     </div>
+                    @if ($address)
+                        <p class="mb-3"><i class="fa fa-map-marker"></i> <strong>Deliver to:</strong> {{ $address }}</p>
+                    @endif
 
                     @if (! empty($order['lines']))
                         <table class="table align-middle">

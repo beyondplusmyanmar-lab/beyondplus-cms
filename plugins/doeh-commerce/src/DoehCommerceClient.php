@@ -146,6 +146,12 @@ final class DoehCommerceClient
         $type = $in['fulfillment']['type'] ?? $this->defaultFulfillment;
         if (is_string($type) && in_array($type, self::FULFILLMENT, true)) {
             $body['fulfillment'] = ['type' => $type];
+
+            // Carried only for delivery: the installation refuses a delivery without one.
+            $address = trim((string) ($in['fulfillment']['address'] ?? ''));
+            if ($type === 'delivery' && $address !== '') {
+                $body['fulfillment']['address'] = $address;
+            }
         }
 
         return $body;
