@@ -20,13 +20,26 @@ class UserTableSeeder extends Seeder
     {
         User::truncate();
 
-        // Demo administrator — matches database/sample-data.sql
+        // Known demo logins exist only where nobody else can reach them. Anywhere else the
+        // admin page is on the internet, and a password every installation shares is the first
+        // one tried — so the superadmin's comes from BP_ADMIN_PASSWORD or is random, and there
+        // are no demo staff or demo customer.
+        $demo = app()->environment('local', 'testing');
+        $adminPassword = (string) env('BP_ADMIN_PASSWORD', '');
+        if ($adminPassword === '') {
+            $adminPassword = $demo ? 'password' : bin2hex(random_bytes(12));
+            if (! $demo) {
+                $this->command?->warn("Admin login: admin@example.com / {$adminPassword} — shown once; change the email and password after signing in.");
+            }
+        }
+
+        // Administrator — on a demo seed, matches database/sample-data.sql
         User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make($adminPassword),
             'role' => 4,
-            'api_token' => 'demo-token',
+            'api_token' => Str::random(60),
             'avatar' => '',
             'status' => 1,
             'verified' => 1,
@@ -36,7 +49,7 @@ class UserTableSeeder extends Seeder
         // real installation, where Faker is not present (it is a dev-only dependency) and
         // its absence used to abort the whole seed run — this is the FIRST seeder, so the
         // other eleven never ran and the site came up unusable.
-        foreach ([['Demo Staff One', 'staff1@example.com'],
+        foreach (! $demo ? [] : [['Demo Staff One', 'staff1@example.com'],
                   ['Demo Staff Two', 'staff2@example.com'],
                   ['Demo Staff Three', 'staff3@example.com']] as [$name, $email]) {
             User::create([
@@ -66,8 +79,11 @@ class UserTableSeeder extends Seeder
             ['id' => 3, 'name' => 'Diamond Member', 'discount_amount' => '5',  'total_spend_amount' => '10000', 'status' => 'active'],
         ]);
 
-        // Demo customer (front-end login) — matches database/sample-data.sql
+        // Demo customer (front-end login) — matches database/sample-data.sql; demo seeds only.
         Customers::truncate();
+        if (! $demo) {
+            return;
+        }
         Customers::insert([
             'customer_types_id' => 1,
             'first_name' => 'Demo',

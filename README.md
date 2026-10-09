@@ -93,6 +93,12 @@ php artisan migrate --seed
 | စီမံခန့်ခွဲသူ | `/bp-admin/login` | `admin@example.com` | `password` |
 | ဖောက်သည် | `/customer/sign-in` | ဖုန်း `09000000000` | `password` |
 
+⚠️ ဤအကောင့်များကို `APP_ENV=local` သို့မဟုတ် `testing` ဖြင့် seed လုပ်မှသာ ဖန်တီးပါသည်။ အခြား
+ပတ်ဝန်းကျင် (production) တွင် demo staff နှင့် demo customer မရှိပါ — စီမံခန့်ခွဲသူ စကားဝှက်ကို
+`BP_ADMIN_PASSWORD` မှ ယူပြီး မသတ်မှတ်ထားလျှင် ကျပန်း ဖန်တီးကာ seed လုပ်စဉ် တစ်ကြိမ်သာ ပြသပါသည်။
+(These demo logins are created only when seeding with `APP_ENV=local` or `testing`. Elsewhere the
+admin password is `BP_ADMIN_PASSWORD` or a random one shown once while seeding.)
+
 ## စမ်းသပ်ခြင်း (Testing)
 
 Feature / unit test suite ကို အောက်ပါအတိုင်း run နိုင်ပါသည်။ SQLite in-memory ဖြင့်
