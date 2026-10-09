@@ -105,9 +105,11 @@ return new class extends Migration
                     continue;
                 }
 
-                if ($bare === $columns) {
-                    Schema::table($table, function (Blueprint $t) use ($columns, $name) {
-                        $t->index($columns, $name);
+                // A prefix length is MySQL/MariaDB syntax; every other driver (SQLite in local
+                // development, for one) indexes the whole column and rejects the prefix.
+                if ($bare === $columns || ! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+                    Schema::table($table, function (Blueprint $t) use ($bare, $name) {
+                        $t->index($bare, $name);
                     });
 
                     continue;
