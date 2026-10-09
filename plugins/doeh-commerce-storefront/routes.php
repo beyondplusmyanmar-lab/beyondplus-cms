@@ -7,6 +7,7 @@
  *   GET  /store               the fixture "shop" (product cards + add)
  *   POST /store/cart/add      add a SKU to the session cart
  *   POST /store/cart/remove   remove a SKU
+ *   POST /store/cart/update   set a SKU's quantity (0 removes it; at most 99)
  *   GET  /store/cart          the cart + a Place order button
  *   POST /store/checkout      → doeh_commerce()->createOrder() → redirect
  *   GET  /store/order/{id}    confirmation, read back via getOrder()
@@ -75,6 +76,25 @@ Route::middleware('web')->group(function () {
 
         return redirect('/store/cart');
     })->middleware('throttle:60,1')->name('doeh-storefront.cart.remove');
+
+    // The cart's − / + buttons. The quantity lands in the server-side cart only for a SKU the
+    // store sells and only within 1..99, the same ceiling as adding; 0 or less removes the line.
+    // Stock is not checked here — the installation answers that at checkout, by product.
+    Route::post('/store/cart/update', function (Request $request) {
+        $sku = trim((string) $request->input('sku'));
+        $qty = (int) $request->input('qty');
+        $cart = session('doeh_store_cart', []);
+        if (isset($cart[$sku])) {
+            if ($qty < 1) {
+                unset($cart[$sku]);
+            } else {
+                $cart[$sku] = min($qty, 99);
+            }
+            session(['doeh_store_cart' => $cart]);
+        }
+
+        return redirect('/store/cart');
+    })->middleware('throttle:60,1')->name('doeh-storefront.cart.update');
 
     Route::get('/store/cart', function () {
         $cart = session('doeh_store_cart', []);
@@ -161,11 +181,23 @@ Route::middleware('web')->group(function () {
         $result = $connector->createOrder($submission, $idemFor($cart));
 
         if (! ($result['ok'] ?? false)) {
+            $code = $result['code'] ?? 'EDGE_TRANSPORT';
+            $message = doeh_storefront_message($code);
+
+            // A refusal about one line names the product and marks that line in the cart, so
+            // the customer knows what to change. Only a SKU in THIS cart is named.
+            $sku = (string) ($result['sku'] ?? '');
+            if ($sku !== '' && isset($cart[$sku]) && in_array($code, ['EDGE_INSUFFICIENT_STOCK', 'EDGE_QTY_LIMIT'], true)) {
+                session()->flash('doeh_store_flag_sku', $sku);
+                if ($code === 'EDGE_INSUFFICIENT_STOCK') {
+                    $names = array_column(doeh_storefront_products(), 'name', 'sku');
+                    $message = sprintf(doeh_storefront_message('STOREFRONT_LOW_STOCK'), $names[$sku] ?? $sku);
+                }
+            }
+
             // Map the stable connector code to friendly copy — the theme decides
             // the words; the customer never sees an HTTP status or edge code.
-            return redirect('/store/cart')->withErrors(
-                doeh_storefront_message($result['code'] ?? 'EDGE_TRANSPORT')
-            );
+            return redirect('/store/cart')->withErrors($message);
         }
 
         $id = (string) ($result['order']['id'] ?? '');

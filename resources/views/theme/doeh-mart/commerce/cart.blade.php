@@ -15,6 +15,7 @@
             'delivery' => [$mm ? 'အိမ်အရောက် ပို့မည်' : 'Delivery', $mm ? 'သင့်လိပ်စာသို့ ပို့ပေးပါမည်' : 'Delivered to your address', 'bi-truck'],
         ];
         $ftOffersDelivery = in_array('delivery', $ftTypes, true);
+        $flagSku = session('doeh_store_flag_sku');
     @endphp
 
     <div class="container pt-3">
@@ -35,14 +36,28 @@
                 <div class="col-lg-7">
                     <div class="mt-panel py-1">
                         @foreach ($lines as $l)
-                            <div class="d-flex align-items-center py-3 {{ ! $loop->last ? 'border-bottom' : '' }}" style="gap:.9rem;">
+                            @php $flagged = $flagSku === $l['sku']; @endphp
+                            <div class="d-flex align-items-center py-3 {{ ! $loop->last ? 'border-bottom' : '' }}" style="gap:.9rem;{{ $flagged ? 'background:var(--mt-wash);margin:0 -.75rem;padding-left:.75rem;padding-right:.75rem;' : '' }}">
                                 <div class="mt-thumb-sm" aria-hidden="true"><i class="bi bi-box-seam"></i></div>
                                 <div class="flex-grow-1" style="min-width:0;">
                                     <div class="fw-semibold text-truncate">{{ $l['name'] }}</div>
-                                    <div class="small mt-muted">
-                                        <span class="mt-money" style="font-weight:500;">{{ $mm ? 'အရေအတွက်' : 'Qty' }} {{ $l['qty'] }}</span>
-                                        @if ($l['price_hint'])<span aria-hidden="true"> · </span><span class="mt-money" style="color:var(--mt-primary);">{{ $l['price_hint'] }}</span>@endif
-                                    </div>
+                                    @if ($l['price_hint'])<div class="small mt-money" style="color:var(--mt-primary);">{{ $l['price_hint'] }}</div>@endif
+                                    @if ($flagged)<div class="small fw-semibold" style="color:var(--mt-primary-dark);">{{ $mm ? 'အရေအတွက်ကို လျှော့ပေးပါ' : 'Lower this quantity' }}</div>@endif
+                                </div>
+                                <div class="mt-qty" role="group" aria-label="{{ $mm ? 'အရေအတွက်' : 'Quantity' }} {{ $l['name'] }}">
+                                    <form method="POST" action="{{ url('/store/cart/update') }}">
+                                        @csrf
+                                        <input type="hidden" name="sku" value="{{ $l['sku'] }}">
+                                        <input type="hidden" name="qty" value="{{ $l['qty'] - 1 }}">
+                                        <button type="submit" aria-label="{{ $l['qty'] <= 1 ? ($mm ? 'ဖယ်ရန်' : 'Remove') : ($mm ? 'တစ်ခု လျှော့ရန်' : 'One fewer') }}"><i class="bi bi-dash"></i></button>
+                                    </form>
+                                    <span class="mt-money" aria-live="polite">{{ $l['qty'] }}</span>
+                                    <form method="POST" action="{{ url('/store/cart/update') }}">
+                                        @csrf
+                                        <input type="hidden" name="sku" value="{{ $l['sku'] }}">
+                                        <input type="hidden" name="qty" value="{{ $l['qty'] + 1 }}">
+                                        <button type="submit" @disabled($l['qty'] >= 99) aria-label="{{ $mm ? 'တစ်ခု တိုးရန်' : 'One more' }}"><i class="bi bi-plus"></i></button>
+                                    </form>
                                 </div>
                                 <form method="POST" action="{{ url('/store/cart/remove') }}">
                                     @csrf

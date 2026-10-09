@@ -209,6 +209,8 @@ final class DoehCommerceClient
             'status' => $status,
             'code' => is_array($data) && isset($data['code']) ? (string) $data['code'] : 'HTTP_'.$status,
             'step' => is_array($data) ? ($data['step'] ?? null) : null,
+            // Which basket line a refusal is about (EDGE_INSUFFICIENT_STOCK, EDGE_QTY_LIMIT).
+            'sku' => is_array($data) && isset($data['sku']) ? (string) $data['sku'] : null,
         ];
     }
 

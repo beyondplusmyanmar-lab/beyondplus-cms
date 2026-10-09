@@ -119,6 +119,12 @@
         .mt-choice:has(input:checked) { border-color: var(--mt-primary); background: var(--mt-wash); }
         .mt-thumb-sm { width: 56px; height: 56px; flex: 0 0 auto; border-radius: 3px; background: #f4f4f4;
                        display: grid; place-items: center; color: #9a9a9a; font-size: 1.4rem; }
+        .mt-qty { display: inline-flex; align-items: center; border: 1px solid var(--mt-border); border-radius: 3px; flex: 0 0 auto; }
+        .mt-qty form { margin: 0; }
+        .mt-qty button { width: 34px; height: 34px; border: 0; background: var(--mt-surface); color: var(--mt-text); font-size: 1.05rem; }
+        .mt-qty button:hover:not(:disabled) { color: var(--mt-primary); }
+        .mt-qty button:disabled { color: #c4c4c4; }
+        .mt-qty span { min-width: 2.2rem; text-align: center; border-inline: 1px solid var(--mt-border); line-height: 34px; font-weight: 600; }
 
         footer.mt-footer { background: #fff; border-top: 3px solid var(--mt-primary); color: var(--mt-muted); }
         footer.mt-footer h6 { color: var(--mt-text); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; }

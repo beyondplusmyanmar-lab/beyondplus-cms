@@ -219,6 +219,11 @@ if (! function_exists('doeh_storefront_message')) {
                 'ဤပစ္စည်းများထဲမှ တစ်ခုတွင် စျေးနှုန်း မသတ်မှတ်ရသေးပါ။'],
             'EDGE_INSUFFICIENT_STOCK' => ['Sorry — not enough stock for your order.',
                 'စိတ်မကောင်းပါ — သင့်အော်ဒါအတွက် လက်ကျန် မလုံလောက်ပါ။'],
+            'EDGE_QTY_LIMIT' => ['You can order up to 99 of one item.',
+                'ပစ္စည်းတစ်မျိုးလျှင် အများဆုံး ၉၉ ခု မှာယူနိုင်ပါသည်။'],
+            // EDGE_INSUFFICIENT_STOCK when the cart knows which item: %s is the product name.
+            'STOREFRONT_LOW_STOCK' => ['Not enough stock for %s — please lower the quantity.',
+                '%s အတွက် လက်ကျန် မလုံလောက်ပါ — အရေအတွက်ကို လျှော့ပေးပါ။'],
             'EDGE_FULFILLMENT_NOT_AVAILABLE' => ['That fulfilment option is not available right now.',
                 'ရွေးချယ်ထားသော ရယူမှုနည်းလမ်းကို ယခု မရနိုင်ပါ။'],
             'EDGE_INVALID_FULFILLMENT' => ['That fulfilment choice is not offered by this store.',
