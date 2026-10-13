@@ -33,6 +33,12 @@
                     <div>{{ doeh_storefront_fulfillment_label($fulfillment)[0] }}</div>
                 </div>
             @endif
+            @if ((int) ($totals['tax_minor'] ?? 0) > 0)
+                <div style="margin-top:16px; text-align:right;">
+                    <div class="muted">Tax</div>
+                    <div>{{ $fmt($totals['tax_minor']) }} {{ $currency }}</div>
+                </div>
+            @endif
             @if ($grand !== null)
                 <div style="margin-top:16px; text-align:right;">
                     <div class="muted">Total</div>

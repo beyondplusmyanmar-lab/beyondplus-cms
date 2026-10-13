@@ -69,6 +69,14 @@
                     </div>
                 @endif
 
+                {{-- Tax is part of the total the shop computed; shown so the total is explained. --}}
+                @if ((int) ($totals['tax_minor'] ?? 0) > 0)
+                    <div style="display:flex; justify-content:space-between; gap:14px; padding:8px 0; align-items:baseline; border-top:1px solid rgba(0,0,0,.12); margin-top:8px;">
+                        <span class="rt-muted">{{ $mm ? 'အခွန်' : 'Tax' }}</span>
+                        <span class="rt-money">{{ $fmt($totals['tax_minor']) }}</span>
+                    </div>
+                @endif
+
                 @if ($grand !== null)
                     <div style="display:flex; justify-content:space-between; align-items:baseline; gap:14px;
                                 border-top:2px solid var(--ink); margin-top:14px; padding-top:16px;">
